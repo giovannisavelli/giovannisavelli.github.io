@@ -1,0 +1,3302 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Intelligenza Artificiale · 3° anno | AANT</title>
+    <meta name="description" content="Corso di Intelligenza Artificiale per l'Interior Design - Prof. Giovanni Savelli - AANT">
+    <meta property="og:title" content="Intelligenza Artificiale · 3° anno">
+    <meta property="og:description" content="Programma, promptoteca, bibliografia e calendario del corso - Prof. Giovanni Savelli - AANT">
+    <meta name="theme-color" content="#090a0f">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🤖</text></svg>">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Lexend:wght@300;400;500;600;700&family=Orbitron:wght@400;700;900&family=VT323&display=swap" rel="stylesheet">
+    
+    <style>
+        /* =========================================================
+           PALETTE & DESIGN SYSTEM (PREMIUM DARK MODE)
+           ========================================================= */
+        :root {
+            --bg: #090a0f;
+            --bg-elevated: #11131a;
+            --card: rgba(22, 25, 37, 0.6);
+            --card-hover: rgba(28, 32, 45, 0.8);
+            
+            --accent: #3b82f6; 
+            --accent-glow: rgba(59, 130, 246, 0.15);
+            --complement: #10b981; 
+            
+            --text-primary: #f8fafc;
+            --text-secondary: #94a3b8;
+            --text-muted: #64748b;
+            
+            --border: rgba(255, 255, 255, 0.08);
+            --border-hover: rgba(255, 255, 255, 0.15);
+            
+            --radius-sm: 8px;
+            --radius-md: 12px;
+            --radius-lg: 16px;
+            --radius-pill: 999px;
+            
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            
+            --font-main: 'Lexend', 'Inter', sans-serif;
+            --font-body: 'Inter', sans-serif;
+            --font-mono: 'Courier New', Courier, monospace;
+        }
+
+        /* =========================================================
+           RESET & BASE
+           ========================================================= */
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        html { background-color: var(--bg); }
+
+        /* La pagina scorre normalmente (niente più riquadro con scroll interno come su Google Sites) */
+        body {
+            background-color: var(--bg);
+            color: var(--text-primary);
+            font-family: var(--font-body);
+            font-size: 15px;
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+            min-height: 100vh;
+            overflow-x: hidden;
+            display: flex;
+            flex-direction: column;
+            background-image: radial-gradient(circle at top center, rgba(59,130,246,0.05) 0%, transparent 50%);
+        }
+
+        h1, h2, h3, h4 { font-family: var(--font-main); font-weight: 600; color: var(--text-primary); }
+        h2 { font-size: 1.5rem; margin-bottom: 1rem; letter-spacing: -0.02em; }
+
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: var(--text-muted); border-radius: var(--radius-pill); }
+        ::-webkit-scrollbar-thumb:hover { background: var(--text-secondary); }
+
+        .app-container { 
+            padding: 30px 20px; 
+            width: 100%; 
+            max-width: 1200px; 
+            margin: 0 auto; 
+            flex: 1; 
+            display: flex; 
+            flex-direction: column; 
+        }
+
+        .content-section { display: none; animation: fadeIn 0.4s ease forwards; }
+        .content-section.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* =========================================================
+           HERO BANNER & HEADER
+           ========================================================= */
+        .hero-banner { 
+            width: 100%; 
+            height: 240px; 
+            background: linear-gradient(to top, var(--bg), rgba(9, 10, 15, 0.4)), url('https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?auto=format&fit=crop&w=1600&q=80'); 
+            background-size: cover; 
+            background-position: center; 
+            background-repeat: no-repeat;
+            border-radius: var(--radius-lg); 
+            overflow: hidden;
+            margin-bottom: 2rem; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            /* Fix bordo: sostituito border fisico con box-shadow inset per evitare sbavature di anti-aliasing */
+            box-shadow: inset 0 0 0 1px var(--border), 0 20px 40px rgba(0,0,0,0.4);
+            text-align: center; 
+        }
+        .hero-banner .top-label { color: var(--accent); font-weight: 600; font-size: 0.8rem; letter-spacing: 0.15em; text-transform: uppercase; margin-bottom: 0.5rem; display: block; }
+        .hero-banner h2 { margin: 0; font-size: clamp(2rem, 5vw, 3.5rem); font-weight: 700; letter-spacing: -0.03em; text-transform: uppercase; text-shadow: 0 4px 20px rgba(0,0,0,0.5); }
+        .hero-banner .course-name { font-size: 1.1rem; color: var(--text-secondary); margin-top: 0.5rem; display: block; }
+
+        header { display: flex; justify-content: space-between; align-items: flex-end; border-bottom: 1px solid var(--border); padding-bottom: 1.5rem; margin-bottom: 2rem; flex-wrap: wrap; gap: 1rem; }
+        .title-group h1 { font-size: 1.25rem; margin-bottom: 0.25rem; }
+        .title-group p { color: var(--accent); font-size: 0.85rem; font-weight: 500; text-transform: uppercase; letter-spacing: 0.05em; }
+        
+        .progress-ring { position: relative; width: 54px; height: 54px; }
+        .progress-ring svg { width: 100%; height: 100%; transform: rotate(-90deg); }
+        .progress-ring circle { fill: none; stroke-width: 4; stroke-linecap: round; }
+        .progress-ring .bg { stroke: var(--border); }
+        .progress-ring .fill { 
+            stroke: url(#ring-gradient); /* Applica il gradiente definito nell'HTML */
+            stroke-dasharray: 150.8; /* Corretto per raggio 24 */
+            stroke-dashoffset: 150.8; 
+            transition: stroke-dashoffset 1s cubic-bezier(0.4, 0, 0.2, 1); 
+        }
+        .progress-ring .text { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 0.8rem; font-weight: 600; }
+
+        /* =========================================================
+           TABS (SCROLL SNAP UX)
+           ========================================================= */
+        .nav-tabs { 
+            display: flex; gap: 0.75rem; margin-bottom: 2.5rem; 
+            overflow-x: auto; padding-bottom: 0.5rem; 
+            scroll-snap-type: x mandatory; scrollbar-width: none; 
+        }
+        .nav-tabs::-webkit-scrollbar { display: none; }
+        /* Tutti i pulsanti sempre visibili: su smartphone vanno a capo invece di finire fuori schermo */
+        .nav-tabs { flex-wrap: wrap; overflow-x: visible; }
+        .tab-btn {
+            scroll-snap-align: start;
+            background: var(--bg-elevated); border: 1px solid var(--border); 
+            color: var(--text-secondary); padding: 0.6rem 1.2rem; 
+            border-radius: var(--radius-pill); cursor: pointer; 
+            font-size: 0.8rem; font-weight: 500; white-space: nowrap; 
+            transition: var(--transition); font-family: var(--font-main); 
+        }
+        .tab-btn:hover { border-color: var(--border-hover); color: var(--text-primary); transform: translateY(-1px); }
+        .tab-btn.active { border-color: var(--accent); color: #fff; background: var(--accent); box-shadow: 0 4px 15px var(--accent-glow); }
+
+        /* =========================================================
+           PROJECT CARD (REFINED)
+           ========================================================= */
+        .home-final-project-card {
+            display: grid; grid-template-columns: auto 1fr auto; gap: 1.5rem; align-items: center;
+            padding: 1.5rem 2rem; margin-bottom: 2.5rem;
+            border-radius: var(--radius-lg);
+            border: 1px solid rgba(250, 204, 21, 0.3);
+            background: linear-gradient(145deg, rgba(250, 204, 21, 0.05) 0%, var(--bg-elevated) 100%);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            transition: var(--transition);
+        }
+        .home-final-project-card:hover { border-color: rgba(250, 204, 21, 0.6); transform: translateY(-2px); }
+        .home-final-project-icon { font-size: 2.5rem; filter: drop-shadow(0 0 10px rgba(250, 204, 21, 0.4)); }
+        .home-final-project-copy h2 { margin-bottom: 0.25rem; color: #facc15; font-size: 1.2rem; letter-spacing: 0.05em; font-family: 'Orbitron', sans-serif; }
+        .home-final-project-copy p { color: var(--text-secondary); font-size: 0.9rem; }
+        .home-final-project-actions { display: flex; gap: 1rem; flex-wrap: wrap; }
+        .home-final-project-link {
+            display: flex; align-items: center; gap: 0.5rem;
+            padding: 0.6rem 1.2rem; border-radius: var(--radius-pill);
+            border: 1px solid rgba(250, 204, 21, 0.3); background: rgba(250, 204, 21, 0.05);
+            color: var(--text-primary); text-decoration: none; font-size: 0.85rem; font-weight: 500;
+            transition: var(--transition);
+        }
+        .home-final-project-link:hover { background: rgba(250, 204, 21, 0.15); border-color: #facc15; }
+
+        /* =========================================================
+           PROGRAMMA & ACCORDION
+           ========================================================= */
+        .program-shell { 
+            background: var(--bg-elevated); border: 1px solid var(--border); 
+            border-radius: var(--radius-md); overflow: hidden; margin-bottom: 1.5rem; 
+            transition: var(--transition);
+        }
+        .program-shell:hover { border-color: var(--border-hover); }
+        .program-topbar { 
+            display: flex; justify-content: space-between; align-items: center; 
+            padding: 1.2rem 1.5rem; background: rgba(255,255,255,0.02); 
+            border-bottom: 1px solid var(--border); cursor: pointer; user-select: none;
+        }
+        .program-topbar h2 { margin: 0; font-size: 1.1rem; }
+        .program-collapse-mark { color: var(--text-muted); font-size: 1.5rem; transition: var(--transition); }
+        
+        .archive-shell.is-collapsed .program-grid { display: none; }
+        .archive-shell.is-open .program-collapse-mark { transform: rotate(180deg); color: var(--accent); }
+
+        .program-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem; padding: 1.5rem; }
+        .lesson-module { padding: 1.2rem; background: var(--bg); border: 1px solid var(--border); border-radius: var(--radius-sm); transition: var(--transition); }
+        .lesson-module:hover { border-color: var(--accent); box-shadow: 0 4px 20px var(--accent-glow); }
+        .lesson-module-title { font-size: 0.85rem; color: var(--accent); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 1rem; padding-bottom: 0.5rem; border-bottom: 1px solid var(--border); }
+        
+        .lesson-checklist { list-style: none; display: grid; gap: 0.5rem; }
+        .lesson-checkitem label { 
+            display: flex; gap: 0.75rem; align-items: flex-start; padding: 0.5rem; 
+            cursor: pointer; border-radius: var(--radius-sm); transition: var(--transition);
+        }
+        .lesson-checkitem label:hover { background: rgba(255,255,255,0.03); }
+        .lesson-checkitem input { display: none; }
+        .lesson-custom-check { 
+            width: 20px; height: 20px; flex-shrink: 0; border-radius: 4px; 
+            border: 1px solid var(--text-muted); display: flex; align-items: center; justify-content: center; 
+            color: transparent; font-size: 0.75rem; transition: var(--transition); margin-top: 2px;
+        }
+        .lesson-title { font-size: 0.95rem; color: var(--text-primary); transition: var(--transition); }
+        
+        .lesson-checkitem input:checked + .lesson-custom-check { background: var(--complement); border-color: var(--complement); color: var(--bg); }
+        .lesson-checkitem input:checked ~ .lesson-title { color: var(--text-muted); text-decoration: line-through; }
+
+        .reset-btn { 
+            width: 100%; padding: 1rem; border-radius: var(--radius-md); 
+            background: transparent; border: 1px dashed var(--border); color: var(--text-secondary); 
+            font-size: 0.85rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; 
+            cursor: pointer; transition: var(--transition); margin-top: 1rem;
+        }
+        .reset-btn:hover { border-color: #ef4444; color: #ef4444; background: rgba(239, 68, 68, 0.05); }
+
+        /* =========================================================
+           VIBE CODING CARDS
+           ========================================================= */
+        .vibe-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 1.5rem; }
+        .vibe-card { 
+            background: var(--bg-elevated); border: 1px solid var(--border); 
+            border-radius: var(--radius-md); overflow: hidden; display: flex; flex-direction: column;
+            transition: var(--transition);
+        }
+        .vibe-card:hover { transform: translateY(-5px); border-color: var(--accent); box-shadow: 0 10px 30px rgba(0,0,0,0.3); }
+        .vibe-img { height: 140px; overflow: hidden; }
+        .vibe-img img { width: 100%; height: 100%; object-fit: cover; transition: var(--transition); }
+        .vibe-card:hover .vibe-img img { transform: scale(1.05); }
+        .vibe-info { padding: 1.2rem; display: flex; flex-direction: column; flex: 1; }
+        .vibe-info h3 { font-size: 1rem; margin-bottom: 0.5rem; }
+        .vibe-info p { font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 1.5rem; flex: 1; }
+        .vibe-btn { 
+            display: block; text-align: center; padding: 0.6rem; border-radius: var(--radius-sm);
+            background: var(--border); color: var(--text-primary); text-decoration: none;
+            font-size: 0.8rem; font-weight: 600; text-transform: uppercase; transition: var(--transition);
+        }
+        .vibe-btn:hover { background: var(--accent); color: #fff; }
+
+        /* =========================================================
+           DOC READER & BIBLIO
+           ========================================================= */
+        .doc-layout { display: flex; flex-direction: column; height: 75vh; border: 1px solid var(--border); border-radius: var(--radius-md); overflow: hidden; }
+        @media (min-width: 768px) { .doc-layout { flex-direction: row; } }
+        
+        .doc-sidebar { width: 100%; background: var(--bg-elevated); padding: 1.5rem; overflow-y: auto; border-bottom: 1px solid var(--border); }
+        @media (min-width: 768px) { .doc-sidebar { width: 300px; border-bottom: none; border-right: 1px solid var(--border); } }
+        
+        .doc-category { font-size: 0.75rem; color: var(--accent); text-transform: uppercase; letter-spacing: 0.05em; margin: 1.5rem 0 0.5rem; padding-bottom: 0.5rem; border-bottom: 1px solid var(--border); font-weight: 700; }
+        .doc-category:first-of-type { margin-top: 0; }
+        .doc-sidebar ul { list-style: none; }
+        .doc-sidebar a { display: block; padding: 0.4rem 0.8rem; color: var(--text-secondary); font-size: 0.85rem; cursor: pointer; border-radius: var(--radius-sm); transition: var(--transition); }
+        .doc-sidebar a:hover { background: var(--border); color: var(--text-primary); }
+
+        .doc-content { flex: 1; padding: 2rem; overflow-y: auto; background: var(--bg); scroll-behavior: smooth; }
+        .doc-article { max-width: 700px; margin: 0 auto; }
+        .doc-article h1 { font-size: 2rem; margin-bottom: 0.5rem; }
+        .doc-article .doc-subtitle { font-size: 1.1rem; color: var(--text-secondary); margin-bottom: 2rem; padding-bottom: 1rem; border-bottom: 1px solid var(--border); }
+        .doc-article h2 { margin-top: 3rem; margin-bottom: 1rem; color: var(--accent); }
+        .doc-article p, .doc-article ul, .doc-article ol { font-size: 1rem; color: var(--text-secondary); margin-bottom: 1.5rem; line-height: 1.7; }
+        .doc-article li { margin-bottom: 0.5rem; }
+        .doc-article strong { color: var(--text-primary); }
+
+        .highlight-box { background: rgba(16, 185, 129, 0.05); border-left: 3px solid var(--complement); padding: 1.25rem; margin: 1.5rem 0; border-radius: 0 var(--radius-sm) var(--radius-sm) 0; }
+        .highlight-box p { margin: 0 0 1rem 0; color: #a7f3d0; font-size: 0.95rem; }
+        .highlight-box p:last-child { margin-bottom: 0; }
+
+        details.example-box { background: var(--bg-elevated); border: 1px solid var(--border); border-radius: var(--radius-sm); margin: 1.5rem 0; overflow: hidden; }
+        details.example-box summary { padding: 1rem; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.05em; font-weight: 600; cursor: pointer; list-style: none; background: rgba(255,255,255,0.02); display: flex; justify-content: space-between; align-items: center;}
+        details.example-box summary::-webkit-details-marker { display: none; }
+        details.example-box[open] summary { border-bottom: 1px dashed var(--border); color: var(--accent); background: var(--accent-glow); }
+        .example-content { padding: 1rem; }
+        .prompt-text { font-family: var(--font-mono); font-size: 0.85rem; color: #93c5fd; white-space: pre-wrap; margin: 0; }
+        .toggle-icon { font-size: 1.2rem; line-height: 1; transition: transform 0.3s ease; }
+        details.example-box[open] .toggle-icon { transform: rotate(45deg); }
+
+        /* =========================================================
+           WIZARD & UTILS
+           ========================================================= */
+        .nexus-wizard-container { background: var(--bg-elevated); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 3rem; text-align: center; min-height: 400px; display: flex; flex-direction: column; justify-content: center; align-items: center; }
+        .wizard-question { font-size: 1.5rem; font-weight: 600; margin-bottom: 2rem; }
+        .wizard-options { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem; width: 100%; max-width: 800px; }
+        .wizard-btn { background: var(--bg); border: 1px solid var(--border); color: var(--text-primary); padding: 1rem; border-radius: var(--radius-sm); font-size: 0.9rem; font-weight: 500; display: flex; align-items: center; gap: 0.75rem; cursor: pointer; transition: var(--transition); text-align: left; }
+        .wizard-btn:hover { border-color: var(--accent); background: var(--accent-glow); transform: translateX(4px); }
+        .wizard-icon { font-size: 1.2rem; }
+        .wizard-result { display: none; flex-direction: column; align-items: center; text-align: center; animation: fadeIn 0.4s ease; width: 100%; max-width: 600px; }
+        .wizard-result-label { font-size: 0.75rem; text-transform: uppercase; color: var(--text-secondary); font-weight: 700; letter-spacing: 0.05em; margin-bottom: 0.75rem; }
+        .wizard-result-title { font-size: 2rem; color: var(--accent); margin-bottom: 1rem; font-weight: 700;}
+        .wizard-result-desc { font-size: 1rem; color: var(--text-primary); line-height: 1.6; margin-bottom: 2rem; }
+        .wizard-result-actions { display: flex; gap: 1rem; }
+        .wizard-action-primary { background: var(--accent); color: #fff; padding: 0.75rem 1.5rem; border-radius: var(--radius-sm); text-decoration: none; font-weight: 600; font-size: 0.9rem; transition: var(--transition); }
+        .wizard-action-primary:hover { background: #2563eb; transform: translateY(-2px); }
+        .wizard-action-reset { background: transparent; color: var(--text-secondary); border: 1px solid var(--border); padding: 0.75rem 1.5rem; border-radius: var(--radius-sm); cursor: pointer; font-weight: 600; font-size: 0.9rem; transition: var(--transition); }
+        .wizard-action-reset:hover { background: var(--bg-elevated); color: #fff; }
+
+        .takeaway-box, .disclaimer-box { padding: 1.5rem; border-radius: var(--radius-md); margin-top: 2rem; }
+        .takeaway-box { background: var(--accent-glow); border-left: 4px solid var(--accent); }
+        .takeaway-box h3 { color: var(--accent); font-size: 1.1rem; margin-bottom: 1rem; }
+        .takeaway-box p, .takeaway-box ul { color: var(--text-primary); font-size: 0.95rem; }
+        
+        .disclaimer-box { background: rgba(245, 158, 11, 0.05); border: 1px solid rgba(245, 158, 11, 0.2); display: flex; gap: 1rem; align-items: flex-start;}
+        .disclaimer-box-icon { font-size: 1.5rem; }
+        .disclaimer-box-content strong { color: #f59e0b; display: block; margin-bottom: 0.25rem; font-size: 0.95rem; }
+        .disclaimer-box-content p { margin: 0; color: #d97706; font-size: 0.85rem; }
+
+        .link-ai { color: var(--complement); text-decoration: underline dashed; cursor: pointer; transition: var(--transition); font-weight: 600; }
+        .link-ai:hover { color: #fff; text-decoration: underline solid; }
+
+        /* =========================================================
+           PROMPTOTHECA & SLIDER
+           ========================================================= */
+        .prompt-gallery-nav { display: flex; gap: 1rem; overflow-x: auto; padding-bottom: 1rem; margin-bottom: 1rem; scroll-snap-type: x mandatory;}
+        .gallery-thumb { flex: 0 0 140px; height: 85px; border-radius: var(--radius-sm); overflow: hidden; cursor: pointer; opacity: 0.5; border: 2px solid transparent; transition: var(--transition); scroll-snap-align: start; position: relative;}
+        .gallery-thumb:hover { opacity: 0.8; transform: translateY(-2px); }
+        .gallery-thumb.active { opacity: 1; border-color: var(--accent); box-shadow: 0 4px 12px var(--accent-glow);}
+        .gallery-thumb img { width: 100%; height: 100%; object-fit: cover; filter: grayscale(50%); transition: var(--transition);}
+        .gallery-thumb.active img { filter: grayscale(0%); }
+        .thumb-label { position: absolute; bottom: 0; width: 100%; background: rgba(0,0,0,0.8); font-size: 0.65rem; text-align: center; padding: 4px; font-weight: 600; font-family: 'Orbitron', sans-serif;}
+
+        .prompt-grid { display: grid; grid-template-columns: 1fr; gap: 2rem; margin-top: 1rem; }
+        .prompt-card { display: none; flex-direction: column; background: var(--bg-elevated); border: 1px solid var(--border); border-radius: var(--radius-md); overflow: hidden; transition: var(--transition);}
+        @media (min-width: 900px) { .prompt-card { flex-direction: row; } }
+        .prompt-card.active-card { display: flex; animation: fadeIn 0.4s ease; box-shadow: 0 10px 30px rgba(0,0,0,0.4);}
+        
+        .prompt-image { flex: 1; position: relative; min-height: 400px; border-bottom: 1px solid var(--border); background: #000; }
+        @media (min-width: 900px) { .prompt-image { width: 45%; border-bottom: none; border-right: 1px solid var(--border); } }
+        
+        .comparison-container { width: 100%; height: 100%; position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; background: #000; overflow: hidden; user-select: none; touch-action: none; cursor: ew-resize;}
+        .comparison-img-base, .comparison-img-over { position: absolute; width: 100%; height: 100%; object-fit: contain; pointer-events: none; padding: 1.5rem;}
+        .comparison-img-over { clip-path: polygon(0 0, 50% 0, 50% 100%, 0 100%); }
+        .comparison-slider-input { display: none; }
+        .comparison-handle { position: absolute; top: 0; bottom: 0; left: 50%; width: 2px; background: var(--accent); transform: translateX(-50%); pointer-events: none; z-index: 5; box-shadow: 0 0 10px rgba(59,130,246,0.5);}
+        .comparison-handle::after { content: '↔'; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 34px; height: 34px; background: var(--bg-elevated); color: var(--text-primary); border: 2px solid var(--accent); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 16px; font-weight: bold;}
+        .comparison-label { position: absolute; top: 1rem; padding: 0.2rem 0.6rem; background: rgba(0,0,0,0.8); font-size: 0.7rem; font-family: 'Orbitron', sans-serif; border-radius: 4px; border: 1px solid; z-index: 6; letter-spacing: 1px;}
+        .comp-label-json { left: 1rem; border-color: var(--accent); color: var(--accent); }
+        .comp-label-txt { right: 1rem; border-color: var(--complement); color: var(--complement); }
+
+        .prompt-code { flex: 1; padding: 1.5rem; display: flex; flex-direction: column; }
+        @media (min-width: 900px) { .prompt-code { width: 55%; } }
+        .code-mode-nav { display: flex; gap: 0.5rem; margin-bottom: 1rem; border-bottom: 1px dashed var(--border); padding-bottom: 1rem; flex-wrap: wrap; align-items: center;}
+        .code-mode-btn, .translate-btn { background: transparent; border: 1px solid var(--border); color: var(--text-secondary); padding: 0.4rem 0.8rem; border-radius: var(--radius-sm); font-size: 0.75rem; cursor: pointer; transition: var(--transition); font-family: var(--font-mono); letter-spacing: 1px;}
+        .code-mode-btn:hover, .translate-btn:hover { background: rgba(255,255,255,0.05); color: var(--text-primary); }
+        .code-mode-btn.active-json { border-color: var(--accent); color: var(--accent); background: var(--accent-glow); }
+        .code-mode-btn.active-txt { border-color: var(--complement); color: var(--complement); background: rgba(16, 185, 129, 0.1); }
+        .translate-btn { margin-left: auto; font-family: var(--font-body); font-weight: 600;}
+        .translate-btn.active-translation { background: rgba(16, 185, 129, 0.1); color: var(--complement); border-color: var(--complement); }
+        
+        .prompt-code pre { background: #0b0f19; padding: 1rem; border-radius: var(--radius-sm); overflow-y: auto; height: 350px; font-family: var(--font-mono); font-size: 0.8rem; color: #e2e8f0; border: 1px solid var(--border); white-space: pre-wrap; word-wrap: break-word; line-height: 1.5;}
+
+        /* CALENDARIO E FOOTER */
+        .class-selector { display: flex; gap: 0.5rem; margin-bottom: 1.5rem; justify-content: center; }
+        .class-btn { background: var(--bg-elevated); border: 1px solid var(--border); color: var(--text-secondary); padding: 0.5rem 1rem; border-radius: var(--radius-sm); cursor: pointer; font-size: 0.85rem; font-weight: 600; transition: var(--transition); }
+        .class-btn:hover { background: var(--card-hover); color: var(--text-primary); }
+        .class-btn.active { background: var(--accent-glow); color: var(--accent); border-color: var(--accent); }
+        
+        .cal-table { width: 100%; border-collapse: collapse; font-size: 0.9rem; background: var(--bg-elevated); border-radius: var(--radius-md); overflow: hidden; border: 1px solid var(--border); }
+        .cal-table th, .cal-table td { padding: 1rem; text-align: left; border-bottom: 1px solid var(--border); }
+        .cal-table th { background: rgba(0,0,0,0.2); color: var(--text-secondary); font-size: 0.75rem; text-transform: uppercase; letter-spacing: 1px; font-weight: 600; }
+        .cal-table tr:last-child td { border-bottom: none; }
+        
+        .glossary-dl { display: grid; gap: 1.5rem; }
+        .glossary-dl dt { color: var(--accent); font-weight: 700; font-size: 1rem; letter-spacing: 0.05em; display: flex; align-items: center; }
+        .glossary-dl dt::before { content: ''; display: inline-block; width: 6px; height: 6px; background: var(--complement); border-radius: 50%; margin-right: 10px; }
+        .glossary-dl dd { color: var(--text-primary); font-size: 0.9rem; margin-left: 16px; padding-left: 15px; border-left: 2px solid var(--border); }
+
+        .footer { display: flex; justify-content: center; align-items: center; gap: 10px; margin-top: auto; color: var(--text-muted); font-size: 0.8rem; padding: 2.5rem 0 1rem 0; }
+        .easter-egg-btn { background: none; border: none; cursor: pointer; opacity: 0.3; transition: var(--transition); font-size: 1rem; padding: 5px; }
+        .easter-egg-btn:hover { opacity: 1; transform: scale(1.2); }
+
+        /* Easter Egg Arcade Mode */
+        body.arcade-mode { --bg: #050505; --bg-elevated: #0d0015; --accent: #ff00ff; --complement: #00ffff; --border: #4d004d; font-family: 'VT323', monospace; font-size: 1.3rem; letter-spacing: 0.05em; -webkit-font-smoothing: none;}
+        body.arcade-mode::after { content: " "; display: block; position: fixed; top: 0; left: 0; bottom: 0; right: 0; background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.12) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.04), rgba(0, 255, 0, 0.01), rgba(0, 0, 255, 0.04)); z-index: 9999; background-size: 100% 3px, 3px 100%; pointer-events: none; }
+        body.arcade-mode h1, body.arcade-mode h2, body.arcade-mode h3, body.arcade-mode .tab-btn { font-family: 'Orbitron', sans-serif; text-transform: uppercase; letter-spacing: 1px; }
+        body.arcade-mode .hero-banner { border: 2px solid var(--accent); border-radius: 0; box-shadow: inset 0 0 50px rgba(255,0,255,0.3), 0 0 20px rgba(255,0,255,0.2); }
+        body.arcade-mode .hero-banner h2 { text-shadow: 0 0 8px #fff, 0 0 15px var(--accent), 4px 4px 0px rgba(0,255,255,0.4); }
+        body.arcade-mode .tab-btn, body.arcade-mode .program-shell, body.arcade-mode .vibe-card, body.arcade-mode .prompt-card { border-radius: 0; border-width: 2px; }
+        body.arcade-mode .prompt-code pre { background: #05000a; color: #0f0; border-color: #0f0; font-size: 1.2rem; }
+    </style>
+</head>
+
+<body>
+
+<div class="app-container">
+
+    <div class="hero-banner">
+        <div>
+            <span class="top-label">AANT Interior Design</span>
+            <h2>Intelligenza Artificiale</h2>
+            <span class="course-name">Anno Accademico 2025/2026</span>
+        </div>
+    </div>
+
+    <header>
+        <div class="title-group">
+            <h1>Docente: Giovanni Savelli</h1>
+            <p>Corso di 3° Anno</p>
+        </div>
+        <div style="display: flex; align-items: center; gap: 1rem;">
+            <div style="text-align: right; font-size: 0.75rem; text-transform: uppercase; color: var(--text-muted); font-weight: 600;">
+                Progresso Lezione<br><b style="color: var(--complement);">Inizio Maggio</b>
+            </div>
+            <div class="progress-ring">
+                <svg>
+                    <defs>
+                        <linearGradient id="ring-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" stop-color="var(--accent)" />
+                            <stop offset="100%" stop-color="var(--complement)" />
+                        </linearGradient>
+                    </defs>
+                    <circle class="bg" cx="27" cy="27" r="24"></circle><circle class="fill" id="ring-fill" cx="27" cy="27" r="24"></circle>
+                </svg>
+                <div class="text" id="ring-text">0%</div>
+            </div>
+        </div>
+    </header>
+
+    <section class="home-final-project-card" aria-label="Progetto di fine anno">
+        <span class="home-final-project-icon" aria-hidden="true">🎓</span>
+        <div class="home-final-project-copy">
+            <span class="home-final-project-eyebrow" style="display:none;">Documento del corso</span>
+            <h2>Progetto di fine anno</h2>
+            <p>Scarica i PDF con le linee guida e le istruzioni del progetto finale.</p>
+        </div>
+        <div class="home-final-project-actions">
+            <a class="home-final-project-link" href="https://drive.google.com/file/d/1bLT9z0ZHQk7lf3TL3cCw-ajk2twT6vYJ/view?usp=sharing" target="_blank" rel="noopener noreferrer">
+                <strong>PDF visuale</strong>
+                <span style="display:none;">Versione semplificata con immagini.</span>
+                <em style="color:#facc15; font-style:normal; font-size:0.75rem; font-weight:700;">Apri ↗</em>
+            </a>
+            <a class="home-final-project-link" href="https://drive.google.com/file/d/18ysYoRZoMNSa3_RmDsuLPXWYEZHubTqX/view?usp=sharing" target="_blank" rel="noopener noreferrer">
+                <strong>PDF testuale</strong>
+                <span style="display:none;">Versione solo testo.</span>
+                <em style="color:#facc15; font-style:normal; font-size:0.75rem; font-weight:700;">Apri ↗</em>
+            </a>
+        </div>
+    </section>
+
+    <!-- TABS -->
+    <div class="nav-tabs">
+        <button class="tab-btn active" onclick="openTab('tab-prog', this)">Programma</button>
+        <button class="tab-btn" onclick="openTab('tab-archive', this)">Archivio Lezioni</button>
+        <button class="tab-btn" onclick="openTab('tab-biblio', this)">Bibliografia</button>
+        <button class="tab-btn" onclick="openTab('tab-promptoteca', this)">Promptoteca</button>
+        <button class="tab-btn" onclick="openTab('tab-tester', this)">Vibe Coding</button>
+        <button class="tab-btn" onclick="openTab('tab-nexus', this)">Nexus Hub</button>
+        <button class="tab-btn" onclick="openTab('tab-glossary', this)">Glossario</button>
+        <button class="tab-btn" onclick="openTab('tab-cal', this)">Calendario</button>
+    </div>
+
+    <!-- TAB: PROGRAMMA -->
+    <div id="tab-prog" class="content-section active">
+        <h2>Sviluppo progetto di fine anno</h2>
+
+        <section class="program-shell">
+            <div class="program-topbar">
+                <h2>Sviluppo progetto di fine anno</h2>
+                <span class="program-collapse-mark">−</span>
+            </div>
+
+            <div class="program-grid">
+                <div class="lesson-module" style="grid-column: 1 / -1;">
+                    <ol class="lesson-checklist">
+                        <li class="lesson-checkitem">
+                            <label>
+                                <input type="checkbox" class="lesson-progress-check">
+                                <span class="lesson-custom-check">✓</span>
+                                <span class="lesson-title">Sviluppo progetto di fine anno</span>
+                            </label>
+                        </li>
+                    </ol>
+                </div>
+            </div>
+        </section>
+
+        <button class="reset-btn" onclick="resetCourseProgress()">Azzera Progressi</button>
+    </div>
+
+    <!-- TAB: ARCHIVIO -->
+    <div id="tab-archive" class="content-section">
+        <h2>Archivio Lezioni</h2>
+        <p style="color: var(--text-secondary); margin-bottom: 1.5rem;">Storico delle lezioni completate e relativi argomenti affrontati.</p>
+
+        <!-- Lezione 1 Archiviata -->
+        <section class="program-shell archive-shell is-collapsed" style="opacity: 0.8;">
+            <div class="program-topbar archive-topbar" role="button" tabindex="0" aria-expanded="false">
+                <h2>Lezione 1 (Introduzione AI, prompting e metodo)</h2>
+                <span class="program-collapse-mark">+</span>
+            </div>
+            <div class="program-grid">
+                <div class="lesson-module">
+                    <h3 class="lesson-module-title">1. Apertura & contesto</h3>
+                    <ol class="lesson-checklist">
+                        <li class="lesson-checkitem is-done">
+                            <label style="cursor: default;"><input type="checkbox" checked disabled class="archived-check"><span class="lesson-custom-check">✓</span><span class="lesson-title">Questo corso è inutile / Non voglio fare più questo corso</span></label>
+                        </li>
+                    </ol>
+                </div>
+                <div class="lesson-module">
+                    <h3 class="lesson-module-title">2. Basi AI & linguaggio</h3>
+                    <ol class="lesson-checklist">
+                        <li class="lesson-checkitem is-done"><label style="cursor: default;"><input type="checkbox" checked disabled class="archived-check"><span class="lesson-custom-check">✓</span><span class="lesson-title">Che cos’è un LLM + esempio di prompt “umano”</span></label></li>
+                        <li class="lesson-checkitem is-done"><label style="cursor: default;"><input type="checkbox" checked disabled class="archived-check"><span class="lesson-custom-check">✓</span><span class="lesson-title">Che cos’è la varianza</span></label></li>
+                    </ol>
+                </div>
+                <div class="lesson-module">
+                    <h3 class="lesson-module-title">3. Prompting</h3>
+                    <ol class="lesson-checklist">
+                        <li class="lesson-checkitem is-done"><label style="cursor: default;"><input type="checkbox" checked disabled class="archived-check"><span class="lesson-custom-check">✓</span><span class="lesson-title">Prompt JSON, prompt narrativo e prompt narrativo strutturato</span></label></li>
+                    </ol>
+                </div>
+                <div class="lesson-module">
+                    <h3 class="lesson-module-title">4. Etica, bias & legalità</h3>
+                    <ol class="lesson-checklist">
+                        <li class="lesson-checkitem is-done"><label style="cursor: default;"><input type="checkbox" checked disabled class="archived-check"><span class="lesson-custom-check">✓</span><span class="lesson-title">Etica dell’utilizzo dell’AI e inquinamento AI</span></label></li>
+                        <li class="lesson-checkitem is-done"><label style="cursor: default;"><input type="checkbox" checked disabled class="archived-check"><span class="lesson-custom-check">✓</span><span class="lesson-title">Bias del training nei modelli di generazione immagini</span></label></li>
+                        <li class="lesson-checkitem is-done"><label style="cursor: default;"><input type="checkbox" checked disabled class="archived-check"><span class="lesson-custom-check">✓</span><span class="lesson-title">“Quello che stai facendo è illegale?”: ritratti, immagini e limiti d’uso</span></label></li>
+                    </ol>
+                </div>
+                <div class="lesson-module">
+                    <h3 class="lesson-module-title">5. Training & personalizzazione</h3>
+                    <ol class="lesson-checklist">
+                        <li class="lesson-checkitem is-done"><label style="cursor: default;"><input type="checkbox" checked disabled class="archived-check"><span class="lesson-custom-check">✓</span><span class="lesson-title">Che cos’è un LoRA / training di un’AI</span></label></li>
+                        <li class="lesson-checkitem is-done"><label style="cursor: default;"><input type="checkbox" checked disabled class="archived-check"><span class="lesson-custom-check">✓</span><span class="lesson-title">Addestrare l’AI</span></label></li>
+                    </ol>
+                </div>
+                <div class="lesson-module">
+                    <h3 class="lesson-module-title">6. Strumenti & siti</h3>
+                    <ol class="lesson-checklist">
+                        <li class="lesson-checkitem is-done"><label style="cursor: default;"><input type="checkbox" checked disabled class="archived-check"><span class="lesson-custom-check">✓</span><span class="lesson-title">Esposizione sito AI</span></label></li>
+                        <li class="lesson-checkitem is-done"><label style="cursor: default;"><input type="checkbox" checked disabled class="archived-check"><span class="lesson-custom-check">✓</span><span class="lesson-title">Esposizione sito Modellazione / Corona</span></label></li>
+                    </ol>
+                </div>
+                <div class="lesson-module">
+                    <h3 class="lesson-module-title">7. Case study & demo</h3>
+                    <ol class="lesson-checklist">
+                        <li class="lesson-checkitem is-done"><label style="cursor: default;"><input type="checkbox" checked disabled class="archived-check"><span class="lesson-custom-check">✓</span><span class="lesson-title">Caso studio: lavoro Thermomix</span></label></li>
+                        <li class="lesson-checkitem is-done"><label style="cursor: default;"><input type="checkbox" checked disabled class="archived-check"><span class="lesson-custom-check">✓</span><span class="lesson-title">App Generatore micro-espressioni / Ritratti Eidolon</span></label></li>
+                        <li class="lesson-checkitem is-done"><label style="cursor: default;"><input type="checkbox" checked disabled class="archived-check"><span class="lesson-custom-check">✓</span><span class="lesson-title">Creazione di un progetto su ChatGPT</span></label></li>
+                    </ol>
+                </div>
+            </div>
+        </section>
+
+        <!-- Lezione 2 Archiviata -->
+        <section class="program-shell archive-shell is-collapsed" style="opacity: 0.8;">
+            <div class="program-topbar archive-topbar" role="button" tabindex="0" aria-expanded="false">
+                <h2>Lezione 2 (Progetti, GPT personalizzati e NotebookLM)</h2>
+                <span class="program-collapse-mark">+</span>
+            </div>
+            <div class="program-grid">
+                <div class="lesson-module">
+                    <h3 class="lesson-module-title">1. Recap & domande</h3>
+                    <ol class="lesson-checklist">
+                        <li class="lesson-checkitem is-done"><label style="cursor: default;"><input type="checkbox" checked disabled class="archived-check"><span class="lesson-custom-check">✓</span><span class="lesson-title">Recap ultima lezione</span></label></li>
+                        <li class="lesson-checkitem is-done"><label style="cursor: default;"><input type="checkbox" checked disabled class="archived-check"><span class="lesson-custom-check">✓</span><span class="lesson-title">Domande e dubbi aperti</span></label></li>
+                    </ol>
+                </div>
+                <div class="lesson-module">
+                    <h3 class="lesson-module-title">2. Progetto vs GPT personalizzato</h3>
+                    <ol class="lesson-checklist">
+                        <li class="lesson-checkitem is-done"><label style="cursor: default;"><input type="checkbox" checked disabled class="archived-check"><span class="lesson-custom-check">✓</span><span class="lesson-title">Differenza tra Progetto e GPT personalizzato</span></label></li>
+                        <li class="lesson-checkitem is-done"><label style="cursor: default;"><input type="checkbox" checked disabled class="archived-check"><span class="lesson-custom-check">✓</span><span class="lesson-title">Quando usare un Progetto</span></label></li>
+                        <li class="lesson-checkitem is-done"><label style="cursor: default;"><input type="checkbox" checked disabled class="archived-check"><span class="lesson-custom-check">✓</span><span class="lesson-title">Quando usare un GPT personalizzato</span></label></li>
+                    </ol>
+                </div>
+                <div class="lesson-module">
+                    <h3 class="lesson-module-title">3. Creare un GPT</h3>
+                    <ol class="lesson-checklist">
+                        <li class="lesson-checkitem is-done"><label style="cursor: default;"><input type="checkbox" checked disabled class="archived-check"><span class="lesson-custom-check">✓</span><span class="lesson-title">Come personalizzare un GPT</span></label></li>
+                        <li class="lesson-checkitem is-done"><label style="cursor: default;"><input type="checkbox" checked disabled class="archived-check"><span class="lesson-custom-check">✓</span><span class="lesson-title">Progetto per aiutarci a creare un GPT personalizzato</span></label></li>
+                    </ol>
+                </div>
+                <div class="lesson-module">
+                    <h3 class="lesson-module-title">4. Il “maledetto assistente”</h3>
+                    <ol class="lesson-checklist">
+                        <li class="lesson-checkitem is-done"><label style="cursor: default;"><input type="checkbox" checked disabled class="archived-check"><span class="lesson-custom-check">✓</span><span class="lesson-title">Esempio di cosa si può fare con il “maledetto assistente”</span></label></li>
+                        <li class="lesson-checkitem is-done"><label style="cursor: default;"><input type="checkbox" checked disabled class="archived-check"><span class="lesson-custom-check">✓</span><span class="lesson-title">Progetto personale con il “maledetto assistente”</span></label></li>
+                    </ol>
+                </div>
+                <div class="lesson-module">
+                    <h3 class="lesson-module-title">5. NotebookLM</h3>
+                    <ol class="lesson-checklist">
+                        <li class="lesson-checkitem is-done"><label style="cursor: default;"><input type="checkbox" checked disabled class="archived-check"><span class="lesson-custom-check">✓</span><span class="lesson-title">NotebookLM: cos’è</span></label></li>
+                        <li class="lesson-checkitem is-done"><label style="cursor: default;"><input type="checkbox" checked disabled class="archived-check"><span class="lesson-custom-check">✓</span><span class="lesson-title">A cosa può essere utile</span></label></li>
+                    </ol>
+                </div>
+                <div class="lesson-module">
+                    <h3 class="lesson-module-title">6. Prompt & presentazioni</h3>
+                    <ol class="lesson-checklist">
+                        <li class="lesson-checkitem is-done"><label style="cursor: default;"><input type="checkbox" checked disabled class="archived-check"><span class="lesson-custom-check">✓</span><span class="lesson-title">Come scrivere un buon prompt su NotebookLM</span></label></li>
+                        <li class="lesson-checkitem is-done"><label style="cursor: default;"><input type="checkbox" checked disabled class="archived-check"><span class="lesson-custom-check">✓</span><span class="lesson-title">App per scrivere un prompt su NotebookLM</span></label></li>
+                        <li class="lesson-checkitem is-done"><label style="cursor: default;"><input type="checkbox" checked disabled class="archived-check"><span class="lesson-custom-check">✓</span><span class="lesson-title">Esempi di presentazioni su NotebookLM</span></label></li>
+                    </ol>
+                </div>
+            </div>
+        </section>
+
+        <!-- Lezione 3 Archiviata -->
+        <section class="program-shell archive-shell is-collapsed" style="opacity: 0.8;">
+            <div class="program-topbar archive-topbar" role="button" tabindex="0" aria-expanded="false">
+                <h2>Lezione 3 (Magnific.ai, Enhance & Simulazione Interior Designer)</h2>
+                <span class="program-collapse-mark">+</span>
+            </div>
+            <div class="program-grid">
+                <div class="lesson-module">
+                    <h3 class="lesson-module-title">1. Apertura & casi studio reali</h3>
+                    <ol class="lesson-checklist">
+                        <li class="lesson-checkitem is-done"><label style="cursor: default;"><input type="checkbox" checked disabled class="archived-check"><span class="lesson-custom-check">✓</span><span class="lesson-title">Casi studio reali di workflow con AI</span></label></li>
+                        <li class="lesson-checkitem is-done"><label style="cursor: default;"><input type="checkbox" checked disabled class="archived-check"><span class="lesson-custom-check">✓</span><span class="lesson-title">Creatività e problem solving nel lavoro con l’AI</span></label></li>
+                        <li class="lesson-checkitem is-done"><label style="cursor: default;"><input type="checkbox" checked disabled class="archived-check"><span class="lesson-custom-check">✓</span><span class="lesson-title">Perché il metodo conta più dello strumento</span></label></li>
+                    </ol>
+                </div>
+                <div class="lesson-module">
+                    <h3 class="lesson-module-title">2. Enhance immagini</h3>
+                    <ol class="lesson-checklist">
+                        <li class="lesson-checkitem is-done"><label style="cursor: default;"><input type="checkbox" checked disabled class="archived-check"><span class="lesson-custom-check">✓</span><span class="lesson-title">Cos’è l’enhance di un’immagine</span></label></li>
+                        <li class="lesson-checkitem is-done"><label style="cursor: default;"><input type="checkbox" checked disabled class="archived-check"><span class="lesson-custom-check">✓</span><span class="lesson-title">A cosa serve in un workflow visivo</span></label></li>
+                        <li class="lesson-checkitem is-done"><label style="cursor: default;"><input type="checkbox" checked disabled class="archived-check"><span class="lesson-custom-check">✓</span><span class="lesson-title">Cenni storici: upscaling, restauro e AI enhancement</span></label></li>
+                    </ol>
+                </div>
+                <div class="lesson-module">
+                    <h3 class="lesson-module-title">3. Magnific.ai</h3>
+                    <ol class="lesson-checklist">
+                        <li class="lesson-checkitem is-done"><label style="cursor: default;"><input type="checkbox" checked disabled class="archived-check"><span class="lesson-custom-check">✓</span><span class="lesson-title">Cos’è Magnific.ai</span></label></li>
+                        <li class="lesson-checkitem is-done"><label style="cursor: default;"><input type="checkbox" checked disabled class="archived-check"><span class="lesson-custom-check">✓</span><span class="lesson-title">Parametri principali e logica di utilizzo</span></label></li>
+                        <li class="lesson-checkitem is-done"><label style="cursor: default;"><input type="checkbox" checked disabled class="archived-check"><span class="lesson-custom-check">✓</span><span class="lesson-title">Quando usarlo e quando evitarlo</span></label></li>
+                    </ol>
+                </div>
+                <div class="lesson-module">
+                    <h3 class="lesson-module-title">4. Test pratici</h3>
+                    <ol class="lesson-checklist">
+                        <li class="lesson-checkitem is-done"><label style="cursor: default;"><input type="checkbox" checked disabled class="archived-check"><span class="lesson-custom-check">✓</span><span class="lesson-title">Test con le immagini degli studenti</span></label></li>
+                        <li class="lesson-checkitem is-done"><label style="cursor: default;"><input type="checkbox" checked disabled class="archived-check"><span class="lesson-custom-check">✓</span><span class="lesson-title">Confronto prima/dopo</span></label></li>
+                        <li class="lesson-checkitem is-done"><label style="cursor: default;"><input type="checkbox" checked disabled class="archived-check"><span class="lesson-custom-check">✓</span><span class="lesson-title">Controllo artefatti, texture e coerenza dell’immagine</span></label></li>
+                    </ol>
+                </div>
+                <div class="lesson-module">
+                    <h3 class="lesson-module-title">5. Vibe Coding & app</h3>
+                    <ol class="lesson-checklist">
+                        <li class="lesson-checkitem is-done"><label style="cursor: default;"><input type="checkbox" checked disabled class="archived-check"><span class="lesson-custom-check">✓</span><span class="lesson-title">Introduzione rapida al Vibe Coding</span></label></li>
+                        <li class="lesson-checkitem is-done"><label style="cursor: default;"><input type="checkbox" checked disabled class="archived-check"><span class="lesson-custom-check">✓</span><span class="lesson-title">App Generatore di Meme</span></label></li>
+                        <li class="lesson-checkitem is-done"><label style="cursor: default;"><input type="checkbox" checked disabled class="archived-check"><span class="lesson-custom-check">✓</span><span class="lesson-title">Humana AI Studio: app per generazione immagini</span></label></li>
+                    </ol>
+                </div>
+                <div class="lesson-module">
+                    <h3 class="lesson-module-title">6. Progetto finale</h3>
+                    <ol class="lesson-checklist">
+                        <li class="lesson-checkitem is-done"><label style="cursor: default;"><input type="checkbox" checked disabled class="archived-check"><span class="lesson-custom-check">✓</span><span class="lesson-title">Presentazione del progetto: Simulazione Interior Designer</span></label></li>
+                        <li class="lesson-checkitem is-done"><label style="cursor: default;"><input type="checkbox" checked disabled class="archived-check"><span class="lesson-custom-check">✓</span><span class="lesson-title">Obiettivo, metodo e consegne principali</span></label></li>
+                        <li class="lesson-checkitem is-done"><label style="cursor: default;"><input type="checkbox" checked disabled class="archived-check"><span class="lesson-custom-check">✓</span><span class="lesson-title">Regola guida: prima il progetto, poi l’immagine</span></label></li>
+                    </ol>
+                </div>
+            </div>
+        </section>
+
+    </div>
+
+    <!-- TAB: BIBLIO -->
+    <div id="tab-biblio" class="content-section">
+        <h2>Bibliografia e Manuali</h2>
+        <p style="color: var(--text-secondary); margin-bottom: 1.5rem;">Consulta l'archivio dei testi di riferimento e la manualistica del corso.</p>
+
+        <div class="doc-layout">
+            <aside class="doc-sidebar">
+                <h3>Indice Risorse</h3>
+                
+                <div class="doc-category">📄 Manuale: NotebookLM</div>
+                <ul>
+                    <li><a onclick="scrollToChapter('cap-0')">Introduzione</a></li>
+                    <li><a onclick="scrollToChapter('cap-1')">1. Che cos’è davvero NotebookLM</a></li>
+                    <li><a onclick="scrollToChapter('cap-2')">2. Le tre fasi del lavoro</a></li>
+                    <li><a onclick="scrollToChapter('cap-3')">3. Prima del prompt: il notebook</a></li>
+                    <li><a onclick="scrollToChapter('cap-4')">4. Le fonti: meno quantità, più controllo</a></li>
+                    <li><a onclick="scrollToChapter('cap-5')">5. Il perimetro del notebook</a></li>
+                    <li><a onclick="scrollToChapter('cap-6')">6. La selezione dinamica delle fonti</a></li>
+                    <li><a onclick="scrollToChapter('cap-7')">7. La sezione Studio</a></li>
+                    <li><a onclick="scrollToChapter('cap-8')">8. Il prompt per slide: non è una frase</a></li>
+                    <li><a onclick="scrollToChapter('cap-9')">9-15. La struttura di un prompt</a></li>
+                    <li><a onclick="scrollToChapter('cap-16')">16-20. Stile, Concept e Identità Visiva</a></li>
+                    <li><a onclick="scrollToChapter('cap-21')">21-27. Regole Editoriali e di Layout</a></li>
+                    <li><a onclick="scrollToChapter('cap-28')">28-30. Tono di voce e Restrizioni</a></li>
+                    <li><a onclick="scrollToChapter('cap-31')">31. Template madre completo</a></li>
+                    <li><a onclick="scrollToChapter('cap-32')">32. Versione breve per studenti</a></li>
+                    <li><a onclick="scrollToChapter('cap-33')">33. Le dieci domande fondamentali</a></li>
+                    <li><a onclick="scrollToChapter('cap-34')">34. Esempio 1: Editorial Business Pop</a></li>
+                    <li><a onclick="scrollToChapter('cap-35')">35. Esempio 2: Material Industrial Zen</a></li>
+                    <li><a onclick="scrollToChapter('cap-36')">36. Struttura per un'app didattica</a></li>
+                    <li><a onclick="scrollToChapter('cap-37')">37-38. Checklist e Sintesi finale</a></li>
+                </ul>
+            </aside>
+
+            <article class="doc-content">
+                <div class="doc-article">
+                    
+                    <h1 id="cap-0">Promptare NotebookLM</h1>
+                    <div class="doc-subtitle">Come progettare presentazioni efficaci senza limitarsi al copia-incolla</div>
+
+                    <p>NotebookLM non va trattato come un semplice chatbot. Non è uno strumento a cui chiedere genericamente “fammi una presentazione”, sperando che produca qualcosa di bello. Va considerato piuttosto come un ambiente di lavoro basato sulle fonti: uno spazio in cui si raccolgono materiali, si organizzano informazioni, si dialoga con i documenti e si trasformano i contenuti in output diversi.</p>
+                    <p>Questa distinzione è fondamentale.</p>
+                    <p>Un chatbot generico lavora spesso su una conoscenza ampia, diffusa e non sempre direttamente controllabile. NotebookLM invece lavora principalmente sui materiali che vengono caricati dall’utente. Questo significa che la qualità del risultato dipende da tre elementi: la qualità delle fonti, la chiarezza dell’obiettivo e la precisione del prompt.</p>
+
+                    <div class="highlight-box">
+                        <p><strong>La formula corretta è:</strong><br>
+                        Buone fonti + buon perimetro + buon prompt = buon output</p>
+                        <p style="margin-top: 15px; color:#f87171;"><strong>La formula sbagliata è:</strong><br>
+                        Fonti casuali + prompt bellissimo = presentazione affidabile</p>
+                    </div>
+
+                    <p>Un prompt, da solo, non può salvare un progetto confuso. Può solo guidare bene un sistema già costruito con criterio.</p>
+                    <p>Per questo, quando si lavora con NotebookLM, bisogna cambiare mentalità. Non bisogna partire dalla domanda finale, ma dalla costruzione del notebook. Prima si progetta il corpus, cioè l’insieme dei materiali da cui il sistema dovrà attingere. Poi si definisce il comportamento dell’intelligenza artificiale. Solo alla fine si scrive il prompt per generare la presentazione.</p>
+                    <p>In altre parole:</p>
+                    <p>Non chiedere a NotebookLM di fare slide.<br>Costruisci le condizioni perché possa progettare un deck coerente.</p>
+
+                    <h2 id="cap-1">1. Che cos’è davvero NotebookLM</h2>
+                    <p>NotebookLM è un sistema di analisi, sintesi e trasformazione delle informazioni. Il suo scopo non è semplicemente “rispondere a domande”, ma permettere all’utente di lavorare con un insieme di fonti in modo più intelligente.</p>
+                    <p>Dentro un notebook si possono caricare documenti, testi, PDF, trascrizioni, link, materiali didattici, appunti, presentazioni, articoli e altri contenuti. Una volta inseriti, questi materiali diventano il territorio su cui NotebookLM lavora.</p>
+                    <p>Il punto centrale è questo: NotebookLM non dovrebbe essere usato come un oracolo generico, ma come un assistente specializzato nel progetto che stiamo costruendo.</p>
+                    <ul>
+                        <li>Se carico materiali sul prompting, NotebookLM diventa un assistente per ragionare sul prompting.</li>
+                        <li>Se carico materiali su un brand, diventa un assistente per analizzare quel brand.</li>
+                        <li>Se carico lezioni, appunti e dispense, diventa un assistente didattico.</li>
+                        <li>Se carico report, dati e presentazioni, diventa uno strumento di sintesi e riorganizzazione.</li>
+                    </ul>
+                    <p>Questa caratteristica rende NotebookLM particolarmente utile in ambito didattico, progettuale e professionale, perché permette di tenere insieme ricerca, analisi, studio e produzione di contenuti.</p>
+
+                    <h2 id="cap-2">2. Le tre fasi del lavoro</h2>
+                    <p>Per usare bene NotebookLM, conviene dividere il lavoro in tre fasi.</p>
+                    <p>La prima fase è la <strong>costruzione del notebook</strong>.<br>Qui si decide che cosa entra nel progetto. Si scelgono le fonti, si organizzano i materiali, si stabilisce il perimetro del tema, si decide se il progetto deve stare in un unico notebook o se conviene dividerlo in più notebook.</p>
+                    <p>La seconda fase è l’<strong>interazione con l’AI</strong>.<br>Qui si dialoga con i documenti. Si fanno domande, si chiedono sintesi, si confrontano concetti, si estraggono pattern, si chiariscono passaggi complessi, si generano note, mappe, report o altri materiali intermedi.</p>
+                    <p>La terza fase è la <strong>generazione dell’output</strong>.<br>Qui si chiede a NotebookLM di trasformare le informazioni in qualcosa: una presentazione, un report, una guida, un quiz, delle flashcard, una mappa mentale, un riassunto audio o un altro formato.</p>
+                    <p>Il processo corretto è quindi:</p>
+                    <ol>
+                        <li>Progetto il notebook</li>
+                        <li>Organizzo le fonti</li>
+                        <li>Interrogo i materiali</li>
+                        <li>Estraggo struttura e concetti</li>
+                        <li>Scrivo il prompt per l’output finale</li>
+                        <li>Controllo e rifinisco il risultato</li>
+                    </ol>
+                    <p>Questo è molto diverso dal flusso più ingenuo: Carico tutto > Chiedo una presentazione > Spero venga bene.</p>
+                    <p>NotebookLM funziona meglio quando viene guidato come un collaboratore progettuale, non quando viene trattato come un pulsante magico.</p>
+
+                    <h2 id="cap-3">3. Prima del prompt: costruire bene il notebook</h2>
+                    <p>Uno degli errori più comuni è pensare che il prompt sia la parte più importante del lavoro. In realtà, il prompt è solo l’ultima parte visibile di un processo più ampio.</p>
+                    <p>Prima di scrivere il prompt bisogna rispondere ad alcune domande:</p>
+                    <ul>
+                        <li>Che cosa voglio ottenere?</li>
+                        <li>Per chi sto lavorando?</li>
+                        <li>Qual è il livello del pubblico?</li>
+                        <li>Quali fonti sono davvero utili?</li>
+                        <li>Quali fonti sono superflue?</li>
+                        <li>Questo progetto è troppo grande per un solo notebook?</li>
+                        <li>Voglio una sintesi, una lezione, una presentazione, un report o uno strumento di verifica?</li>
+                    </ul>
+                    <p>Se queste domande non hanno risposta, il prompt rischia di essere solo una richiesta generica.</p>
+                    
+                    <details class="example-box">
+                        <summary class="example-label">Esempio debole <span class="toggle-icon">+</span></summary>
+                        <div class="example-content">
+                            <pre class="prompt-text">Crea una presentazione sui fondamenti del prompting.</pre>
+                        </div>
+                    </details>
+                    
+                    <details class="example-box">
+                        <summary class="example-label">Esempio più forte <span class="toggle-icon">+</span></summary>
+                        <div class="example-content">
+                            <pre class="prompt-text">Crea una presentazione didattica per studenti universitari di Design.
+L’obiettivo è spiegare i fondamenti del prompting evitando il copia-incolla.
+La presentazione deve aiutare gli studenti a capire la logica progettuale dietro un buon prompt.
+Usa solo le fonti caricate e non inventare informazioni.</pre>
+                        </div>
+                    </details>
+                    <p>Nel secondo caso, NotebookLM riceve già una direzione. Sa a chi sta parlando, cosa deve ottenere e quale atteggiamento deve evitare.</p>
+
+                    <h2 id="cap-4">4. Le fonti: meno quantità, più controllo</h2>
+                    <p>NotebookLM non migliora automaticamente se si caricano più materiali. Anzi, troppe fonti non organizzate possono peggiorare il risultato.</p>
+                    <p>Un notebook efficace non è necessariamente quello con più documenti. È quello con le fonti più pertinenti.</p>
+                    <p>La qualità delle fonti dipende da vari fattori: pertinenza, chiarezza, aggiornamento, coerenza, struttura, pulizia del testo, assenza di materiale inutile.</p>
+                    <p>Se si caricano fonti disordinate, ridondanti o contraddittorie, NotebookLM può produrre sintesi confuse. Se invece il materiale è selezionato con cura, il risultato sarà più solido. Un buon metodo consiste nel preparare le fonti prima di caricarle.</p>
+                    <p>Preparare una fonte può significare: eliminare parti inutili, dividere un documento troppo lungo, rinominare i file in modo chiaro, selezionare solo i capitoli utili, creare una versione sintetica di un materiale troppo dispersivo, distinguere fonti teoriche, esempi e riferimenti visivi.</p>
+                    <p>Per esempio, se sto costruendo un notebook sul prompting per presentazioni, posso organizzare le fonti così:</p>
+                    <ul>
+                        <li>01 Metodo NotebookLM</li>
+                        <li>02 Fondamenti del prompting</li>
+                        <li>03 Esempi di prompt efficaci</li>
+                        <li>04 Prompt per slide deck</li>
+                        <li>05 Stili visivi e design system</li>
+                        <li>06 Materiali didattici per studenti</li>
+                    </ul>
+                    <p>Questa struttura aiuta sia l’utente sia NotebookLM. Al contrario, nomi come questi sono poco utili:</p>
+                    <ul>
+                        <li>documento finale.pdf</li>
+                        <li>appunti vari.docx</li>
+                        <li>slide nuove.pdf</li>
+                        <li>testo copia.pdf</li>
+                        <li>materiale 2.pdf</li>
+                    </ul>
+                    <p>La rinomina delle fonti sembra un dettaglio banale, ma in realtà è parte del metodo. Un nome chiaro aiuta a mantenere ordine mentale e progettuale.</p>
+
+                    <h2 id="cap-5">5. Il perimetro del notebook</h2>
+                    <p>Un notebook dovrebbe avere un perimetro chiaro.</p>
+                    <p>Questo significa che bisogna capire quale argomento contiene e quale argomento invece non deve contenere. Un errore frequente è caricare tutto ciò che sembra vagamente collegato. Ma un notebook troppo ampio rischia di diventare un contenitore confuso.</p>
+                    <p>Meglio un notebook specifico: <em>Prompting per presentazioni didattiche</em><br>
+                    Che un notebook enorme tipo: <em>AI, design, immagini, scuola, marketing, prompt, video, branding, strumenti vari</em></p>
+                    <p>Quando un progetto è grande, conviene dividerlo. Per esempio:</p>
+                    <ul>
+                        <li>Notebook 1: Fondamenti teorici del prompting</li>
+                        <li>Notebook 2: Prompt per generazione immagini</li>
+                        <li>Notebook 3: Prompt per presentazioni NotebookLM</li>
+                        <li>Notebook 4: Esercizi didattici per studenti</li>
+                        <li>Notebook 5: Esempi e casi studio</li>
+                    </ul>
+                    <p>Questa divisione permette di ottenere risposte più focalizzate.</p>
+
+                    <h2 id="cap-6">6. La selezione dinamica delle fonti</h2>
+                    <p>Una funzione molto importante di NotebookLM è la possibilità di attivare o disattivare le fonti prima di fare una richiesta.</p>
+                    <p>Questo significa che non sempre bisogna usare tutto il materiale caricato. Se voglio una risposta metodologica, posso attivare solo le fonti teoriche. Se voglio una presentazione visiva, posso attivare anche gli esempi di prompt grafici. Se voglio un esercizio per studenti, posso attivare solo le fonti didattiche.</p>
+                    
+                    <details class="example-box">
+                        <summary class="example-label">Esempio <span class="toggle-icon">+</span></summary>
+                        <div class="example-content">
+                            <pre class="prompt-text">Voglio creare una presentazione sui fondamenti del prompting.
+
+Attivo:
+01 Metodo NotebookLM
+02 Fondamenti del prompting
+03 Esempi di prompt efficaci
+06 Materiali didattici per studenti
+
+Disattivo:
+04 Prompt troppo avanzati
+05 Esempi visuali non adatti alla lezione</pre>
+                        </div>
+                    </details>
+                    <p>Questo permette di avere un notebook ricco, ma di usare solo il sottoinsieme utile al momento. La selezione dinamica delle fonti è una forma di regia. Non tutto deve parlare sempre.</p>
+
+                    <h2 id="cap-7">7. La sezione Studio</h2>
+                    <p>NotebookLM non è solo chat. La sezione Studio può essere vista come un laboratorio di trasformazione.</p>
+                    <p>Da lì si possono generare output diversi: report, mappe mentali, flashcard, quiz, riassunti audio, video overview, presentazioni e altri formati. La cosa importante è scegliere lo strumento giusto in base allo scopo. Non tutti gli output servono alla stessa cosa.</p>
+                    <ul>
+                        <li><strong>Report:</strong> Utile per analisi strutturate, briefing, documenti di sintesi.</li>
+                        <li><strong>Mappa mentale:</strong> Utile per esplorare collegamenti tra concetti.</li>
+                        <li><strong>Flashcard:</strong> Utili per memorizzare definizioni, concetti, termini tecnici.</li>
+                        <li><strong>Quiz:</strong> Utile per verificare la comprensione.</li>
+                        <li><strong>Riassunto audio:</strong> Utile per ripasso, ascolto, studio secondario.</li>
+                        <li><strong>Presentazione:</strong> Utile per comunicare a un pubblico con una struttura visiva.</li>
+                        <li><strong>Video overview:</strong> Utile per una sintesi visuale più dinamica.</li>
+                    </ul>
+                    <p>Per costruire una buona presentazione, può essere utile non partire subito dalla presentazione. Un flusso più efficace potrebbe essere:</p>
+                    <ol>
+                        <li>Genero una mappa mentale per capire la struttura del tema</li>
+                        <li>Chiedo un report sintetico sui concetti principali</li>
+                        <li>Estraggo una lista di principi chiave</li>
+                        <li>Solo dopo genero la slide deck</li>
+                    </ol>
+                    <p>Questo approccio permette di arrivare al prompt finale con maggiore controllo.</p>
+
+                    <h2 id="cap-8">8. Il prompt per slide: non è una frase, è una direzione artistica</h2>
+                    <p>Un prompt efficace per generare presentazioni non dovrebbe essere una semplice richiesta. Dovrebbe essere una direzione artistica completa.</p>
+                    
+                    <details class="example-box">
+                        <summary class="example-label">Un prompt debole dice: <span class="toggle-icon">+</span></summary>
+                        <div class="example-content">
+                            <pre class="prompt-text">Fammi una presentazione bella e moderna.</pre>
+                        </div>
+                    </details>
+                    
+                    <details class="example-box">
+                        <summary class="example-label">Un prompt forte dice: <span class="toggle-icon">+</span></summary>
+                        <div class="example-content">
+                            <pre class="prompt-text">Crea una presentazione editoriale coerente, basata solo sulle fonti caricate, pensata per studenti universitari di Design. Lo stile deve essere business pop, con titoli enormi, forte contrasto tipografico, uso di numeri come ancore visive, layout asimmetrici, micro-copy editoriale e alternanza tra slide dense e slide visive.</pre>
+                        </div>
+                    </details>
+                    
+                    <p>La differenza è evidente. Nel primo caso NotebookLM deve inventarsi quasi tutto. Nel secondo caso ha una cornice progettuale.</p>
+                    <p>Un prompt maturo deve dire: che ruolo deve assumere l’AI, che fonti deve usare, che lingua deve usare, a chi parla, qual è l’obiettivo, che stile deve avere, che atmosfera deve produrre, quali layout può usare, come deve trasformare i contenuti, che errori deve evitare.</p>
+                    <p>Il prompt non serve solo a chiedere. Serve a progettare il comportamento del risultato.</p>
+
+                    <h2 id="cap-9">9-15. La struttura di un prompt efficace</h2>
+                    <p>Dalla mia analisi, la struttura più efficace per un prompt destinato a generare slide deck è questa:</p>
+                    <ul>
+                        <li><strong>Ruolo:</strong> "Agisci come art director, designer editoriale, information architect..."</li>
+                        <li><strong>Regola sulle fonti:</strong> "Usa solo le informazioni caricate. Non inventare dati o date."</li>
+                        <li><strong>Lingua:</strong> Mantenere coerenza.</li>
+                        <li><strong>Regole di output:</strong> "Non usare simboli Markdown o bullet points decorativi."</li>
+                        <li><strong>Pubblico e Obiettivo:</strong> Definire il target cambia il tono e la profondità dell'output.</li>
+                    </ul>
+
+                    <h2 id="cap-16">16-20. Stile, Concept e Identità Visiva</h2>
+                    <ul>
+                        <li><strong>Style Name:</strong> Dare un nome (es. "Material Industrial Zen") aiuta a creare un mondo visivo.</li>
+                        <li><strong>Concept:</strong> "La fusione tra brutalismo architettonico e data-visualization."</li>
+                        <li><strong>Emotional Direction:</strong> Cosa DEVE e cosa NON DEVE sembrare.</li>
+                        <li><strong>Visual Identity e Palette:</strong> Parole specifiche ("griglia modulare", "spazio negativo") invece di aggettivi vaghi ("bello", "moderno").</li>
+                    </ul>
+
+                    <h2 id="cap-21">21-27. Regole Editoriali e di Layout</h2>
+                    <p>Il concetto chiave nella tipografia è la gerarchia (Jump Ratio): grande differenza di scala tra titolo e testo base.</p>
+                    <p><strong>Slide Logic: 1 slide = 1 message.</strong> Una slide non deve contenere tutto ciò che sappiamo. Deve contenere ciò che serve per comunicare un passaggio.</p>
+                    <p>È vitale fornire <strong>Layout Variations</strong> (es. Cover, Definition Slide, Process Flow) per evitare che il sistema crei layout tutti uguali.</p>
+
+                    <h2 id="cap-28">28-30. Tono di voce e Restrizioni (Avoid)</h2>
+                    <p>Il testo deve essere breve, preciso e dichiarativo. Niente "marketing fluff" o paragrafi lunghi. Inoltre, la sezione <strong>Avoid</strong> deve vietare errori tecnici specifici ("Evita slide con titolo centrato e bullet list").</p>
+
+                    <h2 id="cap-31">31. Template madre completo</h2>
+                    <p>Questo è un template completo da usare come base.</p>
+                    
+                    <details class="example-box">
+                        <summary class="example-label">Prompt Base Completo <span class="toggle-icon">+</span></summary>
+                        <div class="example-content">
+                            <pre class="prompt-text">You are a top-level art director, editorial designer, information architect, and educational content designer.
+
+Create a cohesive slide deck based only on the uploaded source information.
+
+Language:
+Use Italian as the main language.
+Short English labels are allowed only as visual/editorial micro-copy.
+Do not randomly switch languages.
+
+Source Accuracy:
+Use only the uploaded source information.
+Do not invent facts, statistics, quotes, names, references, dates, claims, or examples.
+If a detail is not present in the sources, omit it.
+The deck must be visually strong but factually grounded.
+
+Output Rules:
+Do not use Markdown symbols in visible slide text.
+Do not use #, *, **, decorative bullets, or formatting marks.
+All visible slide text must be clean, editorial, plain text.
+
+Audience:
+[pubblico]
+
+Goal:
+[obiettivo]
+
+Style Name:
+[nome dello stile]
+
+Concept:
+[frase concettuale breve]
+
+Emotional Direction:
+La presentazione deve sembrare [sensazioni desiderate].
+Non deve sembrare [sensazioni da evitare].
+
+Visual Identity:
+[descrizione del mondo visivo]
+
+Color Palette:
+Sfondo:
+Testo:
+Accento:
+Secondari:
+Uso colore:
+
+Typography:
+Headlines:
+Body:
+Labels:
+Numbers:
+Hierarchy Rule:
+
+Visual Materials:
+Use:
+Do not use:
+
+Layout System:
+Griglia:
+Composizione:
+Spazio:
+Immagini:
+Layering:
+
+Slide Logic:
+1 slide = 1 message.
+Ogni slide deve avere un messaggio dominante, un’ancora visiva e un takeaway chiaro.
+Alterna slide dense a slide più visive e respirate.
+Crea ritmo: introduci, spiega, visualizza, confronta, sintetizza.
+
+Layout Variations:
+Cover / Manifesto:
+Definition Slide:
+Prompt Anatomy:
+Problem vs Solution:
+Process Flow:
+Key Principle:
+Checklist Board:
+Example Breakdown:
+Final Principle:
+
+Content Transformation Rules:
+Trasforma i numeri chiave in ancore visive.
+Trasforma i processi in flow diagram o timeline.
+Trasforma i confronti in layout split-screen.
+Trasforma i concetti astratti in metafore visive.
+Trasforma regole e procedure in checklist.
+Sintetizza, organizza e visualizza.
+Non copiare meccanicamente il testo delle fonti.
+
+Tone of Text:
+Breve.
+Preciso.
+Dichiarativo.
+Editoriale.
+Niente marketing fluff.
+Niente paragrafi lunghi.
+Niente frasi motivazionali generiche.
+
+Avoid:
+Template corporate generici.
+Slide con titolo centrato e bullet list.
+Icone decorative casuali.
+Foto stock incoerenti.
+Gradienti non controllati.
+Gerarchie tipografiche deboli.
+Testo troppo lungo.
+Layout tutti uguali.
+Effetto Canva generico.
+
+Generation Instruction:
+Generate a cohesive multi-slide presentation following this exact visual system.
+Maintain consistency in palette, typography, layout rhythm, image treatment, hierarchy and visual language.
+The deck must feel like one designed editorial object, not a collection of unrelated templates.</pre>
+                        </div>
+                    </details>
+
+                    <h2 id="cap-32">32. Versione breve per studenti</h2>
+                    <p>Per iniziare, gli studenti possono usare una versione più semplice.</p>
+                    
+                    <details class="example-box">
+                        <summary class="example-label">Prompt Ridotto <span class="toggle-icon">+</span></summary>
+                        <div class="example-content">
+                            <pre class="prompt-text">Crea una presentazione basata solo sulle fonti caricate.
+
+Lingua:
+Usa italiano come lingua principale.
+
+Pubblico:
+[definisci il pubblico]
+
+Obiettivo:
+[definisci cosa deve ottenere la presentazione]
+
+Stile:
+[definisci il nome dello stile]
+
+Concept:
+[spiega l’idea visiva]
+
+La presentazione deve sembrare:
+[3–5 aggettivi]
+
+Non deve sembrare:
+[3–5 errori da evitare]
+
+Regole:
+1 slide = 1 messaggio.
+Ogni slide deve avere un’idea principale.
+Usa gerarchie tipografiche forti.
+Trasforma processi in diagrammi.
+Trasforma confronti in layout divisi.
+Trasforma concetti astratti in metafore visive.
+Non copiare il testo delle fonti.
+Non inventare dati.
+
+Tono:
+Breve, preciso, editoriale.
+
+Evita:
+template generici, bullet list, testo troppo lungo, icone casuali.
+
+Genera un deck coerente, non una raccolta di slide scollegate.</pre>
+                        </div>
+                    </details>
+                    <p>Questa versione è meno completa, ma utile per iniziare.</p>
+
+                    <h2 id="cap-33">33. Le dieci domande fondamentali</h2>
+                    <p>Per insegnare il metodo agli studenti, si può ridurre tutto a dieci domande.</p>
+                    <ol>
+                        <li>A chi parla la presentazione?</li>
+                        <li>Cosa deve ottenere?</li>
+                        <li>Quali fonti deve usare?</li>
+                        <li>Cosa non deve inventare?</li>
+                        <li>Qual è il nome dello stile?</li>
+                        <li>Qual è il concept?</li>
+                        <li>Che sensazione deve dare?</li>
+                        <li>Quali colori, font e materiali visivi usa?</li>
+                        <li>Quali tipi di slide può generare?</li>
+                        <li>Come deve trasformare dati, concetti e processi?</li>
+                    </ol>
+                    <p>Se uno studente sa rispondere a queste domande, sta già progettando un prompt solido. Se non sa rispondere, il prompt sarà probabilmente generico.</p>
+
+                    <h2 id="cap-34">34. Esempio completo: Editorial Business Pop</h2>
+                    
+                    <details class="example-box">
+                        <summary class="example-label">Prompt Completo 1 <span class="toggle-icon">+</span></summary>
+                        <div class="example-content">
+                            <pre class="prompt-text">You are a top-level art director, editorial designer, information architect, and educational content designer.
+
+Create a cohesive slide deck based only on the uploaded source information.
+
+Language:
+Use Italian as the main language.
+Short English labels are allowed only as visual/editorial micro-copy.
+Do not randomly switch languages.
+
+Source Accuracy:
+Use only the uploaded source information.
+Do not invent facts, statistics, quotes, names, references, dates, claims, or examples.
+If a detail is not present in the sources, omit it.
+The deck must be visually strong but factually grounded.
+
+Output Rules:
+Do not use Markdown symbols in visible slide text.
+Do not use #, *, **, decorative bullets, or formatting marks.
+All visible slide text must be clean, editorial, plain text.
+
+Audience:
+Studenti universitari del corso di Design.
+
+Goal:
+Spiegare i fondamenti del prompting evitando il copia-incolla.
+La presentazione deve insegnare agli studenti a capire la logica dietro un buon prompt, non solo a replicare formule già pronte.
+
+Style Name:
+Editorial Business Pop.
+
+Concept:
+Un magazine digitale premium che incontra un explainer dinamico per i social.
+
+Emotional Direction:
+La presentazione deve sembrare smart, affilata, pop, intellettualmente stimolante, mai infantile.
+Non deve sembrare un noioso PowerPoint scolastico, un template corporate o una raccolta generica di consigli sull’AI.
+
+Visual Identity:
+Estetica business editoriale fusa con cultura visiva nativa per smartphone.
+Molto contrasto.
+Titoli enormi.
+Testi brevi.
+Layout asimmetrici.
+Spazio vuoto usato come elemento premium.
+
+Color Palette:
+Background: bianco puro o grigio molto chiaro.
+Testo: nero profondo.
+Accento: giallo elettrico o rosso alert, usati solo per enfasi.
+Marker: evidenziature fluorescenti su parole chiave o numeri importanti.
+
+Typography:
+Headlines: extra-bold sans serif, enormi, fino al 30–50% della slide.
+Body: piccolo, leggibile, con ampio respiro.
+Labels: micro-copy in inglese, molto piccola, usata come dettaglio editoriale.
+Numbers: numeri giganti usati come ancore visive.
+Hierarchy Rule: contrasto estremo tra titolo, testo, label e numeri. Evitare differenze di scala timide.
+
+Visual Materials:
+Use: foto monocromatiche ritagliate quando disponibili, numeri giganti, parole chiave isolate, etichette inglesi piccolissime, marker fluorescenti, semplici forme geometriche nere o gialle.
+Do not use: illustrazioni casuali, icone cartoon, foto stock colorate non coerenti.
+
+Layout System:
+Usa una griglia rigorosa.
+Preferisci composizioni asimmetriche.
+Evita il titolo centrato come soluzione standard.
+Usa grande spazio vuoto come elemento di qualità.
+Ogni slide deve avere un solo punto focale principale.
+
+Slide Logic:
+1 slide = 1 message.
+Ogni slide deve avere un messaggio dominante, un’ancora visiva e un takeaway chiaro.
+Alterna slide dense a slide più visive e respirate.
+Crea ritmo: spiega, visualizza, sintetizza, colpisci.
+
+Layout Variations:
+Cover / Manifesto:
+Titolo enorme, poco testo, forte uso di spazio vuoto.
+
+Data Emphasis:
+Numero gigante come ancora visiva, breve spiegazione laterale.
+
+Problem vs Solution:
+Due aree contrapposte con forte contrasto tipografico.
+
+Process / Flow:
+Timeline, frecce o sequenza modulare per spiegare passaggi.
+
+Concept Breakdown:
+Scomponi un concetto complesso in 3 o 4 blocchi visivi.
+
+Punchline Slide:
+Una frase centrale, enorme, secca, con impatto editoriale.
+
+Visual Breathing Slide:
+Slide quasi vuota, con una sola immagine cut-out o una sola frase forte.
+
+Content Transformation Rules:
+Trasforma i numeri chiave in ancore visive.
+Trasforma i processi in flow diagram o timeline.
+Trasforma i confronti in layout split-screen.
+Trasforma i concetti astratti in metafore visive.
+Sintetizza, organizza e visualizza.
+Non copiare meccanicamente il testo delle fonti.
+
+Tone of Text:
+Breve.
+Preciso.
+Dichiarativo.
+Editoriale.
+Niente marketing fluff.
+Niente paragrafi lunghi.
+Niente frasi motivazionali generiche.
+
+Avoid:
+Template corporate generici.
+Slide con titolo centrato e bullet list.
+Troppe icone decorative.
+Foto stock casuali.
+Gradienti non controllati.
+Testo troppo lungo.
+Gerarchie tipografiche deboli.
+Layout simmetrici e scolastici.
+Effetto Canva generico.
+
+Generation Instruction:
+Generate a cohesive multi-slide presentation following this exact visual system.
+Maintain consistency in palette, typography, layout rhythm, image treatment, and visual language.
+The deck must feel like one designed editorial object, not a collection of unrelated templates.</pre>
+                        </div>
+                    </details>
+
+                    <h2 id="cap-35">35. Esempio completo: Material Industrial Zen</h2>
+                    
+                    <details class="example-box">
+                        <summary class="example-label">Prompt Completo 2 <span class="toggle-icon">+</span></summary>
+                        <div class="example-content">
+                            <pre class="prompt-text">You are a top-level art director, editorial designer, and information architect.
+
+Create a cohesive slide deck based only on the uploaded source information.
+
+Language:
+Use Italian as the main language.
+Short English labels are allowed only as visual/editorial micro-copy.
+Do not randomly switch languages.
+
+Source Accuracy:
+Use only the uploaded source information.
+Do not invent facts, statistics, quotes, names, references, dates, claims, or examples.
+If a detail is not present in the sources, omit it.
+The deck must be visually strong but factually grounded.
+
+Output Rules:
+Do not use Markdown symbols in visible slide text.
+Do not use #, *, **, decorative bullets, or formatting marks.
+All visible slide text must be clean, editorial, plain text.
+
+Audience:
+Studenti universitari del corso di Design.
+
+Goal:
+Spiegare i fondamenti del prompting evitando il copia-incolla.
+La presentazione deve insegnare agli studenti a progettare un prompt come un sistema, non come una frase casuale.
+
+Style Name:
+Material Industrial Zen.
+
+Concept:
+La fusione tra brutalismo architettonico e data-visualization di precisione attraverso materiali fisici, superfici tattili e composizioni rigorose.
+
+Emotional Direction:
+La presentazione deve sembrare tattile, architettonica, premium, sobria e progettuale.
+Non deve sembrare piatta, colorata, ludica, organica, decorativa o scolastica.
+
+Visual Identity:
+Estetica da laboratorio progettuale e atlante materico.
+Oggetti 3D isometrici con texture fisiche pesanti: cemento, rame spazzolato, basalto, grafite, carta tecnica.
+Ombre morbide a contatto, occlusione ambientale e superfici materiche realistiche.
+Elementi grafici definiti da linee di annotazione ultrasottili che collegano testo, dati e concetti.
+Spazi divisi da griglie ortogonali nette.
+Ogni slide deve sembrare una tavola tecnica editoriale, non una presentazione decorativa.
+
+Color Palette:
+Sfondo: grigio cemento neutro #D1D1D1.
+Testo: nero opaco o carbone #1A1A1A.
+Accento: rame lucido o bronzo #B87333.
+Secondari: grigi caldi, ardesia, grafite, beige minerale.
+Uso colore: molto controllato, mai pop, mai saturo.
+
+Typography:
+Headlines: sans-serif geometrico, pesante, compatto, con kerning ridotto.
+Body: sans-serif regular o medium, piccolo, preciso, molto leggibile.
+Labels: micro-annotazioni tecniche, sottili, allineate alla griglia.
+Numbers: numeri grandi, trattati come incisioni o placche materiche.
+Hierarchy Rule: usare forte contrasto tra titolo, corpo, label e numeri. La gerarchia deve sembrare progettata, non decorativa.
+
+Visual Materials:
+Use: oggetti 3D isometrici quando utili, texture di cemento, superfici porose, metalli spazzolati, rame, basalto, grafite, linee vettoriali minimaliste, annotazioni tecniche, interfacce pulite, griglie ortogonali.
+Do not use: colori vivaci, illustrazioni cartoon, forme morbide organiche, sticker, emoji, gradienti pop, fotografie stock generiche.
+
+Layout System:
+Griglia modulare rigida.
+Sottili linee di separazione grigie.
+Composizione asimmetrica ma bilanciata.
+Ampio uso di spazio negativo.
+Oggetti materici posizionati come ancore visive.
+Testi piccoli e precisi, collegati agli elementi tramite linee hairline.
+La slide deve avere un ritmo da tavola tecnica premium.
+
+Slide Logic:
+1 slide = 1 message.
+Ogni slide deve avere un messaggio dominante, un’ancora visiva e un takeaway chiaro.
+Alterna slide dense a slide più silenziose e materiche.
+Crea ritmo: definisci, scomponi, mostra, confronta, sintetizza.
+
+Layout Variations:
+Cover / Material Manifesto:
+Titolo grande e sobrio, molto spazio vuoto, un solo oggetto materico centrale o laterale.
+
+Concept Block:
+Un concetto astratto trasformato in un blocco fisico isometrico, con annotazioni tecniche intorno.
+
+Prompt Anatomy:
+Scomposizione del prompt in moduli, rappresentati come lastre, livelli o componenti impilati.
+
+Process Flow:
+Sequenza di step su griglia ortogonale, con frecce sottili e blocchi materici progressivi.
+
+Problem vs Solution:
+Due aree separate da una linea netta. A sinistra prompt debole, a destra prompt progettato come sistema.
+
+Data / Key Principle:
+Numero o principio chiave trattato come elemento inciso, placca metallica o blocco tipografico monumentale.
+
+Checklist Technical Board:
+Lista di controllo trattata come tavola tecnica, con micro-label, linee sottili e sezioni modulari.
+
+Final Principle:
+Una frase conclusiva forte, molto sobria, con massimo spazio negativo.
+
+Content Transformation Rules:
+Trasforma i concetti astratti in oggetti o strutture fisiche.
+Trasforma i processi in sequenze modulari.
+Trasforma i confronti in layout split-screen.
+Trasforma le regole in checklist tecniche.
+Trasforma i numeri o principi chiave in ancore visive.
+Sintetizza, organizza e visualizza.
+Non copiare meccanicamente il testo delle fonti.
+
+Tone of Text:
+Breve.
+Preciso.
+Sobrio.
+Tecnico-editoriale.
+Niente marketing fluff.
+Niente paragrafi lunghi.
+Niente frasi motivazionali generiche.
+
+Avoid:
+Template corporate generici.
+Slide scolastiche con titolo e bullet list.
+Colori saturi o giocosi.
+Forme organiche morbide.
+Icone decorative casuali.
+Effetti glossy eccessivi.
+Texture usate solo come decorazione.
+Rendering 3D pacchiani.
+Layout troppo simmetrici o statici.
+Testo troppo lungo.
+
+Generation Instruction:
+Generate a cohesive multi-slide presentation following this exact visual system.
+Maintain consistency in palette, typography, layout rhythm, image treatment, material language and visual hierarchy.
+The deck must feel like one designed editorial object, not a collection of unrelated templates.</pre>
+                        </div>
+                    </details>
+
+                    <h2 id="cap-36">36. Possibile struttura per una futura app didattica</h2>
+                    <p>Tutto questo metodo può essere trasformato in una piccola app per aiutare gli studenti a scrivere prompt.</p>
+                    <p>L’app non dovrebbe chiedere subito “scrivi il prompt”. Dovrebbe guidare l’utente per moduli.</p>
+                    <ul>
+                        <li><strong>Modulo 1 — Obiettivo:</strong> Spiegare, Convincere, Riassumere, Analizzare, Presentare un progetto, Preparare una lezione, Verificare conoscenze, Raccontare dati</li>
+                        <li><strong>Modulo 2 — Pubblico:</strong> Studenti principianti, Studenti avanzati, Cliente, Team creativo, Professionisti, Pubblico generalista, Appassionati, Docenti</li>
+                        <li><strong>Modulo 3 — Tipo di output:</strong> Slide deck, Report, Quiz, Flashcard, Mappa mentale, Riassunto audio, Video overview, Guida didattica</li>
+                        <li><strong>Modulo 4 — Stile:</strong> Editorial Business Pop, Material Industrial Zen, Elite Broadcast Dynamic, Anti-Gravity Living Artifact, Neo-Retro Dev Deck, Premium UI Mockup, Vitamin Pop Digital Neo, Minimal Portfolio</li>
+                        <li><strong>Modulo 5 — Sensazione:</strong> Premium, Didattica, Pop, Tecnica, Sobria, Cinematica, Sperimentale, Istituzionale, Editoriale</li>
+                        <li><strong>Modulo 6 — Regole automatiche:</strong> Usa solo le fonti, Non inventare dati, 1 slide = 1 messaggio, Niente Markdown, Niente bullet list generiche, Alterna slide dense e slide visive, Trasforma numeri in ancore visive, Trasforma processi in diagrammi, Trasforma confronti in split-screen</li>
+                        <li><strong>Modulo 7 — Output finale:</strong> L’app potrebbe generare: prompt completo, prompt breve, prompt di revisione, checklist qualità, varianti di stile.</li>
+                    </ul>
+                    <p>In questo modo gli studenti imparano a costruire un prompt per ragionamento progressivo, non per imitazione.</p>
+
+                    <h2 id="cap-37">37. Checklist finale</h2>
+                    <p>Prima di generare una presentazione con NotebookLM, conviene controllare:</p>
+                    <ul>
+                        <li>Il notebook ha un perimetro chiaro?</li>
+                        <li>Le fonti sono pertinenti?</li>
+                        <li>Le fonti sono nominate bene?</li>
+                        <li>Ho attivato solo le fonti necessarie?</li>
+                        <li>Ho definito il pubblico?</li>
+                        <li>Ho definito l’obiettivo?</li>
+                        <li>Ho scritto che deve usare solo le fonti?</li>
+                        <li>Ho specificato la lingua?</li>
+                        <li>Ho vietato Markdown e simboli inutili?</li>
+                        <li>Ho dato uno Style Name?</li>
+                        <li>Ho scritto un Concept?</li>
+                        <li>Ho definito l’Emotional Direction?</li>
+                        <li>Ho definito palette e tipografia?</li>
+                        <li>Ho indicato materiali visivi coerenti?</li>
+                        <li>Ho definito un layout system?</li>
+                        <li>Ho inserito layout variations?</li>
+                        <li>Ho scritto content transformation rules?</li>
+                        <li>Ho indicato cosa evitare?</li>
+                        <li>Ho chiesto coerenza tra tutte le slide?</li>
+                    </ul>
+                    <p>Se mancano Style Name, Concept, Emotional Direction e Layout Variations, il prompt è probabilmente incompleto.</p>
+
+                    <h2 id="cap-38">38. Sintesi finale</h2>
+                    <p>Il principio operativo è questo: <strong>NotebookLM non premia il prompt bello. Premia il sistema ben progettato.</strong></p>
+                    <p>Il sistema è composto da:</p>
+                    <ul>
+                        <li>fonti selezionate</li>
+                        <li>notebook coerente</li>
+                        <li>obiettivo chiaro</li>
+                        <li>pubblico definito</li>
+                        <li>output scelto bene</li>
+                        <li>prompt editoriale strutturato</li>
+                        <li>revisione critica</li>
+                    </ul>
+                    
+                    <div class="highlight-box">
+                        <p><strong>La frase più importante da ricordare è:</strong></p>
+                        <p>Promptare NotebookLM significa progettare il comportamento della presentazione prima ancora della presentazione.</p>
+                        <p>Oppure, in forma ancora più diretta:</p>
+                        <p><strong>Un prompt efficace non chiede semplicemente delle slide.<br>Costruisce il sistema dentro cui quelle slide devono nascere.</strong></p>
+                    </div>
+
+                </div>
+            </article>
+        </div>
+    </div>
+
+    <!-- TAB: PROMPTOTHECA -->
+    <div id="tab-promptoteca" class="content-section">
+        <h2>Galleria Prompt</h2>
+        <p style="color: var(--text-secondary); margin-bottom: 1.5rem;">Confronto interattivo strutturato (JSON) vs narrativo (TXT) nella generazione visiva.</p>
+        
+        <div class="prompt-gallery-nav">
+            <div class="gallery-thumb active" onclick="switchPrompt('prompt-1', this)">
+                <img src="https://drive.google.com/thumbnail?id=1raXNgsRsLHBljmLOqadjqJIc4IpWIb29&sz=w400" alt="Pascal Neutro">
+                <div class="thumb-label">1. Pascal Neutro</div>
+            </div>
+            <div class="gallery-thumb" onclick="switchPrompt('prompt-2', this)">
+                <img src="https://drive.google.com/thumbnail?id=1smc_9M1PndWWMEVBGlA0l8SvimfBDZjs&sz=w400" alt="Pascal Rabbia">
+                <div class="thumb-label">2. Pascal Rabbia</div>
+            </div>
+            <div class="gallery-thumb" onclick="switchPrompt('prompt-3', this)">
+                <img src="https://drive.google.com/thumbnail?id=1sNsNjM2sN33R_TZo6zVEpojCY2zdUqG6&sz=w400" alt="Pugh Neutro">
+                <div class="thumb-label">3. Pugh Neutro</div>
+            </div>
+            <div class="gallery-thumb" onclick="switchPrompt('prompt-4', this)">
+                <img src="https://drive.google.com/thumbnail?id=139YrltzXOCCQ0Neisxh5rTSLhoxzRtAq&sz=w400" alt="Pugh Smorfia">
+                <div class="thumb-label">4. Pugh Smorfia</div>
+            </div>
+        </div>
+
+        <div class="prompt-grid">
+            
+            <!-- SCHEDA 1 -->
+            <div id="prompt-1" class="prompt-card active-card">
+                <div class="prompt-image">
+                    <div class="comparison-container">
+                        <img src="https://drive.google.com/thumbnail?id=13M6myY0KmbFcR3yIYXRye3iB-ljJAojR&sz=w800" class="comparison-img-base" alt="TXT">
+                        <img src="https://drive.google.com/thumbnail?id=1raXNgsRsLHBljmLOqadjqJIc4IpWIb29&sz=w800" class="comparison-img-over" alt="JSON" id="comp-img-1">
+                        <input type="range" min="0" max="100" value="50" class="comparison-slider-input" oninput="updateSlider(this.value, '1')">
+                        <div class="comparison-handle" id="comp-handle-1"></div>
+                        <div class="comparison-label comp-label-json">SYS: JSON</div>
+                        <div class="comparison-label comp-label-txt">SYS: TXT</div>
+                    </div>
+                </div>
+                <div class="prompt-code">
+                    <div class="code-mode-nav">
+                        <button class="code-mode-btn active-json" onclick="switchPromptMode('json', this)">[ MOSTRA JSON ]</button>
+                        <button class="code-mode-btn" onclick="switchPromptMode('txt', this)">[ MOSTRA TXT ]</button>
+                        <button class="translate-btn" onclick="toggleTranslation(this)">Traduci ITA</button>
+                    </div>
+                    <div class="prompt-view view-json">
+<pre class="lang-en"><code>{
+  "meta": {
+    "version": "3.0",
+    "type": "anatomical_direction_system",
+    "intent": "high precision facial control for portrait generation"
+  },
+  "subject_details": {
+    "identity": {
+      "source": "image_reference",
+      "name": "Pedro Pascal",
+      "type": "specific_person",
+      "preserve_identity": true,
+      "facial_consistency_priority": "absolute",
+      "prompt_trigger": "A head and shoulders shot of Pedro Pascal, in a frontal pose, wearing a black turtleneck, eyes open. Exact facial identity preserved, soft even studio lighting, diffused shadows. Optical parameters: 85mm Prime, f/2.8."
+    },
+    "styling_elements": {
+      "garment": "Black Turtleneck"
+    }
+  },
+  "expression_system": {
+    "global_state": {
+      "emotion": "neutral",
+      "intensity": 0,
+      "muscular_tension": "none"
+    },
+    "upper_face": {
+      "forehead": {
+        "state": "relaxed",
+        "wrinkles": "none"
+      },
+      "brows": {
+        "position": "neutral",
+        "symmetry": "balanced",
+        "tension": "none"
+      }
+    },
+    "eyes": {
+      "left": {
+        "openness": "open",
+        "squint": 0
+      },
+      "right": {
+        "openness": "open",
+        "squint": 0
+      },
+      "gaze": {
+        "direction": "camera directly",
+        "focus_intensity": "soft",
+        "asymmetry": "none"
+      },
+      "secondary_effects": {
+        "crow_feet": "none",
+        "lower_lid_tension": "none"
+      }
+    },
+    "mid_face": {
+      "nose": {
+        "state": "relaxed",
+        "wrinkle": false,
+        "nostril_flare": "none",
+        "bridge_lines": "none"
+      },
+      "cheeks": {
+        "tension": "relaxed",
+        "volume": "natural",
+        "lift": "none",
+        "nasolabial_fold": "natural"
+      }
+    },
+    "lower_face": {
+      "jaw": {
+        "state": "relaxed",
+        "opening": 0.2,
+        "lateral_shift": "none"
+      },
+      "lips": {
+        "state": "parted",
+        "compression": "light",
+        "parting": 0.16,
+        "corner_left": "neutral",
+        "corner_right": "neutral"
+      },
+      "mouth_cavity": {
+        "teeth_visibility": false,
+        "tongue_visibility": false
+      },
+      "chin": {
+        "tension": "none"
+      }
+    },
+    "secondary_physiology": {
+      "neck_tension": "none",
+      "platysma_visibility": "none",
+      "sternocleidomastoid_visibility": "none",
+      "jugular_vein_prominence": "none",
+      "skin_micro_reactions": []
+    }
+  },
+  "skin_detail_system": {
+    "pores_visibility": "medium",
+    "wrinkles": "minimal",
+    "imperfections": "natural",
+    "texture_realism": "high"
+  },
+  "camera_system": {
+    "lens": "85mm Prime",
+    "distance": "0.85m",
+    "aperture": "f/2.8",
+    "depth_of_field": "shallow",
+    "distortion": "none",
+    "framing": "head and shoulders"
+  },
+  "lighting_system": {
+    "type": "studio",
+    "modifier": "Softbox",
+    "position": {
+      "azimuth": 45,
+      "elevation": 45
+    },
+    "quality": "soft",
+    "shadow": "feathered",
+    "contrast": "medium_low",
+    "background_separation": "subtle"
+  },
+  "environment": {
+    "background": "white seamless cyclorama",
+    "luminance": "high",
+    "distractions": "none"
+  }
+}</code></pre>
+<pre class="lang-it" style="display: none;"><code>{
+  "meta": {
+    "version": "3.0",
+    "type": "sistema_direzione_anatomica",
+    "intent": "controllo facciale di alta precisione per ritratti"
+  },
+  "subject_details": {
+    "identity": {
+      "source": "riferimento_immagine",
+      "name": "Pedro Pascal",
+      "type": "persona_specifica",
+      "preserve_identity": true,
+      "facial_consistency_priority": "assoluta",
+      "prompt_trigger": "Un primo piano mezzo busto di Pedro Pascal, posa frontale, indossa un dolcevita nero, occhi aperti. Esatta identità facciale preservata, illuminazione da studio morbida e uniforme, ombre diffuse. Obiettivo: 85mm Prime, f/2.8."
+    },
+    "styling_elements": {
+      "garment": "Dolcevita nero"
+    }
+  },
+  "expression_system": {
+    "global_state": {
+      "emotion": "neutra",
+      "intensity": 0,
+      "muscular_tension": "nessuna"
+    },
+    "upper_face": {
+      "forehead": {
+        "state": "rilassata",
+        "wrinkles": "nessuna"
+      },
+      "brows": {
+        "position": "neutra",
+        "symmetry": "bilanciata",
+        "tension": "nessuna"
+      }
+    },
+    "eyes": {
+      "left": {
+        "openness": "aperto",
+        "squint": 0
+      },
+      "right": {
+        "openness": "aperto",
+        "squint": 0
+      },
+      "gaze": {
+        "direction": "direttamente in camera",
+        "focus_intensity": "morbida",
+        "asymmetry": "nessuna"
+      },
+      "secondary_effects": {
+        "crow_feet": "nessuna",
+        "lower_lid_tension": "nessuna"
+      }
+    },
+    "mid_face": {
+      "nose": {
+        "state": "rilassato",
+        "wrinkle": false,
+        "nostril_flare": "nessuna",
+        "bridge_lines": "nessuna"
+      },
+      "cheeks": {
+        "tension": "rilassate",
+        "volume": "naturale",
+        "lift": "nessuno",
+        "nasolabial_fold": "naturale"
+      }
+    },
+    "lower_face": {
+      "jaw": {
+        "state": "rilassata",
+        "opening": 0.2,
+        "lateral_shift": "nessuno"
+      },
+      "lips": {
+        "state": "dischiuse",
+        "compression": "leggera",
+        "parting": 0.16,
+        "corner_left": "neutro",
+        "corner_right": "neutro"
+      },
+      "mouth_cavity": {
+        "teeth_visibility": false,
+        "tongue_visibility": false
+      },
+      "chin": {
+        "tension": "nessuna"
+      }
+    },
+    "secondary_physiology": {
+      "neck_tension": "nessuna",
+      "platysma_visibility": "nessuna",
+      "sternocleidomastoid_visibility": "nessuna",
+      "jugular_vein_prominence": "nessuna",
+      "skin_micro_reactions": []
+    }
+  },
+  "skin_detail_system": {
+    "pores_visibility": "media",
+    "wrinkles": "minime",
+    "imperfections": "naturali",
+    "texture_realism": "alto"
+  },
+  "camera_system": {
+    "lens": "85mm Fisso",
+    "distance": "0.85m",
+    "aperture": "f/2.8",
+    "depth_of_field": "ridotta",
+    "distortion": "nessuna",
+    "framing": "mezzo busto"
+  },
+  "lighting_system": {
+    "type": "studio",
+    "modifier": "Softbox",
+    "position": {
+      "azimuth": 45,
+      "elevation": 45
+    },
+    "quality": "morbida",
+    "shadow": "sfumata",
+    "contrast": "medio_basso",
+    "background_separation": "sottile"
+  },
+  "environment": {
+    "background": "limbo bianco continuo",
+    "luminance": "alta",
+    "distractions": "nessuna"
+  }
+}</code></pre>
+                    </div>
+
+                    <div class="prompt-view view-txt" style="display: none;">
+<pre class="lang-en"><code>Generate a cinematic head and shoulders portrait of Pedro Pascal, exact facial identity preserved.
+
+frontal pose pose, wearing a black turtleneck. Gaze directed camera directly.
+
+Expression: neutral and composed. Both eyes are open. Symmetrical brow, position is neutral. Forehead is relaxed, nose is relaxed.
+
+Mouth slightly open, lips parted. Relaxed facial muscles.
+
+Micro-details: relaxed neck.
+
+Skin: realistic texture, visible pores, natural imperfections.
+
+Camera: 85mm Prime lens, f/2.8, shallow depth of field, strong subject-background separation, no distortion.
+
+Lighting: the subject is illuminated with soft light and feathered shadows, emulating the effect of a studio softbox positioned at 45°.
+
+Background: pure white seamless cyclorama.
+
+Constraints: no extra people, no extra objects, no text, no watermark, correct anatomy, consistent facial identity, no studio equipment or lighting gear visible in frame.</code></pre>
+<pre class="lang-it" style="display: none;"><code>Genera un ritratto cinematografico a mezzo busto di Pedro Pascal, preservando l'esatta identità facciale.
+
+Posa frontale, indossa un dolcevita nero. Sguardo rivolto direttamente in camera.
+
+Espressione: neutra e composta. Entrambi gli occhi sono aperti. Sopracciglia simmetriche, in posizione neutra. Fronte rilassata, naso rilassato.
+
+Bocca leggermente aperta, labbra dischiuse. Muscoli facciali rilassati.
+
+Micro-dettagli: collo rilassato.
+
+Pelle: texture realistica, pori visibili, imperfezioni naturali.
+
+Macchina fotografica: obiettivo fisso da 85mm, f/2.8, profondità di campo ridotta, forte separazione soggetto-sfondo, nessuna distorsione.
+
+Illuminazione: il soggetto è illuminato da una luce morbida con ombre sfumate, che emula l'effetto di un softbox da studio posizionato a 45°.
+
+Sfondo: limbo bianco puro e continuo.
+
+Vincoli: nessuna persona extra, nessun oggetto extra, nessun testo, nessuna filigrana, anatomia corretta, identità facciale coerente, nessuna attrezzatura da studio visibile.</code></pre>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SCHEDA 2: PASCAL RABBIA -->
+            <div id="prompt-2" class="prompt-card">
+                <div class="prompt-image">
+                    <div class="comparison-container">
+                        <img src="https://drive.google.com/thumbnail?id=15sTcJIJ1uSgb9RdznSPZciJ3CdNBP5Hb&sz=w800" class="comparison-img-base" alt="TXT">
+                        <img src="https://drive.google.com/thumbnail?id=1smc_9M1PndWWMEVBGlA0l8SvimfBDZjs&sz=w800" class="comparison-img-over" alt="JSON" id="comp-img-2">
+                        <input type="range" min="0" max="100" value="50" class="comparison-slider-input" oninput="updateSlider(this.value, '2')">
+                        <div class="comparison-handle" id="comp-handle-2"></div>
+                        <div class="comparison-label comp-label-json">SYS: JSON</div>
+                        <div class="comparison-label comp-label-txt">SYS: TXT</div>
+                    </div>
+                </div>
+                <div class="prompt-code">
+                    <div class="code-mode-nav">
+                        <button class="code-mode-btn active-json" onclick="switchPromptMode('json', this)">[ MOSTRA JSON ]</button>
+                        <button class="code-mode-btn" onclick="switchPromptMode('txt', this)">[ MOSTRA TXT ]</button>
+                        <button class="translate-btn" onclick="toggleTranslation(this)">Traduci ITA</button>
+                    </div>
+                    
+                    <div class="prompt-view view-json">
+<pre class="lang-en"><code>{
+  "meta": {
+    "version": "3.0",
+    "type": "anatomical_direction_system",
+    "intent": "high precision facial control for portrait generation"
+  },
+  "subject_details": {
+    "identity": {
+      "source": "image_reference",
+      "name": "Pedro Pascal",
+      "type": "celebrity",
+      "preserve_identity": true,
+      "facial_consistency_priority": "absolute",
+      "prompt_trigger": "Cinematic head and shoulders commercial shot of celebrity Pedro Pascal, in a frontal pose, wearing a black turtleneck, eyes open. Professional masterpiece, soft even studio lighting, diffused shadows. Captured with 85mm Prime and f/2.8."
+    },
+    "styling_elements": {
+      "garment": "Black Turtleneck"
+    }
+  },
+  "expression_system": {
+    "global_state": {
+      "emotion": "angry_disgusted",
+      "intensity": 0.8,
+      "muscular_tension": "high"
+    },
+    "upper_face": {
+      "forehead": {
+        "state": "rippled (stress)",
+        "wrinkles": "none"
+      },
+      "brows": {
+        "position": "neutral",
+        "symmetry": "balanced",
+        "tension": "none"
+      }
+    },
+    "eyes": {
+      "left": {
+        "openness": "open",
+        "squint": 0
+      },
+      "right": {
+        "openness": "open",
+        "squint": 0
+      },
+      "gaze": {
+        "direction": "camera directly",
+        "focus_intensity": "soft",
+        "asymmetry": "none"
+      },
+      "secondary_effects": {
+        "crow_feet": "none",
+        "lower_lid_tension": "none"
+      }
+    },
+    "mid_face": {
+      "nose": {
+        "state": "wrinkled",
+        "wrinkle": true,
+        "nostril_flare": "none",
+        "bridge_lines": "none"
+      },
+      "cheeks": {
+        "tension": "relaxed",
+        "volume": "natural",
+        "lift": "none",
+        "nasolabial_fold": "natural"
+      }
+    },
+    "lower_face": {
+      "jaw": {
+        "state": "gaped",
+        "opening": 1,
+        "lateral_shift": "none"
+      },
+      "lips": {
+        "state": "open",
+        "compression": "light",
+        "parting": 1,
+        "corner_left": "neutral",
+        "corner_right": "neutral"
+      },
+      "mouth_cavity": {
+        "teeth_visibility": true,
+        "tongue_visibility": false
+      },
+      "chin": {
+        "tension": "none"
+      }
+    },
+    "secondary_physiology": {
+      "neck_tension": "visible platysma & sternocleidomastoid tension",
+      "platysma_visibility": "none",
+      "sternocleidomastoid_visibility": "none",
+      "jugular_vein_prominence": "none",
+      "skin_micro_reactions": [
+        "jugular vein prominence",
+        "nostril flaring",
+        "bunny lines on nasal bridge",
+        "deepened nasolabial folds"
+      ]
+    }
+  },
+  "skin_detail_system": {
+    "pores_visibility": "medium",
+    "wrinkles": "minimal",
+    "imperfections": "natural",
+    "texture_realism": "high"
+  },
+  "camera_system": {
+    "lens": "85mm Prime",
+    "distance": "0.85m",
+    "aperture": "f/2.8",
+    "depth_of_field": "shallow",
+    "distortion": "none",
+    "framing": "head and shoulders"
+  },
+  "lighting_system": {
+    "type": "studio",
+    "modifier": "Softbox",
+    "position": {
+      "azimuth": 45,
+      "elevation": 45
+    },
+    "quality": "soft",
+    "shadow": "feathered",
+    "contrast": "medium_low",
+    "background_separation": "subtle"
+  },
+  "environment": {
+    "background": "white seamless cyclorama",
+    "luminance": "high",
+    "distractions": "none"
+  }
+}</code></pre>
+<pre class="lang-it" style="display: none;"><code>{
+  "meta": {
+    "version": "3.0",
+    "type": "sistema_direzione_anatomica",
+    "intent": "controllo facciale di alta precisione per ritratti"
+  },
+  "subject_details": {
+    "identity": {
+      "source": "riferimento_immagine",
+      "name": "Pedro Pascal",
+      "type": "celebrità",
+      "preserve_identity": true,
+      "facial_consistency_priority": "assoluta",
+      "prompt_trigger": "Ritratto commerciale cinematografico a mezzo busto della celebrità Pedro Pascal, posa frontale, indossa un dolcevita nero, occhi aperti. Capolavoro professionale, luce da studio morbida e uniforme, ombre diffuse. Scattato con 85mm Prime e f/2.8."
+    },
+    "styling_elements": {
+      "garment": "Dolcevita nero"
+    }
+  },
+  "expression_system": {
+    "global_state": {
+      "emotion": "rabbia_disgusto",
+      "intensity": 0.8,
+      "muscular_tension": "alta"
+    },
+    "upper_face": {
+      "forehead": {
+        "state": "corrugata (stress)",
+        "wrinkles": "nessuna"
+      },
+      "brows": {
+        "position": "neutra",
+        "symmetry": "bilanciata",
+        "tension": "nessuna"
+      }
+    },
+    "eyes": {
+      "left": {
+        "openness": "aperto",
+        "squint": 0
+      },
+      "right": {
+        "openness": "aperto",
+        "squint": 0
+      },
+      "gaze": {
+        "direction": "direttamente in camera",
+        "focus_intensity": "morbida",
+        "asymmetry": "nessuna"
+      },
+      "secondary_effects": {
+        "crow_feet": "nessuna",
+        "lower_lid_tension": "nessuna"
+      }
+    },
+    "mid_face": {
+      "nose": {
+        "state": "arricciato",
+        "wrinkle": true,
+        "nostril_flare": "nessuna",
+        "bridge_lines": "nessuna"
+      },
+      "cheeks": {
+        "tension": "rilassate",
+        "volume": "naturale",
+        "lift": "nessuno",
+        "nasolabial_fold": "naturale"
+      }
+    },
+    "lower_face": {
+      "jaw": {
+        "state": "spalancata",
+        "opening": 1,
+        "lateral_shift": "nessuno"
+      },
+      "lips": {
+        "state": "aperte",
+        "compression": "leggera",
+        "parting": 1,
+        "corner_left": "neutro",
+        "corner_right": "neutro"
+      },
+      "mouth_cavity": {
+        "teeth_visibility": true,
+        "tongue_visibility": false
+      },
+      "chin": {
+        "tension": "nessuna"
+      }
+    },
+    "secondary_physiology": {
+      "neck_tension": "tensione visibile su platysma e sternocleidomastoideo",
+      "platysma_visibility": "nessuna",
+      "sternocleidomastoid_visibility": "nessuna",
+      "jugular_vein_prominence": "nessuna",
+      "skin_micro_reactions": [
+        "vena giugulare prominente",
+        "dilatazione narici",
+        "rughe del coniglietto sul ponte nasale",
+        "pieghe nasolabiali accentuate"
+      ]
+    }
+  },
+  "skin_detail_system": {
+    "pores_visibility": "media",
+    "wrinkles": "minime",
+    "imperfections": "naturali",
+    "texture_realism": "alto"
+  },
+  "camera_system": {
+    "lens": "85mm Fisso",
+    "distance": "0.85m",
+    "aperture": "f/2.8",
+    "depth_of_field": "ridotta",
+    "distortion": "nessuna",
+    "framing": "mezzo busto"
+  },
+  "lighting_system": {
+    "type": "studio",
+    "modifier": "Softbox",
+    "position": {
+      "azimuth": 45,
+      "elevation": 45
+    },
+    "quality": "morbida",
+    "shadow": "sfumata",
+    "contrast": "medio_basso",
+    "background_separation": "sottile"
+  },
+  "environment": {
+    "background": "limbo bianco continuo",
+    "luminance": "alta",
+    "distractions": "nessuna"
+  }
+}</code></pre>
+                    </div>
+
+                    <div class="prompt-view view-txt" style="display: none;">
+<pre class="lang-en"><code>Generate a cinematic head and shoulders portrait of Pedro Pascal, exact facial identity preserved.
+
+frontal pose pose, wearing a black turtleneck. Gaze directed camera directly.
+
+Expression: strong anger mixed with disgust. Both eyes are open. Symmetrical brow, position is neutral. Forehead is rippled (stress), nose is wrinkled.
+
+Mouth wide open with significant jaw drop, lips open with teeth clearly visible. High muscular tension across the face and neck.
+
+Micro-details: jugular vein prominence, nostril flaring, bunny lines on nasal bridge, deepened nasolabial folds, visible platysma & sternocleidomastoid tension.
+
+Skin: realistic texture, visible pores, natural imperfections.
+
+Camera: 85mm Prime lens, f/2.8, shallow depth of field, strong subject-background separation, no distortion.
+
+Lighting: the subject is illuminated with soft light and feathered shadows, emulating the effect of a studio softbox positioned at 45°.
+
+Background: pure white seamless cyclorama.
+
+Constraints: no extra people, no extra objects, no text, no watermark, correct anatomy, consistent facial identity, no studio equipment or lighting gear visible in frame.</code></pre>
+<pre class="lang-it" style="display: none;"><code>Genera un ritratto cinematografico a mezzo busto di Pedro Pascal, preservando l'esatta identità facciale.
+
+Posa frontale, indossa un dolcevita nero. Sguardo rivolto direttamente in camera.
+
+Espressione: forte rabbia mista a disgusto. Entrambi gli occhi sono aperti. Sopracciglia simmetriche, in posizione neutra. Fronte corrugata (stress), naso arricciato.
+
+Bocca spalancata con un notevole abbassamento della mascella, labbra aperte con denti chiaramente visibili. Alta tensione muscolare su tutto il viso e il collo.
+
+Micro-dettagli: prominenza della vena giugulare, narici dilatate, rughe del coniglietto sul ponte nasale, pieghe nasolabiali accentuate, platysma e sternocleidomastoideo visibilmente in tensione.
+
+Pelle: texture realistica, pori visibili, imperfezioni naturali.
+
+Macchina fotografica: obiettivo fisso da 85mm, f/2.8, profondità di campo ridotta, forte separazione soggetto-sfondo, nessuna distorsione.
+
+Illuminazione: luce morbida e ombre sfumate, che emula l'effetto di un softbox da studio a 45°.
+
+Sfondo: limbo bianco puro e continuo.
+
+Vincoli: nessuna persona extra, nessun oggetto extra, nessun testo, nessuna filigrana, anatomia corretta, identità facciale coerente, nessuna attrezzatura da studio visibile.</code></pre>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SCHEDA 3: PUGH NEUTRO -->
+            <div id="prompt-3" class="prompt-card">
+                <div class="prompt-image">
+                    <div class="comparison-container">
+                        <img src="https://drive.google.com/thumbnail?id=1pbmr9t3IBLMCkhjrH9etGyqQU3vjmQ4t&sz=w800" class="comparison-img-base" alt="TXT">
+                        <img src="https://drive.google.com/thumbnail?id=1sNsNjM2sN33R_TZo6zVEpojCY2zdUqG6&sz=w800" class="comparison-img-over" alt="JSON" id="comp-img-3">
+                        <input type="range" min="0" max="100" value="50" class="comparison-slider-input" oninput="updateSlider(this.value, '3')">
+                        <div class="comparison-handle" id="comp-handle-3"></div>
+                        <div class="comparison-label comp-label-json">SYS: JSON</div>
+                        <div class="comparison-label comp-label-txt">SYS: TXT</div>
+                    </div>
+                </div>
+                <div class="prompt-code">
+                    <div class="code-mode-nav">
+                        <button class="code-mode-btn active-json" onclick="switchPromptMode('json', this)">[ MOSTRA JSON ]</button>
+                        <button class="code-mode-btn" onclick="switchPromptMode('txt', this)">[ MOSTRA TXT ]</button>
+                        <button class="translate-btn" onclick="toggleTranslation(this)">Traduci ITA</button>
+                    </div>
+                    
+                    <div class="prompt-view view-json">
+<pre class="lang-en"><code>{
+  "meta": {
+    "version": "3.0",
+    "type": "anatomical_direction_system",
+    "intent": "high precision facial control for portrait generation"
+  },
+  "subject_details": {
+    "identity": {
+      "source": "image_reference",
+      "name": "Florent Pugh",
+      "type": "celebrity",
+      "preserve_identity": true,
+      "facial_consistency_priority": "absolute",
+      "prompt_trigger": "Cinematic head and shoulders commercial shot of celebrity Florent Pugh, in a frontal pose, wearing a evening gown, eyes open. Professional masterpiece, soft even studio lighting, diffused shadows. Captured with 85mm Prime and f/2.8."
+    },
+    "styling_elements": {
+      "garment": "Evening Gown"
+    }
+  },
+  "expression_system": {
+    "global_state": {
+      "emotion": "neutral",
+      "intensity": 0,
+      "muscular_tension": "none"
+    },
+    "upper_face": {
+      "forehead": {
+        "state": "relaxed",
+        "wrinkles": "none"
+      },
+      "brows": {
+        "position": "neutral",
+        "symmetry": "balanced",
+        "tension": "none"
+      }
+    },
+    "eyes": {
+      "left": {
+        "openness": "open",
+        "squint": 0
+      },
+      "right": {
+        "openness": "open",
+        "squint": 0
+      },
+      "gaze": {
+        "direction": "camera directly",
+        "focus_intensity": "soft",
+        "asymmetry": "none"
+      },
+      "secondary_effects": {
+        "crow_feet": "none",
+        "lower_lid_tension": "none"
+      }
+    },
+    "mid_face": {
+      "nose": {
+        "state": "relaxed",
+        "wrinkle": false,
+        "nostril_flare": "none",
+        "bridge_lines": "none"
+      },
+      "cheeks": {
+        "tension": "Rilassate",
+        "volume": "natural",
+        "lift": "none",
+        "nasolabial_fold": "natural"
+      }
+    },
+    "lower_face": {
+      "jaw": {
+        "state": "relaxed",
+        "opening": 0.2,
+        "lateral_shift": "none"
+      },
+      "lips": {
+        "state": "closed",
+        "compression": "light",
+        "parting": 0,
+        "corner_left": "neutral",
+        "corner_right": "neutral"
+      },
+      "mouth_cavity": {
+        "teeth_visibility": false,
+        "tongue_visibility": false
+      },
+      "chin": {
+        "tension": "none"
+      }
+    },
+    "secondary_physiology": {
+      "neck_tension": "none",
+      "platysma_visibility": "none",
+      "sternocleidomastoid_visibility": "none",
+      "jugular_vein_prominence": "none",
+      "skin_micro_reactions": []
+    }
+  },
+  "skin_detail_system": {
+    "pores_visibility": "medium",
+    "wrinkles": "minimal",
+    "imperfections": "natural",
+    "texture_realism": "high"
+  },
+  "camera_system": {
+    "lens": "85mm Prime",
+    "distance": "0.85m",
+    "aperture": "f/2.8",
+    "depth_of_field": "shallow",
+    "distortion": "none",
+    "framing": "head and shoulders"
+  },
+  "lighting_system": {
+    "type": "studio",
+    "modifier": "Softbox",
+    "position": {
+      "azimuth": 45,
+      "elevation": 45
+    },
+    "quality": "soft",
+    "shadow": "feathered",
+    "contrast": "medium_low",
+    "background_separation": "subtle"
+  },
+  "environment": {
+    "background": "white seamless cyclorama",
+    "luminance": "high",
+    "distractions": "none"
+  },
+  "translation_rules": {
+    "mode": "natural_language_conversion",
+    "style": "photographic_direction",
+    "output_format": "cinematic_instruction",
+    "priority": [
+      "identity",
+      "facial_expression",
+      "gaze",
+      "mouth_state",
+      "secondary_physiology",
+      "camera",
+      "lighting",
+      "environment"
+    ],
+    "rules": {
+      "use_natural_language": true,
+      "avoid_parameter_labels_in_final_prompt": true,
+      "merge_related_states_into_single_descriptive_phrases": true,
+      "preserve_identity_statement_at_start": true
+    }
+  }
+}</code></pre>
+<pre class="lang-it" style="display: none;"><code>{
+  "meta": {
+    "version": "3.0",
+    "type": "sistema_direzione_anatomica",
+    "intent": "controllo facciale di alta precisione per ritratti"
+  },
+  "subject_details": {
+    "identity": {
+      "source": "riferimento_immagine",
+      "name": "Florent Pugh",
+      "type": "celebrità",
+      "preserve_identity": true,
+      "facial_consistency_priority": "assoluta",
+      "prompt_trigger": "Ritratto commerciale cinematografico a mezzo busto della celebrità Florent Pugh, posa frontale, indossa un abito da sera, occhi aperti. Capolavoro professionale, luce da studio morbida e uniforme, ombre diffuse. Scattato con 85mm Prime e f/2.8."
+    },
+    "styling_elements": {
+      "garment": "Abito da sera"
+    }
+  },
+  "expression_system": {
+    "global_state": {
+      "emotion": "neutra",
+      "intensity": 0,
+      "muscular_tension": "nessuna"
+    },
+    "upper_face": {
+      "forehead": {
+        "state": "rilassata",
+        "wrinkles": "nessuna"
+      },
+      "brows": {
+        "position": "neutra",
+        "symmetry": "bilanciata",
+        "tension": "nessuna"
+      }
+    },
+    "eyes": {
+      "left": {
+        "openness": "aperto",
+        "squint": 0
+      },
+      "right": {
+        "openness": "aperto",
+        "squint": 0
+      },
+      "gaze": {
+        "direction": "direttamente in camera",
+        "focus_intensity": "morbida",
+        "asymmetry": "nessuna"
+      },
+      "secondary_effects": {
+        "crow_feet": "nessuna",
+        "lower_lid_tension": "nessuna"
+      }
+    },
+    "mid_face": {
+      "nose": {
+        "state": "rilassato",
+        "wrinkle": false,
+        "nostril_flare": "nessuna",
+        "bridge_lines": "nessuna"
+      },
+      "cheeks": {
+        "tension": "rilassate",
+        "volume": "naturale",
+        "lift": "nessuno",
+        "nasolabial_fold": "naturale"
+      }
+    },
+    "lower_face": {
+      "jaw": {
+        "state": "rilassata",
+        "opening": 0.2,
+        "lateral_shift": "nessuno"
+      },
+      "lips": {
+        "state": "chiuse",
+        "compression": "leggera",
+        "parting": 0,
+        "corner_left": "neutro",
+        "corner_right": "neutro"
+      },
+      "mouth_cavity": {
+        "teeth_visibility": false,
+        "tongue_visibility": false
+      },
+      "chin": {
+        "tension": "nessuna"
+      }
+    },
+    "secondary_physiology": {
+      "neck_tension": "nessuna",
+      "platysma_visibility": "nessuna",
+      "sternocleidomastoid_visibility": "nessuna",
+      "jugular_vein_prominence": "nessuna",
+      "skin_micro_reactions": []
+    }
+  },
+  "skin_detail_system": {
+    "pores_visibility": "media",
+    "wrinkles": "minime",
+    "imperfections": "naturali",
+    "texture_realism": "alto"
+  },
+  "camera_system": {
+    "lens": "85mm Fisso",
+    "distance": "0.85m",
+    "aperture": "f/2.8",
+    "depth_of_field": "ridotta",
+    "distortion": "nessuna",
+    "framing": "mezzo busto"
+  },
+  "lighting_system": {
+    "type": "studio",
+    "modifier": "Softbox",
+    "position": {
+      "azimuth": 45,
+      "elevation": 45
+    },
+    "quality": "morbida",
+    "shadow": "sfumata",
+    "contrast": "medio_basso",
+    "background_separation": "sottile"
+  },
+  "environment": {
+    "background": "limbo bianco continuo",
+    "luminance": "alta",
+    "distractions": "nessuna"
+  }
+}</code></pre>
+                    </div>
+
+                    <div class="prompt-view view-txt" style="display: none;">
+<pre class="lang-en"><code>Cinematic head-and-shoulders commercial portrait of Florence Pugh, based strictly on the provided image reference, with absolute identity preservation and perfect facial consistency. She is facing the camera in a clean frontal pose, wearing an elegant evening gown. Her expression is completely neutral, emotionally flat, with no visible muscular tension across the face.
+The entire upper face is relaxed: smooth forehead with no wrinkles, eyebrows naturally positioned and perfectly symmetrical, without any tension. Both eyes are fully open and aligned, looking directly into the camera with a soft, calm focus, without squinting or asymmetry. The gaze feels controlled and natural, with no secondary tension in the eyelids and no crow’s feet.
+The mid-face remains soft and inactive: the nose is fully relaxed with no flaring or micro-wrinkles, and the cheeks maintain a natural volume without lift or compression, preserving subtle and realistic nasolabial folds.
+The lower face is equally controlled: the jaw is relaxed with a very slight natural opening, no lateral movement. Lips are closed with minimal compression, completely neutral at the corners, with no smile or tension. Teeth and tongue are not visible. The chin remains relaxed, with no muscular activation.
+Neck and secondary anatomy are completely neutral: no visible tension, no platysma activation, no pronounced tendons or veins. Skin behaves naturally, with medium-visible pores, minimal wrinkles, and realistic micro-imperfections, maintaining a high level of texture fidelity.
+Shot with an 85mm prime lens at approximately 0.85 meters, aperture f/2.8, producing a shallow depth of field with no distortion. The framing is tight head and shoulders, with a clean, controlled photographic composition.
+Lighting is professional studio setup using a softbox positioned at 45 degrees, slightly elevated, producing soft, diffused light with feathered shadows and medium-low contrast. The subject is subtly separated from the background without harsh rim lighting.
+The environment is a high-key white seamless cyclorama, completely clean and distraction-free, with uniform luminance and no additional elements.</code></pre>
+<pre class="lang-it" style="display: none;"><code>Ritratto commerciale cinematografico a mezzo busto di Florence Pugh, basato rigorosamente sulla foto di riferimento fornita, con conservazione assoluta dell'identità e coerenza facciale perfetta. È rivolta verso la fotocamera in una posa frontale pulita, indossa un elegante abito da sera. La sua espressione è completamente neutra, emotivamente piatta, senza alcuna tensione muscolare visibile sul viso.
+L'intera parte superiore del viso è rilassata: fronte liscia senza rughe, sopracciglia in posizione naturale e perfettamente simmetriche, senza alcuna tensione. Entrambi gli occhi sono completamente aperti e allineati, guardano direttamente nell'obiettivo con una messa a fuoco morbida e calma, senza strizzare gli occhi né asimmetrie. Lo sguardo risulta controllato e naturale, senza tensioni secondarie nelle palpebre o zampe di gallina.
+La parte centrale del viso rimane morbida e inattiva: il naso è completamente rilassato senza dilatazione delle narici o micro-rughe, e le guance mantengono un volume naturale senza sollevamenti o compressioni, preservando pieghe nasolabiali sottili e realistiche.
+La parte inferiore del viso è altrettanto controllata: la mascella è rilassata con una leggerissima apertura naturale, nessun movimento laterale. Le labbra sono chiuse con una compressione minima, completamente neutre agli angoli, senza sorrisi o tensioni. Denti e lingua non sono visibili. Il mento rimane rilassato, senza attivazione muscolare.
+Il collo e l'anatomia secondaria sono completamente neutri: nessuna tensione visibile, nessuna attivazione del platysma, tendini o vene non pronunciati. La pelle si comporta in modo naturale, con pori mediamente visibili, rughe minime e micro-imperfezioni realistiche, mantenendo un alto livello di fedeltà della texture.
+Scattato con un obiettivo a focale fissa da 85mm a circa 0.85 metri, apertura f/2.8, producendo una profondità di campo ridotta senza distorsioni. L'inquadratura è stretta su testa e spalle, con una composizione fotografica pulita e controllata.
+L'illuminazione è un setup da studio professionale che utilizza un softbox posizionato a 45 gradi, leggermente rialzato, che produce una luce morbida e diffusa con ombre sfumate e contrasto medio-basso. Il soggetto è separato in modo sottile dallo sfondo senza luci di contorno (rim light) aggressive.
+L'ambiente è un limbo bianco continuo (cyclorama) in high-key, completamente pulito e privo di distrazioni, con luminanza uniforme e senza elementi aggiuntivi.</code></pre>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SCHEDA 4: PUGH SMORFIA -->
+            <div id="prompt-4" class="prompt-card">
+                <div class="prompt-image">
+                    <div class="comparison-container">
+                        <img src="https://drive.google.com/thumbnail?id=1winAyx8WlPRg2wv-iOjSzOmS12P_7_xI&sz=w800" class="comparison-img-base" alt="TXT">
+                        <img src="https://drive.google.com/thumbnail?id=139YrltzXOCCQ0Neisxh5rTSLhoxzRtAq&sz=w800" class="comparison-img-over" alt="JSON" id="comp-img-4">
+                        <input type="range" min="0" max="100" value="50" class="comparison-slider-input" oninput="updateSlider(this.value, '4')">
+                        <div class="comparison-handle" id="comp-handle-4"></div>
+                        <div class="comparison-label comp-label-json">SYS: JSON</div>
+                        <div class="comparison-label comp-label-txt">SYS: TXT</div>
+                    </div>
+                </div>
+                <div class="prompt-code">
+                    <div class="code-mode-nav">
+                        <button class="code-mode-btn active-json" onclick="switchPromptMode('json', this)">[ MOSTRA JSON ]</button>
+                        <button class="code-mode-btn" onclick="switchPromptMode('txt', this)">[ MOSTRA TXT ]</button>
+                        <button class="translate-btn" onclick="toggleTranslation(this)">Traduci ITA</button>
+                    </div>
+                    
+                    <div class="prompt-view view-json">
+<pre class="lang-en"><code>{
+  "meta": {
+    "version": "3.0",
+    "type": "anatomical_direction_system",
+    "intent": "high precision facial control for portrait generation"
+  },
+  "subject_details": {
+    "identity": {
+      "source": "image_reference",
+      "name": "Florent Pugh",
+      "type": "celebrity",
+      "preserve_identity": true,
+      "facial_consistency_priority": "absolute",
+      "prompt_trigger": "Cinematic head and shoulders commercial shot of celebrity Florent Pugh, in a frontal pose, wearing a evening gown, left eye open and right eye wincing tightly. Professional masterpiece, soft even studio lighting, diffused shadows. Captured with 85mm Prime and f/2.8."
+    },
+    "styling_elements": {
+      "garment": "Evening Gown"
+    }
+  },
+  "expression_system": {
+    "global_state": {
+      "emotion": "angry_disgusted",
+      "intensity": 0.8,
+      "muscular_tension": "high"
+    },
+    "upper_face": {
+      "forehead": {
+        "state": "relaxed",
+        "wrinkles": "none"
+      },
+      "brows": {
+        "position": "neutral",
+        "symmetry": "right raised",
+        "tension": "none"
+      }
+    },
+    "eyes": {
+      "left": {
+        "openness": "open",
+        "squint": 0
+      },
+      "right": {
+        "openness": "wincing tightly",
+        "squint": 0
+      },
+      "gaze": {
+        "direction": "camera directly",
+        "focus_intensity": "soft",
+        "asymmetry": "none"
+      },
+      "secondary_effects": {
+        "crow_feet": "none",
+        "lower_lid_tension": "none"
+      }
+    },
+    "mid_face": {
+      "nose": {
+        "state": "wrinkled",
+        "wrinkle": true,
+        "nostril_flare": "none",
+        "bridge_lines": "none"
+      },
+      "cheeks": {
+        "tension": "Rilassate",
+        "volume": "natural",
+        "lift": "none",
+        "nasolabial_fold": "natural"
+      }
+    },
+    "lower_face": {
+      "jaw": {
+        "state": "relaxed",
+        "opening": 0.71,
+        "lateral_shift": "none"
+      },
+      "lips": {
+        "state": "parted",
+        "compression": "light",
+        "parting": 0.57,
+        "corner_left": "neutral",
+        "corner_right": "neutral"
+      },
+      "mouth_cavity": {
+        "teeth_visibility": true,
+        "tongue_visibility": true
+      },
+      "chin": {
+        "tension": "none"
+      }
+    },
+    "secondary_physiology": {
+      "neck_tension": "visible platysma & sternocleidomastoid tension",
+      "platysma_visibility": "none",
+      "sternocleidomastoid_visibility": "none",
+      "jugular_vein_prominence": "none",
+      "skin_micro_reactions": [
+        "jugular vein prominence",
+        "nostril flaring",
+        "crow's feet wrinkles",
+        "bunny lines on nasal bridge",
+        "deepened nasolabial folds"
+      ]
+    }
+  },
+  "skin_detail_system": {
+    "pores_visibility": "medium",
+    "wrinkles": "minimal",
+    "imperfections": "natural",
+    "texture_realism": "high"
+  },
+  "camera_system": {
+    "lens": "85mm Prime",
+    "distance": "0.85m",
+    "aperture": "f/2.8",
+    "depth_of_field": "shallow",
+    "distortion": "none",
+    "framing": "head and shoulders"
+  },
+  "lighting_system": {
+    "type": "studio",
+    "modifier": "Softbox",
+    "position": {
+      "azimuth": 45,
+      "elevation": 45
+    },
+    "quality": "soft",
+    "shadow": "feathered",
+    "contrast": "medium_low",
+    "background_separation": "subtle"
+  },
+  "environment": {
+    "background": "white seamless cyclorama",
+    "luminance": "high",
+    "distractions": "none"
+  },
+  "translation_rules": {
+    "mode": "natural_language_conversion",
+    "style": "photographic_direction",
+    "output_format": "cinematic_instruction",
+    "priority": [
+      "identity",
+      "facial_expression",
+      "gaze",
+      "mouth_state",
+      "secondary_physiology",
+      "camera",
+      "lighting",
+      "environment"
+    ],
+    "rules": {
+      "use_natural_language": true,
+      "avoid_parameter_labels_in_final_prompt": true,
+      "merge_related_states_into_single_descriptive_phrases": true,
+      "preserve_identity_statement_at_start": true
+    }
+  }
+}</code></pre>
+<pre class="lang-it" style="display: none;"><code>{
+  "meta": {
+    "version": "3.0",
+    "type": "sistema_direzione_anatomica",
+    "intent": "controllo facciale di alta precisione per ritratti"
+  },
+  "subject_details": {
+    "identity": {
+      "source": "riferimento_immagine",
+      "name": "Florent Pugh",
+      "type": "celebrità",
+      "preserve_identity": true,
+      "facial_consistency_priority": "assoluta",
+      "prompt_trigger": "Ritratto commerciale cinematografico a mezzo busto della celebrità Florent Pugh, posa frontale, indossa un abito da sera, occhio sinistro aperto e occhio destro strizzato strettamente. Capolavoro professionale, luce da studio morbida e uniforme, ombre diffuse. Scattato con 85mm Prime e f/2.8."
+    },
+    "styling_elements": {
+      "garment": "Abito da sera"
+    }
+  },
+  "expression_system": {
+    "global_state": {
+      "emotion": "rabbia_disgusto",
+      "intensity": 0.8,
+      "muscular_tension": "alta"
+    },
+    "upper_face": {
+      "forehead": {
+        "state": "rilassata",
+        "wrinkles": "nessuna"
+      },
+      "brows": {
+        "position": "neutra",
+        "symmetry": "destro sollevato",
+        "tension": "nessuna"
+      }
+    },
+    "eyes": {
+      "left": {
+        "openness": "aperto",
+        "squint": 0
+      },
+      "right": {
+        "openness": "strizzato strettamente",
+        "squint": 0
+      },
+      "gaze": {
+        "direction": "direttamente in camera",
+        "focus_intensity": "morbida",
+        "asymmetry": "nessuna"
+      },
+      "secondary_effects": {
+        "crow_feet": "nessuna",
+        "lower_lid_tension": "nessuna"
+      }
+    },
+    "mid_face": {
+      "nose": {
+        "state": "arricciato",
+        "wrinkle": true,
+        "nostril_flare": "nessuna",
+        "bridge_lines": "nessuna"
+      },
+      "cheeks": {
+        "tension": "rilassate",
+        "volume": "naturale",
+        "lift": "nessuno",
+        "nasolabial_fold": "naturale"
+      }
+    },
+    "lower_face": {
+      "jaw": {
+        "state": "rilassata",
+        "opening": 0.71,
+        "lateral_shift": "nessuno"
+      },
+      "lips": {
+        "state": "dischiuse",
+        "compression": "leggera",
+        "parting": 0.57,
+        "corner_left": "neutro",
+        "corner_right": "neutro"
+      },
+      "mouth_cavity": {
+        "teeth_visibility": true,
+        "tongue_visibility": true
+      },
+      "chin": {
+        "tension": "nessuna"
+      }
+    },
+    "secondary_physiology": {
+      "neck_tension": "tensione visibile su platysma e sternocleidomastoideo",
+      "platysma_visibility": "nessuna",
+      "sternocleidomastoid_visibility": "nessuna",
+      "jugular_vein_prominence": "nessuna",
+      "skin_micro_reactions": [
+        "vena giugulare prominente",
+        "dilatazione narici",
+        "rughe a zampe di gallina",
+        "rughe del coniglietto sul ponte nasale",
+        "pieghe nasolabiali accentuate"
+      ]
+    }
+  },
+  "skin_detail_system": {
+    "pores_visibility": "media",
+    "wrinkles": "minime",
+    "imperfections": "naturali",
+    "texture_realism": "alto"
+  },
+  "camera_system": {
+    "lens": "85mm Fisso",
+    "distance": "0.85m",
+    "aperture": "f/2.8",
+    "depth_of_field": "ridotta",
+    "distortion": "nessuna",
+    "framing": "mezzo busto"
+  },
+  "lighting_system": {
+    "type": "studio",
+    "modifier": "Softbox",
+    "position": {
+      "azimuth": 45,
+      "elevation": 45
+    },
+    "quality": "morbida",
+    "shadow": "sfumata",
+    "contrast": "medio_basso",
+    "background_separation": "sottile"
+  },
+  "environment": {
+    "background": "limbo bianco continuo",
+    "luminance": "alta",
+    "distractions": "nessuna"
+  }
+}</code></pre>
+                    </div>
+
+                    <div class="prompt-view view-txt" style="display: none;">
+<pre class="lang-en"><code>Cinematic head-and-shoulders commercial portrait of Florence Pugh, based strictly on the provided image reference, with absolute identity preservation and perfect facial consistency. She is facing the camera in a clean frontal pose, wearing an elegant evening gown.
+Her expression conveys a strong mix of anger and disgust, with high facial tension, but controlled and believable. The asymmetry is the key driver: her left eye remains fully open and steady, while the right eye is tightly wincing, creating a sharp imbalance in the expression. Her gaze is still directed straight into the camera, maintaining a soft but intense focus that contrasts with the tension in the face.
+The upper face stays relatively composed: the forehead remains smooth without visible wrinkles, while one eyebrow is subtly raised on the right side, reinforcing the asymmetry without introducing chaos or distortion.
+The mid-face carries most of the emotional signal: the nose is slightly wrinkled, with visible tension that suggests disgust, creating subtle compression in the central facial area. The cheeks remain mostly natural in volume, but the expression introduces slight micro-tension and a gentle deepening of the nasolabial folds.
+The lower face is partially open and reactive: the jaw drops slightly in a natural, unforced way, and the lips are parted enough to reveal both teeth and a hint of the tongue, without exaggeration. The mouth remains uncontrolled but still anatomically plausible, supporting the emotional state rather than breaking it.
+Secondary physiology subtly reinforces the expression: there is visible tension in the neck area, suggesting activation of underlying muscles, without becoming exaggerated or anatomically incorrect. Small skin reactions appear across the face, including faint nasal wrinkles, slight nostril activity, and minimal crow’s feet, all remaining grounded and realistic.
+Skin detail is highly realistic, with visible pores, natural imperfections, and fine texture variation, avoiding any artificial smoothing.
+Shot with an 85mm prime lens at approximately 0.85 meters, aperture f/2.8, producing a shallow depth of field with no distortion. Tight head-and-shoulders framing.
+Lighting is a professional studio softbox setup at 45 degrees, slightly elevated, producing soft, diffused light with feathered shadows and medium-low contrast. The subject is gently separated from the background.
+The environment is a clean white seamless cyclorama, high-key, with no distractions.</code></pre>
+<pre class="lang-it" style="display: none;"><code>Ritratto commerciale cinematografico a mezzo busto di Florence Pugh, basato rigorosamente sulla foto di riferimento fornita, con conservazione assoluta dell'identità e coerenza facciale perfetta. È rivolta verso la fotocamera in una posa frontale pulita, indossa un elegante abito da sera.
+La sua espressione trasmette un forte mix di rabbia e disgusto, con un'alta tensione facciale, ma controllata e credibile. L'asimmetria è l'elemento chiave: il suo occhio sinistro rimane completamente aperto e fermo, mentre l'occhio destro è strizzato strettamente, creando un netto squilibrio nell'espressione. Il suo sguardo è ancora diretto dritto verso la fotocamera, mantenendo una messa a fuoco morbida ma intensa che contrasta con la tensione del viso.
+La parte superiore del viso rimane relativamente composta: la fronte resta liscia senza rughe visibili, mentre un sopracciglio è leggermente sollevato sul lato destro, rafforzando l'asimmetria senza introdurre caos o distorsioni.
+La parte centrale del viso trasporta la maggior parte del segnale emotivo: il naso è leggermente arricciato, con una tensione visibile che suggerisce disgusto, creando una sottile compressione nella zona facciale centrale. Le guance rimangono per lo più naturali nel volume, ma l'espressione introduce una leggera micro-tensione e un lieve approfondimento delle pieghe nasolabiali.
+La parte inferiore del viso è parzialmente aperta e reattiva: la mascella si abbassa leggermente in modo naturale, non forzato, e le labbra sono dischiuse quanto basta per rivelare sia i denti che un accenno di lingua, senza esagerazioni. La bocca rimane non controllata ma comunque anatomicamente plausibile, supportando lo stato emotivo piuttosto che romperlo.
+La fisiologia secondaria rafforza sottilmente l'espressione: c'è una tensione visibile nell'area del collo, che suggerisce l'attivazione dei muscoli sottostanti, senza diventare esagerata o anatomicamente scorretta. Piccole reazioni della pelle appaiono sul viso, incluse deboli rughe nasali, leggera attività delle narici e minime zampe di gallina, mantenendosi il tutto realistico e credibile.
+Il dettaglio della pelle è altamente realistico, con pori visibili, imperfezioni naturali e sottili variazioni di texture, evitando qualsiasi levigatura artificiale.
+Scattato con un obiettivo a focale fissa da 85mm a circa 0.85 metri, apertura f/2.8, producendo una profondità di campo ridotta senza distorsioni. Inquadratura stretta su testa e spalle.
+L'illuminazione è un setup da studio professionale con softbox a 45 gradi, leggermente rialzato, producendo luce morbida e diffusa con ombre sfumate e contrasto medio-basso. Il soggetto è delicatamente separato dallo sfondo.
+L'ambiente è un limbo bianco continuo e pulito, in high-key, senza distrazioni.</code></pre>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        
+        <div class="takeaway-box">
+            <h3>Analisi Dati: Quale approccio scegliere?</h3>
+            <p>Come si evince dagli esempi visivi interattivi, entrambi i metodi sono vincenti, ma rispondono a esigenze progettuali profondamente diverse:</p>
+            <ul style="padding-left: 20px;">
+                <li><strong>Metodo Narrativo (TXT):</strong> Ideale per descrivere <em>sensazioni, atmosfere e suggestioni emotive</em>. Essendo discorsivo, lascia all'IA un margine interpretativo prezioso per la fase di concept e brainstorming. Tuttavia, se c'è bisogno di modificare un singolo dettaglio (come l'espressione o un arredo) senza stravolgere inavvertitamente l'intera scena, questo metodo risulta complesso e imprevedibile.</li>
+                <li><strong>Metodo Strutturato (JSON):</strong> Offre una <em>precisione millimetrica</em>. Separando le variabili a compartimenti stagni (luce, camera, espressione, materiali), agevola le modifiche singole in maniera velocissima mantenendo il resto del setup intatto. Di contro, la sua natura rigida e tecnica lo rende meno immediato quando l'obiettivo è comunicare un "mood" astratto.</li>
+            </ul>
+            
+            <div class="disclaimer-box">
+                <div class="disclaimer-box-icon">🎲</div>
+                <div class="disclaimer-box-content">
+                    <strong>ATTENZIONE: FATTORE "LANCIO DEI DADI" <a class="link-ai" onclick="openTab('tab-tester', document.querySelectorAll('.tab-btn')[4])">(Varianza IA)</a></strong>
+                    <p>È fondamentale ricordare che, per quanto un prompt possa essere ingegnerizzato o strutturato, l'IA Generativa mantiene una natura intrinsecamente probabilistica. <strong>Non si otterranno mai due immagini identiche in sequenza usando lo stesso identico prompt.</strong> Il prompt serve a "restringere il recinto" delle probabilità, ma il risultato esatto conserverà sempre un grado ineliminabile di casualità e interpretazione.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- TAB: VIBE CODING -->
+    <div id="tab-tester" class="content-section">
+        <h2>Vibe Coding</h2>
+        <p style="color: var(--text-secondary); margin-bottom: 25px;">Sviluppo di applicazioni programmando "a sensazione" attraverso il dialogo iterativo con l'IA.</p>
+        
+        <div class="vibe-grid">
+            <div class="vibe-card">
+                <div class="vibe-img">
+                    <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=800&h=450&q=80" alt="Generatore Micro-Espressioni">
+                </div>
+                <div class="vibe-info">
+                    <h3>Generatore Micro-Espressioni</h3>
+                    <p>Pannello di controllo per definire dettagli facciali e outfit. Utilizza un sistema a "cartucce" per esportare un JSON iper-preciso.</p>
+                    <a href="https://ai.studio/apps/719e8d11-9853-4b61-99f7-9ae91617c4b8?fullscreenApplet=true" target="_blank" class="vibe-btn">Apri Applicazione ↗</a>
+                </div>
+            </div>
+
+            <div class="vibe-card">
+                <div class="vibe-img">
+                    <img src="https://images.unsplash.com/photo-1542060748-10c28b62716f?auto=format&fit=crop&w=800&q=80" alt="Humana Vintage">
+                </div>
+                <div class="vibe-info">
+                    <h3>Generatore Humana Vintage</h3>
+                    <p>Tool per la direzione artistica fashion. Seleziona location, illuminazione, pellicola e caratteristiche del modello.</p>
+                    <a href="https://ai.studio/apps/ea162171-4307-421d-b326-7fbe31cc26ad?fullscreenApplet=true" target="_blank" class="vibe-btn">Apri Applicazione ↗</a>
+                </div>
+            </div>
+
+            <div class="vibe-card">
+                <div class="vibe-img">
+                    <img src="https://images.unsplash.com/photo-1643330683233-ff2ac89b002c?auto=format&fit=crop&w=800&q=80" alt="Laboratorio Varianza e Dadi">
+                </div>
+                <div class="vibe-info">
+                    <h3>Laboratorio Varianza (Seed)</h3>
+                    <p>Simulatore interattivo per comprendere la natura probabilistica dell'IA. Scopri come l'aggiunta di parametri nel prompt riduce il caos.</p>
+                    <a href="https://ai.studio/apps/91920319-ccee-4bc2-8173-8e2953656b3d?fullscreenApplet=true" target="_blank" class="vibe-btn">Apri Applicazione ↗</a>
+                </div>
+            </div>
+
+            <div class="vibe-card">
+                <div class="vibe-img">
+                    <img src="https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?auto=format&fit=crop&w=800&q=80" alt="Codice e Dati per NotebookLM">
+                </div>
+                <div class="vibe-info">
+                    <h3>Prompt Builder NotebookLM</h3>
+                    <p>Strumento interattivo per imparare a scrivere prompt efficaci per le presentazioni di NotebookLM.</p>
+                    <a href="https://ai.studio/apps/e84971cf-b8df-482c-8e2c-4f42e59e8c85?fullscreenApplet=true" target="_blank" class="vibe-btn">Apri Applicazione ↗</a>
+                </div>
+            </div>
+            
+            <div class="vibe-card" style="border: 2px dashed var(--border); background: rgba(255,255,255,0.02); justify-content: center; align-items: center; cursor: default; min-height: 350px; box-shadow: none;">
+                <div style="font-size: 50px; color: var(--border); font-family: 'Orbitron', sans-serif; margin-bottom: 10px;">+</div>
+                <div style="font-size: 15px; color: var(--text-secondary); font-family: 'Orbitron', sans-serif; letter-spacing: 2px; text-transform: uppercase; font-weight: bold;">Coming Soon</div>
+            </div>
+        </div>
+        
+        <h2 style="margin-top: 3rem;">Laboratorio Studenti</h2>
+        <p style="color: var(--text-secondary); margin-bottom: 25px;">Lo spazio dedicato alle applicazioni create da voi in Vibe Coding.</p>
+
+        <div class="takeaway-box" style="margin-top: 0; margin-bottom: 40px;">
+            <h3>Regole di Pubblicazione</h3>
+            <p>Vuoi vedere la tua applicazione nella Hall of Fame del corso? Ecco come fare:</p>
+            <ol style="margin-left: 20px;">
+                <li><strong>Progetta:</strong> Crea la tua web app a file singolo (.html) utilizzando il Vibe Coding.</li>
+                <li><strong>Testa:</strong> Verifica che l'app funzioni correttamente sul tuo browser.</li>
+                <li><strong>Consegna:</strong> Invia il file <code>.html</code> (insieme al titolo dell'app e a una breve descrizione) tramite il canale Teams del corso.</li>
+                <li><strong>Pubblicazione:</strong> Dopo la revisione tecnica, il progetto verrà aggiunto ufficialmente a questa galleria!</li>
+            </ol>
+        </div>
+
+        <div class="vibe-grid">
+            <div class="vibe-card" style="background: rgba(0,0,0,0.5); justify-content: center; align-items: center; cursor: default; min-height: 350px;">
+                <div style="font-size: 50px; color: var(--border); font-family: 'Orbitron', sans-serif;">&lt;/&gt;</div>
+                <div style="font-size: 16px; color: var(--text-secondary); font-family: 'Orbitron', sans-serif; letter-spacing: 2px; text-align: center; margin-top: 15px;">WAITING FOR<br>STUDENT_CODE</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- TAB: NEXUS HUB -->
+    <div id="tab-nexus" class="content-section">
+        <h2>Nexus Hub: La Bussola dell'IA</h2>
+        <p style="color: var(--text-secondary); margin-bottom: 25px;">Non serve conoscere a memoria tutti gli strumenti esistenti. Rispondi alle domande per trovare il tool perfetto per il tuo obiettivo di design oggi.</p>
+        <div class="nexus-wizard-container" id="nexus-wizard"></div>
+    </div>
+
+    <!-- TAB: GLOSSARIO -->
+    <div id="tab-glossary" class="content-section">
+        <h2>Glossario Termini</h2>
+        <p style="color: var(--text-secondary); margin-bottom: 25px;">I concetti fondamentali per navigare il mondo dell'Intelligenza Artificiale.</p>
+        <div class="program-shell" style="padding: 2rem;">
+            <dl class="glossary-dl">
+                <dt>LLM (Modello Linguistico di Grandi Dimensioni)</dt>
+                <dd>Il "cervello" testuale dell'IA (come GPT-4). È un algoritmo probabilistico che prevede la parola successiva più sensata in base al contesto, non "capisce" nel senso umano.</dd>
+                
+                <dt>Prompt</dt>
+                <dd>Il comando o l'istruzione scritta che dai all'IA. Più è preciso il prompt, più è precisa la risposta.</dd>
+                
+                <dt>Prompt Engineering</dt>
+                <dd>L'arte e la tecnica di strutturare i prompt in modo ottimale (definendo Ruolo, Contesto, Task, Vincoli e Tono) per ottenere risultati superiori.</dd>
+                
+                <dt>Token</dt>
+                <dd>I frammenti di testo che l'IA elabora (come sillabe o intere parole). Esiste un limite massimo di token (la "finestra di contesto") per singola conversazione.</dd>
+                
+                <dt>Allucinazione</dt>
+                <dd>Un errore fondamentale dove l'IA inventa informazioni false (nomi, date, dati storici, misure edilizie) ma lo fa in modo grammaticalmente perfetto e convincente.</dd>
+                
+                <dt>Custom GPT / Gems</dt>
+                <dd>Versioni personalizzate dell'IA che sono state pre-istruite con prompt specifici e file di conoscenza (Knowledge) per svolgere un compito unico e verticale.</dd>
+                
+                <dt>JSON (JavaScript Object Notation)</dt>
+                <dd>Un formato dati strutturato a blocchi. Usarlo per scrivere un prompt permette di "ingabbiare" l'IA in parametri rigorosi: modificando una singola variabile testuale, l'IA rigenererà il risultato modificando solo quel dettaglio e mantenendo intatto tutto il resto del contesto.</dd>
+                
+                <dt>Inpainting / Outpainting</dt>
+                <dd>Tecniche di modifica visiva: l'Inpainting permette di rigenerare solo una porzione specifica di un'immagine (es. cambiare un divano), mentre l'Outpainting ne estende i bordi immaginando cosa ci sia fuori dall'inquadratura.</dd>
+
+                <dt>Casualità (Randomness / Varianza)</dt>
+                <dd>La componente imprevedibile dell'IA. Per quanto un prompt possa essere tecnico, magistrale e iperdettagliato, ci sarà sempre una percentuale ineliminabile di casualità e interpretazione autonoma nella generazione finale.</dd>
+                
+                <dt>Vibe Coding</dt>
+                <dd>Un approccio innovativo allo sviluppo in cui non si scrive codice manualmente, ma si guida l'IA usando il linguaggio naturale. Si procede "a sensazione" (vibe), lavorando per iterazioni e correzioni visive.</dd>
+            </dl>
+        </div>
+    </div>
+
+    <!-- TAB: CALENDARIO -->
+    <div id="tab-cal" class="content-section">
+        <h2>Calendario Lezioni</h2>
+        <div class="class-selector">
+            <button class="class-btn active" onclick="showClass('3A', this)">Classe 3A</button>
+            <button class="class-btn" onclick="showClass('3B', this)">Classe 3B</button>
+            <button class="class-btn" onclick="showClass('3C', this)">Classe 3C</button>
+        </div>
+        <table class="cal-table">
+            <thead><tr><th>Data / Ora</th><th>Argomento</th></tr></thead>
+            <tbody id="calendar-body"></tbody>
+        </table>
+    </div>
+
+    <div class="footer">
+        Intelligenza Artificiale | Giovanni Savelli | 2025/26
+        <button class="easter-egg-btn" onclick="toggleArcadeMode()" title="Sorpresa...">👾</button>
+    </div>
+</div>
+
+<script>
+    // ==========================================
+    // LOGICA UI GENERALE E EASTER EGG
+    // ==========================================
+    
+    function toggleArcadeMode() {
+        document.body.classList.toggle('arcade-mode');
+        if(document.body.classList.contains('arcade-mode')) {
+            localStorage.setItem('ia-arcade', 'true');
+        } else {
+            localStorage.removeItem('ia-arcade');
+        }
+    }
+
+    if(localStorage.getItem('ia-arcade') === 'true') {
+        document.body.classList.add('arcade-mode');
+    }
+
+    // Ogni scheda ha il suo indirizzo (es. .../ia/#promptoteca): il tasto "Indietro" torna alla scheda precedente
+    const TAB_NAMES = {
+        'tab-prog': 'programma', 'tab-archive': 'archivio', 'tab-biblio': 'bibliografia', 'tab-promptoteca': 'promptoteca',
+        'tab-tester': 'vibe-coding', 'tab-nexus': 'nexus', 'tab-glossary': 'glossario', 'tab-cal': 'calendario'
+    };
+
+    function showTabFromHash() {
+        const id = Object.keys(TAB_NAMES).find(k => '#' + TAB_NAMES[k] === location.hash) || 'tab-prog';
+        openTab(id, document.querySelector(`.tab-btn[onclick*="'${id}'"]`), true);
+    }
+
+    window.addEventListener('popstate', showTabFromHash);
+
+    function openTab(id, btn, fromHistory) {
+        const targetTab = document.getElementById(id);
+        if (!targetTab) return;
+
+        document.querySelectorAll('.content-section').forEach(s => s.classList.remove('active'));
+        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+
+        targetTab.classList.add('active');
+        if (btn) btn.classList.add('active');
+        if (!fromHistory && location.hash !== '#' + TAB_NAMES[id]) history.pushState(null, '', '#' + TAB_NAMES[id]);
+
+        if(id === 'tab-nexus') { initWizard(); }
+    }
+
+    function scrollToChapter(chapterId) {
+        const targetElement = document.getElementById(chapterId);
+        const container = document.querySelector('.doc-content');
+        if (targetElement && container) {
+            container.scrollTo({ top: targetElement.offsetTop - 30, behavior: 'smooth' });
+        }
+    }
+
+    // ==========================================
+    // LOGICA AVANZAMENTO PROGRAMMA
+    // ==========================================
+    const LESSON_KEY = 'aiCourseLessonProgress_New';
+
+    function updateCourseProgress() {
+        const checks = Array.from(document.querySelectorAll('.lesson-progress-check'));
+        const ringFill = document.getElementById('ring-fill');
+        const ringText = document.getElementById('ring-text');
+        const circumference = 150.8; // Raggio 24 (2 * pi * 24 = ~150.8)
+
+        if (!checks.length || !ringFill || !ringText) return;
+
+        const completed = checks.filter(check => check.checked).length;
+        const percent = Math.round((completed / checks.length) * 100);
+        const offset = circumference - (circumference * percent / 100);
+
+        ringFill.style.strokeDashoffset = offset;
+        ringText.textContent = `${percent}%`;
+
+        checks.forEach((check, index) => {
+            const row = check.closest('.lesson-checkitem');
+            if (row) row.classList.toggle('is-done', check.checked);
+        });
+
+        localStorage.setItem(LESSON_KEY, JSON.stringify(checks.map(c => c.checked)));
+    }
+
+    function initCourseProgress() {
+        const checks = Array.from(document.querySelectorAll('.lesson-progress-check'));
+        const savedProgress = JSON.parse(localStorage.getItem(LESSON_KEY) || '[]');
+
+        checks.forEach((check, index) => {
+            check.checked = Boolean(savedProgress[index]);
+            check.addEventListener('change', updateCourseProgress);
+        });
+        updateCourseProgress();
+    }
+    
+    function resetCourseProgress() {
+        if(confirm("Vuoi azzerare i progressi della lezione in corso?")) {
+            localStorage.removeItem(LESSON_KEY);
+            document.querySelectorAll('.lesson-progress-check').forEach(c => c.checked = false);
+            updateCourseProgress();
+        }
+    }
+
+    // ==========================================
+    // ARCHIVIO LEZIONI COLLASSABILE
+    // ==========================================
+    function toggleArchivedLesson(shell) {
+        if (!shell) return;
+        const isOpen = shell.classList.toggle('is-open');
+        shell.classList.toggle('is-collapsed', !isOpen);
+        const topbar = shell.querySelector('.archive-topbar');
+        const marker = shell.querySelector('.program-collapse-mark');
+        if (topbar) topbar.setAttribute('aria-expanded', String(isOpen));
+        if (marker) marker.textContent = isOpen ? '−' : '+';
+    }
+
+    function initArchiveLessons() {
+        document.querySelectorAll('#tab-archive .archive-shell').forEach(shell => {
+            const topbar = shell.querySelector('.archive-topbar');
+            const marker = shell.querySelector('.program-collapse-mark');
+            shell.classList.remove('is-open');
+            shell.classList.add('is-collapsed');
+            if (topbar) topbar.setAttribute('aria-expanded', 'false');
+            if (marker) marker.textContent = '+';
+            if (!topbar || topbar.dataset.archiveReady === 'true') return;
+            topbar.dataset.archiveReady = 'true';
+            topbar.addEventListener('click', () => toggleArchivedLesson(shell));
+        });
+    }
+
+    // ==========================================
+    // LOGICA CALENDARIO
+    // ==========================================
+    const lezioniCal = {
+        '3A': { time: "09:00–13:00", days: ["Mer 27 Mag", "Mer 03 Giu", "Mer 10 Giu", "Mer 17 Giu", "Mer 24 Giu"], topics: ["Lezione 1", "Lezione 2", "Lezione 3", "Lezione 4", "Lezione 5"] },
+        '3B': { time: "14:00–18:00", days: ["Mer 27 Mag", "Mer 03 Giu", "Mer 10 Giu", "Mer 17 Giu", "Mer 24 Giu"], topics: ["Lezione 1", "Lezione 2", "Lezione 3", "Lezione 4", "Lezione 5"] },
+        '3C': { time: "09:00–13:00", days: ["Gio 28 Mag", "Gio 04 Giu", "Gio 11 Giu", "Gio 18 Giu", "Gio 25 Giu"], topics: ["Lezione 1", "Lezione 2", "Lezione 3", "Lezione 4", "Lezione 5"] }
+    };
+
+    function showClass(cl, btn) {
+        document.querySelectorAll('.class-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        let html = '';
+        const data = lezioniCal[cl];
+        data.days.forEach((day, i) => {
+            html += `<tr><td><strong style="color:var(--accent);">${day}</strong><br><span style="color:var(--text-muted); font-size:0.8rem;">${data.time}</span></td><td>${data.topics[i]}</td></tr>`;
+        });
+        document.getElementById('calendar-body').innerHTML = html;
+    }
+
+    // ==========================================
+    // LOGICA PROMPTOTEC (SLIDER & TABS)
+    // ==========================================
+    function setComparisonPosition(container, val) {
+        if (!container) return;
+        const handle = container.querySelector('.comparison-handle');
+        const overImg = container.querySelector('.comparison-img-over');
+        const slider = container.querySelector('.comparison-slider-input');
+        if (!handle || !overImg) return;
+
+        const safeVal = Math.max(0, Math.min(100, Number(val)));
+        if (slider) slider.value = safeVal;
+        handle.style.left = `${safeVal}%`;
+        overImg.style.clipPath = `polygon(0 0, ${safeVal}% 0, ${safeVal}% 100%, 0 100%)`;
+    }
+
+    function getComparisonValueFromPointer(container, event) {
+        const rect = container.getBoundingClientRect();
+        const x = event.clientX - rect.left;
+        return (x / rect.width) * 100;
+    }
+
+    function updateSlider(val, id) {
+        const overImg = document.getElementById(`comp-img-${id}`);
+        const handle = document.getElementById(`comp-handle-${id}`);
+        const container = (overImg || handle)?.closest('.comparison-container');
+        setComparisonPosition(container, val);
+    }
+
+    function initComparisonSliders() {
+        document.querySelectorAll('.comparison-container').forEach(container => {
+            if (container.dataset.sliderReady === 'true') return;
+            container.dataset.sliderReady = 'true';
+            setComparisonPosition(container, 50);
+            
+            container.addEventListener('pointerdown', (event) => {
+                event.preventDefault();
+                container.setPointerCapture(event.pointerId);
+                setComparisonPosition(container, getComparisonValueFromPointer(container, event));
+            });
+            container.addEventListener('pointermove', (event) => {
+                if (!container.hasPointerCapture(event.pointerId)) return;
+                event.preventDefault();
+                setComparisonPosition(container, getComparisonValueFromPointer(container, event));
+            });
+            container.addEventListener('pointerup', (event) => {
+                if (container.hasPointerCapture(event.pointerId)) container.releasePointerCapture(event.pointerId);
+            });
+        });
+    }
+
+    function switchPromptMode(mode, btn) {
+        const container = btn.closest('.prompt-code');
+        container.querySelectorAll('.prompt-view').forEach(view => view.style.display = 'none');
+        container.querySelector(`.view-${mode}`).style.display = 'block';
+        container.querySelectorAll('.code-mode-btn').forEach(b => b.classList.remove('active-json', 'active-txt'));
+        btn.classList.add(mode === 'json' ? 'active-json' : 'active-txt');
+    }
+
+    function toggleTranslation(btn) {
+        const container = btn.closest('.prompt-code');
+        const activeView = container.querySelector('.prompt-view[style*="display: block"]');
+        if(!activeView) return;
+        const enCode = activeView.querySelector('.lang-en');
+        const itCode = activeView.querySelector('.lang-it');
+        
+        if (enCode.style.display !== 'none') {
+            enCode.style.display = 'none';
+            itCode.style.display = 'block';
+            btn.innerHTML = '[ ORIGINALE ENG ]';
+            btn.classList.add('active-translation');
+        } else {
+            enCode.style.display = 'block';
+            itCode.style.display = 'none';
+            btn.innerHTML = 'Traduci ITA';
+            btn.classList.remove('active-translation');
+        }
+    }
+
+    function switchPrompt(id, thumbEl) {
+        document.querySelectorAll('.prompt-card').forEach(c => c.classList.remove('active-card'));
+        document.querySelectorAll('.gallery-thumb').forEach(t => t.classList.remove('active'));
+        document.getElementById(id).classList.add('active-card');
+        thumbEl.classList.add('active');
+        
+        const sliderInput = document.getElementById(id).querySelector('.comparison-slider-input');
+        if(sliderInput) {
+            sliderInput.value = 50;
+            updateSlider(50, id.split('-')[1]);
+        }
+    }
+
+    // ==========================================
+    // LOGICA NEXUS WIZARD
+    // ==========================================
+    const wizardLogic = {
+        "start": {
+            q: "Cosa devi creare oggi?",
+            options: [
+                { icon: "💻", text: "Codice e Sviluppo App", next: "q_code" },
+                { icon: "🎨", text: "Immagini e Visual Design", next: "q_img" },
+                { icon: "📝", text: "Testi, Ricerca e Dati", next: "q_text" },
+                { icon: "🎬", text: "Video e Motion", next: "q_video" }
+            ]
+        },
+        "q_code": {
+            q: "Quanto è complesso il progetto di sviluppo?",
+            options: [
+                { icon: "🧠", text: "Molto complesso, mi serve un Vibe Coding avanzato", result: "claude" },
+                { icon: "⚙️", text: "Mi serve creare un'App complessa con vari Add-on", result: "aistudio" },
+                { icon: "⚡", text: "Mi serve assistenza veloce o un prototipo rapido", result: "chatgpt" }
+            ]
+        },
+        "q_img": {
+            q: "Come preferisci gestire la generazione visiva?",
+            options: [
+                { icon: "🔗", text: "Voglio il controllo totale lavorando a Nodi", result: "nodi" },
+                { icon: "🧬", text: "Voglio mixare modelli diversi per alta qualità", result: "higgsfield" },
+                { icon: "✏️", text: "Voglio fare schizzi che diventano foto in Real-Time", result: "krea" },
+                { icon: "🚀", text: "Mi serve un'ideazione velocissima e intuitiva", result: "flow" }
+            ]
+        },
+        "q_text": {
+            q: "Di cosa hai bisogno esattamente?",
+            options: [
+                { icon: "📚", text: "Analizzare PDF o miei documenti (Senza allucinazioni!)", result: "notebooklm" },
+                { icon: "💡", text: "Brainstorming o creare un Assistente Personalizzato", result: "chatgpt" }
+            ]
+        },
+        "q_video": {
+            q: "Che tipo di video devi produrre?",
+            options: [
+                { icon: "🔗", text: "Controllo assoluto fotogramma per fotogramma a Nodi", result: "nodi" },
+                { icon: "🎥", text: "Video professionale, manipolazione e avatar", result: "higgsfield_vid" },
+                { icon: "🌪️", text: "Generazione veloce e sperimentale", result: "flow_vid" }
+            ]
+        }
+    };
+
+    const toolResults = {
+        "claude": { cat: "DEV / LOGIC", title: "Claude 3.5 / 4", desc: "L'LLM attualmente più forte per il 'Vibe Coding'. Capisce istruzioni strutturate alla perfezione e genera codice o JSON con una logica quasi impeccabile.", url: "https://claude.ai" },
+        "aistudio": { cat: "DEV / WORKSPACE", title: "Google AI Studio", desc: "L'ambiente ideale per costruire applicazioni complesse. Permette di regolare finemente i parametri dei modelli Gemini.", url: "https://aistudio.google.com" },
+        "chatgpt": { cat: "LLM / CHAT", title: "ChatGPT / Gemini", desc: "I 'coltellini svizzeri' perfetti. Ideali per ideare concept, riassumere informazioni rapide, o creare bot personalizzati.", url: "https://chatgpt.com" },
+        "nodi": { cat: "NODES / PRO", title: "Weave / ComfyUI", desc: "L'hub definitivo per il controllo assoluto. Weave è attualmente il top per generare immagini e video avanzati tramite flussi a nodi.", url: "https://weave.figma.com/" },
+        "higgsfield": { cat: "VISUAL / MIX", title: "Higgsfield AI", desc: "Piattaforma incredibile per la generazione di immagini di altissima qualità permettendo di mixare modelli visivi diversi.", url: "https://higgsfield.ai" },
+        "krea": { cat: "VISUAL / REAL-TIME", title: "Krea AI", desc: "Permette di disegnare schizzi sulla tela che l'IA trasforma in immagini fotorealistiche in diretta.", url: "https://www.krea.ai" },
+        "flow": { cat: "VISION / FAST", title: "Google Flow", desc: "Ecosistema sperimentale di Google per creare immagini e video mixando stili, template e prompt.", url: "https://labs.google/fx/it/tools/flow" },
+        "notebooklm": { cat: "RESEARCH / DOCS", title: "NotebookLM", desc: "Il re della ricerca. Non 'allucina' perché basa le sue risposte solo sui documenti che gli carichi tu.", url: "https://notebooklm.google.com" },
+        "higgsfield_vid": { cat: "VIDEO / PRO", title: "Higgsfield AI (Video Studio)", desc: "Specializzato nella creazione e manipolazione di clip video, gestione di avatar coerenti.", url: "https://higgsfield.ai" },
+        "flow_vid": { cat: "VIDEO / FAST", title: "Google Flow (Veo)", desc: "L'accesso rapido di Google per generare video sperimentali sfruttando il potentissimo modello Veo 3.1.", url: "https://labs.google/fx/it/tools/flow" }
+    };
+
+    const wizardContainer = document.getElementById('nexus-wizard');
+    function renderQuestion(nodeId) {
+        const node = wizardLogic[nodeId];
+        let html = `<div class="wizard-question">${node.q}</div><div class="wizard-options">`;
+        node.options.forEach(opt => {
+            if (opt.next) html += `<button class="wizard-btn" onclick="renderQuestion('${opt.next}')"><span class="wizard-icon">${opt.icon}</span> ${opt.text}</button>`;
+            else if (opt.result) html += `<button class="wizard-btn" onclick="renderResult('${opt.result}')"><span class="wizard-icon">${opt.icon}</span> ${opt.text}</button>`;
+        });
+        html += `</div>`;
+        if (nodeId !== 'start') html += `<br><button class="wizard-action-reset" style="margin-top:20px; border:none;" onclick="initWizard()">⟲ Ricomincia</button>`;
+        wizardContainer.innerHTML = html;
+    }
+
+    function renderResult(resultId) {
+        const res = toolResults[resultId];
+        wizardContainer.innerHTML = `
+            <div class="wizard-result" style="display:flex;">
+                <div class="wizard-result-label">[ CONSIGLIO DI SISTEMA ] • ${res.cat}</div>
+                <div class="wizard-result-title">${res.title}</div>
+                <div class="wizard-result-desc">${res.desc}</div>
+                <div class="wizard-result-actions">
+                    <a href="${res.url}" target="_blank" class="wizard-action-primary">Apri Strumento ↗</a>
+                    <button class="wizard-action-reset" onclick="initWizard()">⟲ Cerca ancora</button>
+                </div>
+            </div>`;
+    }
+
+    function initWizard() { renderQuestion('start'); }
+
+    // ESECUZIONE AL CARICAMENTO
+    showClass('3A', document.querySelector('.class-btn'));
+    initWizard();
+    initCourseProgress();
+    initArchiveLessons();
+    initComparisonSliders();
+    if (location.hash) showTabFromHash();
+</script>
+</body>
+</html>

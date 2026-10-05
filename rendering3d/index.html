@@ -1,0 +1,1239 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rendering 3D · 2° anno | AANT</title>
+    <meta name="description" content="Corso di Rendering 3D (Cinema 4D + Corona) - Prof. Giovanni Savelli - AANT">
+    <meta property="og:title" content="Rendering 3D · 2° anno">
+    <meta property="og:description" content="Programma, video, appunti e calendario del corso - Prof. Giovanni Savelli - AANT">
+    <meta name="theme-color" content="#0d0d0f">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🧊</text></svg>">
+    <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;700&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            /* PALETTE: VIOLA TWITCH E COMPLEMENTARE ORO */
+            --bg: #0d0d0f;
+            --card: #141417;
+            --accent: #9146FF; 
+            --accent-gradient: linear-gradient(135deg, #9146FF 0%, #5c16c5 100%);
+            --complement: #FFC300; 
+            
+            /* Variabili dinamiche per le classi (gestite da JS) */
+            --active-class-color: #9146FF;
+            --active-class-text: #ffffff;
+
+            --text: #ffffff;
+            --subtext: #88888e;
+            --border: #2a2a2e;
+            --modal-bg: rgba(0, 0, 0, 0.95);
+        }
+
+        *, *::before, *::after { box-sizing: border-box; }
+
+        html {
+            background-color: var(--bg);
+        }
+
+        /* La pagina scorre normalmente (niente più riquadro con scroll interno come su Google Sites) */
+        body {
+            background-color: var(--bg);
+            margin: 0; padding: 0;
+            color: var(--text);
+            font-family: 'Inter', -apple-system, sans-serif;
+            -webkit-font-smoothing: antialiased;
+            min-height: 100vh;
+            overflow-x: hidden;
+            display: flex;
+            flex-direction: column;
+            transition: font-family 0.3s ease;
+        }
+
+        /* --- CLASSE PER ALTA LEGGIBILITÀ POTENZIATA --- */
+        body.dyslexia-mode, body.dyslexia-mode * {
+            font-family: 'Lexend', sans-serif !important;
+            letter-spacing: 1px !important;
+            word-spacing: 3px !important;
+            line-height: 1.8 !important;
+        }
+        body.dyslexia-mode .item-text { font-size: 15px !important; }
+        body.dyslexia-mode .section-title { font-size: 13px !important; }
+        body.dyslexia-mode .tab-btn { font-size: 11px !important; }
+        body.dyslexia-mode .tutorial-content { font-size: 15px !important; }
+
+        .app-container { padding: 20px 15px; width: 100%; max-width: 1200px; margin: 0 auto; flex: 1; display: flex; flex-direction: column; }
+        .content-section { flex: 1; display: none; animation: fadeIn 0.3s ease; }
+        .content-section.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+        /* --- TASTO FLUTTUANTE ACCESSIBILITÀ --- */
+        .fab-accessibility {
+            position: fixed; top: 20px; right: 20px; background: var(--accent-gradient);
+            color: #fff; padding: 12px 20px; border-radius: 50px; display: flex; align-items: center;
+            gap: 10px; font-weight: 800; box-shadow: 0 4px 20px rgba(145, 70, 255, 0.4);
+            cursor: pointer; z-index: 990; transition: 0.3s cubic-bezier(0.25, 0.8, 0.25, 1); border: none;
+        }
+        .fab-accessibility:hover { transform: scale(1.05) translateY(-3px); box-shadow: 0 6px 25px rgba(145, 70, 255, 0.6); }
+        .fab-accessibility.active { background: #1a1a1a; color: var(--accent); border: 2px solid var(--accent); box-shadow: 0 0 15px rgba(0,0,0,0.8); }
+        .fab-icon { font-size: 18px; }
+        .fab-text { font-size: 11px; text-transform: uppercase; letter-spacing: 1px; }
+        /* Su smartphone: tasto rotondo in basso a destra, così non copre l'avviso e il titolo */
+        @media (max-width: 600px) {
+            .fab-accessibility { top: auto; bottom: 20px; right: 16px; width: 52px; height: 52px; padding: 0; justify-content: center; }
+            .fab-text { display: none; }
+        }
+
+        /* --- TASTI ESAME E ESONERO --- */
+        .midterm-btn {
+            background: linear-gradient(135deg, rgba(145, 70, 255, 0.15) 0%, rgba(145, 70, 255, 0.05) 100%);
+            border: 1px solid var(--accent);
+            border-radius: 10px;
+            padding: 12px 16px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+            color: var(--accent);
+            margin-bottom: 12px;
+            transition: 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+            box-shadow: 0 4px 15px rgba(145, 70, 255, 0.1);
+            flex-shrink: 0;
+        }
+        .midterm-btn:hover {
+            background: var(--accent);
+            color: #fff;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(145, 70, 255, 0.3);
+        }
+        .midterm-btn:hover .midterm-text span { color: rgba(255, 255, 255, 0.8); }
+        .midterm-icon { font-size: 24px; filter: drop-shadow(0 2px 5px rgba(0,0,0,0.2)); }
+        .midterm-text { display: flex; flex-direction: column; }
+        .midterm-text strong { font-size: 13px; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; }
+        .midterm-text span { font-size: 11px; color: rgba(145, 70, 255, 0.8); margin-top: 3px; font-weight: 600; transition: 0.3s; }
+
+        .exam-prominent-btn {
+            background: linear-gradient(135deg, rgba(255, 195, 0, 0.15) 0%, rgba(255, 195, 0, 0.05) 100%);
+            border: 1px solid var(--complement);
+            border-radius: 12px;
+            padding: 16px 20px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            text-decoration: none;
+            color: var(--complement);
+            margin-bottom: 25px;
+            transition: 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+            box-shadow: 0 4px 15px rgba(255, 195, 0, 0.1);
+            flex-shrink: 0;
+        }
+        .exam-prominent-btn:hover {
+            background: var(--complement);
+            color: #000;
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(255, 195, 0, 0.3);
+        }
+        .exam-prominent-btn:hover .exam-text span {
+            color: rgba(0, 0, 0, 0.7);
+        }
+        .exam-icon { font-size: 32px; filter: drop-shadow(0 2px 5px rgba(0,0,0,0.2)); }
+        .exam-text { display: flex; flex-direction: column; }
+        .exam-text strong { font-size: 15px; font-weight: 900; text-transform: uppercase; letter-spacing: 1px; }
+        .exam-text span { font-size: 12px; color: rgba(255, 195, 0, 0.8); margin-top: 4px; font-weight: 600; transition: 0.3s; }
+
+        /* --- ALERT AGGIORNAMENTO CENTRATO --- */
+        .update-alert {
+            background: rgba(255, 195, 0, 0.1); border: 1px solid var(--complement); color: var(--complement);
+            padding: 14px 40px; border-radius: 12px; margin-bottom: 25px; display: flex; align-items: center;
+            justify-content: center; position: relative; font-size: 12px; line-height: 1.5; text-align: center;
+            animation: slideDown 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        @keyframes slideDown { from { opacity: 0; transform: translateY(-15px); } to { opacity: 1; transform: translateY(0); } }
+        .update-alert-content { display: flex; align-items: center; justify-content: center; gap: 10px; }
+        .update-alert-icon { font-size: 20px; }
+        .update-alert-close {
+            position: absolute; right: 15px; top: 50%; transform: translateY(-50%); background: none;
+            border: none; color: var(--complement); font-size: 20px; cursor: pointer; opacity: 0.7; transition: 0.2s; padding: 0 5px;
+        }
+        .update-alert-close:hover { opacity: 1; transform: translateY(-50%) scale(1.1); }
+
+        /* --- HERO BANNER --- */
+        .hero-banner {
+            width: 100%; height: 180px;
+            background: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.8)), url('https://images.unsplash.com/photo-1550684848-fac1c5b4e853?q=80&w=1600&auto=format&fit=crop');
+            background-size: cover; background-position: center 30%; border-radius: 15px;
+            margin-bottom: 25px; display: flex; align-items: center; justify-content: center;
+            border: 1px solid var(--border); text-align: center; flex-shrink: 0;
+        }
+        .hero-banner .top-label { letter-spacing: 4px; color: var(--accent); font-weight: 900; font-size: 10px; text-transform: uppercase; margin-bottom: 5px; display: block; }
+        .hero-banner h2 { margin: 0; font-size: clamp(28px, 8vw, 64px); font-weight: 800; text-transform: uppercase; line-height: 1; }
+        .hero-banner .course-name { font-size: clamp(14px, 4vw, 24px); font-weight: 300; letter-spacing: 2px; color: #fff; margin-top: 5px; display: block; }
+
+        header { display: flex; flex-direction: column; gap: 15px; border-bottom: 2px solid var(--border); padding-bottom: 15px; margin-bottom: 25px; flex-shrink: 0; }
+        .title-group h1 { margin: 0; font-size: 20px; text-transform: uppercase; color: var(--subtext); font-weight: 400; line-height: 1.2; }
+        .title-group p { margin: 5px 0 0 0; color: var(--accent); font-size: 11px; font-weight: 700; line-height: 1.5; }
+        .header-controls { display: flex; align-items: center; justify-content: space-between; width: 100%; }
+        
+        /* --- PROGRESS RING CIRCOLARE XL --- */
+        .stats-box { display: flex; align-items: center; justify-content: flex-end; gap: 12px; width: 100%;}
+        .progress-ring { position: relative; width: 70px; height: 70px; }
+        .progress-ring svg { width: 100%; height: 100%; transform: rotate(-90deg); }
+        .progress-ring circle { fill: none; stroke-width: 6; stroke-linecap: round; }
+        .progress-ring .bg { stroke: rgba(255,255,255,0.05); }
+        .progress-ring .fill { stroke: url(#ring-gradient); stroke-dasharray: 188.5; stroke-dashoffset: 188.5; transition: stroke-dashoffset 0.8s cubic-bezier(0.16, 1, 0.3, 1); }
+        .progress-ring .text { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 16px; font-weight: 900; color: var(--text); }
+
+        /* --- NAV TABS --- */
+        .nav-tabs { display: flex; gap: 10px; margin-bottom: 25px; overflow-x: auto; padding-bottom: 10px; scrollbar-width: none; -webkit-overflow-scrolling: touch; flex-shrink: 0; align-items: center; }
+        .nav-tabs::-webkit-scrollbar { display: none; }
+        /* Tutti i pulsanti sempre visibili: su smartphone vanno a capo invece di finire fuori schermo */
+        .nav-tabs { flex-wrap: wrap; overflow-x: visible; }
+        .tab-btn { flex-shrink: 0; background: none; border: 1px solid var(--border); color: var(--subtext); padding: 10px 18px; border-radius: 50px; cursor: pointer; font-weight: 700; text-transform: uppercase; font-size: 10px; white-space: nowrap; transition: 0.3s; }
+        .tab-btn.active { border-color: var(--accent); color: var(--accent); background: rgba(145, 70, 255, 0.1); }
+        .drive-btn { text-decoration: none; border-color: #60a5fa; color: #60a5fa; }
+        .drive-btn:hover { background-color: rgba(96, 165, 250, 0.1); box-shadow: 0 0 15px rgba(96, 165, 250, 0.3); }
+
+        /* --- CALENDARIO CON CLASSI DINAMICHE --- */
+        .class-selector { display: flex; gap: 10px; margin-bottom: 20px; justify-content: center; }
+        .class-btn { background: #1a1a1c; border: 1px solid var(--border); color: var(--subtext); padding: 8px 15px; border-radius: 50px; cursor: pointer; font-size: 11px; font-weight: bold; transition: 0.3s;}
+        .class-btn.active { background: var(--active-class-color); color: var(--active-class-text); border-color: var(--active-class-color); box-shadow: 0 4px 15px rgba(0,0,0,0.3);}
+        
+        .cal-table { width: 100%; border-collapse: collapse; font-size: 12px; background: var(--card); border-radius: 10px; overflow: hidden; }
+        .cal-table th, .cal-table td { padding: 12px 10px; text-align: left; border-bottom: 1px solid var(--border); }
+        .cal-table th { background: #1a1a1c; color: var(--subtext); text-transform: uppercase; font-size: 10px; letter-spacing: 1px; }
+        .cal-link-btn { background: rgba(255, 255, 255, 0.05); color: var(--text); border: 1px solid var(--border); padding: 6px 12px; border-radius: 50px; font-size: 10px; font-weight: 800; cursor: pointer; text-transform: uppercase; transition: 0.3s; white-space: nowrap; }
+        .cal-link-btn:hover { background: var(--active-class-color); color: var(--active-class-text); border-color: transparent;}
+        .current-badge { background: var(--active-class-color); color: var(--active-class-text); padding: 4px 8px; border-radius: 4px; font-size: 9px; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; margin-left: 10px; transition: 0.3s;}
+
+        /* --- PROGRAMMA E LISTE --- */
+        .prog-grid { display: grid; grid-template-columns: 1fr; gap: 15px; }
+        .section-card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 15px; }
+        .section-card.full-width { grid-column: 1 / -1; }
+        .section-title { color: var(--accent); font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 12px; display: flex; align-items: center; }
+        .section-title::after { content: ''; flex-grow: 1; height: 1px; background: var(--border); margin-left: 10px; }
+        
+        .item { display: flex; align-items: center; padding: 12px 5px; border-bottom: 1px solid rgba(255,255,255,0.03); transition: 0.2s;}
+        .item:hover { background: rgba(255,255,255,0.02); border-radius: 6px;}
+        .checkbox-container { display: flex; align-items: center; justify-content: center; padding-right: 12px; cursor: pointer; }
+        .checkbox { width: 22px; height: 22px; border: 2px solid #555; border-radius: 6px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
+        .item.checked .checkbox { background: var(--complement); border-color: transparent; transform: scale(1.1); }
+        .item.checked .checkbox::after { content: '✓'; color: #000; font-size: 14px; font-weight: 900; }
+        .item-text { flex-grow: 1; font-size: 13px; color: #eee; cursor: pointer; display: flex; align-items: center; justify-content: space-between; line-height: 1.4; transition: 0.3s;}
+        .item.checked .item-text { color: #555; text-decoration: line-through; }
+        .preview-badge { font-size: 9px; background: #222; padding: 4px 8px; border-radius: 20px; color: var(--text); font-weight: bold; margin-left: 10px; white-space: nowrap; text-decoration: none; display: inline-block; transition: 0.3s;}
+        .item-text:hover .preview-badge { background: var(--accent); color: #fff;}
+
+        /* --- ACCORDION COMPONENTI --- */
+        details.tutorial-main {
+            background: rgba(255,255,255,0.02); border: 1px solid var(--border); border-radius: 16px; margin-bottom: 15px; transition: 0.3s;
+        }
+        details.tutorial-main > summary { padding: 20px; cursor: pointer; list-style: none; display: flex; justify-content: space-between; align-items: center; }
+        details.tutorial-main > summary::-webkit-details-marker { display: none; }
+        details.tutorial-main > summary h3 { margin: 0; color: var(--complement); font-size: 16px; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; }
+        details.tutorial-main > summary::after { content: '+'; color: var(--accent); font-size: 26px; transition: transform 0.3s; line-height: 1; font-weight: 300; }
+        details.tutorial-main[open] > summary::after { content: '−'; transform: rotate(180deg); }
+        details.tutorial-main[open] > summary { background: rgba(0,0,0,0.3); border-bottom: 1px solid var(--border); border-radius: 16px 16px 0 0; }
+        .tutorial-main-body { padding: 20px; }
+        
+        .tutorial-actions { margin-bottom: 20px; display: flex; justify-content: flex-start; }
+        .tutorial-ref-btn { background: rgba(255,255,255,0.05); color: var(--text); border: 1px solid var(--border); padding: 8px 16px; border-radius: 50px; font-size: 11px; font-weight: 800; cursor: pointer; transition: 0.3s; display: inline-flex; align-items: center; gap: 6px; }
+        .tutorial-ref-btn:hover { background: var(--accent-gradient); color: #fff; border-color: transparent;}
+        .tutorial-ref-btn svg { width: 14px; height: 14px; fill: currentColor; }
+
+        details.tutorial-step { background: var(--card); border: 1px solid var(--border); border-radius: 12px; margin-bottom: 12px; overflow: hidden; }
+        details.tutorial-step:last-child { margin-bottom: 0; }
+        details.tutorial-step > summary { padding: 18px 20px; font-weight: 700; color: var(--text); cursor: pointer; list-style: none; display: flex; justify-content: space-between; align-items: center; transition: 0.3s; font-size: 14px;}
+        details.tutorial-step > summary::-webkit-details-marker { display: none; }
+        details.tutorial-step > summary::after { content: '▼'; color: var(--accent); font-size: 12px; transition: transform 0.3s; line-height: 1;}
+        details.tutorial-step[open] > summary::after { transform: rotate(180deg); }
+        details.tutorial-step[open] > summary { background: rgba(145, 70, 255, 0.08); color: var(--accent); border-bottom: 1px solid var(--border); }
+        .tutorial-content { padding: 20px; color: #ccc; font-size: 13px; line-height: 1.6; }
+        .tutorial-content ol { margin: 0; padding-left: 20px; }
+        .tutorial-content li { margin-bottom: 12px; }
+        .tutorial-content li::marker { color: var(--complement); font-weight: 800; }
+        .tutorial-content strong { color: #fff; }
+
+        /* --- VIDEO & SHORTCUTS --- */
+        .video-grid { display: grid; grid-template-columns: 1fr; gap: 20px; }
+        .video-card { background: var(--card); border-radius: 12px; overflow: hidden; border: 1px solid var(--border); }
+        .video-wrapper { position: relative; padding-bottom: 56.25%; height: 0; background-color: #000; }
+        .video-wrapper iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0; }
+        .video-info { padding: 15px; }
+        .video-info h3 { font-size: 15px; margin: 0 0 5px 0; color: var(--text); }
+        .video-info p { margin: 0; color: var(--subtext); font-size: 12px; line-height: 1.4;}
+        .play-btn { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 60px; height: 60px; background: rgba(0, 0, 0, 0.6); border-radius: 50px; display: flex; align-items: center; justify-content: center; transition: 0.3s; border: 2px solid rgba(255,255,255,0.3); backdrop-filter: blur(4px); }
+        .video-wrapper:hover .play-btn { transform: translate(-50%, -50%) scale(1.1); background: var(--accent-gradient); border-color: transparent;}
+        .play-btn::after { content: ''; width: 0; height: 0; border-top: 12px solid transparent; border-bottom: 12px solid transparent; border-left: 20px solid white; margin-left: 5px; }
+
+        .sc-grid { display: grid; grid-template-columns: 1fr; gap: 8px; }
+        .sc-card { background: var(--card); border: 1px solid var(--border); padding: 12px; border-radius: 8px; display: flex; align-items: center; justify-content: space-between; }
+        .key { background: #2a2a2e; padding: 4px 8px; border-radius: 4px; font-family: monospace; color: var(--complement); font-weight: 700; font-size: 12px; border-bottom: 2px solid #000; margin-right: 4px;}
+        .sc-label { font-size: 12px; color: #ccc; text-align: right; }
+        
+        /* --- BRAND LINKS (ARCHVIZ RESOURCES) --- */
+        .brand-category-title { color: var(--text); font-size: 18px; font-weight: 800; margin: 35px 0 5px 0; display: flex; align-items: center; gap: 10px; }
+        .brand-category-desc { color: var(--subtext); font-size: 13px; margin-bottom: 20px; line-height: 1.5; }
+        .brand-grid { display: grid; grid-template-columns: 1fr; gap: 10px; }
+        
+        .brand-link {
+            background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 15px;
+            display: flex; flex-direction: column; text-decoration: none; transition: 0.3s; position: relative; overflow: hidden;
+        }
+        .brand-link:hover { border-color: var(--accent); background: rgba(145, 70, 255, 0.05); transform: translateY(-3px); box-shadow: 0 5px 15px rgba(0,0,0,0.4); }
+        .brand-name { color: var(--text); font-weight: 800; font-size: 15px; margin-bottom: 5px; }
+        .brand-url { color: var(--complement); font-size: 11px; display: flex; justify-content: space-between; align-items: center; font-family: monospace;}
+        .brand-url::after { content: '↗'; font-size: 14px; transition: 0.3s; color: var(--subtext); }
+        .brand-link:hover .brand-url::after { transform: translate(3px, -3px); color: var(--accent); }
+
+        /* --- MODAL --- */
+        #modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--modal-bg); z-index: 1000; justify-content: center; align-items: center; padding: 20px; cursor: pointer; }
+        .modal-content { position: relative; max-width: 90%; max-height: 90vh; background: #000; border-radius: 12px; border: 1px solid #333; overflow: hidden; display: flex; flex-direction: column; cursor: default; box-shadow: 0 20px 50px rgba(0,0,0,0.8); }
+        .modal-header { padding: 15px 20px; background: #141417; border-bottom: 1px solid #333; display: flex; align-items: center; justify-content: space-between; }
+        #modal-caption { margin: 0; color: white; font-size: 16px; font-weight: 700; letter-spacing: 1px; }
+        .close-btn { color: #888; font-size: 28px; font-weight: 300; cursor: pointer; transition: 0.2s; line-height: 1; }
+        .close-btn:hover { color: white; }
+        .image-container { position: relative; flex-grow: 1; display: flex; align-items: center; justify-content: center; background: #000; min-height: 300px; }
+        #modal-img { max-width: 100%; max-height: calc(80vh - 120px); object-fit: contain; display: block; }
+        .nav-arrow { position: absolute; top: 50%; transform: translateY(-50%); background: rgba(0,0,0,0.5); color: white; border: none; width: 50px; height: 50px; border-radius: 50%; font-size: 24px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: 0.3s; z-index: 10; user-select: none; }
+        .nav-arrow:hover { background: var(--accent); }
+        .prev-arrow { left: 15px; }
+        .next-arrow { right: 15px; }
+        .nav-arrow.disabled { opacity: 0.2; cursor: default; background: rgba(0,0,0,0.2); }
+        .nav-arrow.disabled:hover { background: rgba(0,0,0,0.2); }
+        .modal-footer { padding: 10px 20px; background: #141417; border-top: 1px solid #333; display: flex; align-items: center; justify-content: center; }
+        .dots-container { display: flex; gap: 8px; }
+        .dot { width: 8px; height: 8px; background: #333; border-radius: 50%; cursor: pointer; transition: 0.3s; }
+        .dot.active { background: var(--accent); transform: scale(1.3); }
+
+        @media (min-width: 500px) {
+            .brand-grid { grid-template-columns: repeat(2, 1fr); }
+        }
+        @media (min-width: 768px) {
+            .app-container { padding: 40px 5%; } .hero-banner { height: 280px; }
+            header { flex-direction: row; align-items: flex-end; } .title-group h1 { font-size: 24px; }
+            .prog-grid { grid-template-columns: 1fr 1fr; } .full-width { grid-column: span 2; }
+            .video-grid { grid-template-columns: repeat(2, 1fr); }
+            .sc-grid { grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); }
+            .cal-table { font-size: 14px; }
+            .drive-btn { margin-left: auto; }
+            .brand-grid { grid-template-columns: repeat(3, 1fr); }
+        }
+        @media (min-width: 1024px) {
+            .brand-grid { grid-template-columns: repeat(4, 1fr); }
+        }
+        
+        .reset-btn { margin-top: 30px; background: rgba(255,255,255,0.03); border: 1px solid var(--border); color: var(--subtext); padding: 14px 20px; border-radius: 50px; cursor: pointer; font-size: 10px; width: 100%; font-weight: bold; letter-spacing: 1px; transition: 0.3s;}
+        .reset-btn:hover { color: var(--accent); border-color: var(--accent); background: rgba(145,70,255,0.05);}
+        .footer { text-align: center; margin-top: auto; color: #555; font-size: 9px; text-transform: uppercase; letter-spacing: 1px; padding: 40px 0 20px 0; flex-shrink: 0; }
+    </style>
+</head>
+
+<body>
+
+<button class="fab-accessibility" id="btn-dyslexia" onclick="toggleDyslexia()" title="Alta leggibilità" aria-label="Alta leggibilità">
+    <span class="fab-icon">Aa</span>
+    <span class="fab-text">Alta Leggibilità</span>
+</button>
+
+<div class="app-container">
+
+    <div class="update-alert">
+        <div class="update-alert-content">
+            <span class="update-alert-icon">⚠️</span>
+            <span>
+                <strong>NUOVA VERSIONE:</strong> È ora disponibile l'aggiornamento a <strong>Cinema 4D 2026.1.4</strong>.
+            </span>
+        </div>
+        <button class="update-alert-close" onclick="this.parentElement.style.display='none'">&times;</button>
+    </div>
+
+    <div class="hero-banner">
+        <div>
+            <span class="top-label">AANT Interior Design</span>
+            <h2>2° ANNO</h2>
+            <span class="course-name">RENDERING 3D</span>
+        </div>
+    </div>
+
+    <header>
+        <div class="title-group">
+            <h1>Docente: Giovanni Savelli</h1>
+            <p>Accademia delle Arti e Nuove Tecnologie <span style="white-space: nowrap;">| A.A. 2025/2026</span></p>
+        </div>
+        <div class="header-controls">
+            <div class="stats-box">
+                <div style="font-size: 11px; color: var(--subtext); text-transform: uppercase; line-height: 1.3; text-align: right; margin-right: 5px;">
+                    Completato<br><b style="color: var(--text);">Lezione 8</b>
+                </div>
+                <div class="progress-ring">
+                    <svg>
+                        <defs>
+                            <linearGradient id="ring-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" stop-color="#9146FF" />
+                                <stop offset="100%" stop-color="#5c16c5" />
+                            </linearGradient>
+                        </defs>
+                        <circle class="bg" cx="35" cy="35" r="30"></circle>
+                        <circle class="fill" id="ring-fill" cx="35" cy="35" r="30"></circle>
+                    </svg>
+                    <div class="text" id="ring-text">0%</div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <a href="https://drive.google.com/file/d/19ttsB6XbvCe_dWNn2i7sV1P6aC1NXuyw/view?usp=sharing" target="_blank" class="midterm-btn">
+        <span class="midterm-icon">🔬</span>
+        <div class="midterm-text">
+            <strong>Esonero: Microscopio Långsök</strong>
+            <span>Scarica il PDF con le specifiche della prova intermedia</span>
+        </div>
+    </a>
+
+    <a href="https://drive.google.com/file/d/1gl4PRGz6araeXmKZlB59agQUElBGvDPr/view?usp=sharing" target="_blank" class="exam-prominent-btn">
+        <span class="exam-icon">🎓</span>
+        <div class="exam-text">
+            <strong>Progetto d'Esame Finale</strong>
+            <span>Scarica il PDF con le linee guida e le istruzioni su cosa fare per agevolare il tuo lavoro</span>
+        </div>
+    </a>
+
+    <div class="nav-tabs">
+        <button class="tab-btn active" id="btn-prog-current" onclick="openTab('tab-prog-current', this)">Programma 8ª Lez.</button>
+        <button class="tab-btn" onclick="openTab('tab-archive', this)">Archivio</button>
+        <button class="tab-btn" onclick="openTab('tab-notes', this)">Appunti</button>
+        <button class="tab-btn" id="btn-cal" onclick="openTab('tab-cal', this)">Calendario</button>
+        <button class="tab-btn" onclick="openTab('tab-video', this)">Video</button>
+        <button class="tab-btn" onclick="openTab('tab-resources', this)">Brand & Modelli</button>
+        <button class="tab-btn" onclick="openTab('tab-short', this)">Scorciatoie</button>
+        
+        <a href="corona.html" class="tab-btn" style="border-color: var(--complement); color: var(--complement); text-decoration: none;">CORONA →</a>
+        <a href="https://drive.google.com/drive/folders/1xanDdnzdc-_gRJcwwSOdzABOH7afzR2V?usp=sharing" target="_blank" class="tab-btn drive-btn">Cartella Drive ↗</a>
+    </div>
+
+    <div id="tab-prog-current" class="content-section active">
+        <div class="prog-grid" id="prog-content-current"></div>
+        <button class="reset-btn" onclick="resetCurrent(this)">AZZERA PROGRESSI LEZ. 8</button>
+    </div>
+
+    <div id="tab-archive" class="content-section">
+        <h2 style="color: var(--text); font-size: 20px; font-weight: 800; margin-top: 0; margin-bottom: 20px;">Archivio Lezioni</h2>
+        <div id="prog-content-archive"></div>
+    </div>
+
+    <div id="tab-notes" class="content-section">
+        <h2 style="color: var(--text); font-size: 20px; font-weight: 800; margin-top: 0; margin-bottom: 20px;">Libreria Tutorial</h2>
+        
+        <details class="tutorial-main">
+            <summary><h3>Mattoncino Lego</h3></summary>
+            <div class="tutorial-main-body">
+                <div class="tutorial-actions">
+                    <button class="tutorial-ref-btn" onclick="openModal([
+                        'https://drive.google.com/file/d/1k0hovQIZufm06BYR2PtIszzdOoWhJWn3/view?usp=sharing',
+                        'https://drive.google.com/file/d/1aLHP2LhOCV04Cd0oASy9z-K-Aqp1zc42/view?usp=sharing',
+                        'https://drive.google.com/file/d/1cBmEzW7-WnGNC_nis7znCrLUG2-Rs5d_/view?usp=sharing',
+                        'https://drive.google.com/file/d/1rOLNbuZUBfzc4ToZWukQY273rSQkmEPD/view?usp=sharing'
+                    ], 'Mattoncino Lego'); event.stopPropagation();">
+                        <svg viewBox="0 0 24 24"><path d="M4,4H7L9,2H15L17,4H20A2,2 0 0,1 22,6V18A2,2 0 0,1 20,20H4A2,2 0 0,1 2,18V6A2,2 0 0,1 4,4M12,7A5,5 0 0,0 7,12A5,5 0 0,0 12,17A5,5 0 0,0 17,12A5,5 0 0,0 12,7M12,9A3,3 0 0,1 15,12A3,3 0 0,1 12,15A3,3 0 0,1 9,12A3,3 0 0,1 12,9Z"/></svg>
+                        Vedi Reference (4)
+                    </button>
+                </div>
+                <details class="tutorial-step"><summary>1. Setup Viste e Riferimenti</summary><div class="tutorial-content"><ol><li>Trascina le immagini di riferimento nelle viste: <strong>FRONTALE, DESTRA, SOPRA</strong>.</li><li>Vai su <strong>VISTE > CONFIGURA</strong> per apportare le modifiche.</li><li>Ridimensiona le immagini dello sfondo a <strong>39,4 pixel</strong> e imposta una trasparenza dell'85%.</li></ol></div></details>
+                <details class="tutorial-step"><summary>2. Primitiva e Creazione Denti</summary><div class="tutorial-content"><ol><li>Crea una primitiva <strong>Cubo</strong> e impostala a 10 volte la dimensione del mattoncino reale, poi rendila modificabile (esplodi).</li><li>Usa il <strong>Taglio Loop (ML)</strong> tenendo premuto SHIFT per allineare i tagli.</li><li>In modalità poligoni, seleziona 4 facce per volta, e creiamo i cerchi con la combo "inserto-adatta a cerchio". Attiva inserto e crea un inserto di 0,1 cm, dopo di che attiva adatta a cerchio ed imposta 50% sulla scala. Ripetere per tutti i dentini.</li><li>Sempre in modalità poligoni, mantieni selezionati i cerchi, imposta la quantizzazione alla misura corretta e <strong>trascina verso l'alto con CTRL</strong> per estrudere e creare i denti.</li></ol></div></details>
+                <details class="tutorial-step"><summary>3. Booleana e Arco (Cilindro)</summary><div class="tutorial-content"><ol><li>Crea un <strong>Cilindro</strong> ruotato sull'asse X, imposta <strong>1 segmento altezza</strong> e <strong>8 segmenti di rotazione</strong>. Ridimensionalo manualmente in base al raggio del riferimento, poi esplodilo (rendilo modificabile).</li><li>In modalità bordi, usa la <strong>selezione rettangolare</strong> per selezionare tutta la metà inferiore del cilindro. Escludi dalla selezione la linea centrale ed elimina le altre facce.</li><li>Seleziona la linea centrale e trascinala verso il basso tenendo premuto <strong>CTRL</strong>.</li><li>Chiudi l'arco usando l'opzione <strong>Chiudi foro poligono (griglia)</strong>.</li><li>Attiva la <strong>Booleana</strong> (scegliendo la modalità "Senza") inserendo prima il Parallelepipedo e poi il Cilindro. Rendi la booleana un oggetto modificabile (tasto C) ed esplodi il tutto.</li><li>Crea i tagli per collegare i nuovi punti orfani generati: usa il <strong>Taglio Loop (ML)</strong> per creare 2 all'altezza dei punti orfani, poi ricollegali usando il <strong>Taglio Lineare (KK)</strong>.</li><li>A questo punto, elimina la base del mattoncino: usa la selezione loop (<strong>UL</strong>) per selezionare il bordo inferiore e la selezione riempimento (<strong>UF</strong>) per selezionare ed eliminare i poligoni interni.</li></ol></div></details>
+                <details class="tutorial-step"><summary>4. Spessore e Controlli Finali</summary><div class="tutorial-content"><ol><li>Seleziona singolarmente i bordi necessari e usa <strong>SLIDE (MO)</strong> per spostarli di 0,6 (o -0,6 a seconda della direzione di spostamento).</li><li>Seleziona tutti i poligoni ed <strong>estrudi</strong> con Valore -0,5 per estrudere all'interno, mantenendo l'opzione "Crea tappi" attivata.</li><li>Seleziona il loop dell'arco (UL) e usa <strong>SLIDE</strong> per spostarlo di 0,5 cm verso l'esterno creando nuovi poligoni.</li><li>Seleziona le facce interne della porta e trascinale verso l'interno (CTRL) per creare l'incavo.</li><li>Crea <strong>tutti i tagli di supporto</strong> necessari per la SDS: inseriscili sui dentini in alto, sull'arco appena formato e su tutti gli spigoli che necessitano di mantenere la tensione. Infine, attiva la SDS per verificare il risultato finale senza artefatti.</li></ol></div></details>
+            </div>
+        </details>
+
+        <details class="tutorial-main">
+            <summary><h3>Mensola e Cubo di Rubik</h3></summary>
+            <div class="tutorial-main-body">
+                <div class="tutorial-actions">
+                    <button class="tutorial-ref-btn" onclick="openModal('https://drive.google.com/file/d/16q5k7alRoLkgvnMEn9OQncfWfW49cQS-/view?usp=sharing', 'Mensola'); event.stopPropagation();">
+                        <svg viewBox="0 0 24 24"><path d="M4,4H7L9,2H15L17,4H20A2,2 0 0,1 22,6V18A2,2 0 0,1 20,20H4A2,2 0 0,1 2,18V6A2,2 0 0,1 4,4M12,7A5,5 0 0,0 7,12A5,5 0 0,0 12,17A5,5 0 0,0 17,12A5,5 0 0,0 12,7M12,9A3,3 0 0,1 15,12A3,3 0 0,1 12,15A3,3 0 0,1 9,12A3,3 0 0,1 12,9Z"/></svg>
+                        Vedi Reference (1)
+                    </button>
+                </div>
+                <details class="tutorial-step"><summary>1. Struttura Metallica</summary><div class="tutorial-content"><ol><li>Crea una primitiva Cubo e imposta le dimensioni a <strong>X: 2 cm, Y: 25 cm, Z: 2 cm</strong>.</li><li>Rendi modificabile la primitiva (premendo il tasto <strong>C</strong>).</li><li>Crea un taglio orizzontale nella parte superiore del solido di 2 cm (ML in modalità bordi).</li><li>In modalità Poligoni, seleziona la faccia appena creata ed estrudilo di <strong>20 cm</strong>.</li><li>Crea un altro taglio nella parte esterna del cubo, sempre di 2 cm.</li><li>Seleziona le 2 facce laterali del solido ed estrudile entrambe di <strong>48 cm</strong> (impostando e sistemando la quantizzazione). Dopo aver completato l'estrusione, elimina le due facce estruse.</li><li>In modalità Modellazione, slega gli assi e, attivando lo strumento sposta ancorali all'estremità del modello appena creato, quindi blocca nuovamente gli assi.</li><li>Con il modello selezionato, crea una <strong>Simmetria</strong> tenendo premuto il tasto ALT per considerare automaticamente gli assi del modello.</li><li>Imposta la simmetria sull'asse corretto, imposta l'opzione <strong>Salda su ON</strong> e rendi la simmetria un oggetto unico (tasto C).</li></ol></div></details>
+                <details class="tutorial-step"><summary>2. Supporto Laterale</summary><div class="tutorial-content"><ol><li>Crea una primitiva Cubo e imposta le dimensioni a <strong>X: 2 cm, Y: 10 cm, Z: 0,3 cm</strong>.</li><li>Rendi modificabile la primitiva (tasto C).</li><li>Crea un taglio nella parte superiore del solido di 2 cm (in modalità bordi).</li><li>In modalità Poligoni, seleziona la faccia appena creata ed estrudilo di <strong>8 cm</strong>.</li><li>Posiziona questo solido su una delle due estremità della mensola creata precedentemente.</li><li>In modalità Bordi, seleziona il bordo dello spigolo interno del solido appena creato, attiva la <strong>Smussatura</strong> e smussa al massimo della sua dimensione, impostando le suddivisioni a 60.</li><li>Dissolvi i bordi che si sono venuti a creare sulle 4 facce del modello.</li><li>In modalità punti seleziona tutti i punti e usa <strong>Ottimizza</strong>.</li><li>In modalità Modellazione duplica l'oggetto appena creato, trascinandolo di lato tenendo premuto CTRL, e posizionalo all'altra estremità della mensola.</li></ol></div></details>
+                <details class="tutorial-step"><summary>3. Asse Mensola & Raggruppamento</summary><div class="tutorial-content"><ol><li>Crea una primitiva Cubo e imposta le dimensioni a <strong>X: 22 cm, Y: 2 cm, Z: 100 cm</strong>.</li><li>Posiziona la mensola sulla base creata precedentemente.</li><li>Seleziona la mensola, i due supporti laterali e la base, poi premi <strong>ALT+G</strong> per inserirli in un gruppo.</li><li>Crea un modificatore <strong>Smussare</strong>, inseriscilo dentro il gruppo e imposta: Offset: 0,05, Suddivisione: 3. Seleziona l'opzione <em>Interruzione Phong arrotondata</em> in Topologia.</li></ol></div></details>
+                <details class="tutorial-step"><summary>4. Cubo di Rubik</summary><div class="tutorial-content"><ol><li>Crea una primitiva Cubo e imposta le dimensioni a <strong>X: 1,8 cm, Y: 1,8 cm, Z: 1,8 cm</strong>. Rendilo modificabile.</li><li>In modalità Modellazione, libera gli assi e posizionali su un vertice a destra o sinistra.</li><li>Attiva lo Snap e, tenendo premuto CTRL, duplica il cubo e attaccalo a quello principale. Ripeti una seconda volta per creare una fila di tre cubetti.</li><li>Raggruppa i tre cubetti (ALT+G).</li><li>In modalità Poligoni, libera gli assi e posizionali su un vertice nella parte bassa della fila di cubetti.</li><li>Con lo Snap attivo e premendo CTRL, duplica la fila di cubetti in verticale. Ripeti per ottenere tre file orizzontali sovrapposte.</li><li>Raggruppa nuovamente tutti gli elementi creati, libera gli assi posizionandoli su un vertice e duplica la struttura in orizzontale per ottenere un cubo formato da <strong>27 cubetti</strong>.</li><li>Raggruppa tutto (ALT+G) e inserisci il modificatore Smussare con i seguenti valori: Offset: 0,07, Suddivisione: 3, Interruzione Phong arrotondata in Topologia.</li></ol></div></details>
+                <details class="tutorial-step"><summary>5. Bonus Track - Vitarella</summary><div class="tutorial-content"><ol><li>Crea una primitiva Cilindro (Raggio: 0,4 cm, Altezza: 0,3 cm, Segmenti rotazione: 8).</li><li>Ruota il cilindro sull'asse Z, rendilo modificabile e posizionalo sul bordo del supporto laterale.</li><li>Sulla faccia frontale, dissolvi i bordi diagonali che creano triangoli (MN).</li><li>In modalità Punti, seleziona il punto centrale sulla faccia frontale e spostalo leggermente sull'asse Z per formare una piccola piramide.</li><li>Crea i tagli per la SDS (Superficie di Suddivisione) e attivala impostandola a 2 suddivisioni.</li><li>Esplodi la SDS.</li><li>In modalità Poligoni, seleziona le facce frontali che formano una croce e (tenendo premuto CTRL) spostale verso l'interno per metà dello spessore.</li><li>Usa lo strumento Scala per appiattire le facce selezionate.</li><li>Crea i tagli rimanenti necessari per la topologia corretta.</li><li>Attiva la SDS per verificare il risultato finale.</li></ol></div></details>
+            </div>
+        </details>
+    </div>
+
+    <div id="tab-cal" class="content-section">
+        <div class="class-selector">
+            <button class="class-btn active" onclick="showClass('2A', this)">Classe 2A</button>
+            <button class="class-btn" onclick="showClass('2B', this)">Classe 2B</button>
+            <button class="class-btn" onclick="showClass('2C', this)">Classe 2C</button>
+        </div>
+        <table class="cal-table">
+            <thead><tr><th>Data / Ora</th><th>Argomento</th></tr></thead>
+            <tbody id="calendar-body"></tbody>
+        </table>
+    </div>
+
+    <div id="tab-video" class="content-section">
+        <h2 style="color: var(--text); font-size: 20px; font-weight: 800; margin-top: 0; margin-bottom: 20px;">Videoteca</h2>
+        <div id="video-content"></div>
+    </div>
+    
+    <!-- NUOVA SEZIONE: BRAND & MODELLI -->
+    <div id="tab-resources" class="content-section">
+        <div style="margin-bottom: 10px;">
+            <h2 style="color: var(--text); font-size: 20px; font-weight: 800; margin-top: 0; margin-bottom: 5px;">Brand e Modelli 3D</h2>
+            <p style="color: var(--subtext); font-size: 13px; margin: 0;">Libreria dei produttori per reperire asset e modelli da inserire nei tuoi progetti di Archviz.</p>
+        </div>
+
+        <div class="brand-category-title">💡 Illuminazione (Tecnica e Decorativa)</div>
+        <div class="brand-category-desc">Aziende focalizzate principalmente o esclusivamente sulla luce.</div>
+        <div class="brand-grid">
+            <a href="https://www.artemide.com" target="_blank" class="brand-link"><span class="brand-name">Artemide</span><span class="brand-url">artemide.com</span></a>
+            <a href="https://www.brokis.cz" target="_blank" class="brand-link"><span class="brand-name">Brokis</span><span class="brand-url">brokis.cz</span></a>
+            <a href="https://www.davidegroppi.com" target="_blank" class="brand-link"><span class="brand-name">Davide Groppi</span><span class="brand-url">davidegroppi.com</span></a>
+            <a href="https://www.fabbian.com" target="_blank" class="brand-link"><span class="brand-name">Fabbian</span><span class="brand-url">fabbian.com</span></a>
+            <a href="https://www.flos.com" target="_blank" class="brand-link"><span class="brand-name">Flos</span><span class="brand-url">flos.com</span></a>
+            <a href="https://www.foscarini.com" target="_blank" class="brand-link"><span class="brand-name">Foscarini</span><span class="brand-url">foscarini.com</span></a>
+            <a href="https://www.luceplan.com" target="_blank" class="brand-link"><span class="brand-name">Luceplan</span><span class="brand-url">luceplan.com</span></a>
+            <a href="https://www.lumina.it" target="_blank" class="brand-link"><span class="brand-name">Lumina</span><span class="brand-url">lumina.it</span></a>
+            <a href="https://www.martinelliluce.it" target="_blank" class="brand-link"><span class="brand-name">Martinelli Luce</span><span class="brand-url">martinelliluce.it</span></a>
+            <a href="https://www.nuura.com" target="_blank" class="brand-link"><span class="brand-name">Nuura</span><span class="brand-url">nuura.com</span></a>
+            <a href="https://www.oluce.com" target="_blank" class="brand-link"><span class="brand-name">Oluce</span><span class="brand-url">oluce.com</span></a>
+            <a href="https://www.terzani.com" target="_blank" class="brand-link"><span class="brand-name">Terzani</span><span class="brand-url">terzani.com</span></a>
+            <a href="https://www.vibia.com" target="_blank" class="brand-link"><span class="brand-name">Vibia</span><span class="brand-url">vibia.com</span></a>
+        </div>
+
+        <div class="brand-category-title">🛋️ Arredo Interni (Living, Sedute, Imbottiti)</div>
+        <div class="brand-category-desc">I grandi nomi per la zona giorno, divani e arredo generale.</div>
+        <div class="brand-grid">
+            <a href="https://www.andreuworld.com" target="_blank" class="brand-link"><span class="brand-name">Andreu World</span><span class="brand-url">andreuworld.com</span></a>
+            <a href="https://www.bebitalia.com" target="_blank" class="brand-link"><span class="brand-name">B&B Italia</span><span class="brand-url">bebitalia.com</span></a>
+            <a href="https://www.bonaldo.com" target="_blank" class="brand-link"><span class="brand-name">Bonaldo</span><span class="brand-url">bonaldo.com</span></a>
+            <a href="https://www.calligaris.com" target="_blank" class="brand-link"><span class="brand-name">Calligaris</span><span class="brand-url">calligaris.com</span></a>
+            <a href="https://www.cassina.com" target="_blank" class="brand-link"><span class="brand-name">Cassina</span><span class="brand-url">cassina.com</span></a>
+            <a href="https://www.cattelanitalia.com" target="_blank" class="brand-link"><span class="brand-name">Cattelan Italia</span><span class="brand-url">cattelanitalia.com</span></a>
+            <a href="https://www.depadova.com" target="_blank" class="brand-link"><span class="brand-name">De Padova</span><span class="brand-url">depadova.com</span></a>
+            <a href="https://www.desede.ch" target="_blank" class="brand-link"><span class="brand-name">De Sede</span><span class="brand-url">desede.ch</span></a>
+            <a href="https://www.desalto.it" target="_blank" class="brand-link"><span class="brand-name">Desalto</span><span class="brand-url">desalto.it</span></a>
+            <a href="https://www.edra.com" target="_blank" class="brand-link"><span class="brand-name">Edra</span><span class="brand-url">edra.com</span></a>
+            <a href="https://www.flexform.it" target="_blank" class="brand-link"><span class="brand-name">Flexform</span><span class="brand-url">flexform.it</span></a>
+            <a href="https://www.fritzhansen.com" target="_blank" class="brand-link"><span class="brand-name">Fritz Hansen</span><span class="brand-url">fritzhansen.com</span></a>
+            <a href="https://www.henge07.com" target="_blank" class="brand-link"><span class="brand-name">Henge</span><span class="brand-url">henge07.com</span></a>
+            <a href="https://www.livingdivani.it" target="_blank" class="brand-link"><span class="brand-name">Living Divani</span><span class="brand-url">livingdivani.it</span></a>
+            <a href="https://www.meridiani.it" target="_blank" class="brand-link"><span class="brand-name">Meridiani</span><span class="brand-url">meridiani.it</span></a>
+            <a href="https://www.minotti.com" target="_blank" class="brand-link"><span class="brand-name">Minotti</span><span class="brand-url">minotti.com</span></a>
+            <a href="https://www.moroso.it" target="_blank" class="brand-link"><span class="brand-name">Moroso</span><span class="brand-url">moroso.it</span></a>
+            <a href="https://www.sancal.com" target="_blank" class="brand-link"><span class="brand-name">Sancal</span><span class="brand-url">sancal.com</span></a>
+            <a href="https://www.ton.eu" target="_blank" class="brand-link"><span class="brand-name">Ton</span><span class="brand-url">ton.eu</span></a>
+            <a href="https://www.wittmann.at" target="_blank" class="brand-link"><span class="brand-name">Wittmann</span><span class="brand-url">wittmann.at</span></a>
+            <a href="https://www.zanotta.it" target="_blank" class="brand-link"><span class="brand-name">Zanotta</span><span class="brand-url">zanotta.it</span></a>
+        </div>
+
+        <div class="brand-category-title">🌿 Arredo Esterni (Outdoor)</div>
+        <div class="brand-category-desc">Aziende segnalate nei tuoi appunti, specializzate in arredo giardino e dehor.</div>
+        <div class="brand-grid">
+            <a href="https://www.dedon.de" target="_blank" class="brand-link"><span class="brand-name">Dedon</span><span class="brand-url">dedon.de</span></a>
+            <a href="https://www.emu.it" target="_blank" class="brand-link"><span class="brand-name">Emu</span><span class="brand-url">emu.it</span></a>
+            <a href="https://www.gandiablasco.com" target="_blank" class="brand-link"><span class="brand-name">Gandia Blasco</span><span class="brand-url">gandiablasco.com</span></a>
+            <a href="https://www.rodaonline.com" target="_blank" class="brand-link"><span class="brand-name">Roda</span><span class="brand-url">rodaonline.com</span></a>
+            <a href="https://www.vondom.com" target="_blank" class="brand-link"><span class="brand-name">Vondom</span><span class="brand-url">vondom.com</span></a>
+        </div>
+
+        <div class="brand-category-title">🖥️ Arredo Ufficio e Contract</div>
+        <div class="brand-category-desc">Aziende segnalate con una forte divisione contract o ufficio.</div>
+        <div class="brand-grid">
+            <a href="https://www.arper.com" target="_blank" class="brand-link"><span class="brand-name">Arper</span><span class="brand-url">arper.com</span></a>
+            <a href="https://www.brunner-group.com" target="_blank" class="brand-link"><span class="brand-name">Brunner</span><span class="brand-url">brunner-group.com</span></a>
+            <a href="https://www.devorm.nl" target="_blank" class="brand-link"><span class="brand-name">De Vorm</span><span class="brand-url">devorm.nl</span></a>
+            <a href="https://www.vitra.com" target="_blank" class="brand-link"><span class="brand-name">Vitra</span><span class="brand-url">vitra.com</span></a>
+        </div>
+
+        <div class="brand-category-title">🛏️ Sistemi, Armadi e Zona Notte</div>
+        <div class="brand-category-desc">Aziende specializzate in contenimento, librerie o letti.</div>
+        <div class="brand-grid">
+            <a href="https://www.flou.it" target="_blank" class="brand-link"><span class="brand-name">Flou</span><span class="brand-url">flou.it</span></a>
+            <a href="https://www.lemamobili.com" target="_blank" class="brand-link"><span class="brand-name">Lema</span><span class="brand-url">lemamobili.com</span></a>
+            <a href="https://www.mdfitalia.com" target="_blank" class="brand-link"><span class="brand-name">MDF Italia</span><span class="brand-url">mdfitalia.com</span></a>
+            <a href="https://www.tumidei.it" target="_blank" class="brand-link"><span class="brand-name">Tumidei</span><span class="brand-url">tumidei.it</span></a>
+            <a href="https://www.twils.it" target="_blank" class="brand-link"><span class="brand-name">Twils</span><span class="brand-url">twils.it</span></a>
+        </div>
+
+        <div class="brand-category-title">🇩🇰 Total Living e Stile Nordico</div>
+        <div class="brand-category-desc">Fornitori misti (arredi + lampade + accessori).</div>
+        <div class="brand-grid">
+            <a href="https://www.andtradition.com" target="_blank" class="brand-link"><span class="brand-name">&Tradition</span><span class="brand-url">andtradition.com</span></a>
+            <a href="https://www.audocph.com" target="_blank" class="brand-link"><span class="brand-name">Audo Copenhagen</span><span class="brand-url">audocph.com</span></a>
+            <a href="https://www.hay.dk" target="_blank" class="brand-link"><span class="brand-name">Hay</span><span class="brand-url">hay.dk</span></a>
+            <a href="https://www.muuto.com" target="_blank" class="brand-link"><span class="brand-name">Muuto</span><span class="brand-url">muuto.com</span></a>
+            <a href="https://www.newworks.dk" target="_blank" class="brand-link"><span class="brand-name">New Works</span><span class="brand-url">newworks.dk</span></a>
+            <a href="https://www.northern.no" target="_blank" class="brand-link"><span class="brand-name">Northern</span><span class="brand-url">northern.no</span></a>
+        </div>
+
+        <div class="brand-category-title">🛁 Bagni e 🧵 Finiture Speciali</div>
+        <div class="brand-category-desc">Aziende specifiche per il bagno e per pavimentazioni/texture.</div>
+        <div class="brand-grid" style="margin-bottom: 30px;">
+            <a href="https://www.falper.it" target="_blank" class="brand-link"><span class="brand-name">Falper</span><span class="brand-url">falper.it</span></a>
+            <a href="https://www.bolon.com" target="_blank" class="brand-link"><span class="brand-name">Bolon</span><span class="brand-url">bolon.com</span></a>
+        </div>
+    </div>
+    
+    <div id="tab-short" class="content-section"><div class="sc-grid" id="short-content"></div></div>
+    
+    <div class="footer">Rendering 3D - Giovanni Savelli - 2025/26</div>
+</div>
+
+<div id="modal" onclick="closeModal()">
+    <div class="modal-content" onclick="event.stopPropagation()">
+        <div class="modal-header">
+            <h4 id="modal-caption"></h4>
+            <span class="close-btn" onclick="closeModal()">&times;</span>
+        </div>
+        <div class="image-container">
+            <button class="nav-arrow prev-arrow" id="prev-btn" onclick="changeImage(-1)">&#10094;</button>
+            <img id="modal-img" alt="" onerror="if (!this.src.startsWith('data:')) this.src = IMG_ERROR">
+            <button class="nav-arrow next-arrow" id="next-btn" onclick="changeImage(1)">&#10095;</button>
+        </div>
+        <div class="modal-footer" id="modal-footer">
+            <div class="dots-container" id="dots-container"></div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function toggleDyslexia() {
+        document.body.classList.toggle('dyslexia-mode');
+        const btn = document.getElementById('btn-dyslexia');
+        btn.classList.toggle('active');
+        const txt = btn.querySelector('.fab-text');
+        
+        const isActive = document.body.classList.contains('dyslexia-mode');
+        localStorage.setItem('dyslexia-pref', isActive);
+        
+        if(isActive) {
+            txt.innerText = "LEGGIBILITÀ: ON";
+        } else {
+            txt.innerText = "ALTA LEGGIBILITÀ";
+        }
+    }
+    
+    if(localStorage.getItem('dyslexia-pref') === 'true') {
+        document.body.classList.add('dyslexia-mode');
+        const btn = document.getElementById('btn-dyslexia');
+        btn.classList.add('active');
+        btn.querySelector('.fab-text').innerText = "LEGGIBILITÀ: ON";
+    }
+
+    // --- NAVIGAZIONE: ogni scheda ha il suo indirizzo (es. .../rendering3d/#calendario)
+    // così il tasto "Indietro" del telefono torna alla scheda precedente e puoi mandare link diretti ---
+    const TAB_NAMES = {
+        'tab-prog-current': 'programma', 'tab-archive': 'archivio', 'tab-notes': 'appunti', 'tab-cal': 'calendario',
+        'tab-video': 'video', 'tab-resources': 'brand', 'tab-short': 'scorciatoie'
+    };
+
+    function showTabFromHash() {
+        const id = Object.keys(TAB_NAMES).find(k => '#' + TAB_NAMES[k] === location.hash) || 'tab-prog-current';
+        openTab(id, document.querySelector(`.tab-btn[onclick*="'${id}'"]`), true);
+    }
+
+    window.addEventListener('popstate', () => { hideModal(); showTabFromHash(); });
+
+    function openTab(id, btn, fromHistory) {
+        document.querySelectorAll('.content-section').forEach(s => s.classList.remove('active'));
+        document.querySelectorAll('.tab-btn:not(.drive-btn)').forEach(b => b.classList.remove('active'));
+        document.getElementById(id).classList.add('active');
+        if(btn) btn.classList.add('active');
+        if(!fromHistory && location.hash !== '#' + TAB_NAMES[id]) history.pushState(null, '', '#' + TAB_NAMES[id]);
+
+        if(id === 'tab-archive') {
+            document.getElementById('ring-text').innerText = '100%';
+            document.getElementById('ring-fill').style.strokeDashoffset = 0;
+        } else if(id === 'tab-prog-current' || id === 'tab-cal' || id === 'tab-video' || id === 'tab-short' || id === 'tab-resources') {
+            updateStats8(); 
+        }
+    }
+
+    window.goToArchive = function(e) {
+        if(e) e.preventDefault();
+        const tabBtn = document.querySelectorAll('.tab-btn')[1];
+        openTab('tab-archive', tabBtn);
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    window.goToProgCurrent = function(e) {
+        if(e) e.preventDefault();
+        const btn = document.getElementById('btn-prog-current');
+        openTab('tab-prog-current', btn);
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    const lezioniCal = {
+        '2A': { 
+            time: "09:00–13:00", 
+            days: ["Mar 10 Mar", "Mar 17 Mar", "Mar 31 Mar", "Mar 14 Apr", "Mar 28 Apr", "Mar 05 Mag", "Mar 12 Mag", "Ven 19 Mag", "Mar 26 Mag", "Mar 16 Giu"],
+            topics: ["Presentazione + base", "Modellazione", "Modellazione", "Corona 1", "Modellazione", "Corona 2", "Spiegazione progetto", "Prima revisione", "Seconda revisione", "Consegna esame"]
+        },
+        '2B': { 
+            time: "14:00–18:00", 
+            days: ["Mar 10 Mar", "Mar 17 Mar", "Mar 31 Mar", "Mar 14 Apr", "Mar 28 Apr", "Mar 05 Mag", "Mar 12 Mag", "Ven 19 Mag", "Mar 26 Mag", "Mar 16 Giu"],
+            topics: ["Presentazione + base", "Modellazione", "Modellazione", "Corona 1", "Modellazione", "Corona 2", "Spiegazione progetto", "Prima revisione", "Seconda revisione", "Consegna esame"]
+        },
+        '2C': { 
+            time: "09:00–13:00", 
+            days: ["Ven 13 Mar", "Ven 20 Mar", "Ven 27 Mar", "Ven 10 Apr", "Ven 17 Apr", "Ven 08 Mag", "Ven 15 Mag", "Ven 22 Mag", "Ven 29 Mag", "Ven 05 Giu"],
+            topics: ["Presentazione + base", "Modellazione", "Modellazione", "Modellazione", "Corona 1", "Corona 2", "Spiegazione progetto", "Prima revisione", "Seconda revisione", "Consegna esame"]
+        }
+    };
+
+    function showClass(cl, btn) {
+        const classColors = {
+            '2A': { bg: '#9146FF', text: '#ffffff' }, 
+            '2B': { bg: '#FFC300', text: '#000000' }, 
+            '2C': { bg: '#00E5FF', text: '#000000' }  
+        };
+        
+        const activeColor = classColors[cl];
+        document.documentElement.style.setProperty('--active-class-color', activeColor.bg);
+        document.documentElement.style.setProperty('--active-class-text', activeColor.text);
+
+        document.querySelectorAll('.class-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        
+        let html = '';
+        const data = lezioniCal[cl];
+        
+        data.days.forEach((day, i) => {
+            let topicContent = data.topics[i];
+            
+            // LA LEZIONE 8 (Indice 7) È QUELLA ATTUALE
+            if (i < 7) {
+                topicContent = `
+                    <div style="display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: wrap;">
+                        <span style="color: #aaa; text-decoration: line-through;">${topicContent}</span>
+                        <button class="cal-link-btn" onclick="goToArchive(event)">Vedi in Archivio</button>
+                    </div>
+                `;
+            } else if (i === 7) { 
+                topicContent = `
+                    <div style="display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: wrap;">
+                        <span style="color: #fff; font-weight: bold;">${topicContent} <span class="current-badge">LEZIONE ATTUALE</span></span>
+                    </div>
+                `;
+            } else {
+                topicContent = `<span style="color: #888;">${topicContent}</span>`;
+            }
+            
+            html += `<tr><td style="color:var(--active-class-color); font-weight:bold; min-width:90px; vertical-align: middle;">${day}<br><span style="color:#666; font-weight:normal;">${data.time}</span></td><td style="vertical-align: middle;">${topicContent}</td></tr>`;
+        });
+        document.getElementById('calendar-body').innerHTML = html;
+    }
+
+    const agenda1 = [
+        { title: "Introduzione", items: [{ name: "Presentazione alunni" }, { name: "Presentazione corso" }] },
+        { title: "Preferenze Setup", items: [{ name: "Interfaccia" }, { name: "Unità e Memoria" }, { name: "Renderizzazione" }] },
+        { title: "Controllo 3D", items: [{ name: "Primitive" }, { name: "Coordinate" }, { name: "Quantizzazioni" }, { name: "Dimensioni" }, { name: "Shading" }, { name: "Ambiente" }, { name: "Livelli" }] },
+        { title: "Modellazione", items: [{ name: "Raggruppare" }, { name: "Booleane" }, { name: "Esercizi Booleana" }, { name: "Smussature" }] },
+        { title: "Esercitazioni", full: true, items: [
+            { name: "Appartamento", image: "https://drive.google.com/file/d/1Zy2qifYTlzVbHPLshY02_IzR4EgzDq13/view?usp=sharing" }, 
+            { name: "Booleana esercizio Polygonpen", image: "https://drive.google.com/file/d/1kMKy_MbNfsgQ-ElhFLRTcIyfu2aWtEia/view?usp=sharing" }
+        ]}
+    ];
+
+    const agenda2 = [
+        { title: "Ripasso e Setup", items: [{ name: "Termine argomenti Lezione 1" }, { name: "Preparazione area di lavoro" }] },
+        { title: "Strumenti di Modellazione Poligonale", items: [{ name: "Costruzione cerchio/cilindro (smussare un punto)" }, { name: "Strumento Smussare (punti e spigoli)" }, { name: "Strumento Estrudi" }, { name: "Strumento Slide (gestione tagli e topologia)" }] },
+        { title: "Superfici, Assi e Deformatori", items: [{ name: "Superficie di Suddivisione (SDS)" }, { name: "Gestione perno: tasto Libera Assi" }, { name: "Oggetto Simmetria" }, { name: "Deformatore Smussatore e Tag Phong" }] },
+        { title: "Modellazione Pratica", full: true, items: [
+            { name: "Mattoncino Lego", images: [
+                "https://drive.google.com/file/d/1k0hovQIZufm06BYR2PtIszzdOoWhJWn3/view?usp=sharing",
+                "https://drive.google.com/file/d/1aLHP2LhOCV04Cd0oASy9z-K-Aqp1zc42/view?usp=sharing",
+                "https://drive.google.com/file/d/1cBmEzW7-WnGNC_nis7znCrLUG2-Rs5d_/view?usp=sharing",
+                "https://drive.google.com/file/d/1rOLNbuZUBfzc4ToZWukQY273rSQkmEPD/view?usp=sharing"
+            ]},
+            { name: "Mensola (con Cubo di Rubik)", image: "https://drive.google.com/file/d/16q5k7alRoLkgvnMEn9OQncfWfW49cQS-/view?usp=sharing" }
+        ]}
+    ];
+
+    const agenda3 = [
+        { title: "Strumenti di Disegno", items: [
+            { name: "Penna Poligono" }, 
+            { name: "Penna Spline" }
+        ]},
+        { title: "Completamento Appartamento", items: [
+            { name: "Tetto e Pavimento (Penna Poligono)" }, 
+            { name: "Battiscopa (Penna Spline)" }, 
+            { name: "Cornice della porta (Penna Spline)" }
+        ]},
+        { title: "Generatori Base", items: [
+            { name: "Generatore Rotazione (Tornitura)" }, 
+            { name: "Generatore Sweep" }, 
+            { name: "Accenni sull'Estrusione" }
+        ]},
+        { title: "Esercitazioni e Reference", full: true, items: [
+            { name: "Profili Spline", images: [
+                "https://drive.google.com/file/d/1w_R5Z7xibN7dw44HgugcTgGI2TSJD5Dn/view?usp=sharing",
+                "https://drive.google.com/file/d/1HPY5aVLStVuzN3yRdjBn1aOWOAfegLNh/view?usp=sharing",
+                "https://drive.google.com/file/d/1JFZKzcm4M8Cp0MZkKKG8KzISOj41SFS4/view?usp=sharing",
+                "https://drive.google.com/file/d/1MKz4AL4-YhxDjQmrsXhUzuyUQz698fbG/view?usp=sharing"
+            ]},
+            { name: "Generatore Rotazione (Tornitura)", image: "https://drive.google.com/file/d/1ua_iGtmzAwJXgRM8ad3g4B6RBNzJxk1Z/view?usp=sharing" },
+            { name: "Bonus Track: Tavolino con complementi", images: [
+                "https://drive.google.com/file/d/1pYtQQT3Ylv6akQqItGXFQMMP3qbPFys5/view?usp=sharing",
+                "https://drive.google.com/file/d/1ygSRpu-zRaSvYy0Nz43-K_Yb1YfFSnlL/view?usp=sharing"
+            ]}
+        ]}
+    ];
+
+    const agenda4 = [
+        { title: "Review & Troubleshooting", items: [
+            { name: "Analisi Esercitazioni: Tavolino e Generatori" },
+            { name: "Q&A: Risoluzione dubbi su Spline e Sweep" }
+        ]},
+        { title: "Progetto: Appartamento Lopez", items: [
+            { name: "Impostazione Planimetria e Muri principali" },
+            { name: "Creazione varchi per Porte e Finestre" },
+            { name: "Dettagli Architettonici (Battiscopa e Infissi)" }
+        ]},
+        { title: "Arredo e Setup (Chaos Cosmos)", items: [
+            { name: "Introduzione al Cosmos Browser: Ricerca e Download" },
+            { name: "Importazione Asset e Ottimizzazione Scena" },
+            { name: "Illuminazione Base: Setup HDRI tramite Cosmos" }
+        ]}
+    ];
+
+    const agenda5 = [
+        { title: "1. Setup Telecamera", items: [{ name: "Posizionamento e coordinate" }, { name: "Campo visivo e offset" }]},
+        { title: "2. Luce Corona", items: [{ name: "Setup Corona Sun & Sky" }, { name: "Parametri principali luce" }]},
+        { title: "3. Render Setup", items: [{ name: "Formati, DPI e Profondità colore" }, { name: "Limiti e Noise di base" }]},
+        { title: "4. VFB & Output", items: [{ name: "Tone Mapping e analisi immagine" }, { name: "Esportazione finale" }]}
+    ];
+
+    const agenda6 = [
+        { title: "1. Feedback & Recap", items: [
+            { name: "Ripassone generale e Q&A sui dubbi di modellazione" },
+            { name: "Revisione rapida dei workflow precedenti" }
+        ]},
+        { title: "2. Intro Render & Light", items: [
+            { name: "Introduzione al motore di render Corona" },
+            { name: "Setup base della Telecamera Corona" },
+            { name: "Corona Light: tipi di luce e parametri base" }
+        ]},
+        { title: "3. Teoria PBR & Interfaccia", items: [
+            { name: "Cos'è il Physical Material e il workflow PBR" },
+            { name: "Panoramica livelli: General, Base Layer, Refraction..." }
+        ]},
+        { title: "4. Riflessione & Metalness", items: [
+            { name: "Studio visivo tramite Shaderball" },
+            { name: "Differenza pratica tra Metal e Non-Metal" }
+        ]},
+        { title: "5. Focus: Base Layer", items: [
+            { name: "Color, Texture, Roughness, IOR, Edge, Bump" },
+            { name: "Creazione: Plastica lucida, opaca e legni semplici" }
+        ]},
+        { title: "6. Trasparenze & Dettagli", items: [
+            { name: "Il Vetro: spessore reale e Volumetrics" },
+            { name: "Il realismo nelle imperfezioni: Roughness mappata" }
+        ]}
+    ];
+
+    const agenda7 = [
+        { title: "1. Review & Illuminazione Avanzata", items: [
+            { name: "Q&A e correzione delle esercitazioni" },
+            { name: "Illuminazione con HDRI (Image Based Lighting)" },
+            { name: "Corona Area Light: setup e parametri" }
+        ]},
+        { title: "2. Asset 3D e Troubleshooting", items: [
+            { name: "Gestione avanzata modelli da Chaos Cosmos" },
+            { name: "Risoluzione errori comuni negli asset importati" }
+        ]},
+        { title: "3. Progetto Finale e Workflow", items: [
+            { name: "Presentazione del Progetto d'Esame" },
+            { name: "Impostazione del corretto flusso di lavoro" },
+            { name: "Ideazione e realizzazione di una Moodboard efficace" }
+        ]}
+    ];
+
+    const agenda8 = [
+        { title: "1. Live Modeling Showcase", items: [
+            { name: "Modellazione live del microscopio Långsök." }
+        ]},
+        { title: "2. Revisione Progetti", items: [
+            { name: "Analisi, feedback e troubleshooting sui progetti d'esame in corso" }
+        ]},
+        { title: "3. Lab & DJ Set", items: [
+            { name: "Voi modellate, io faccio assistenza e metto su due dischi. Accetto richieste musicali (con insindacabile diritto di veto)." }
+        ]}
+    ];
+
+    let currentImages = [];
+    let currentImageIndex = 0;
+    let currentCaption = "";
+
+    const IMG_ERROR = "data:image/svg+xml," + encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="800" height="450"><rect width="100%" height="100%" fill="#141417"/><text x="50%" y="50%" fill="#88888e" font-family="sans-serif" font-size="22" text-anchor="middle">Immagine non disponibile: riprova tra poco</text></svg>');
+
+    function getDirectLink(url) {
+        if (!url || !url.includes('drive.google.com')) return url;
+        const m = url.match(/\/d\/(.+?)\//) || url.match(/id=(.+?)(&|$)/);
+        if (m && m[1]) return `https://drive.google.com/thumbnail?id=${m[1]}&sz=w1600`;
+        return url;
+    }
+
+    window.openModal = function(imageInput, title) {
+        if(!imageInput) return;
+        currentCaption = title;
+        if (Array.isArray(imageInput)) { currentImages = imageInput; } 
+        else { currentImages = [imageInput]; }
+        currentImageIndex = 0;
+        updateModalImage();
+        document.getElementById('modal').style.display = 'flex';
+        // Il tasto "Indietro" del telefono chiude l'immagine invece di uscire dal sito
+        history.pushState({ modal: true }, '');
+    }
+
+    function updateModalImage() {
+        const img = document.getElementById('modal-img');
+        const caption = document.getElementById('modal-caption');
+        const footer = document.getElementById('modal-footer');
+        const dotsContainer = document.getElementById('dots-container');
+        const prevBtn = document.getElementById('prev-btn');
+        const nextBtn = document.getElementById('next-btn');
+        
+        const rawUrl = currentImages[currentImageIndex];
+        img.src = getDirectLink(rawUrl);
+        
+        if (currentImages.length > 1) {
+            caption.innerText = `${currentCaption} (${currentImageIndex + 1} di ${currentImages.length})`;
+            footer.style.display = 'flex';
+            prevBtn.style.display = '';
+            nextBtn.style.display = '';
+            if (currentImageIndex === 0) { prevBtn.classList.add('disabled'); } else { prevBtn.classList.remove('disabled'); }
+            if (currentImageIndex === currentImages.length - 1) { nextBtn.classList.add('disabled'); } else { nextBtn.classList.remove('disabled'); }
+            dotsContainer.innerHTML = '';
+            for (let i = 0; i < currentImages.length; i++) {
+                const dot = document.createElement('div');
+                dot.className = `dot ${i === currentImageIndex ? 'active' : ''}`;
+                dot.onclick = () => { currentImageIndex = i; updateModalImage(); };
+                dotsContainer.appendChild(dot);
+            }
+        } else {
+            caption.innerText = currentCaption;
+            footer.style.display = 'none';
+            prevBtn.style.display = 'none';
+            nextBtn.style.display = 'none';
+        }
+    }
+
+    window.changeImage = function(direction) {
+        if (currentImages.length <= 1) return;
+        let newIndex = currentImageIndex + direction;
+        if (newIndex < 0 || newIndex >= currentImages.length) return;
+        currentImageIndex = newIndex;
+        updateModalImage();
+    }
+
+    function hideModal() { document.getElementById('modal').style.display = 'none'; }
+
+    window.closeModal = function() {
+        if (document.getElementById('modal').style.display !== 'flex') return;
+        if (history.state && history.state.modal) history.back(); else hideModal();
+    }
+
+    function renderArchive() {
+        let html = '';
+        const archivi = [
+            { titolo: "Lezione 7 (HDRI, Area Light e Progetto)", agenda: agenda7 },
+            { titolo: "Lezione 6 (Corona 2 - PBR & Materiali)", agenda: agenda6 },
+            { titolo: "Lezione 5 (Corona 1 - Setup Telecamera e Luce)", agenda: agenda5 },
+            { titolo: "Lezione 4 (Appartamento Lopez)", agenda: agenda4 },
+            { titolo: "Lezione 3 (Strumenti Spline)", agenda: agenda3 },
+            { titolo: "Lezione 2 (Modellazione Poligonale)", agenda: agenda2 },
+            { title: "Lezione 1 (Introduzione)", agenda: agenda1 } // Piccolo fix "titolo"
+        ];
+
+        archivi.forEach((lezione, index) => {
+            const isOpen = index === 0 ? 'open' : '';
+            html += `
+            <details class="tutorial-main archive-details" ${isOpen}>
+                <summary><h3>${lezione.titolo || lezione.title}</h3></summary>
+                <div class="tutorial-main-body">
+                    <div class="prog-grid">`;
+            
+            lezione.agenda.forEach((sec) => {
+                html += `<div class="section-card ${sec.full ? 'full-width' : ''}"><div class="section-title">${sec.title}</div>`;
+                sec.items.forEach((item) => {
+                    const imagesToPass = item.images ? JSON.stringify(item.images) : (item.image ? `'${item.image}'` : null);
+                    const hasImages = item.image || item.images;
+                    const textAction = hasImages ? `onclick="openModal(${imagesToPass.replace(/"/g, '&quot;')}, '${item.name.replace(/'/g, "\\'")}')"` : '';
+                    
+                    html += `
+                        <div class="item checked">
+                            <div class="checkbox-container" style="cursor: default;">
+                                <div class="checkbox"></div>
+                            </div>
+                            <div class="item-text" ${textAction} style="${hasImages ? 'cursor: pointer;' : 'cursor: default;'}">
+                                <span>${item.name}</span>
+                                ${hasImages ? '<span class="preview-badge" style="text-decoration: none;">REFERENCE</span>' : ''}
+                            </div>
+                        </div>`;
+                });
+                html += `</div>`;
+            });
+            html += `</div></div></details>`;
+        });
+        document.getElementById('prog-content-archive').innerHTML = html;
+
+        const archiveDetails = document.querySelectorAll('.archive-details');
+        archiveDetails.forEach(targetDetail => {
+            targetDetail.addEventListener('toggle', () => {
+                if (targetDetail.open) {
+                    archiveDetails.forEach(detail => {
+                        if (detail !== targetDetail && detail.open) {
+                            detail.open = false;
+                        }
+                    });
+                }
+            });
+        });
+    }
+
+    function renderProgCurrent() {
+        let html = '';
+        agenda8.forEach((sec, sIdx) => {
+            html += `<div class="section-card ${sec.full ? 'full-width' : ''}"><div class="section-title">${sec.title}</div>`;
+            sec.items.forEach((item, iIdx) => {
+                const id = `c4d-final-26-L8-${sIdx}-${iIdx}`;
+                const done = localStorage.getItem(id) === 'true';
+                
+                const imagesToPass = item.images ? JSON.stringify(item.images) : (item.image ? `'${item.image}'` : null);
+                const hasImages = item.image || item.images;
+                const textAction = hasImages ? `onclick="openModal(${imagesToPass.replace(/"/g, '&quot;')}, '${item.name.replace(/'/g, "\\'")}')"` : '';
+                
+                html += `
+                    <div class="item ${done ? 'checked' : ''}">
+                        <div class="checkbox-container" onclick="toggleCurrent('${id}')">
+                            <div class="checkbox"></div>
+                        </div>
+                        <div class="item-text" ${textAction} style="${hasImages ? 'cursor: pointer;' : 'cursor: default;'}">
+                            <span onclick="${hasImages ? '' : `toggleCurrent('${id}')`}">${item.name}</span>
+                            ${hasImages ? '<span class="preview-badge">REFERENCE</span>' : ''}
+                        </div>
+                    </div>`;
+            });
+            html += `</div>`;
+        });
+        document.getElementById('prog-content-current').innerHTML = html;
+        updateStats8();
+    }
+
+    window.toggleCurrent = (id) => { 
+        localStorage.setItem(id, localStorage.getItem(id) !== 'true'); 
+        renderProgCurrent(); 
+    }
+    
+    function updateStats8() {
+        const all = agenda8.reduce((acc, s) => acc + s.items.length, 0);
+        let done = 0;
+        for(let i=0; i<localStorage.length; i++) {
+            if(localStorage.key(i).startsWith('c4d-final-26-L8-') && localStorage.getItem(localStorage.key(i)) === 'true') done++;
+        }
+        const perc = all === 0 ? 0 : Math.round((done/all)*100);
+        
+        const offset = 188.5 - (188.5 * perc / 100);
+        document.getElementById('ring-fill').style.strokeDashoffset = offset;
+        document.getElementById('ring-text').innerText = perc + '%';
+        
+        if(document.getElementById('tab-archive').classList.contains('active')) {
+            document.getElementById('ring-fill').style.strokeDashoffset = 0;
+            document.getElementById('ring-text').innerText = '100%';
+        }
+    }
+
+    window.resetCurrent = (btn) => { 
+        if (btn.innerText === "AZZERA PROGRESSI LEZ. 8") {
+            btn.innerText = "CONFERMI? CLICCA DI NUOVO";
+            btn.style.background = "var(--accent)";
+            btn.style.color = "#fff";
+            btn.style.border = "none";
+            setTimeout(() => {
+                if(btn) {
+                    btn.innerText = "AZZERA PROGRESSI LEZ. 8";
+                    btn.style.background = "rgba(255,255,255,0.03)";
+                    btn.style.color = "var(--subtext)";
+                    btn.style.border = "1px solid var(--border)";
+                }
+            }, 3000);
+            return;
+        }
+
+        agenda8.forEach((sec, sIdx) => {
+            sec.items.forEach((item, iIdx) => {
+                const id = `c4d-final-26-L8-${sIdx}-${iIdx}`;
+                localStorage.removeItem(id);
+            });
+        });
+        renderProgCurrent(); 
+        
+        btn.innerText = "AZZERA PROGRESSI LEZ. 8";
+        btn.style.background = "rgba(255,255,255,0.03)";
+        btn.style.color = "var(--subtext)";
+        btn.style.border = "1px solid var(--border)";
+    }
+
+    let videoContainer = document.getElementById('video-content');
+    let videoContainerHtml = '';
+
+    function createVideoCards(videos) {
+        if (!videos || videos.length === 0) return '';
+        let html = '<div class="video-grid">';
+        videos.forEach(l => {
+            let videoHtml = '';
+            if (l.type === 'drive') {
+                const coverId = l.cover ? l.cover : l.id;
+                const coverUrl = `https://drive.google.com/thumbnail?id=${coverId}&sz=w800`;
+                const videoUrl = `https://drive.google.com/file/d/${l.id}/preview`;
+                const onClickCode = `this.style.background='none'; this.innerHTML='<iframe src=\\'${videoUrl}\\' allowfullscreen></iframe>'; this.onclick=null;`;
+                videoHtml = `
+                    <div class="video-wrapper" style="background: url('${coverUrl}') center/cover; cursor: pointer;" onclick="${onClickCode}">
+                        <div class="play-btn"></div>
+                    </div>`;
+            } else {
+                const videoUrl = `https://www.youtube.com/embed/${l.id}`;
+                videoHtml = `<div class="video-wrapper"><iframe src="${videoUrl}" loading="lazy" allowfullscreen></iframe></div>`;
+            }
+            html += `
+                <div class="video-card">
+                    ${videoHtml}
+                    <div class="video-info"><h3>${l.t}</h3><p>${l.d}</p></div>
+                </div>`; 
+        });
+        html += '</div>';
+        return html;
+    }
+
+    const videoCategories = [
+        {
+            title: "Ripassone & Approfondimenti (A.A. Precedenti)",
+            videos: [
+                { id: "11vpjVdFCB0gbQlRPrus3xLxFRAZ9lIHS", t: "Ripassone Generale", d: "Sessione completa di ripasso sui flussi di lavoro e gestione della scena.", type: "drive" },
+                { id: "175pvgtAH69mJQH-8s4t6chKtJDyl49zy", t: "Approfondimento: Bordi di Supporto", d: "Analisi tecnica specifica sulla topologia e il posizionamento dei tagli di supporto per la SDS.", type: "drive" }
+            ]
+        },
+        {
+            title: "Polygonpen",
+            videos: [
+                { id: "5MEELRoi7Ds", t: "01. Primi Passi", d: "Navigazione e workflow SubD.", type: "youtube" },
+                { id: "a93N62t-8Vo", t: "02. Radio Modeling", d: "Bevel tool e topologia Quad.", type: "youtube" },
+                { id: "0p8E_T832cc", t: "03. Skateboard", d: "Blueprint e simmetria.", type: "youtube" },
+                { id: "KnBmV1IFfAQ", t: "04. Camera & UV", d: "Fino al min 23:00.", type: "youtube" },
+                { id: "g0l_gWbUvN4", t: "05. Phone Holder", d: "Workflow non-distruttivo.", type: "youtube" }
+            ]
+        },
+        {
+            title: "Video Ripasso (Lezione 3)",
+            videos: [
+                { id: "1Zk-jXVT5X4lE5zNlFTGFz8jWqapXdUcA", t: "Penna Spline", d: "Approfondimento e ripasso sulla Penna Spline.", type: "drive" },
+                { id: "1UZ7l0DCl4Gy49cQmknOuAgyE_nMw72n6", t: "Rotazione (Tornitura)", d: "Utilizzo del generatore Rotazione.", type: "drive" },
+                { id: "1ogiQcjbvHrMNe1zs8BrJn3uaW-uwEfj_", t: "Sweep", d: "Utilizzo del generatore Sweep.", type: "drive" }
+            ]
+        },
+        {
+            title: "Video Ripasso (Lezione 1 & 2)",
+            videos: [
+                { id: "1t9xcBBlQKmskI0S0lQtbm1yr2_lRaLCw", t: "Appartamento semplice", d: "Creazione poligoni, quantizzazione e tagli.", type: "drive", cover: "1Zy2qifYTlzVbHPLshY02_IzR4EgzDq13" },
+                { id: "12RLQwU7CalobemZQL2DK14mDOBVWyHH0", t: "Primitive + Booleana", d: "Gestione delle operazioni booleane.", type: "drive", cover: "1kMKy_MbNfsgQ-ElhFLRTcIyfu2aWtEia" },
+                { id: "1r4p06BSzCf_4Jilc6ig7wLLk3OVjB9mQ", t: "Superficie di Suddivisione", d: "Approfondimento sulla SDS.", type: "drive" },
+                { id: "1TdvJLNR94gHKIoGY0mEuAVlHiclIJR2U", t: "Strumento Slide", d: "Approfondimento sullo strumento Slide (MO).", type: "drive" }
+            ],
+            subcategories: [
+                {
+                    title: "Mattoncino Lego",
+                    videos: [
+                        { id: "122kk674Qs2Nb3hlBCY0aOYF4Rz72Mr75", t: "Lego - Parte 1", d: "Impostazione viste e primitiva.", type: "drive" },
+                        { id: "1YhHH1IpAw4rV3K8KV4q6fJok04QoUKYw", t: "Lego - Parte 2", d: "Denti, booleana e arco.", type: "drive" },
+                        { id: "1WOajiopDBop9HF1Kwl0sP3RNHmWRG5-2", t: "Lego - Parte 3", d: "Spessore, tagli e SDS.", type: "drive" }
+                    ]
+                },
+                {
+                    title: "Mensola + Cubo di Rubik + Vitarella",
+                    videos: [
+                        { id: "1KTmC19-4-_XZuporvu5Uc6FhDNXWLV3i", t: "Mensola - Parte 1", d: "Struttura metallica e supporti laterali.", type: "drive" },
+                        { id: "1lyVPVh4KdKlCJGP01_WlZieTU-COGFsB", t: "Mensola - Parte 2", d: "Cubo di Rubik e dettagli vitarella.", type: "drive" }
+                    ]
+                }
+            ]
+        }
+    ];
+
+    videoCategories.forEach((cat, index) => {
+        const isOpen = index === 0 ? 'open' : '';
+        videoContainerHtml += `
+            <details class="tutorial-main video-details" ${isOpen}>
+                <summary>
+                    <h3>${cat.title}</h3>
+                </summary>
+                <div class="tutorial-main-body">
+        `;
+
+        if (cat.videos && cat.videos.length > 0) {
+            videoContainerHtml += createVideoCards(cat.videos);
+        }
+
+        if (cat.subcategories && cat.subcategories.length > 0) {
+            if (cat.videos && cat.videos.length > 0) {
+                videoContainerHtml += `<div style="margin-top: 25px;"></div>`;
+            }
+            cat.subcategories.forEach(sub => {
+                videoContainerHtml += `
+                    <details class="tutorial-step" style="margin-bottom: 12px;">
+                        <summary>${sub.title}</summary>
+                        <div class="tutorial-content" style="padding: 20px;">
+                            ${createVideoCards(sub.videos)}
+                        </div>
+                    </details>
+                `;
+            });
+        }
+
+        videoContainerHtml += `</div></details>`;
+    });
+
+    videoContainer.innerHTML = videoContainerHtml;
+
+    // Attiva chiusura automatica videoteca
+    const videoDetails = document.querySelectorAll('.video-details');
+    videoDetails.forEach(targetDetail => {
+        targetDetail.addEventListener('toggle', () => {
+            if (targetDetail.open) {
+                videoDetails.forEach(detail => {
+                    if (detail !== targetDetail && detail.open) {
+                        detail.open = false;
+                    }
+                });
+            }
+        });
+    });
+
+    const shortcuts = [
+        { k: "E", l: "Sposta" }, { k: "T", l: "Scala" }, { k: "R", l: "Ruota" }, { k: "C", l: "Rendi Modificabile" }, { k: "Shift V", l: "Preferenze Viewport" },
+        { k: "Alt G", l: "Crea Gruppo" }, { k: "M E", l: "Penna Poligono" }, { k: "M N", l: "Dissolvi" }, { k: "M L", l: "Taglio Loop" },
+        { k: "M J", l: "Taglio Piano" }, { k: "M Q", l: "Unisci" }, { k: "M O", l: "Slide" }, { k: "U L", l: "Selezione Loop" },
+        { k: "U F", l: "Riempi Selezione" }, { k: "K K", l: "Taglio Lineare" }, { k: "N A", l: "Gouraud Shading" }, { k: "N B", l: "Gouraud (Linee)" },
+        { k: "N C", l: "Quick Shading" }, { k: "N D", l: "Quick (Linee)" }
+    ];
+
+    shortcuts.forEach(s => { const ks = s.k.split(' ').map(k => `<span class="key">${k}</span>`).join(''); document.getElementById('short-content').innerHTML += `<div class="sc-card"><div>${ks}</div><span class="sc-label">${s.l}</span></div>`; });
+
+    document.addEventListener('keydown', function(event) {
+        if (event.key === "Escape") { closeModal(); } 
+        else if (event.key === "ArrowLeft") { changeImage(-1); } 
+        else if (event.key === "ArrowRight") { changeImage(1); }
+    });
+
+    showClass('2A', document.querySelector('.class-btn'));
+    renderArchive();
+    renderProgCurrent();
+    if (location.hash) showTabFromHash();
+</script>
+</body>
+</html>

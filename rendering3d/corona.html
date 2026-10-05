@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Corona · Rendering 3D | AANT</title>
+    <meta name="description" content="Dizionario PBR, proiezioni texture e videoteca Corona - Prof. Giovanni Savelli - AANT">
+    <meta property="og:title" content="Corona · Rendering 3D">
+    <meta property="og:description" content="Dizionario PBR, proiezioni texture e videoteca Corona - Prof. Giovanni Savelli - AANT">
+    <meta name="theme-color" content="#0d0d0f">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🧊</text></svg>">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;800&family=Lexend:wght@300;400;700&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            /* PALETTE: VIOLA TWITCH E COMPLEMENTARE ORO */
+            --bg: #0d0d0f;
+            --card: #141417;
+            --accent: #9146FF;
+            --accent-gradient: linear-gradient(135deg, #9146FF 0%, #5c16c5 100%);
+            --complement: #FFC300;
+            --text: #ffffff;
+            --subtext: #88888e;
+            --border: #2a2a2e;
+        }
+
+        *, *::before, *::after { box-sizing: border-box; }
+
+        html { background-color: var(--bg); }
+
+        /* La pagina scorre normalmente (niente più riquadro con scroll interno come su Google Sites) */
+        body {
+            background-color: var(--bg); color: var(--text); font-family: 'Inter', sans-serif;
+            margin: 0; padding: 0; min-height: 100vh; overflow-x: hidden;
+            display: flex; flex-direction: column; align-items: center; transition: font-family 0.3s ease;
+        }
+
+        /* --- CLASSE PER ALTA LEGGIBILITÀ (MODALITÀ DISLESSIA) --- */
+        body.dyslexia-mode, body.dyslexia-mode * {
+            font-family: 'Lexend', sans-serif !important;
+            letter-spacing: 1px !important; word-spacing: 3px !important; line-height: 1.8 !important;
+        }
+        body.dyslexia-mode .term-btn, body.dyslexia-mode .sub-btn, body.dyslexia-mode .sub-tab-btn { font-size: 13px !important; }
+        body.dyslexia-mode .display-body, body.dyslexia-mode .sub-display-body { font-size: 18px !important; }
+
+        .app-container { padding: 20px 15px; width: 100%; max-width: 1200px; margin: 0 auto; flex: 1; display: flex; flex-direction: column; align-items: center; }
+
+        /* Tasti e Alert */
+        .fab-accessibility { position: fixed; top: 20px; right: 20px; background: var(--accent-gradient); color: #fff; padding: 12px 20px; border-radius: 50px; display: flex; align-items: center; gap: 10px; font-weight: 800; box-shadow: 0 4px 20px rgba(145, 70, 255, 0.4); cursor: pointer; z-index: 990; transition: 0.3s; border: none; }
+        .fab-accessibility.active { background: #1a1a1a; color: var(--accent); border: 2px solid var(--accent); }
+        .fab-icon { font-size: 18px; }
+        .fab-text { font-size: 11px; text-transform: uppercase; letter-spacing: 1px; }
+        /* Su smartphone: tasto rotondo in basso a destra, così non copre il tasto "Torna" */
+        @media (max-width: 600px) {
+            .fab-accessibility { top: auto; bottom: 20px; right: 16px; width: 52px; height: 52px; padding: 0; justify-content: center; }
+            .fab-text { display: none; }
+        }
+
+        .back-btn { background: rgba(255,255,255,0.03); color: var(--subtext); border: 1px solid var(--border); padding: 12px 20px; border-radius: 50px; font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; cursor: pointer; transition: 0.3s; display: inline-flex; align-items: center; text-decoration: none; margin-bottom: 20px; align-self: flex-start; }
+        .back-btn:hover { background: rgba(145,70,255,0.05); color: var(--accent); border-color: var(--accent); }
+
+        .hero-banner { width: 100%; height: 180px; background: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.8)), url('https://images.unsplash.com/photo-1550684848-fac1c5b4e853?q=80&w=1600&auto=format&fit=crop'); background-size: cover; background-position: center 30%; border-radius: 15px; margin-bottom: 25px; display: flex; align-items: center; justify-content: center; border: 1px solid var(--border); text-align: center; flex-shrink: 0; width: 100%; max-width: 900px; }
+        .hero-banner h2 { margin: 0; font-size: clamp(28px, 8vw, 64px); font-weight: 800; text-transform: uppercase; line-height: 1; }
+        .hero-banner .top-label { letter-spacing: 4px; color: var(--accent); font-weight: 900; font-size: 10px; text-transform: uppercase; margin-bottom: 5px; display: block; }
+        .hero-banner .course-name { font-size: clamp(14px, 4vw, 24px); font-weight: 300; letter-spacing: 2px; color: #fff; margin-top: 5px; display: block; }
+
+        header { display: flex; flex-direction: column; gap: 15px; border-bottom: 2px solid var(--border); padding-bottom: 15px; margin-bottom: 25px; flex-shrink: 0; width: 100%; max-width: 900px; }
+        .title-group h1 { margin: 0; font-size: 20px; text-transform: uppercase; color: var(--subtext); font-weight: 400; line-height: 1.2; }
+        .title-group p { margin: 5px 0 0 0; color: var(--accent); font-size: 11px; font-weight: 700; line-height: 1.5; }
+
+        /* NAV TABS (Stile identico alla Home Page) */
+        .nav-tabs { display: flex; gap: 10px; margin-bottom: 25px; overflow-x: auto; padding-bottom: 10px; scrollbar-width: none; -webkit-overflow-scrolling: touch; flex-shrink: 0; align-items: center; width: 100%; max-width: 900px; }
+        .nav-tabs::-webkit-scrollbar { display: none; }
+        /* Tutti i pulsanti sempre visibili: su smartphone vanno a capo invece di finire fuori schermo */
+        .nav-tabs { flex-wrap: wrap; overflow-x: visible; }
+        .tab-btn { flex-shrink: 0; background: none; border: 1px solid var(--border); color: var(--subtext); padding: 10px 18px; border-radius: 50px; cursor: pointer; font-weight: 700; text-transform: uppercase; font-size: 10px; white-space: nowrap; transition: 0.3s; }
+        .tab-btn.active { border-color: var(--accent); color: var(--accent); background: rgba(145, 70, 255, 0.1); }
+
+        /* SOTTO-TABS PER LA VIDEOTECA */
+        .sub-nav-tabs { display: flex; gap: 8px; margin-bottom: 25px; flex-wrap: wrap; justify-content: center; width: 100%; }
+        .sub-tab-btn { background: rgba(255,255,255,0.02); border: 1px solid var(--border); color: var(--subtext); padding: 8px 16px; border-radius: 50px; cursor: pointer; font-weight: 700; text-transform: uppercase; font-size: 9px; transition: 0.3s; }
+        .sub-tab-btn:hover, .sub-tab-btn.active { border-color: var(--complement); color: var(--complement); background: rgba(255, 195, 0, 0.05); }
+
+        /* Content Sections */
+        .content-section { flex: 1; display: none; animation: fadeIn 0.3s ease; width: 100%; max-width: 900px; }
+        .content-section.active { display: block; }
+
+        .sub-content-section { display: none; animation: fadeIn 0.3s ease; width: 100%; }
+        .sub-content-section.active { display: block; }
+
+        /* Griglie e Area Testo */
+        .section-title { color: var(--accent); font-size: 14px; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 20px; display: flex; align-items: center; width: 100%; }
+        .section-title::after { content: ''; flex-grow: 1; height: 1px; background: var(--border); margin-left: 10px; }
+
+        /* LAYOUT PULSANTI: FLEX CENTRATO */
+        .glossary-flex { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; width: 100%; margin-bottom: 30px; }
+
+        .term-btn { background: rgba(255,255,255,0.02); border: 1px solid var(--border); color: var(--subtext); padding: 10px 18px; border-radius: 50px; cursor: pointer; font-weight: 700; text-transform: uppercase; font-size: 10px; letter-spacing: 1px; transition: 0.3s; text-align: center; }
+        .term-btn:hover, .term-btn.active { background: rgba(145, 70, 255, 0.1); border-color: var(--accent); color: var(--accent); }
+
+        .display-area { background: var(--card); border: 1px solid var(--border); border-radius: 12px; width: 100%; padding: 30px; animation: fadeIn 0.3s ease-out; margin-bottom: 30px; border-left: 4px solid var(--accent); }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
+
+        .display-header { color: var(--complement); font-size: 22px; font-weight: 800; text-transform: uppercase; margin-bottom: 15px; }
+        .display-body { font-size: 14px; line-height: 1.6; color: #eee; }
+
+        .sub-buttons-container { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 20px; padding-top: 15px; border-top: 1px solid var(--border); }
+        .sub-btn { background: rgba(255, 195, 0, 0.05); border: 1px solid var(--complement); color: var(--complement); padding: 8px 14px; border-radius: 50px; cursor: pointer; font-weight: 800; text-transform: uppercase; font-size: 9px; transition: 0.2s; }
+        .sub-btn:hover, .sub-btn.active { background: var(--complement); color: #000; }
+        .sub-display-body { font-size: 13px; line-height: 1.6; color: #ccc; padding: 15px; background: rgba(0,0,0,0.2); border-radius: 8px; margin-top: 12px; display: none; border-left: 2px solid var(--complement); }
+
+        .placeholder { color: var(--subtext); text-align: center; margin-top: 20px; font-style: italic; font-size: 14px; width: 100%; }
+
+        /* --- STILI VIDEOTECA CORONA --- */
+        .video-grid { display: grid; grid-template-columns: 1fr; gap: 20px; width: 100%; margin-bottom: 30px; }
+        @media (min-width: 600px) { .video-grid { grid-template-columns: 1fr 1fr; } }
+        .video-card { background: var(--card); border-radius: 12px; overflow: hidden; border: 1px solid var(--border); display: flex; flex-direction: column; }
+        .video-wrapper { position: relative; padding-bottom: 56.25%; height: 0; background-color: #000; border-radius: 8px 8px 0 0; overflow: hidden; }
+        .video-wrapper iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0; }
+        .video-info { padding: 15px; flex-grow: 1; }
+        .video-info h3 { font-size: 13px; margin: 0 0 5px 0; color: var(--text); font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; }
+        .video-info p { margin: 0; color: var(--subtext); font-size: 11px; line-height: 1.4; }
+        .play-btn { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 50px; height: 50px; background: rgba(0, 0, 0, 0.6); border-radius: 50px; display: flex; align-items: center; justify-content: center; transition: 0.3s; border: 2px solid rgba(255,255,255,0.3); backdrop-filter: blur(4px); }
+        .video-wrapper:hover .play-btn { transform: translate(-50%, -50%) scale(1.1); background: var(--accent-gradient); border-color: transparent;}
+        .play-btn::after { content: ''; width: 0; height: 0; border-top: 10px solid transparent; border-bottom: 10px solid transparent; border-left: 16px solid white; margin-left: 4px; }
+        .macro-title { color: var(--accent); font-size: 12px; font-weight: 800; text-transform: uppercase; letter-spacing: 1.5px; margin: 5px 0 15px 0; display: block; border-left: 3px solid var(--accent); padding-left: 10px; }
+
+        /* Risorse Bibliografia */
+        .resources-grid { display: grid; grid-template-columns: 1fr; gap: 15px; width: 100%; max-width: 900px; margin-bottom: 40px; }
+        @media (min-width: 600px) { .resources-grid { grid-template-columns: 1fr 1fr; } }
+        .res-card { background: rgba(255,255,255,0.02); border: 1px solid var(--border); padding: 20px; border-radius: 12px; display: flex; flex-direction: column; gap: 10px; transition: 0.3s; text-decoration: none; color: var(--text); }
+        .res-card:hover { background: rgba(145, 70, 255, 0.05); border-color: var(--accent); transform: translateY(-2px); }
+        .res-title { font-size: 14px; font-weight: 700; color: var(--complement); text-transform: uppercase; }
+        .res-desc { font-size: 12px; color: var(--subtext); line-height: 1.5; }
+
+        @media (min-width: 768px) { .app-container { padding: 40px 5%; } .hero-banner { height: 280px; } }
+        .footer { text-align: center; margin-top: auto; color: #555; font-size: 9px; text-transform: uppercase; padding: 40px 0 20px 0; width: 100%; }
+    </style>
+</head>
+
+<body>
+
+<button class="fab-accessibility" id="btn-dyslexia" onclick="toggleDyslexia()" title="Alta leggibilità" aria-label="Alta leggibilità">
+    <span class="fab-icon">Aa</span>
+    <span class="fab-text">Alta Leggibilità</span>
+</button>
+
+<div class="app-container">
+
+    <a href="./" class="back-btn">← Torna alla Home</a>
+
+    <div class="hero-banner">
+        <div>
+            <span class="top-label">AANT Interior Design</span>
+            <h2>2° ANNO</h2>
+            <span class="course-name">CORONA</span>
+        </div>
+    </div>
+
+    <header>
+        <div class="title-group">
+            <h1>Docente: Giovanni Savelli</h1>
+            <p>Accademia delle Arti e Nuove Tecnologie <span style="white-space: nowrap;">| A.A. 2025/2026</span></p>
+        </div>
+    </header>
+
+    <!-- BARRA DI NAVIGAZIONE A TAB (Stile Home Page) -->
+    <div class="nav-tabs">
+        <button class="tab-btn active" id="btn-tab-dizionario" onclick="openTab('tab-dizionario', this)">Dizionario PBR</button>
+        <button class="tab-btn" id="btn-tab-proiezioni" onclick="openTab('tab-proiezioni', this)">Proiezioni Texture</button>
+        <button class="tab-btn" id="btn-tab-videoteca" onclick="openTab('tab-videoteca', this)">Videoteca Corona</button>
+    </div>
+
+    <!-- SEZIONE 1: DIZIONARIO PBR -->
+    <div id="tab-dizionario" class="content-section active">
+        <div class="section-title">Dizionario PBR</div>
+        
+        <div class="glossary-flex" id="main-glossary-btns">
+            <button class="term-btn" id="default-term" onclick="showTerm('pbr', this)">Physical Material</button>
+            <button class="term-btn" onclick="showTerm('metal', this)">Metalness</button>
+            <button class="term-btn" onclick="showTerm('base', this)">Base Layer</button>
+            <button class="term-btn" onclick="showTerm('disp', this)">Displacement</button>
+            <button class="term-btn" onclick="showTerm('refr', this)">Refraction</button>
+            <button class="term-btn" onclick="showTerm('opac', this)">Opacity</button>
+            <button class="term-btn" onclick="showTerm('volum', this)">Volumetrics</button>
+        </div>
+
+        <div id="display-area" class="display-area">
+            <div id="term-title" class="display-header"></div>
+            <div id="term-desc" class="display-body"></div>
+            <div id="sub-buttons-container" class="sub-buttons-container"></div>
+            <div id="sub-term-desc" class="sub-display-body"></div>
+
+            <div id="ior-table-container" style="display: none; margin-top: 20px; padding-top: 20px; border-top: 1px solid var(--border);">
+                <div style="margin-bottom: 15px;">
+                    <input type="text" id="ior-search" onkeyup="filterIOR()" placeholder="Cerca materiale (es. Vetro, Marmo...)" 
+                           style="width: 100%; padding: 12px 20px; border-radius: 50px; border: 1px solid var(--border); background: var(--bg); color: var(--text); font-family: 'Inter', sans-serif; font-size: 12px; outline: none; transition: 0.3s;">
+                </div>
+                <div style="background: rgba(0,0,0,0.2); border: 1px solid var(--border); border-radius: 8px; overflow: hidden; max-height: 250px; overflow-y: auto;">
+                    <table style="width: 100%; border-collapse: collapse; font-size: 13px; text-align: left;" id="ior-table">
+                        <thead style="background: #21192e; color: var(--accent); text-transform: uppercase; font-size: 10px; letter-spacing: 1px; position: sticky; top: 0; z-index: 10;">
+                            <tr>
+                                <th style="padding: 10px 15px; border-bottom: 1px solid var(--border);">Materiale (Interior Design)</th>
+                                <th style="padding: 10px 15px; border-bottom: 1px solid var(--border);">Valore IOR</th>
+                            </tr>
+                        </thead>
+                        <tbody id="ior-table-body" style="color: #ccc;">
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- SEZIONE 2: PROIEZIONI TEXTURE -->
+    <div id="tab-proiezioni" class="content-section">
+        <div class="section-title">Proiezioni Texture (Mapping)</div>
+        
+        <div style="width: 100%; margin-bottom: 20px; font-size: 13px; line-height: 1.6; color: var(--subtext); text-align: center;">
+            Metodo geometrico per avvolgere un'immagine 2D su un volume 3D.
+        </div>
+
+        <div class="glossary-flex">
+            <button class="proj-btn term-btn" id="default-proj" onclick="showProj('cubica', this)">Cubica</button>
+            <button class="proj-btn term-btn" onclick="showProj('uvw', this)">Mappatura UVW</button>
+            <button class="proj-btn term-btn" onclick="showProj('piatta', this)">Piatta</button>
+            <button class="proj-btn term-btn" onclick="showProj('cilindrica', this)">Cilindrica</button>
+            <button class="proj-btn term-btn" onclick="showProj('sferica', this)">Sferica</button>
+            <button class="proj-btn term-btn" onclick="showProj('frontale', this)">Frontale</button>
+        </div>
+
+        <div id="proj-display-area" class="display-area" style="border-left-color: var(--complement);">
+            <div id="proj-term-title" class="display-header"></div>
+            <div id="proj-term-desc" class="display-body"></div>
+        </div>
+    </div>
+
+    <!-- SEZIONE 3: VIDEOTECA CORONA CON SOTTO-TABS -->
+    <div id="tab-videoteca" class="content-section">
+        <div class="section-title">Videoteca Corona</div>
+
+        <!-- SOTTO-NAVIGAZIONE (Sottocartelle con pulsanti) -->
+        <div class="sub-nav-tabs">
+            <button class="sub-tab-btn active" id="btn-sub-base" onclick="openSubTab('sub-base', this)">🎬 Inizio Percorso (Base)</button>
+            <button class="sub-tab-btn" id="btn-sub-avanzato" onclick="openSubTab('sub-avanzato', this)">🪵 Tecniche Avanzate</button>
+        </div>
+        
+        <!-- SOTTO-SEZIONE 1: CORSO BASE -->
+        <div id="sub-base" class="sub-content-section active">
+            <span class="macro-title">🎬 Inizio Percorso (Base)</span>
+            <div class="video-grid">
+                <div class="video-card">
+                    <div class="video-wrapper" style="background: url('https://drive.google.com/thumbnail?id=1dF76yqoBlC1WVoJ4Umma8l3PlfAvMf4m&sz=w800') center/cover; cursor: pointer;" onclick="this.style.background='none'; this.innerHTML='<iframe src=\'https://drive.google.com/file/d/1dF76yqoBlC1WVoJ4Umma8l3PlfAvMf4m/preview\' allowfullscreen></iframe>'; this.onclick=null;">
+                        <div class="play-btn"></div>
+                    </div>
+                    <div class="video-info">
+                        <h3>Introduzione a Corona</h3>
+                        <p>Lezione introduttiva: posizionamento della camera, creazione delle prime luci e setup base del motore di render.</p>
+                    </div>
+                </div>
+                <div class="video-card">
+                    <div class="video-wrapper" style="background: url('https://drive.google.com/thumbnail?id=1V_I3eWoWNTbYgSo58jSatvunc97u7T6h&sz=w800') center/cover; cursor: pointer;" onclick="this.style.background='none'; this.innerHTML='<iframe src=\'https://drive.google.com/file/d/1V_I3eWoWNTbYgSo58jSatvunc97u7T6h/preview\' allowfullscreen></iframe>'; this.onclick=null;">
+                        <div class="play-btn"></div>
+                    </div>
+                    <div class="video-info">
+                        <h3>Riassunto: Introduzione a Corona</h3>
+                        <p>Video riassuntivo sui concetti base e l'introduzione al motore di render.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SOTTO-SEZIONE 2: TECNICHE AVANZATE -->
+        <div id="sub-avanzato" class="sub-content-section">
+            <span class="macro-title">🪵 Tecniche Avanzate (Pavimenti & Workflow)</span>
+            <div class="video-grid">
+                <div class="video-card">
+                    <div class="video-wrapper" style="background: url('https://drive.google.com/thumbnail?id=1yaZCMEVIx9Wd3r2I2eGBZ2D2OCIE0Ria&sz=w800') center/cover; cursor: pointer;" onclick="this.style.background='none'; this.innerHTML='<iframe src=\'https://drive.google.com/file/d/1yaZCMEVIx9Wd3r2I2eGBZ2D2OCIE0Ria/preview\' allowfullscreen></iframe>'; this.onclick=null;">
+                        <div class="play-btn"></div>
+                    </div>
+                    <div class="video-info">
+                        <h3>Mapping Randomizer</h3>
+                        <p>Approfondimento sull'utilizzo del Corona Mapping Randomizer per variare le texture del parquet ed evitare ripetizioni evidenti.</p>
+                    </div>
+                </div>
+                <div class="video-card">
+                    <div class="video-wrapper" style="background: url('https://drive.google.com/thumbnail?id=1iCa64ynHExNFwVM_oybuPfFKB9fIrkyZ&sz=w800') center/cover; cursor: pointer;" onclick="this.style.background='none'; this.innerHTML='<iframe src=\'https://drive.google.com/file/d/1iCa64ynHExNFwVM_oybuPfFKB9fIrkyZ/preview\' allowfullscreen></iframe>'; this.onclick=null;">
+                        <div class="play-btn"></div>
+                    </div>
+                    <div class="video-info">
+                        <h3>Corona Multishader</h3>
+                        <p>Studio pratico del nodo Multishader per randomizzare i toni dei listelli di legno dei pavimenti in modo automatico.</p>
+                    </div>
+                </div>
+                <div class="video-card">
+                    <div class="video-wrapper" style="background: url('https://drive.google.com/thumbnail?id=1aUcuu19rus5BWlqGnva1QEwxgxMOLxqc&sz=w800') center/cover; cursor: pointer;" onclick="this.style.background='none'; this.innerHTML='<iframe src=\'https://drive.google.com/file/d/1aUcuu19rus5BWlqGnva1QEwxgxMOLxqc/preview\' allowfullscreen></iframe>'; this.onclick=null;">
+                        <div class="play-btn"></div>
+                    </div>
+                    <div class="video-info">
+                        <h3>Randomizer + Tile + Approfondimenti</h3>
+                        <p>Come combinare il Mapping Randomizer con il nodo Tile per un controllo geometrico e procedurale avanzato delle fughe.</p>
+                    </div>
+                </div>
+                <div class="video-card">
+                    <div class="video-wrapper" style="background: url('https://drive.google.com/thumbnail?id=1s5Da3rPlMQSRCfNVkQ_A30O4Zs8K8ho5&sz=w800') center/cover; cursor: pointer;" onclick="this.style.background='none'; this.innerHTML='<iframe src=\'https://drive.google.com/file/d/1s5Da3rPlMQSRCfNVkQ_A30O4Zs8K8ho5/preview\' allowfullscreen></iframe>'; this.onclick=null;">
+                        <div class="play-btn"></div>
+                    </div>
+                    <div class="video-info">
+                        <h3>Corona Decal</h3>
+                        <p>Uso delle decal in Corona per applicare grafiche, etichette e dettagli localizzati senza modificare il materiale principale.</p>
+                    </div>
+                </div>
+                <div class="video-card">
+                    <div class="video-wrapper" style="background: url('https://drive.google.com/thumbnail?id=1LFzrG7YWz9HnpFDsckkTL6wBs15qdudR&sz=w800') center/cover; cursor: pointer;" onclick="this.style.background='none'; this.innerHTML='<iframe src=\'https://drive.google.com/file/d/1LFzrG7YWz9HnpFDsckkTL6wBs15qdudR/preview\' allowfullscreen></iframe>'; this.onclick=null;">
+                        <div class="play-btn"></div>
+                    </div>
+                    <div class="video-info">
+                        <h3>Come salvare i progetti con Texture e Cosmos</h3>
+                        <p>Procedura corretta per il salvataggio dei file includendo tutti i materiali e le texture scaricate dal Cosmos Browser.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- SEZIONE BIBLIOGRAFIA (Sempre visibile in fondo) -->
+    <div class="section-title" style="margin-top: 50px;">📖 Bibliografia e Risorse</div>
+    <div class="resources-grid">
+        <a href="https://drive.google.com/file/d/1A6X18M3br9C1z2chNDBGvao3028NE4zT/view?usp=sharing" target="_blank" class="res-card">
+            <span class="res-title">Slide: Corso Corona</span>
+            <span class="res-desc">Dispense ufficiali in PDF. Materiali PBR, luce ed esempi pratici di applicazione.</span>
+        </a>
+        <a href="https://angeloferretti.blogspot.com/2021/08/cinema-4d-corona-renderer-7-physical-material.html#sec2" target="_blank" class="res-card">
+            <span class="res-title">Blog: Luce e Materiali</span>
+            <span class="res-desc">Approfondimento completo dal blog di Angelo Ferretti sul Physical Material e i suoi nodi.</span>
+        </a>
+    </div>
+
+    <div class="footer">Rendering 3D - Giovanni Savelli - 2025/26</div>
+</div>
+
+<script>
+    // --- SCRIPT: ACCESSIBILITA' ---
+    function toggleDyslexia() {
+        document.body.classList.toggle('dyslexia-mode');
+        const btn = document.getElementById('btn-dyslexia');
+        btn.classList.toggle('active');
+        localStorage.setItem('dyslexia-pref', document.body.classList.contains('dyslexia-mode'));
+    }
+    if(localStorage.getItem('dyslexia-pref') === 'true') { 
+        document.body.classList.add('dyslexia-mode'); 
+        document.getElementById('btn-dyslexia').classList.add('active'); 
+    }
+
+    // --- SCRIPT: APERTURA TAB (Identica alla Home Page) ---
+    // Ogni scheda ha il suo indirizzo (es. corona.html#videoteca): il tasto "Indietro" torna alla scheda precedente
+    const TAB_NAMES = { 'tab-dizionario': 'dizionario', 'tab-proiezioni': 'proiezioni', 'tab-videoteca': 'videoteca' };
+
+    function showTabFromHash() {
+        const id = Object.keys(TAB_NAMES).find(k => '#' + TAB_NAMES[k] === location.hash) || 'tab-dizionario';
+        openTab(id, document.getElementById('btn-' + id), true);
+    }
+
+    window.addEventListener('popstate', showTabFromHash);
+
+    function openTab(id, btn, fromHistory) {
+        document.querySelectorAll('.content-section').forEach(s => s.classList.remove('active'));
+        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+        document.getElementById(id).classList.add('active');
+        if(btn) btn.classList.add('active');
+        if(!fromHistory && location.hash !== '#' + TAB_NAMES[id]) history.pushState(null, '', '#' + TAB_NAMES[id]);
+    }
+
+    // --- SCRIPT: APERTURA SOTTO-TAB VIDEOTECA (Sottocartelle) ---
+    function openSubTab(subId, btn) {
+        document.querySelectorAll('.sub-content-section').forEach(s => s.classList.remove('active'));
+        document.querySelectorAll('.sub-tab-btn').forEach(b => b.classList.remove('active'));
+        document.getElementById(subId).classList.add('active');
+        if(btn) btn.classList.add('active');
+    }
+
+    // --- SCRIPT: DATI DIZIONARIO PBR ---
+    const terms = {
+        pbr: { t: "Physical Material", d: "Sistema di shading avanzato basato sullo standard PBR (Physically Based Rendering). Garantisce che i materiali reagiscano alla luce in modo fisicamente corretto in ogni condizione di illuminazione, migliorando drasticamente la resa fotografica rispetto ai materiali tradizionali." },
+        metal: { t: "Metalness", d: "Definisce la natura fisica del materiale: impostato su 'Metal' crea un conduttore fortemente riflettente, su 'Non-Metal' crea un materiale dielettrico. <br><br><strong>Materiali Ibridi:</strong> È possibile usare texture in scala di grigi per creare mix: ad esempio un tessuto (nero) con ricami in oro (bianco)." },
+        base: { 
+            t: "Base Layer", d: "Contenitore principale delle proprietà visive e di riflessione della superficie. Seleziona un parametro per approfondirne la logica:",
+            sub: [
+                { id: "col", label: "Color / Texture" }, { id: "rough", label: "Roughness" },
+                { id: "ior", label: "IOR" }, { id: "edge", label: "Edge Color" }, { id: "normal", label: "Normal / Bump" }
+            ]
+        },
+        col: { t: "Color / Texture", d: "Definisce l'Albedo (colore puro). Può essere un colore a tinta unita (es. per vernici o plastiche) o una mappa d'immagine (legno, marmo, ecc)." },
+        rough: { t: "Roughness", d: "Controlla la micro-rugosità della superficie. 0% = Specchio perfetto. 100% = Completamente opaco." },
+        ior: { t: "IOR", d: "Index of Refraction. Valore scientifico che determina la deviazione della luce (se la rifrazione è attiva) e l'intensità della riflessione ad angolazioni radenti (Effetto Fresnel)." },
+        edge: { t: "Edge Color", d: "Attivo e rilevante principalmente quando la Metalness è su 'Metal'. Permette di variare il colore della riflessione esclusivamente nei punti in cui l'oggetto è inquadrato di profilo o con angolazioni radenti, restituendo un metallo visivamente più complesso." },
+        normal: { t: "Normal / Bump", d: "Simulano micro-rilievi superficiali alterando il calcolo della luce senza aggiungere reale geometria. Il <strong>Bump</strong> utilizza mappe in scala di grigi (generando un'illusione basilare); la <strong>Normal Map</strong> utilizza i canali RGB per determinare l'inclinazione esatta dei pixel, offrendo una precisione superiore." },
+        disp: { t: "Displacement", d: "Sposta fisicamente i poligoni del modello 3D durante il calcolo del render, leggendo i valori di una texture in scala di grigi. È essenziale per alterare la silhouette e creare rilievi profondi (muri in pietra, terreni, intagli)." },
+        refr: { t: "Refraction", d: "Gestisce la trasparenza fisica e il passaggio della luce attraverso i volumi (es. vetro o liquidi). Essendo un calcolo fisico basato sull'IOR, richiede tassativamente che l'oggetto 3D possieda uno spessore reale." },
+        opac: { t: "Opacity", d: "Semplice maschera di ritaglio (clipping) bidimensionale. Leggendo una mappa in scala di grigi, decide quali pixel calcolare (Bianco) e quali rendere totalmente trasparenti/bucati (Nero), risultando utile per creare reti o sagomare foglie senza modellarle." },
+        volum: { 
+            t: "Volumetrics", d: "Gestisce il colore degli oggetti trasparenti e densi (come i liquidi o i vetri spessi) tramite l'assorbimento volumetrico della luce, risultando molto più realistico rispetto a colorare semplicemente la superficie. Seleziona per esplorare:",
+            sub: [{ id: "abs", label: "Absorption" }, { id: "dist", label: "Distance" }]
+        },
+        abs: { t: "Absorption Color", d: "Il colore che il materiale assume quando la luce bianca vi penetra ed alcune lunghezze d'onda vengono assorbite. L'intensità visiva di questo colore cresce all'aumentare dello spessore dell'oggetto." },
+        dist: { t: "Distance", d: "Parametro in centimetri che stabilisce la distanza percorsa dalla luce prima di essere completamente saturata dal colore di assorbimento. Valori bassi creano vetri subito saturi e scuri; valori alti mantengono il vetro limpido permettendo alla luce di viaggiare più a fondo." }
+    };
+
+    // --- SCRIPT: DATI PROIEZIONI (MAPPING) ---
+    const projTerms = {
+        cubica: { 
+            t: "Proiezione Cubica", 
+            d: "La proiezione cubica (o Box mapping) proietta la texture simultaneamente da sei direzioni ortogonali, avvolgendo l'oggetto in una 'scatola' immaginaria.<br><br><strong>Quando usarla:</strong> È il metodo più rapido e diffuso nell'ArchViz. Perfetta per elementi architettonici regolari e arredi squadrati come muri, pavimenti, soffitti e battiscopa." 
+        },
+        uvw: { 
+            t: "Mappatura UVW", 
+            d: "Il metodo nativo e più accurato. La texture aderisce alla geometria seguendo le sue coordinate interne (UV), ottenute 'srotolando' il modello 3D su un piano 2D.<br><br><strong>Quando usarla:</strong> Da utilizzare quando è necessario avere molto controllo sulla texture, oppure per superfici organiche e molto complesse. Garantisce che la texture segua l'andamento reale della geometria, indispensabile per divani, cuscini o tessuti." 
+        },
+        piatta: { 
+            t: "Proiezione Piatta", 
+            d: "Proietta l'immagine bidimensionale lungo un singolo asse, funzionando esattamente come un videoproiettore puntato su un muro. Su superfici curve o perpendicolari alla proiezione genera un vistoso allungamento (stretching).<br><br><strong>Quando usarla:</strong> Ideale per inserire grafiche piane e localizzate su superfici dritte, come ad esempio l'immagine all'interno dello schermo di una TV, un quadro in una cornice o la copertina di un libro." 
+        },
+        cilindrica: { 
+            t: "Proiezione Cilindrica", 
+            d: "Avvolge la texture attorno a un asse centrale verticale. L'immagine si adatta perfettamente alle pareti laterali, ma subisce una distorsione a raggiera sulle facce piane superiori e inferiori (i 'tappi').<br><br><strong>Quando usarla:</strong> La scelta geometrica più logica per oggetti a base tubolare, come applicare un'etichetta a 360° su un flacone o direzionare correttamente la venatura su una colonna." 
+        },
+        sferica: { 
+            t: "Proiezione Sferica", 
+            d: "Avvolge la texture curvandola su entrambi gli assi, comportandosi come la carta stampata su un mappamondo. L'immagine si restringe e si distorce ai due poli (Nord e Sud).<br><br><strong>Quando usarla:</strong> Utilizzata raramente nella modellazione standard. Trova il suo scopo primario nell'illuminazione per mappare correttamente gli sfondi panoramici a 360° sull'ambiente (Sky)." 
+        },
+        frontale: { 
+            t: "Proiezione Frontale", 
+            d: "Proietta la texture direttamente dal punto di vista della telecamera attiva, come se l'immagine fosse 'stampata' sullo schermo e cadesse sugli oggetti 3D presenti nella scena.<br><br><strong>Quando usarla:</strong> È una proiezione molto specifica. Si utilizza quasi esclusivamente per il foto-inserimento (Compositing) e il 'Camera Mapping'. Permette di creare volumi 3D base invisibili e proiettarci sopra la fotografia di sfondo, in modo che l'oggetto 3D 'si mimetizzi' con il reale per raccogliere ombre o generare riflessi corretti." 
+        }
+    };
+
+    // --- SCRIPT: DATI TABELLA IOR (INTERIOR DESIGN) ---
+    const iorData = [
+        { m: "Acqua", v: "1.33" },
+        { m: "Ceramica / Piastrelle / Smalto", v: "1.53" },
+        { m: "Cristallo", v: "2.00" },
+        { m: "Ghiaccio", v: "1.31" },
+        { m: "Legno (Laccato / Verniciato)", v: "1.52" },
+        { m: "Marmo / Granito / Pietra", v: "1.55" },
+        { m: "Pelle / Cuoio", v: "1.40" },
+        { m: "Plastica generica", v: "1.50" },
+        { m: "Plexiglass", v: "1.49" },
+        { m: "Tessuto generico", v: "1.35" },
+        { m: "Vernice da muro", v: "1.50" },
+        { m: "Vetro Architettonico / Finestre", v: "1.52" },
+        { m: "Vetro Satinato (Usa Roughness!)", v: "1.52" }
+    ];
+
+    // --- SCRIPT: FUNZIONI E INTERAZIONE ---
+    function showTerm(id, btn) {
+        document.querySelectorAll('#main-glossary-btns .term-btn').forEach(b => b.classList.remove('active'));
+        if(btn) btn.classList.add('active');
+        document.getElementById('display-area').style.display = 'block';
+        
+        // Nascondi la tabella IOR quando si cambia termine principale
+        document.getElementById('ior-table-container').style.display = 'none';
+
+        const data = terms[id];
+        document.getElementById('term-title').innerText = data.t;
+        document.getElementById('term-desc').innerHTML = data.d;
+        
+        const subContainer = document.getElementById('sub-buttons-container');
+        const subDesc = document.getElementById('sub-term-desc');
+        subContainer.innerHTML = ''; subDesc.style.display = 'none';
+        
+        if(data.sub) { 
+            data.sub.forEach(subItem => {
+                const b = document.createElement('button'); 
+                b.className = 'sub-btn'; 
+                b.innerText = subItem.label;
+                b.onclick = () => { 
+                    document.querySelectorAll('.sub-btn').forEach(sb => sb.classList.remove('active')); 
+                    b.classList.add('active'); 
+                    subDesc.innerHTML = terms[subItem.id].d; 
+                    subDesc.style.display = 'block'; 
+                    
+                    // Mostra la tabella IOR SOLO se è stato cliccato il tasto IOR
+                    if(subItem.id === 'ior') {
+                        document.getElementById('ior-table-container').style.display = 'block';
+                    } else {
+                        document.getElementById('ior-table-container').style.display = 'none';
+                    }
+                };
+                subContainer.appendChild(b);
+            }); 
+        }
+    }
+
+    function showProj(id, btn) {
+        document.querySelectorAll('.proj-btn').forEach(b => b.classList.remove('active'));
+        if(btn) btn.classList.add('active');
+        document.getElementById('proj-display-area').style.display = 'block';
+        const data = projTerms[id];
+        document.getElementById('proj-term-title').innerText = data.t;
+        document.getElementById('proj-term-desc').innerHTML = data.d;
+    }
+
+    function renderIORTable(data) {
+        const body = document.getElementById('ior-table-body');
+        body.innerHTML = data.map(item => `
+            <tr style="border-bottom: 1px solid rgba(255,255,255,0.03);">
+                <td style="padding: 12px 20px; font-weight: 600; color: var(--text);">${item.m}</td>
+                <td style="padding: 12px 20px; font-family: monospace; color: var(--complement); font-weight: bold;">${item.v}</td>
+            </tr>
+        `).join('');
+    }
+
+    function filterIOR() {
+        const query = document.getElementById('ior-search').value.toLowerCase();
+        const filtered = iorData.filter(item => item.m.toLowerCase().includes(query));
+        renderIORTable(filtered);
+        const searchInput = document.getElementById('ior-search');
+        if(query !== "") { searchInput.style.borderColor = "var(--accent)"; } 
+        else { searchInput.style.borderColor = "var(--border)"; }
+    }
+
+    // Inizializzazione automatica al caricamento
+    window.onload = () => {
+        showTerm('pbr', document.getElementById('default-term'));
+        showProj('cubica', document.getElementById('default-proj'));
+        renderIORTable(iorData);
+        if (location.hash) showTabFromHash();
+    };
+</script>
+</body>
+</html>
