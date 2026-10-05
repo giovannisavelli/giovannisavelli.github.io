@@ -1,0 +1,839 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Il Laboratorio della Varianza (Seed)</title>
+  <meta name="theme-color" content="#0f111a">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎲</text></svg>">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=JetBrains+Mono&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #0f111a;
+      --card: #161925;
+      --blue: #3b82f6;
+      --green: #10b981;
+      --text: #e2e8f0;
+      --text-dim: #94a3b8;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      padding: 0;
+      background-color: var(--bg);
+      color: var(--text);
+      font-family: 'Inter', sans-serif;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    .container {
+      display: grid;
+      grid-template-columns: 380px 1fr;
+      min-height: 100vh;
+      width: 100%;
+      margin: 0;
+      padding: 0;
+      gap: 0;
+    }
+
+    .left-col {
+      background: var(--card);
+      padding: 32px 40px;
+      border-right: 1px solid rgba(255, 255, 255, 0.05);
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+      max-width: none;
+    }
+
+    /* Simulate header from design on the first div in left-col */
+    .left-col > div:first-child {
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+      margin: -32px -40px 0 -40px;
+      padding: 24px 40px;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: 20px;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      text-transform: uppercase;
+      color: var(--blue);
+      background: none;
+      -webkit-text-fill-color: unset;
+      -webkit-background-clip: unset;
+    }
+
+    .subtitle {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12px;
+      color: var(--text-dim);
+      margin: 0;
+      font-weight: 400;
+    }
+
+    /* We add a fake sidebar title to match the design */
+    .left-col > div:first-child::after {
+      content: 'Costruttore di Prompt';
+      display: block;
+      font-size: 24px;
+      font-weight: 600;
+      margin-top: 24px;
+      color: var(--text);
+      font-family: 'Inter', sans-serif;
+      text-transform: none;
+      letter-spacing: normal;
+    }
+
+    .toggles-list {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      background-color: transparent;
+      padding: 0;
+      border-radius: 0;
+      box-shadow: none;
+    }
+
+    .toggle-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 16px;
+      background: rgba(255, 255, 255, 0.03);
+      border-radius: 12px;
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .toggle-item:has(input:checked) {
+      border-color: var(--blue);
+      background: rgba(59, 130, 246, 0.1);
+    }
+
+    .toggle-info {
+      flex: 1;
+      padding-right: 1rem;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .toggle-label {
+      display: block;
+      font-size: 14px;
+      font-weight: 600;
+      margin-bottom: 0px;
+    }
+
+    .toggle-desc {
+      color: var(--text-dim);
+      font-size: 11px;
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    .switch {
+      width: 40px;
+      height: 20px;
+      background: #334155;
+      border-radius: 20px;
+      position: relative;
+      transition: background 0.3s;
+      flex-shrink: 0;
+    }
+
+    .switch input { 
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+
+    .slider {
+      position: absolute;
+      cursor: pointer;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background-color: transparent;
+      border-radius: 20px;
+    }
+
+    .slider:before {
+      content: "";
+      position: absolute;
+      height: 16px;
+      width: 16px;
+      left: 2px;
+      bottom: 2px;
+      background-color: white;
+      transition: .3s;
+      border-radius: 50%;
+    }
+
+    input:checked + .slider {
+      background-color: transparent;
+    }
+    
+    .switch:has(input:checked) {
+      background: var(--green);
+    }
+
+    input:checked + .slider:before {
+      transform: translateX(20px);
+    }
+
+    .cta-btn {
+      margin-top: auto;
+      background: var(--blue);
+      color: white;
+      border: none;
+      padding: 20px;
+      border-radius: 12px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      cursor: pointer;
+      transition: transform 0.1s, filter 0.2s;
+      font-size: 1rem;
+      box-shadow: none;
+    }
+
+    .cta-btn:hover {
+      filter: brightness(1.1);
+      transform: none;
+      box-shadow: none;
+    }
+
+    .cta-btn:active {
+      transform: scale(0.98);
+      box-shadow: none;
+    }
+
+    .right-col {
+      position: relative;
+      background-color: transparent;
+      border-radius: 0;
+      padding: 40px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      box-shadow: none;
+      overflow: hidden;
+    }
+
+    .right-header {
+      width: 100%;
+      text-align: center;
+      font-weight: 600;
+      color: var(--text-dim);
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 14px;
+      margin-bottom: 2rem;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      display: block;
+    }
+
+    .output-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 2rem;
+      width: 100%;
+      max-width: 550px;
+      aspect-ratio: 1;
+      margin-bottom: 2rem;
+    }
+
+    .grid-item {
+      width: 100%;
+      height: 100%;
+      border-radius: 0.75rem;
+      overflow: hidden;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      transform: scale(0.9);
+      animation: popIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+    }
+
+    .skeleton {
+      width: 100%;
+      height: 100%;
+      border-radius: 0.75rem;
+      background: rgba(255,255,255,0.03);
+      border: 1px dashed rgba(255,255,255,0.1);
+    }
+
+    @keyframes popIn {
+      to {
+        opacity: 1;
+        transform: scale(1);
+      }
+    }
+
+    .noise-container {
+      width: 100%;
+      height: 100%;
+      background: var(--bg);
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    .noise-container::after {
+      content: "";
+      position: absolute;
+      top: -50%; left: -50%; right: -50%; bottom: -50%;
+      background: url('data:image/svg+xml,%3Csvg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg"%3E%3Cfilter id="noiseFilter"%3E%3CfeTurbulence type="fractalNoise" baseFrequency="0.8" numOctaves="3" stitchTiles="stitch"/%3E%3C/filter%3E%3Crect width="100%25" height="100%25" filter="url(%23noiseFilter)"/%3E%3C/svg%3E');
+      opacity: 0.6;
+      animation: noiseAnim 0.2s infinite;
+    }
+
+    .noise-text {
+      position: relative;
+      z-index: 10;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      color: rgba(255,255,255,0.7);
+      background: rgba(0,0,0,0.5);
+      padding: 4px 8px;
+      border-radius: 4px;
+    }
+
+    @keyframes noiseAnim {
+      0% { transform: translate(0,0) }
+      10% { transform: translate(-5%,-5%) }
+      20% { transform: translate(-10%,5%) }
+      30% { transform: translate(5%,-10%) }
+      40% { transform: translate(-5%,15%) }
+      50% { transform: translate(-10%,5%) }
+      60% { transform: translate(15%,0) }
+      70% { transform: translate(0,15%) }
+      80% { transform: translate(3%,35%) }
+      90% { transform: translate(-10%,10%) }
+      100% { transform: translate(0,0) }
+    }
+
+    .svg-container {
+      width: 100%;
+      height: 100%;
+    }
+
+    .prompt-preview {
+      background: rgba(0,0,0,0.25);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      border-radius: 12px;
+      padding: 16px;
+      font-family: 'JetBrains Mono', monospace;
+      line-height: 1.8;
+      box-shadow: inset 0 2px 10px rgba(0,0,0,0.5);
+    }
+    
+    .prompt-header {
+      font-size: 11px;
+      text-transform: uppercase;
+      color: var(--text-dim);
+      margin-bottom: 12px;
+      letter-spacing: 1px;
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .prompt-code {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      font-size: 13px;
+    }
+
+    .prompt-part {
+      transition: all 0.3s ease;
+      padding: 2px 6px;
+      border-radius: 4px;
+      border: 1px solid transparent;
+    }
+
+    .prompt-part.missing {
+      color: rgba(255, 255, 255, 0.4);
+      border-color: rgba(255, 255, 255, 0.1);
+      border-style: dashed;
+    }
+
+    .prompt-part.present {
+      color: var(--green);
+      background: rgba(16, 185, 129, 0.1);
+      border-color: rgba(16, 185, 129, 0.2);
+    }
+
+    .didactic-panel {
+      width: 100%;
+      background: rgba(0,0,0,0.2);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 12px;
+      overflow: hidden;
+      margin-top: auto;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+    }
+
+    .didactic-header {
+      padding: 16px 24px;
+      background: rgba(255, 255, 255, 0.03);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .didactic-title {
+      font-weight: 700;
+      font-size: 13px;
+      color: var(--blue);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .entropy-badge {
+      padding: 6px 12px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 800;
+      font-family: 'JetBrains Mono', monospace;
+      transition: all 0.3s;
+    }
+
+    .didactic-body {
+      padding: 24px;
+      font-size: 15px;
+      line-height: 1.6;
+      color: var(--text);
+    }
+
+    .didactic-body p {
+      margin-top: 0;
+      margin-bottom: 20px;
+    }
+
+    .theory-box {
+      background: rgba(59, 130, 246, 0.08);
+      border-left: 3px solid var(--blue);
+      padding: 16px;
+      border-radius: 0 8px 8px 0;
+      font-size: 14px;
+      color: var(--text-dim);
+    }
+
+    .theory-box strong {
+      color: var(--text);
+      font-weight: 600;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      display: block;
+      margin-bottom: 6px;
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    @media (max-width: 900px) {
+      .container {
+        display: flex;
+        flex-direction: column;
+        min-height: auto;
+      }
+      .left-col {
+        padding: 24px 20px;
+        border-right: none;
+        border-bottom: 2px solid rgba(255,255,255,0.05); /* Divider */
+      }
+      .left-col > div:first-child {
+        margin: -24px -20px 0 -20px;
+        padding: 20px;
+      }
+      .right-col {
+        padding: 24px 16px;
+      }
+      .output-grid {
+        gap: 1rem;
+        max-width: 550px;
+        margin-left: auto;
+        margin-right: auto;
+      }
+      .didactic-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 12px;
+      }
+      .prompt-code {
+        gap: 6px;
+        font-size: 11px;
+      }
+      h1 {
+        font-size: 18px;
+      }
+      .left-col > div:first-child::after {
+        font-size: 20px;
+        margin-top: 16px;
+      }
+      .right-header {
+        font-size: 12px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .toggle-item {
+        padding: 12px;
+      }
+      .toggle-label {
+        font-size: 13px;
+      }
+      .toggle-desc {
+        font-size: 11px;
+      }
+      .output-grid {
+        gap: 0.5rem;
+      }
+      .didactic-body {
+        padding: 16px;
+        font-size: 14px;
+      }
+      .prompt-preview {
+        padding: 12px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <div class="col left-col">
+      <div>
+        <h1>Costruttore di Prompt</h1>
+        <p class="subtitle">Aggiungi struttura per ridurre la CASUALITÀ (varianza).</p>
+      </div>
+
+      <div class="toggles-list">
+        <div class="toggle-item">
+          <div class="toggle-info">
+            <span class="toggle-label">1. Soggetto e Contesto</span>
+            <span class="toggle-desc">Es: "Una donna in un caffè parigino"</span>
+          </div>
+          <label class="switch">
+            <input type="checkbox" id="toggle-1">
+            <span class="slider"></span>
+          </label>
+        </div>
+        
+        <div class="toggle-item">
+          <div class="toggle-info">
+            <span class="toggle-label">2. Stile Visivo e Medium</span>
+            <span class="toggle-desc">Es: "Fotografia analogica 35mm, lomo"</span>
+          </div>
+          <label class="switch">
+            <input type="checkbox" id="toggle-2">
+            <span class="slider"></span>
+          </label>
+        </div>
+
+        <div class="toggle-item">
+          <div class="toggle-info">
+            <span class="toggle-label">3. Luce e Colori</span>
+            <span class="toggle-desc">Es: "Golden hour, palette calda, ombre morbide"</span>
+          </div>
+          <label class="switch">
+            <input type="checkbox" id="toggle-3">
+            <span class="slider"></span>
+          </label>
+        </div>
+
+        <div class="toggle-item">
+          <div class="toggle-info">
+            <span class="toggle-label">4. Vincoli Specifici e Struttura</span>
+            <span class="toggle-desc">Es: Regola dei terzi, Negative prompt, JSON/Seed</span>
+          </div>
+          <label class="switch">
+            <input type="checkbox" id="toggle-4">
+            <span class="slider"></span>
+          </label>
+        </div>
+      </div>
+
+      <div class="prompt-preview">
+        <div class="prompt-header">
+          <span>Output Prompt al Motore AI</span>
+        </div>
+        <div class="prompt-code" id="prompt-code">
+          <span class="prompt-part missing" id="pp-subj">/* Soggetto_Assente */</span>
+          <span class="prompt-part missing" id="pp-style">/* Stile_Ignoto */</span>
+          <span class="prompt-part missing" id="pp-light">/* Luce_Random */</span>
+          <span class="prompt-part missing" id="pp-struct">/* Seed_Libero */</span>
+        </div>
+      </div>
+
+      <button class="cta-btn" id="generate-btn">
+        Lancia i Dadi (Genera)
+      </button>
+    </div>
+
+    <div class="col right-col" id="right-col">
+      <div class="right-header">Risultati Generazione (Griglia 2x2)</div>
+      
+      <div class="output-grid" id="output-grid">
+        <div class="skeleton"></div>
+        <div class="skeleton"></div>
+        <div class="skeleton"></div>
+        <div class="skeleton"></div>
+      </div>
+
+      <div class="didactic-panel" id="didactic-panel">
+        <div class="didactic-header">
+          <span class="didactic-title">Monitoraggio Varianza</span>
+          <span class="entropy-badge" id="entropy-badge" style="color: var(--text-dim); background: rgba(255,255,255,0.05);">Entropia: --</span>
+        </div>
+        <div class="didactic-body">
+          <p id="didactic-text">Attiva i comandi a sinistra e genera per svelare i meccanismi dell'IA.</p>
+          <div class="theory-box" id="theory-box">
+            <strong>Pillola Teorica</strong>
+            L'IA non "pensa", ma calcola probabilità. Omettere parti del prompt costringe il modello a riempire lacune pescando casualmente dallo <em>spazio latente</em>.
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const btn = document.getElementById('generate-btn');
+      const outputGrid = document.getElementById('output-grid');
+      const didacticText = document.getElementById('didactic-text');
+      const theoryBox = document.getElementById('theory-box');
+      const entropyBadge = document.getElementById('entropy-badge');
+      
+      const toggles = [
+        document.getElementById('toggle-1'),
+        document.getElementById('toggle-2'),
+        document.getElementById('toggle-3'),
+        document.getElementById('toggle-4')
+      ];
+
+      function updatePanelState(stateType) {
+        const activeCount = toggles.filter(t => t.checked).length;
+        const isSubjFixed = toggles[0].checked;
+        const isStyleFixed = toggles[1].checked;
+        const isLightFixed = toggles[2].checked;
+        const isStructFixed = toggles[3].checked;
+
+        const missing = [];
+        if (!isSubjFixed) missing.push("soggetto");
+        if (!isStyleFixed) missing.push("medium visivo");
+        if (!isLightFixed) missing.push("luce");
+        if (!isStructFixed) missing.push("struttura");
+
+        let pText = "";
+        let tText = "";
+        let eColor = "";
+        let eBg = "";
+        let eLabel = "";
+
+        if (stateType === 'initial') {
+            pText = "Inizia accendendo gli interruttori a sinistra per vedere come si abbassa l'entropia prima di lanciare i dadi.";
+            tText = "<strong>Stato Iniziale</strong> L'attesa del seed. Prova a cliccare un comando per vedere la stima della varianza.";
+            eColor = "#94a3b8"; 
+            eBg = "rgba(148, 163, 184, 0.1)";
+            eLabel = "Entropia: --";
+        } else if (activeCount === 0) {
+            if (stateType === 'preview') {
+                pText = "Previsione: Tutti gli interruttori spenti. Entropia al 100%. Se generi ora, i risultati saranno completamente randomici.";
+                tText = "<strong>Analisi in corso...</strong> Nessun vincolo inserito nel prompt.";
+            } else {
+                pText = "Esito: Caos puro. L'IA ha iterato senza riferimenti, producendo generazioni visuali e concettualmente disconnesse l'una dall'altra.";
+                tText = "<strong>Massima Entropia:</strong> Senza alcun vincolo, la funzione matematica esplora lo Spazio Latente attraverso un Random Walk senza meta.";
+            }
+            eColor = "#ef4444"; eBg = "rgba(239, 68, 68, 0.1)"; eLabel = "Entropia: 100%";
+        } else if (activeCount === 1) {
+            if (stateType === 'preview') {
+                pText = "Previsione: Entropia scesa al 75%. Hai riempito 1 vuoto, l'immagine seguirà questo binario ma inventerà di sana pianta: " + missing.join(", ") + ".";
+                tText = "<strong>Analisi in corso...</strong> Un solo parametro offre un'ancora molto debole. L'IA manterrà moltissimo spazio di manovra.";
+            } else {
+                pText = "Esito: Hai limitato una direzione. Si nota un filo logico, ma le differenze (appunto su " + missing.join(", ") + ") sono nettissime.";
+                tText = "<strong>Gestione delle Lacune:</strong> L'IA non va in errore se mancano pezzi del prompt: li inventa pescando casualmente dai valori appresi nel training.";
+            }
+            eColor = "#f97316"; eBg = "rgba(249, 115, 22, 0.1)"; eLabel = "Entropia: 75%";
+        } else if (activeCount === 2) {
+            if (stateType === 'preview') {
+                pText = "Previsione: Entropia al 50%. Bene, hai vincolato metà della richiesta. Le future generazioni condivideranno la natura, ma varieranno totalmente su: " + missing.join(" e ") + ".";
+                tText = "<strong>Analisi in corso...</strong> Prompt intermedio. Inizi a ridurre drasticamente lo spazio delle possibilità esplorabili.";
+            } else {
+                pText = "Esito: C'è coerenza visiva! Le 4 scatole comunicano la stessa idea di fondo e iniziano a somigliarsi (al netto del caso su " + missing.join(" e ") + ").";
+                tText = "<strong>Varianza Moderata:</strong> Due costanti limitano lo Spazio Latente ad una regione più prevedibile. L'algoritmo converge.";
+            }
+            eColor = "#eab308"; eBg = "rgba(234, 179, 8, 0.1)"; eLabel = "Entropia: 50%";
+        } else if (activeCount === 3) {
+            if (stateType === 'preview') {
+                pText = "Previsione: Entropia crollata al 25%. Ottimo lavoro, hai blindato le colonne! L'IA metterà del suo solo per: " + missing[0] + ".";
+                tText = "<strong>Analisi in corso...</strong> Area di ricerca strettissima. L'IA non ha quasi più gradi di libertà per stravolgere l'immagine.";
+            } else {
+                pText = "Esito: Variazioni millimetriche e piacevoli. L'IA ha seguito il pattern ovunque concedendosi la variabilità residua sul " + missing[0] + ".";
+                tText = "<strong>L'Ottimizzazione del Designer:</strong> Molti si fermano qui. Lasciare all'IA un 25% di spazio vitale genera la famosa \"Serendipity\" creativa.";
+            }
+            eColor = "#84cc16"; eBg = "rgba(132, 204, 22, 0.1)"; eLabel = "Entropia: 25%";
+        } else if (activeCount === 4) {
+            if (stateType === 'preview') {
+                pText = "Previsione: L'entropia è al suo limite teorico! Tutto bloccato. La dispersione ora dipende solo ed unicamente dal frammento del Seed Iniziale (Noise).";
+                tText = "<strong>Analisi in corso...</strong> Generazione imminente: ci si aspetta che le immagini siano copie quasi esatte.";
+            } else {
+                pText = "Esito: Missione compiuta. Hai ottenuto un Prompt \"Master\". Ma occhio al dettaglio della texture interna: ogni box ha frammenti o particelle uniche.";
+                tText = "<strong>Rumore Irrisolvibile:</strong> Anche nel prompt perfetto, i modelli base partono da un seme rumoroso (Noise). La varianza tocca un minimo (~1%), ma NON fa mai zero.";
+            }
+            eColor = "#10b981"; eBg = "rgba(16, 185, 129, 0.1)"; eLabel = "Entropia: 1%";
+        }
+
+        didacticText.innerHTML = pText;
+        theoryBox.innerHTML = tText;
+        entropyBadge.textContent = eLabel;
+        entropyBadge.style.color = eColor;
+        entropyBadge.style.backgroundColor = eBg;
+
+        // Update live prompt UI
+        updateLivePrompt(isSubjFixed, isStyleFixed, isLightFixed, isStructFixed);
+      }
+
+      function updateLivePrompt(subj, style, light, struct) {
+        const pSubj = document.getElementById('pp-subj');
+        const pStyle = document.getElementById('pp-style');
+        const pLight = document.getElementById('pp-light');
+        const pStruct = document.getElementById('pp-struct');
+
+        if (subj) { pSubj.textContent = "«Donna in caffè parigino»"; pSubj.className = "prompt-part present"; }
+        else { pSubj.textContent = "/* Soggetto: [???] */"; pSubj.className = "prompt-part missing"; }
+
+        if (style) { pStyle.textContent = "+ «Fotografia analogica 35mm»"; pStyle.className = "prompt-part present"; }
+        else { pStyle.textContent = "/* Stile: [???] */"; pStyle.className = "prompt-part missing"; }
+
+        if (light) { pLight.textContent = "+ «Golden hour, palette calda»"; pLight.className = "prompt-part present"; }
+        else { pLight.textContent = "/* Illuminazione: [???] */"; pLight.className = "prompt-part missing"; }
+
+        if (struct) { pStruct.textContent = "--seed 4242 --no-blur --json"; pStruct.className = "prompt-part present"; }
+        else { pStruct.textContent = "/* Struttura: [???] */"; pStruct.className = "prompt-part missing"; }
+      }
+
+      toggles.forEach((t) => {
+        t.addEventListener('change', () => {
+             updatePanelState('preview');
+        });
+      });
+
+      updatePanelState('initial');
+      updateLivePrompt(false, false, false, false);
+
+      const subjects = [
+        '<circle cx="50" cy="50" r="25" />',
+        '<rect x="25" y="25" width="50" height="50" rx="6" />',
+        '<polygon points="50,20 80,75 20,75" />',
+        '<polygon points="50,20 80,50 50,80 20,50" />',
+        '<path d="M60,20 A30,30 0 1,0 80,70 A35,35 0 1,1 60,20 Z" />',
+        '<path d="M40,20 L60,20 L60,40 L80,40 L80,60 L60,60 L60,80 L40,80 L40,60 L20,60 L20,40 L40,40 Z" />'
+      ];
+
+      const styles = [
+        'fill: currentColor;',
+        'fill: none; stroke: currentColor; stroke-width: 4px;',
+        'fill: transparent; stroke: currentColor; stroke-width: 2px; filter: drop-shadow(0px 0px 6px currentColor);',
+        'fill: currentColor; opacity: 0.4; stroke: currentColor; stroke-width: 2px;',
+        'fill: none; stroke: currentColor; stroke-width: 3px; stroke-dasharray: 6 5;'
+      ];
+
+      const lights = [
+        { bg: 'linear-gradient(135deg, #0f172a, #1e3a8a)', color: '#38bdf8' },
+        { bg: 'linear-gradient(135deg, #450a0a, #991b1b)', color: '#fca5a5' },
+        { bg: 'linear-gradient(135deg, #022c22, #065f46)', color: '#6ee7b7' },
+        { bg: 'linear-gradient(135deg, #2e1065, #6b21a8)', color: '#d8b4fe' },
+        { bg: 'linear-gradient(135deg, #171717, #404040)', color: '#ffffff' }
+      ];
+
+      const structures = [
+        'scale(1) rotate(0deg)',
+        'scale(0.65) rotate(25deg) translate(-20px, -20px)',
+        'scale(1.2) rotate(-15deg) translate(10px, 10px)',
+        'scale(0.8) rotate(45deg) translate(20px, -20px)',
+        'scale(0.9) rotate(-30deg) translate(-10px, 20px)'
+      ];
+
+      btn.addEventListener('click', () => {
+        outputGrid.innerHTML = '';
+
+        const isSubjFixed = toggles[0].checked;
+        const isStyleFixed = toggles[1].checked;
+        const isLightFixed = toggles[2].checked;
+        const isStructFixed = toggles[3].checked;
+
+        updatePanelState('result');
+
+        // Generate base values that act as "Fixed" 
+        const baseSubj = Math.floor(Math.random()*subjects.length);
+        const baseStyle = Math.floor(Math.random()*styles.length);
+        const baseLight = Math.floor(Math.random()*lights.length);
+        const baseStruct = Math.floor(Math.random()*structures.length);
+
+        for (let i = 0; i < 4; i++) {
+            // First step: inject Noise (Denosing process simulation)
+            const cell = document.createElement('div');
+            cell.className = 'grid-item';
+            cell.style.animation = 'none'; // reset pop in
+            cell.style.opacity = '1';
+            cell.style.transform = 'scale(1)';
+            cell.innerHTML = '<div class="noise-container"><span class="noise-text">Denoising...</span></div>';
+            outputGrid.appendChild(cell);
+
+            // Second step: resolve to SVG
+            setTimeout(() => {
+                const subjIdx = isSubjFixed ? baseSubj : Math.floor(Math.random()*subjects.length);
+                const styleIdx = isStyleFixed ? baseStyle : Math.floor(Math.random()*styles.length);
+                const lightIdx = isLightFixed ? baseLight : Math.floor(Math.random()*lights.length);
+                const structIdx = isStructFixed ? baseStruct : Math.floor(Math.random()*structures.length);
+                
+                const subjHtml = subjects[subjIdx];
+                const styleStr = styles[styleIdx];
+                const lightObj = lights[lightIdx];
+                const structStr = structures[structIdx];
+                
+                // Random irreducible variance (noise / slight position shift)
+                const vRot = (Math.random()-0.5)*10;
+                const vX = (Math.random()-0.5)*8;
+                const vY = (Math.random()-0.5)*8;
+                
+                let dust = '';
+                for(let p=0; p<15; p++) {
+                    dust += `<circle cx="${Math.random()*100}" cy="${Math.random()*100}" r="${Math.random()*1.5 + 0.2}" fill="rgba(255,255,255,${Math.random()*0.4 + 0.1})" />`;
+                }
+                
+                cell.style.background = lightObj.bg;
+                cell.style.color = lightObj.color;
+                
+                cell.innerHTML = `
+                    <svg class="svg-container" viewBox="0 0 100 100" preserveAspectRatio="xMidYMid slice" style="animation: popIn 0.4s ease-out">
+                        <g>${dust}</g>
+                        <g style="transform-origin: 50px 50px; transform: ${structStr} translate(${vX}px, ${vY}px) rotate(${vRot}deg); ${styleStr}">
+                            ${subjHtml}
+                        </g>
+                    </svg>
+                `;
+            }, 600 + (i * 150));
+        }
+      });
+    });
+  </script>
+</body>
+</html>
