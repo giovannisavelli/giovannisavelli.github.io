@@ -1,6 +1,6 @@
-# Corsi del Prof. Giovanni Savelli - AANT
+# Hub Docente · Prof. Giovanni Savelli - AANT
 
-Sito dei corsi: https://giovannisavelli-beep.github.io
+Sito: https://giovannisavelli.github.io
 
-- Rendering 3D (2° anno): /rendering3d/
-- Intelligenza Artificiale (3° anno): /ia/
+- Interior Design: /interior/rendering3d/ · /interior/photoshop/ · /interior/ia/
+- Product Design: /product/modellazione/ · /product/photoshop/ · /product/ia/

@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Photoshop · Product Design | AANT</title>
+    <meta name="description" content="Corso di Photoshop per Product Design - Prof. Giovanni Savelli - AANT. In preparazione.">
+    <meta property="og:title" content="Photoshop · Product Design">
+    <meta property="og:description" content="Corso in preparazione - Prof. Giovanni Savelli - AANT">
+    <meta name="theme-color" content="#07080c">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎨</text></svg>">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&family=JetBrains+Mono:wght@400;600&family=Space+Grotesk:wght@700&display=swap" rel="stylesheet">
+
+    <!-- =====================================================================
+         PAGINA PROVVISORIA "IN PREPARAZIONE".
+         Quando il corso è pronto, sostituisci questo file con la pagina completa
+         (stesso nome: index.html, stessa cartella) e nell'hub (../../index.html)
+         cambia lo stato del corso da 'preparazione' a 'disponibile'.
+         ===================================================================== -->
+    <style>
+        :root { --bg: #07080c; --border: rgba(255,255,255,0.08); --text: #f5f5f7; --muted: #8b8b94; --c: #31A8FF; --glow: rgba(49, 168, 255, 0.14); --wip: #fbbf24; }
+        *, *::before, *::after { box-sizing: border-box; }
+        body {
+            margin: 0; min-height: 100vh; background: var(--bg); color: var(--text); font-family: 'Inter', -apple-system, sans-serif;
+            -webkit-font-smoothing: antialiased; display: flex; align-items: center; justify-content: center; padding: 16px; overflow-x: hidden;
+        }
+        .bg-grid {
+            position: fixed; inset: 0; z-index: -2; pointer-events: none;
+            background-image: linear-gradient(rgba(255,255,255,0.035) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.035) 1px, transparent 1px);
+            background-size: 48px 48px;
+            -webkit-mask-image: radial-gradient(ellipse 70% 60% at 50% 40%, #000 20%, transparent 100%);
+                    mask-image: radial-gradient(ellipse 70% 60% at 50% 40%, #000 20%, transparent 100%);
+        }
+        .bg-glow { position: fixed; z-index: -1; width: 520px; height: 520px; border-radius: 50%; background: var(--c); filter: blur(110px); opacity: 0.22; top: 50%; left: 50%; transform: translate(-50%, -60%); pointer-events: none; }
+        .box { width: 100%; max-width: 520px; text-align: center; }
+        .icon { width: 64px; height: 64px; margin: 0 auto 22px; border-radius: 16px; display: grid; place-items: center; color: var(--c); background: var(--glow); border: 1px solid var(--border); }
+        .icon svg { width: 32px; height: 32px; fill: none; stroke: currentColor; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
+        .dept { font-family: 'JetBrains Mono', monospace; font-size: 12px; letter-spacing: 1px; text-transform: uppercase; color: var(--muted); }
+        h1 { margin: 10px 0 16px; font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: clamp(34px, 9vw, 52px); line-height: 1.05; letter-spacing: -0.02em; }
+        .status { display: inline-flex; align-items: center; gap: 8px; font-family: 'JetBrains Mono', monospace; font-size: 12px; text-transform: uppercase; letter-spacing: 0.5px; color: var(--wip); padding: 6px 12px; border-radius: 50px; border: 1px solid var(--border); }
+        .status::before { content: ''; width: 7px; height: 7px; border-radius: 50%; border: 1.5px solid var(--wip); }
+        p { margin: 22px 0 32px; color: var(--muted); font-size: 15px; line-height: 1.6; }
+        a.back {
+            display: inline-block; padding: 14px 24px; border-radius: 50px; text-decoration: none; color: var(--text);
+            font-family: 'JetBrains Mono', monospace; font-weight: 600; font-size: 13px; border: 1px solid var(--c); background: var(--glow); transition: transform 0.2s ease;
+        }
+        a.back:hover { transform: translateY(-2px); }
+        footer { margin-top: 48px; font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--muted); }
+    </style>
+</head>
+<body>
+    <div class="bg-grid"></div>
+    <div class="bg-glow"></div>
+
+    <div class="box">
+        <div class="icon"><svg viewBox="0 0 24 24"><path d="M12 3 2.5 8 12 13l9.5-5z"/><path d="m2.5 12.5 9.5 5 9.5-5"/><path d="m2.5 16.5 9.5 5 9.5-5"/></svg></div>
+        <span class="dept">AANT · Product Design</span>
+        <h1>Photoshop</h1>
+        <span class="status">In preparazione</span>
+        <p>Il sito di questo corso è in costruzione.<br>Programma, calendario e materiali verranno pubblicati qui a breve.</p>
+        <a class="back" href="../../">← Torna all'hub dei corsi</a>
+        <footer>Giovanni Savelli · A.A. 2026/2027</footer>
+    </div>
+</body>
+</html>
