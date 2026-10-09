@@ -69,6 +69,20 @@
         .empty { max-width: 720px; padding: 28px; border: 1px dashed rgba(163,195,225,.26); border-radius: 16px; background: rgba(255,255,255,.02); }
         .empty h3 { margin: 0 0 8px; font-size: 18px; }
         .empty p { margin: 0; color: var(--muted); font-size: 14px; line-height: 1.65; }
+        .shortcut-lead { max-width: 860px; margin: 0 0 24px; padding: 18px 20px; border: 1px solid rgba(49,168,255,.25); border-radius: 14px; background: var(--accent-soft); line-height: 1.65; }
+        .shortcut-lead strong { color: var(--accent); }
+        .shortcut-group { margin-top: 30px; }
+        .shortcut-group h3 { margin: 0 0 8px; font-family: "Space Grotesk", sans-serif; font-size: 21px; }
+        .shortcut-group > p { margin: 0 0 16px; color: var(--muted); font-size: 13px; line-height: 1.6; }
+        .shortcut-list { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr)); gap: 10px; margin: 0; padding: 0; list-style: none; }
+        .shortcut-list li { display: flex; align-items: center; gap: 14px; min-height: 72px; padding: 13px 15px; border: 1px solid var(--border); border-radius: 13px; background: var(--surface-strong); }
+        .shortcut-list kbd { flex: 0 0 auto; padding: 7px 9px; border: 1px solid rgba(49,168,255,.35); border-radius: 8px; background: #091a2a; color: var(--accent); font-family: "JetBrains Mono", monospace; font-size: 12px; font-weight: 600; white-space: nowrap; }
+        .shortcut-list strong, .shortcut-list small { display: block; }
+        .shortcut-list strong { font-size: 13px; line-height: 1.4; }
+        .shortcut-list small { margin-top: 3px; color: var(--muted); font-size: 12px; line-height: 1.4; }
+        .shortcut-note { max-width: 860px; margin: 25px 0 0; color: var(--muted); font-size: 13px; line-height: 1.65; }
+        .shortcut-note a { color: var(--accent); text-decoration: none; }
+        .shortcut-note a:hover, .shortcut-note a:focus-visible { text-decoration: underline; }
         .video-frame { position: relative; width: min(100%, 860px); aspect-ratio: 16 / 9; border: 1px solid var(--border); border-radius: 16px; overflow: hidden; background: #070d16; }
         .video-frame iframe { display: block; width: 100%; height: 100%; border: 0; }
         .video-frame iframe[hidden], .video-placeholder[hidden] { display: none; }
@@ -101,6 +115,7 @@
             .hero { grid-template-columns: 1fr; }
             .ps-mark { grid-row: 1; width: 74px; border-radius: 14px; font-size: 42px; }
             .schedule-list li { flex-wrap: wrap; gap: 3px 10px; }
+            .shortcut-list li { flex-wrap: wrap; }
         }
         @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
     </style>
@@ -238,8 +253,47 @@
         <section class="panel" role="tabpanel" id="tab-scorciatoie" aria-labelledby="btn-scorciatoie" hidden>
             <p class="kicker">Consultazione rapida</p>
             <h2>Scorciatoie</h2>
-            <p class="panel-intro">Una guida rapida ai comandi utili di Photoshop.</p>
-            <div class="empty"><h3>Elenco in preparazione</h3><p>Le scorciatoie usate nelle lezioni saranno raccolte qui.</p></div>
+            <p class="panel-intro">I comandi essenziali di Photoshop, da tenere a portata di mano mentre lavori. Le combinazioni qui sotto si riferiscono a Windows.</p>
+            <p class="shortcut-lead"><strong>Come ricordarle:</strong> molte scorciatoie riprendono l’iniziale del nome inglese dello strumento: <strong>B</strong> come <em>Brush</em> (Pennello), <strong>C</strong> come <em>Crop</em> (Ritaglia), <strong>T</strong> come <em>Type</em> (Testo). È un aiuto per orientarsi, non una regola assoluta: alcune lettere sono eccezioni.</p>
+
+            <div class="shortcut-group">
+                <h3>Strumenti</h3>
+                <p>Premi la lettera per richiamare lo strumento. Alcune lettere comprendono più strumenti dello stesso gruppo.</p>
+                <ul class="shortcut-list">
+                    <li><kbd>V</kbd><span><strong>Sposta</strong><small>Un aggancio: moVe. Non è l’iniziale.</small></span></li>
+                    <li><kbd>M</kbd><span><strong>Selezione rettangolare o ellittica</strong><small>Da <em>Marquee</em>.</small></span></li>
+                    <li><kbd>L</kbd><span><strong>Lazo</strong><small>Da <em>Lasso</em>.</small></span></li>
+                    <li><kbd>W</kbd><span><strong>Selezione oggetto, rapida o bacchetta magica</strong><small>Da <em>Wand</em> (bacchetta).</small></span></li>
+                    <li><kbd>C</kbd><span><strong>Ritaglia</strong><small>Da <em>Crop</em>.</small></span></li>
+                    <li><kbd>B</kbd><span><strong>Pennello</strong><small>Da <em>Brush</em>.</small></span></li>
+                    <li><kbd>E</kbd><span><strong>Gomma</strong><small>Da <em>Eraser</em>.</small></span></li>
+                    <li><kbd>I</kbd><span><strong>Contagocce</strong><small>Eccezione da ricordare: <em>Eyedropper</em>.</small></span></li>
+                    <li><kbd>J</kbd><span><strong>Pennello correttivo</strong><small>Eccezione da ricordare: <em>Healing Brush</em>.</small></span></li>
+                    <li><kbd>S</kbd><span><strong>Timbro clone</strong><small>Da <em>Stamp</em>.</small></span></li>
+                    <li><kbd>G</kbd><span><strong>Sfumatura o secchiello</strong><small>Da <em>Gradient</em>.</small></span></li>
+                    <li><kbd>T</kbd><span><strong>Testo</strong><small>Da <em>Type</em>.</small></span></li>
+                    <li><kbd>H</kbd><span><strong>Mano</strong><small>Da <em>Hand</em>.</small></span></li>
+                    <li><kbd>Z</kbd><span><strong>Zoom</strong><small>Stessa parola in italiano e inglese.</small></span></li>
+                </ul>
+            </div>
+
+            <div class="shortcut-group">
+                <h3>Operazioni frequenti</h3>
+                <p>Per le combinazioni, tieni premuti insieme i tasti indicati. Alcune seguono ancora il nome inglese; altre si imparano usandole.</p>
+                <ul class="shortcut-list">
+                    <li><kbd>Spazio</kbd><span><strong>Mano temporanea</strong><small>Tieni premuto per spostarti nell’immagine.</small></span></li>
+                    <li><kbd>D</kbd><span><strong>Colori predefiniti</strong><small>Primo piano nero, sfondo bianco: <em>Default</em>.</small></span></li>
+                    <li><kbd>X</kbd><span><strong>Scambia i colori</strong><small>Inverte primo piano e sfondo.</small></span></li>
+                    <li><kbd>Ctrl + D</kbd><span><strong>Deseleziona</strong><small>Da <em>Deselect</em>.</small></span></li>
+                    <li><kbd>Ctrl + J</kbd><span><strong>Duplica il livello</strong><small>Con una selezione attiva, ne copia il contenuto su un nuovo livello.</small></span></li>
+                    <li><kbd>Ctrl + Shift + N</kbd><span><strong>Nuovo livello</strong><small>Da <em>New</em>.</small></span></li>
+                    <li><kbd>Ctrl + G</kbd><span><strong>Raggruppa i livelli</strong><small>Da <em>Group</em>.</small></span></li>
+                    <li><kbd>Ctrl + Alt + G</kbd><span><strong>Maschera di ritaglio</strong><small>Crea o rilascia la maschera di ritaglio.</small></span></li>
+                    <li><kbd>Ctrl + T</kbd><span><strong>Trasformazione libera</strong><small>Da <em>Transform</em>.</small></span></li>
+                    <li><kbd>Ctrl + Z</kbd><span><strong>Annulla</strong><small>Il comando standard per tornare indietro.</small></span></li>
+                </ul>
+            </div>
+            <p class="shortcut-note">Quando una lettera corrisponde a più strumenti, controlla quale icona è attiva nella barra degli strumenti. Le scorciatoie possono cambiare se sono state personalizzate. <a href="https://helpx.adobe.com/content/dam/help/en/photoshop/using/default-keyboard-shortcuts/photoshop-keyboard-shortcuts.pdf" target="_blank" rel="noopener noreferrer">Consulta l’elenco completo di Adobe ↗</a></p>
         </section>
     </main>
 
