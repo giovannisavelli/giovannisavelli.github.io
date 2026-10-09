@@ -69,6 +69,28 @@
         .empty { max-width: 720px; padding: 28px; border: 1px dashed rgba(163,195,225,.26); border-radius: 16px; background: rgba(255,255,255,.02); }
         .empty h3 { margin: 0 0 8px; font-size: 18px; }
         .empty p { margin: 0; color: var(--muted); font-size: 14px; line-height: 1.65; }
+        .lesson-opening { position: relative; overflow: hidden; padding: clamp(24px, 4vw, 42px); border: 1px solid rgba(49,168,255,.28); border-radius: 20px; background: radial-gradient(circle at 95% 0, rgba(49,168,255,.2), transparent 37%), linear-gradient(135deg, #14243a, #0b1421 72%); }
+        .lesson-opening::after { content: "01"; position: absolute; top: -56px; right: -8px; color: rgba(163,205,241,.055); font-family: "Space Grotesk", sans-serif; font-size: clamp(150px, 25vw, 290px); font-weight: 700; line-height: 1; pointer-events: none; }
+        .lesson-opening > * { position: relative; z-index: 1; }
+        .lesson-label { display: inline-flex; align-items: center; gap: 9px; margin: 0 0 20px; color: #a9d9ff; font-family: "JetBrains Mono", monospace; font-size: 11px; font-weight: 600; letter-spacing: .09em; text-transform: uppercase; }
+        .lesson-label::before { content: ""; width: 8px; height: 8px; border-radius: 50%; background: var(--accent); box-shadow: 0 0 0 5px rgba(49,168,255,.12); }
+        .lesson-opening h3 { max-width: 750px; margin: 0; font-family: "Space Grotesk", sans-serif; font-size: clamp(38px, 7vw, 68px); line-height: 1.03; letter-spacing: -.045em; }
+        .lesson-opening h3 span { color: var(--accent); }
+        .lesson-deck { max-width: 620px; margin: 17px 0 0; color: #d5e6f4; font-size: clamp(15px, 2vw, 18px); line-height: 1.55; }
+        .lesson-thought { max-width: 790px; margin: 32px 0 0; padding: 20px 23px; border-left: 3px solid var(--accent); border-radius: 0 12px 12px 0; background: rgba(3,12,23,.43); }
+        .lesson-thought p { margin: 0; color: #e2eff9; font-size: clamp(15px, 2vw, 18px); line-height: 1.6; }
+        .lesson-thought strong { color: #85ccff; font-weight: 700; }
+        .interface-path { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 13px; margin-top: 18px; }
+        .interface-step { min-height: 228px; padding: 22px; border: 1px solid var(--border); border-radius: 16px; background: var(--surface-strong); }
+        .interface-step:nth-child(2) { background: #142032; }
+        .interface-step:nth-child(3) { border-color: rgba(49,168,255,.3); background: #11283e; }
+        .step-number { display: block; margin-bottom: 28px; color: var(--accent); font-family: "JetBrains Mono", monospace; font-size: 12px; font-weight: 600; }
+        .interface-step h4 { margin: 0 0 9px; font-family: "Space Grotesk", sans-serif; font-size: clamp(19px, 2.6vw, 23px); line-height: 1.2; }
+        .interface-step p { margin: 0; color: var(--muted); font-size: 13px; line-height: 1.65; }
+        .lesson-end { display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap; margin-top: 20px; }
+        .lesson-end p { max-width: 650px; margin: 0; color: var(--muted); font-size: 13px; line-height: 1.6; }
+        .lesson-end a { color: var(--accent); font-size: 13px; font-weight: 700; text-decoration: none; white-space: nowrap; }
+        .lesson-end a:hover, .lesson-end a:focus-visible { text-decoration: underline; }
         .shortcut-lead { max-width: 860px; margin: 0 0 24px; padding: 18px 20px; border: 1px solid rgba(49,168,255,.25); border-radius: 14px; background: var(--accent-soft); line-height: 1.65; }
         .shortcut-lead strong { color: var(--accent); }
         .shortcut-platform { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; max-width: 860px; margin-bottom: 20px; padding: 13px 16px; border: 1px solid var(--border); border-radius: 13px; background: var(--surface-strong); }
@@ -122,6 +144,9 @@
             .ps-mark { grid-row: 1; width: 74px; border-radius: 14px; font-size: 42px; }
             .schedule-list li { flex-wrap: wrap; gap: 3px 10px; }
             .shortcut-list li { flex-wrap: wrap; }
+            .interface-path { grid-template-columns: 1fr; }
+            .interface-step { min-height: 0; }
+            .step-number { margin-bottom: 18px; }
         }
         @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
     </style>
@@ -144,26 +169,51 @@
     </header>
 
     <div class="notice">
-        <div><strong>Calendario delle lezioni disponibile</strong><p>Il programma e i materiali saranno organizzati qui durante la preparazione del corso.</p></div>
-        <a href="#calendario">Vedi date e orari →</a>
+        <div><strong>La prima lezione è online</strong><p>Conosciamoci: iniziamo dalle nostre interfacce.</p></div>
+        <a href="#programma">Scopri la prima lezione →</a>
     </div>
 
     <main>
         <nav class="tabs" id="calendario" role="tablist" aria-label="Sezioni del corso">
-            <button class="tab-btn" type="button" role="tab" id="btn-programma" data-tab="tab-programma" aria-controls="tab-programma" aria-selected="false">Programma lezioni</button>
+            <button class="tab-btn" type="button" role="tab" id="btn-programma" data-tab="tab-programma" aria-controls="tab-programma" aria-selected="true">Programma lezioni</button>
             <button class="tab-btn" type="button" role="tab" id="btn-archivio" data-tab="tab-archivio" aria-controls="tab-archivio" aria-selected="false">Archivio lezioni</button>
             <button class="tab-btn" type="button" role="tab" id="btn-appunti" data-tab="tab-appunti" aria-controls="tab-appunti" aria-selected="false">Appunti</button>
-            <button class="tab-btn" type="button" role="tab" id="btn-calendario" data-tab="tab-calendario" aria-controls="tab-calendario" aria-selected="true">Calendario</button>
+            <button class="tab-btn" type="button" role="tab" id="btn-calendario" data-tab="tab-calendario" aria-controls="tab-calendario" aria-selected="false">Calendario</button>
             <button class="tab-btn" type="button" role="tab" id="btn-video" data-tab="tab-video" aria-controls="tab-video" aria-selected="false">Video</button>
             <button class="tab-btn" type="button" role="tab" id="btn-risorse" data-tab="tab-risorse" aria-controls="tab-risorse" aria-selected="false">Risorse</button>
             <button class="tab-btn" type="button" role="tab" id="btn-scorciatoie" data-tab="tab-scorciatoie" aria-controls="tab-scorciatoie" aria-selected="false">Scorciatoie</button>
         </nav>
 
-        <section class="panel" role="tabpanel" id="tab-programma" aria-labelledby="btn-programma" hidden>
+        <section class="panel" role="tabpanel" id="tab-programma" aria-labelledby="btn-programma">
             <p class="kicker">Il percorso</p>
             <h2>Programma lezioni</h2>
-            <p class="panel-intro">Qui troverai la sequenza delle lezioni, gli obiettivi e le attività del modulo.</p>
-            <div class="empty"><h3>Programma in preparazione</h3><p>Gli argomenti verranno inseriti dopo la definizione del percorso didattico. Le date già confermate sono nella scheda Calendario.</p></div>
+            <p class="panel-intro">Il corso comincia da un primo incontro: con il docente, con la classe e con Photoshop.</p>
+            <article class="lesson-opening" aria-labelledby="lesson-one-title">
+                <p class="lesson-label">Prima lezione · 2 ore</p>
+                <h3 id="lesson-one-title">Conosciamoci<span>.</span></h3>
+                <p class="lesson-deck">Prima di lavorare insieme sulle immagini, scopriamo chi siamo e come ci si orienta nel programma.</p>
+                <div class="lesson-thought">
+                    <p>In due ore voi non potete conoscere a fondo me, io non posso conoscere a fondo voi e voi non potete conoscere a fondo Photoshop. Possiamo però iniziare dalle <strong>nostre interfacce.</strong></p>
+                </div>
+            </article>
+            <div class="interface-path" aria-label="I tre momenti della prima lezione">
+                <section class="interface-step">
+                    <span class="step-number" aria-hidden="true">01 / VOI → ME</span>
+                    <h4>Voi conoscete me</h4>
+                    <p>Partiamo da un mio lavoro: chi sono, che cosa faccio e come affronto le immagini nella mia attività.</p>
+                </section>
+                <section class="interface-step">
+                    <span class="step-number" aria-hidden="true">02 / IO → VOI</span>
+                    <h4>Io conosco voi</h4>
+                    <p>Mi raccontate da dove partite, quali strumenti usate già e che cosa vorreste imparare a fare con le immagini.</p>
+                </section>
+                <section class="interface-step">
+                    <span class="step-number" aria-hidden="true">03 / VOI → PS</span>
+                    <h4>Voi conoscete Photoshop</h4>
+                    <p>Apriamo il programma e ne leggiamo la mappa: documento, strumenti, opzioni e livelli. Cominciamo a muoverci.</p>
+                </section>
+            </div>
+            <div class="lesson-end"><p>Questo è il punto di partenza. Le prossime lezioni daranno profondità a ciò che oggi iniziamo a conoscere.</p><a href="#calendario">Guarda date e orari →</a></div>
         </section>
 
         <section class="panel" role="tabpanel" id="tab-archivio" aria-labelledby="btn-archivio" hidden>
@@ -180,7 +230,7 @@
             <div class="empty"><h3>Appunti in preparazione</h3><p>Le note del corso compariranno qui quando saranno pronte.</p></div>
         </section>
 
-        <section class="panel" role="tabpanel" id="tab-calendario" aria-labelledby="btn-calendario">
+        <section class="panel" role="tabpanel" id="tab-calendario" aria-labelledby="btn-calendario" hidden>
             <p class="kicker">1° semestre · A.A. 2026/2027</p>
             <h2>Calendario lezioni</h2>
             <p class="panel-intro">Modulo Photoshop di Comunicazione del progetto. Cerca la tua classe: le date riportate qui sono quelle confermate.</p>
@@ -312,7 +362,7 @@
 </div>
 
 <script>
-    // Ogni scheda ha un indirizzo condivisibile. Il calendario resta la vista iniziale finché il programma è in preparazione.
+    // Ogni scheda ha un indirizzo condivisibile. Il programma apre la pagina ora che la prima lezione è disponibile.
     const TAB_NAMES = {
         "tab-programma": "programma",
         "tab-archivio": "archivio",
@@ -322,7 +372,7 @@
         "tab-risorse": "risorse",
         "tab-scorciatoie": "scorciatoie"
     };
-    const DEFAULT_TAB = "tab-calendario";
+    const DEFAULT_TAB = "tab-programma";
 
     function openTab(id, updateAddress) {
         if (!TAB_NAMES[id]) return;
