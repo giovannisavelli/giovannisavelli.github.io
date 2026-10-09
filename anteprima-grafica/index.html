@@ -11,6 +11,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
+  <script src="hub.js" defer></script>
 </head>
 <body>
   <div class="concept-bar"><div class="shell"><span>Concept 01 / Nuova veste grafica</span><span>Anteprima separata · <a href="../">Apri il sito attuale ↗</a></span></div></div>
@@ -26,7 +27,22 @@
           <p class="eyebrow">Uno spazio per imparare a progettare</p>
           <h1 id="hub-title">Dall'idea<br>all'<em>immagine.</em></h1>
           <p class="hero-copy">Lezioni, materiali e strumenti dei corsi di <strong>Giovanni Savelli</strong> all'AANT. Un ambiente comune per Interior e Product Design, con un carattere diverso per ogni materia.</p>
-          <div class="hero-actions"><a class="primary-link" href="#interior">Esplora i corsi <span aria-hidden="true">↘</span></a><span class="micro-note">A.A. 2026/2027 · 6 corsi</span></div>
+          <div class="quick-access" aria-labelledby="quick-title">
+            <div class="quick-heading"><div><span>ACCESSO RAPIDO</span><h2 id="quick-title">Vai al tuo corso.</h2></div><small>Programma e date in un tocco</small></div>
+            <div class="last-course" id="last-course" hidden><span>ULTIMO CORSO APERTO</span><strong id="last-course-name"></strong><div><a id="last-course-open" href="#">Apri corso →</a><a id="last-course-calendar" href="#">Calendario →</a></div></div>
+            <div class="dept-switch" role="group" aria-label="Scegli il reparto"><button type="button" data-dept="interior" aria-pressed="true" aria-controls="quick-interior">Interior Design</button><button type="button" data-dept="product" aria-pressed="false" aria-controls="quick-product">Product Design</button></div>
+            <div class="quick-panel" id="quick-interior" data-dept-panel="interior">
+              <div class="quick-row"><div><strong>Rendering 3D</strong><small>2° anno · Cinema 4D e Corona</small></div><a href="corso.html?c=rendering-interior#programma">Programma</a><a href="corso.html?c=rendering-interior#calendario">Date</a></div>
+              <div class="quick-row"><div><strong>Photoshop</strong><small>2° anno · classi 2A, 2B, 2C</small></div><a href="corso.html?c=photoshop-interior#programma">Programma</a><a href="corso.html?c=photoshop-interior#calendario">Date</a></div>
+              <div class="quick-row"><div><strong>Intelligenza Artificiale</strong><small>3° anno · classi 3A, 3B, 3C</small></div><a href="corso.html?c=ia-interior#programma">Programma</a><a href="corso.html?c=ia-interior#calendario">Date</a></div>
+            </div>
+            <div class="quick-panel" id="quick-product" data-dept-panel="product" hidden>
+              <div class="quick-row"><div><strong>Modellazione 3D</strong><small>Corso in preparazione</small></div><a href="corso.html?c=modellazione-product#panoramica">Stato corso</a></div>
+              <div class="quick-row"><div><strong>Photoshop</strong><small>Corso in preparazione</small></div><a href="corso.html?c=photoshop-product#panoramica">Stato corso</a></div>
+              <div class="quick-row"><div><strong>Intelligenza Artificiale</strong><small>PD3 · calendario disponibile</small></div><a href="corso.html?c=ia-product#panoramica">Stato corso</a><a href="corso.html?c=ia-product#calendario">Date</a></div>
+            </div>
+          </div>
+          <div class="hero-actions"><a class="all-courses-link" href="#interior">Esplora tutte le card ↓</a><span class="micro-note">A.A. 2026/2027 · 6 corsi</span></div>
         </div>
         <div class="workbench" aria-hidden="true">
           <div class="workbench-top"><span class="traffic"><i></i><i></i><i></i></span><span>GS / CREATIVE WORKSPACE</span><span>001</span></div>
@@ -62,7 +78,7 @@
         </div>
       </section>
 
-      <section class="rationale" aria-labelledby="rationale-title"><h2 id="rationale-title">Un sistema.<br>Sei identità.</h2><article><b>01 / RICONOSCERE</b><h3>Un colore per materia</h3><p>Stessa struttura, ma ogni corso mantiene un segno immediatamente riconoscibile.</p></article><article><b>02 / ORIENTARSI</b><h3>Indice sempre visibile</h3><p>Le sezioni rimangono semplici, leggibili e facili da trovare anche sul telefono.</p></article><article><b>03 / STUDIARE</b><h3>Il contenuto guida</h3><p>La grafica dà gerarchia a lezioni e risorse, senza rubare spazio al materiale didattico.</p></article></section>
+      <section class="rationale" aria-labelledby="rationale-title"><h2 id="rationale-title">Meno passaggi.<br>Più corso.</h2><article><b>01 / ENTRARE</b><h3>Accesso immediato</h3><p>Programma e date sono raggiungibili dalla home, prima delle card e della grafica decorativa.</p></article><article><b>02 / TORNARE</b><h3>Il tuo corso resta lì</h3><p>Dopo la prima visita, un collegamento rapido riporta al corso aperto più di recente.</p></article><article><b>03 / TROVARE</b><h3>Solo la tua classe</h3><p>Nel calendario Photoshop scegli 2A, 2B o 2C e ritrovi la scelta alla visita successiva.</p></article></section>
     </main>
     <footer class="site-footer"><span>Giovanni Savelli · AANT · Concept grafico 01</span><a href="../">Vai al sito attuale ↗</a></footer>
   </div>

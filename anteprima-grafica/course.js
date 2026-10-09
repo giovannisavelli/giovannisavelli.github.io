@@ -54,6 +54,7 @@ const COURSES = {
 
 const slug = new URLSearchParams(location.search).get("c");
 const course = COURSES[slug] || COURSES["photoshop-interior"];
+try { localStorage.setItem("gs-preview-last-course", COURSES[slug] ? slug : "photoshop-interior"); } catch { /* Navigation works without storage. */ }
 document.documentElement.style.setProperty("--accent", course.accent);
 document.documentElement.style.setProperty("--accent-ink", "#091219");
 document.documentElement.style.setProperty("--wash", course.wash);
@@ -109,12 +110,20 @@ function dateCard(name, detail, rows) {
   return `<article class="date-card"><h3>${name}</h3><small>${detail}</small><ul>${rows.map(([day,hours]) => `<li><time>${day}</time><span>${hours}</span></li>`).join("")}</ul></article>`;
 }
 
+const photoshopDates = {
+  "2A": { detail: "6 incontri · 20 ore", rows: [["24 nov 2026","11–13"],["1 dic 2026","11–13"],["15 dic 2026","09–13"],["12 gen 2027","09–13"],["19 gen 2027","09–13"],["26 gen 2027","09–13"]] },
+  "2B": { detail: "5 incontri · 16 ore confermate", rows: [["24 nov 2026","14–16"],["1 dic 2026","14–16"],["15 dic 2026","14–18"],["12 gen 2027","14–18"],["26 gen 2027","14–18"]] },
+  "2C": { detail: "6 incontri · 16 ore confermate", rows: [["20 nov 2026","11–13"],["27 nov 2026","11–13"],["4 dic 2026","11–13"],["11 dic 2026","11–13"],["18 dic 2026","09–13"],["15 gen 2027","09–13"]] }
+};
+let selectedClass;
+try { selectedClass = localStorage.getItem("gs-preview-photoshop-class"); } catch { selectedClass = null; }
+if (!photoshopDates[selectedClass]) selectedClass = null;
+
 function calendar() {
   if (course.kind === "photoshop") {
-    return `<p class="content-kicker">1° semestre / Calendario</p><h2>Trova la tua classe.</h2><p class="content-lead">Qui compaiono solo gli incontri confermati. Per 2B e 2C resta un incontro di quattro ore in sospeso.</p><div class="date-grid">
-      ${dateCard("2A","6 incontri · 20 ore",[["24 nov 2026","11–13"],["1 dic 2026","11–13"],["15 dic 2026","09–13"],["12 gen 2027","09–13"],["19 gen 2027","09–13"],["26 gen 2027","09–13"]])}
-      ${dateCard("2B","5 incontri · 16 ore confermate",[["24 nov 2026","14–16"],["1 dic 2026","14–16"],["15 dic 2026","14–18"],["12 gen 2027","14–18"],["26 gen 2027","14–18"]])}
-      ${dateCard("2C","6 incontri · 16 ore confermate",[["20 nov 2026","11–13"],["27 nov 2026","11–13"],["4 dic 2026","11–13"],["11 dic 2026","11–13"],["18 dic 2026","09–13"],["15 gen 2027","09–13"]])}</div>`;
+    const choices = Object.keys(photoshopDates).map(name => `<button type="button" class="class-choice" data-class-choice="${name}" aria-pressed="${name === selectedClass}">${name}</button>`).join("");
+    const dates = selectedClass ? `<div class="date-grid one">${dateCard(selectedClass, photoshopDates[selectedClass].detail, photoshopDates[selectedClass].rows)}</div>` : `<p class="class-empty">Seleziona la tua classe per vedere le date.</p>`;
+    return `<p class="content-kicker">1° semestre / Calendario</p><h2>Trova la tua classe.</h2><p class="content-lead">Scegli la tua classe: vedrai solo gli incontri confermati. Per 2B e 2C resta un incontro di quattro ore in sospeso.</p><div class="class-picker"><span>LA TUA CLASSE</span><div class="class-choices" role="group" aria-label="Classe Photoshop Interior">${choices}</div></div>${dates}`;
   }
   if (course.kind === "rendering") return `<p class="content-kicker">Calendario / Rendering 3D</p><h2>Date da definire.</h2><p class="content-lead">Il calendario del secondo semestre 2026/2027 non è ancora disponibile. Questa è la veste prevista per le date, una volta confermate.</p><p class="preview-note">Lo stato aggiornato è nella <a href="${course.live}#calendario">pagina attuale ↗</a>.</p>`;
   if (course.kind === "ia") return `<p class="content-kicker">1° semestre / Calendario</p><h2>Classi 3A, 3B e 3C.</h2><p class="content-lead">Il calendario è già pubblicato. Nell'anteprima le classi avrebbero card separate, così ogni studente trova subito la propria.</p><div class="info-grid"><article class="info-card"><b>CLASSE</b><h3>3A</h3><p>Consulta tutte le date nel sito attuale.</p></article><article class="info-card"><b>CLASSE</b><h3>3B</h3><p>Consulta tutte le date nel sito attuale.</p></article><article class="info-card"><b>CLASSE</b><h3>3C</h3><p>Consulta tutte le date nel sito attuale.</p></article></div><p class="preview-note"><a href="${course.live}#calendario">Apri il calendario completo ↗</a></p>`;
@@ -164,6 +173,17 @@ nav.addEventListener("click", event => {
   const button = event.target.closest("button[data-section]");
   if (button) showSection(button.dataset.section, true);
 });
+content.addEventListener("click", event => {
+  const button = event.target.closest("button[data-class-choice]");
+  if (!button || !photoshopDates[button.dataset.classChoice]) return;
+  selectedClass = button.dataset.classChoice;
+  try { localStorage.setItem("gs-preview-photoshop-class", selectedClass); } catch { /* The current selection still works. */ }
+  showSection("calendario", false);
+  content.querySelector(`[data-class-choice="${selectedClass}"]`)?.focus();
+});
 window.addEventListener("popstate", () => showSection(location.hash.slice(1), false));
 window.addEventListener("hashchange", () => showSection(location.hash.slice(1), false));
 showSection(location.hash.slice(1) || course.first, false);
+if (location.hash && course.tabs.some(([key]) => `#${key}` === location.hash)) {
+  requestAnimationFrame(() => nav.scrollIntoView({ block: "start" }));
+}
