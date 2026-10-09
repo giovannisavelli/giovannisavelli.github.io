@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="it">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="robots" content="noindex,nofollow">
+  <meta name="theme-color" content="#0a0e13">
+  <title>Anteprima corso · Giovanni Savelli</title>
+  <meta name="description" content="Anteprima grafica navigabile di un corso dell'Hub docente di Giovanni Savelli.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <script src="course.js" defer></script>
+</head>
+<body>
+  <div class="concept-bar"><div class="shell"><span>Concept 01 / Anteprima di un corso</span><span>Contenuti completi nel <a id="bar-live" href="../">sito attuale ↗</a></span></div></div>
+  <div class="shell">
+    <header class="site-header">
+      <a class="brand" href="./" aria-label="Torna all'anteprima dell'Hub docente"><span class="brand-mark">GS</span><span class="brand-label"><strong>Giovanni Savelli</strong><small>Hub docente / AANT</small></span></a>
+      <nav class="header-links" aria-label="Navigazione principale"><a href="./#interior">Interior Design</a><a href="./#product">Product Design</a><a class="header-live" id="header-live" href="../">Sito attuale ↗</a></nav>
+    </header>
+
+    <main>
+      <div class="course-hero">
+        <section class="course-intro" aria-labelledby="course-title">
+          <div class="crumb"><a href="./">Hub dei corsi</a><i>/</i><span id="course-department">Interior Design</span><i>/</i><span id="course-year">2° anno</span></div>
+          <h1 id="course-title">Photoshop<span>.</span></h1>
+          <p id="course-description">Un ambiente per lezioni, materiali e strumenti del corso.</p>
+          <div class="course-meta" id="course-meta"></div>
+        </section>
+        <div class="course-cover" aria-hidden="true"><div class="cover-top"><span id="cover-top-left">AANT / INTERIOR</span><span>GS 2026/27</span></div><div class="cover-mark" id="cover-mark">Ps</div><div class="cover-foot"><span id="cover-foot-left">IMMAGINE / PROGETTO</span><span>↗ 01</span></div></div>
+      </div>
+
+      <div class="course-status"><span id="course-status-label">Corso</span><p id="course-status-text">Questa è una proposta grafica navigabile.</p><a id="course-live" href="../">Apri il corso attuale ↗</a></div>
+      <nav class="section-nav" role="tablist" aria-label="Sezioni del corso" id="course-nav"></nav>
+      <section class="content-shell" role="tabpanel" id="course-content" aria-live="polite"></section>
+      <div class="course-bottom"><span>Anteprima grafica: struttura e contenuti campione. Il sito attuale resta disponibile.</span><a href="./">← Torna a tutti i corsi</a></div>
+    </main>
+
+    <footer class="site-footer"><span>Giovanni Savelli · AANT · Concept grafico 01</span><a id="footer-live" href="../">Apri il corso attuale ↗</a></footer>
+  </div>
+</body>
+</html>
