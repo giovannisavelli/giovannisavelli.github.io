@@ -2,112 +2,256 @@
 <html lang="it">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Photoshop · Interior Design | AANT</title>
-    <meta name="description" content="Calendario di Photoshop per le classi 2A, 2B e 2C di Interior Design - Prof. Giovanni Savelli - AANT.">
-    <meta property="og:title" content="Photoshop · Interior Design">
-    <meta property="og:description" content="Calendario del primo semestre 2026/2027 disponibile; materiali del corso in preparazione.">
-    <meta name="theme-color" content="#07080c">
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎨</text></svg>">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&family=JetBrains+Mono:wght@400;600&family=Space+Grotesk:wght@700&display=swap" rel="stylesheet">
-
-    <!-- =====================================================================
-         PAGINA PROVVISORIA "IN PREPARAZIONE".
-         Quando il corso è pronto, sostituisci questo file con la pagina completa
-         (stesso nome: index.html, stessa cartella) e nell'hub (../../index.html)
-         cambia lo stato del corso da 'preparazione' a 'disponibile'.
-         ===================================================================== -->
+    <meta name="description" content="Corso di Photoshop per Interior Design, 2° anno AANT: programma, lezioni, appunti, calendario, video e risorse. Prof. Giovanni Savelli.">
+    <meta property="og:title" content="Photoshop · Interior Design | AANT">
+    <meta property="og:description" content="Calendario 2026/2027 delle classi 2A, 2B e 2C e materiali del corso.">
+    <meta name="theme-color" content="#080b11">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='18' fill='%230b1624'/><text x='50' y='68' text-anchor='middle' font-size='55' font-family='Arial' fill='%2331A8FF'>Ps</text></svg>">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
     <style>
-        :root { --bg: #07080c; --border: rgba(255,255,255,0.08); --text: #f5f5f7; --muted: #8b8b94; --c: #31A8FF; --glow: rgba(49, 168, 255, 0.14); --wip: #fbbf24; }
+        :root {
+            --bg: #080b11;
+            --surface: #101620;
+            --surface-strong: #151e2b;
+            --border: rgba(163, 195, 225, .16);
+            --text: #f4f8fc;
+            --muted: #aab8c8;
+            --accent: #31a8ff;
+            --accent-soft: rgba(49, 168, 255, .12);
+            --warning: #fbbf24;
+            --radius: 18px;
+        }
         *, *::before, *::after { box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
         body {
-            margin: 0; min-height: 100vh; background: var(--bg); color: var(--text); font-family: 'Inter', -apple-system, sans-serif;
-            -webkit-font-smoothing: antialiased; display: flex; align-items: center; justify-content: center; padding: 16px; overflow-x: hidden;
+            margin: 0;
+            min-height: 100vh;
+            background: radial-gradient(circle at 85% 0, rgba(49,168,255,.14), transparent 38%), radial-gradient(circle at 0 48%, rgba(33,88,151,.09), transparent 38%), var(--bg);
+            color: var(--text);
+            font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+            -webkit-font-smoothing: antialiased;
         }
-        .bg-grid {
-            position: fixed; inset: 0; z-index: -2; pointer-events: none;
-            background-image: linear-gradient(rgba(255,255,255,0.035) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.035) 1px, transparent 1px);
-            background-size: 48px 48px;
-            -webkit-mask-image: radial-gradient(ellipse 70% 60% at 50% 40%, #000 20%, transparent 100%);
-                    mask-image: radial-gradient(ellipse 70% 60% at 50% 40%, #000 20%, transparent 100%);
+        button { font: inherit; }
+        a { color: inherit; }
+        .shell { width: min(1120px, calc(100% - 32px)); margin: 0 auto; }
+        .topbar { display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap; padding: 22px 0; }
+        .back-link { color: var(--muted); font-family: "JetBrains Mono", monospace; font-size: 12px; text-decoration: none; }
+        .back-link:hover, .back-link:focus-visible { color: var(--accent); }
+        .year { border: 1px solid var(--border); border-radius: 100px; padding: 7px 12px; color: var(--muted); font-family: "JetBrains Mono", monospace; font-size: 11px; }
+        .hero {
+            display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 28px; align-items: center;
+            margin: 10px 0 24px; padding: clamp(28px, 6vw, 56px);
+            border: 1px solid rgba(49,168,255,.26); border-radius: 24px;
+            background: linear-gradient(125deg, #122239, #0c1420 60%, #101b2c);
+            box-shadow: 0 18px 55px rgba(0,0,0,.22);
         }
-        .bg-glow { position: fixed; z-index: -1; width: 520px; height: 520px; border-radius: 50%; background: var(--c); filter: blur(110px); opacity: 0.22; top: 50%; left: 50%; transform: translate(-50%, -60%); pointer-events: none; }
-        .box { width: 100%; max-width: 800px; text-align: center; }
-        .icon { width: 64px; height: 64px; margin: 0 auto 22px; border-radius: 16px; display: grid; place-items: center; color: var(--c); background: var(--glow); border: 1px solid var(--border); }
-        .icon svg { width: 32px; height: 32px; fill: none; stroke: currentColor; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
-        .dept { font-family: 'JetBrains Mono', monospace; font-size: 12px; letter-spacing: 1px; text-transform: uppercase; color: var(--muted); }
-        h1 { margin: 10px 0 16px; font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: clamp(34px, 9vw, 52px); line-height: 1.05; letter-spacing: -0.02em; }
-        .status { display: inline-flex; align-items: center; gap: 8px; font-family: 'JetBrains Mono', monospace; font-size: 12px; text-transform: uppercase; letter-spacing: 0.5px; color: var(--c); padding: 6px 12px; border-radius: 50px; border: 1px solid var(--border); }
-        .status::before { content: ''; width: 7px; height: 7px; border-radius: 50%; background: var(--c); }
-        p { margin: 22px 0 32px; color: var(--muted); font-size: 15px; line-height: 1.6; }
-        .calendar { margin: 32px 0; text-align: left; }
-        .calendar h2 { margin: 0 0 8px; font-family: 'Space Grotesk', sans-serif; font-size: 27px; }
-        .calendar-intro { margin: 0 0 20px; }
-        .class-block { margin: 16px 0; padding: 18px; border: 1px solid var(--border); border-radius: 16px; background: rgba(255,255,255,0.03); }
-        .class-block h3 { margin: 0 0 14px; color: var(--c); font-family: 'Space Grotesk', sans-serif; font-size: 20px; }
+        .eyebrow, .kicker { margin: 0 0 12px; color: var(--accent); font-family: "JetBrains Mono", monospace; font-size: 11px; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; }
+        h1 { margin: 0; font-family: "Space Grotesk", sans-serif; font-size: clamp(38px, 7vw, 72px); line-height: 1; letter-spacing: -.04em; }
+        .subtitle { margin: 18px 0 0; max-width: 630px; color: #d6e5f1; font-size: clamp(15px, 2vw, 18px); line-height: 1.55; }
+        .meta { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 22px; }
+        .meta span { border: 1px solid var(--border); border-radius: 100px; padding: 7px 11px; color: var(--muted); font-size: 12px; }
+        .ps-mark { display: grid; place-items: center; width: clamp(80px, 14vw, 146px); aspect-ratio: 1; border: 2px solid #31a8ff; border-radius: 22px; background: #071e34; color: #31a8ff; font-family: Inter, sans-serif; font-size: clamp(42px, 7vw, 78px); font-weight: 700; letter-spacing: -.08em; box-shadow: 0 0 48px rgba(49,168,255,.15); }
+        .notice { display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap; margin-bottom: 24px; padding: 17px 20px; border: 1px solid rgba(49,168,255,.28); border-radius: var(--radius); background: var(--accent-soft); }
+        .notice strong { display: block; font-size: 15px; }
+        .notice p { margin: 4px 0 0; color: var(--muted); font-size: 13px; line-height: 1.5; }
+        .notice a { display: inline-flex; align-items: center; min-height: 42px; border-radius: 100px; padding: 10px 16px; background: var(--accent); color: #06111d; font-size: 13px; font-weight: 700; text-decoration: none; white-space: nowrap; }
+        .notice a:hover, .notice a:focus-visible { background: #7ccbff; }
+        .tabs { display: flex; gap: 9px; flex-wrap: wrap; margin-bottom: 24px; scroll-margin-top: 24px; }
+        .tab-btn { min-height: 43px; border: 1px solid var(--border); border-radius: 100px; padding: 10px 15px; background: var(--surface); color: var(--muted); font-size: 13px; font-weight: 600; cursor: pointer; }
+        .tab-btn:hover, .tab-btn:focus-visible { border-color: var(--accent); color: var(--text); }
+        .tab-btn[aria-selected="true"] { border-color: var(--accent); background: var(--accent); color: #06111d; }
+        .panel { min-height: 280px; padding: clamp(22px, 4vw, 36px); border: 1px solid var(--border); border-radius: 22px; background: rgba(16,22,32,.9); }
+        .panel[hidden] { display: none; }
+        .panel h2 { margin: 0 0 12px; font-family: "Space Grotesk", sans-serif; font-size: clamp(25px, 3.8vw, 33px); }
+        .panel-intro { max-width: 730px; margin: 0 0 24px; color: var(--muted); font-size: 15px; line-height: 1.65; }
+        .empty { max-width: 720px; padding: 28px; border: 1px dashed rgba(163,195,225,.26); border-radius: 16px; background: rgba(255,255,255,.02); }
+        .empty h3 { margin: 0 0 8px; font-size: 18px; }
+        .empty p { margin: 0; color: var(--muted); font-size: 14px; line-height: 1.65; }
+        .calendar-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 290px), 1fr)); gap: 16px; }
+        .class-card { padding: 21px; border: 1px solid var(--border); border-radius: var(--radius); background: var(--surface-strong); }
+        .class-card h3 { margin: 0 0 4px; color: var(--accent); font-family: "Space Grotesk", sans-serif; font-size: 24px; }
+        .class-detail { margin: 0 0 16px; color: var(--muted); font-size: 12px; }
         .schedule-list { margin: 0; padding: 0; list-style: none; }
-        .schedule-list li { display: flex; justify-content: space-between; gap: 16px; padding: 10px 0; border-top: 1px solid var(--border); font-size: 14px; }
+        .schedule-list li { display: flex; justify-content: space-between; gap: 12px; padding: 11px 0; border-top: 1px solid var(--border); font-size: 13px; line-height: 1.4; }
         .schedule-list time { font-weight: 600; }
-        .schedule-list span { color: var(--muted); white-space: nowrap; }
-        .calendar-note { margin: 18px 0 0; padding: 14px 16px; border: 1px solid rgba(251,191,36,0.25); border-radius: 12px; color: #fbbf24; background: rgba(251,191,36,0.06); }
-        @media (max-width: 480px) { .schedule-list li { flex-wrap: wrap; gap: 3px 12px; } }
-        a.back {
-            display: inline-block; padding: 14px 24px; border-radius: 50px; text-decoration: none; color: var(--text);
-            font-family: 'JetBrains Mono', monospace; font-weight: 600; font-size: 13px; border: 1px solid var(--c); background: var(--glow); transition: transform 0.2s ease;
+        .schedule-list span { color: #c1d3e5; white-space: nowrap; }
+        .calendar-note { margin: 20px 0 0; padding: 15px 17px; border: 1px solid rgba(251,191,36,.3); border-radius: 13px; background: rgba(251,191,36,.07); color: #f9d77e; font-size: 13px; line-height: 1.6; }
+        .site-footer { display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap; padding: 30px 0 40px; color: var(--muted); font-family: "JetBrains Mono", monospace; font-size: 11px; }
+        .site-footer a { color: var(--text); text-decoration: none; }
+        .site-footer a:hover { color: var(--accent); }
+        @media (max-width: 620px) {
+            .hero { grid-template-columns: 1fr; }
+            .ps-mark { grid-row: 1; width: 74px; border-radius: 14px; font-size: 42px; }
+            .schedule-list li { flex-wrap: wrap; gap: 3px 10px; }
         }
-        a.back:hover { transform: translateY(-2px); }
-        footer { margin-top: 48px; font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--muted); }
+        @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
     </style>
 </head>
 <body>
-    <div class="bg-grid"></div>
-    <div class="bg-glow"></div>
-
-    <div class="box">
-        <div class="icon"><svg viewBox="0 0 24 24"><path d="M12 3 2.5 8 12 13l9.5-5z"/><path d="m2.5 12.5 9.5 5 9.5-5"/><path d="m2.5 16.5 9.5 5 9.5-5"/></svg></div>
-        <span class="dept">AANT · Interior Design</span>
-        <h1>Photoshop</h1>
-        <span class="status">Calendario disponibile</span>
-        <p>Le date del primo semestre sono qui sotto per 2A, 2B e 2C. Il materiale didattico è ancora in preparazione.</p>
-        <section class="calendar" id="calendario" aria-labelledby="calendar-title">
-            <h2 id="calendar-title">Calendario lezioni · 2026/2027</h2>
-            <p class="calendar-intro">Modulo Photoshop di Comunicazione del progetto. Trova la tua classe qui sotto.</p>
-            <div class="class-block">
-                <h3>Classe 2A</h3>
-                <ul class="schedule-list">
-                    <li><time datetime="2026-11-24">Mar 24 nov 2026</time><span>11:00–13:00</span></li>
-                    <li><time datetime="2026-12-01">Mar 1 dic 2026</time><span>11:00–13:00</span></li>
-                    <li><time datetime="2026-12-15">Mar 15 dic 2026</time><span>09:00–13:00</span></li>
-                    <li><time datetime="2027-01-12">Mar 12 gen 2027</time><span>09:00–13:00</span></li>
-                    <li><time datetime="2027-01-19">Mar 19 gen 2027</time><span>09:00–13:00</span></li>
-                    <li><time datetime="2027-01-26">Mar 26 gen 2027</time><span>09:00–13:00</span></li>
-                </ul>
-            </div>
-            <div class="class-block">
-                <h3>Classe 2B</h3>
-                <ul class="schedule-list">
-                    <li><time datetime="2026-11-24">Mar 24 nov 2026</time><span>14:00–16:00</span></li>
-                    <li><time datetime="2026-12-01">Mar 1 dic 2026</time><span>14:00–16:00</span></li>
-                    <li><time datetime="2026-12-15">Mar 15 dic 2026</time><span>14:00–18:00</span></li>
-                    <li><time datetime="2027-01-12">Mar 12 gen 2027</time><span>14:00–18:00</span></li>
-                    <li><time datetime="2027-01-26">Mar 26 gen 2027</time><span>14:00–18:00</span></li>
-                </ul>
-            </div>
-            <div class="class-block">
-                <h3>Classe 2C</h3>
-                <ul class="schedule-list">
-                    <li><time datetime="2026-11-20">Ven 20 nov 2026</time><span>11:00–13:00</span></li>
-                    <li><time datetime="2026-11-27">Ven 27 nov 2026</time><span>11:00–13:00</span></li>
-                    <li><time datetime="2026-12-04">Ven 4 dic 2026</time><span>11:00–13:00</span></li>
-                    <li><time datetime="2026-12-11">Ven 11 dic 2026</time><span>11:00–13:00</span></li>
-                    <li><time datetime="2026-12-18">Ven 18 dic 2026</time><span>09:00–13:00</span></li>
-                    <li><time datetime="2027-01-15">Ven 15 gen 2027</time><span>09:00–13:00</span></li>
-                </ul>
-            </div>
-            <p class="calendar-note">Per 2B e 2C manca ancora la conferma di un incontro di 4 ore. Le date qui sopra sono quelle non in discussione.</p>
-        </section>
-        <a class="back" href="../../">← Torna all'hub dei corsi</a>
-        <footer>Giovanni Savelli · A.A. 2026/2027</footer>
+<div class="shell">
+    <div class="topbar">
+        <a class="back-link" href="../../">← Tutti i corsi del docente</a>
+        <span class="year">A.A. 2026/2027</span>
     </div>
+
+    <header class="hero">
+        <div>
+            <p class="eyebrow">AANT · Interior Design · 2° anno</p>
+            <h1>Photoshop</h1>
+            <p class="subtitle">Modulo di Comunicazione del progetto. Programma, lezioni e materiali del corso del prof. Giovanni Savelli.</p>
+            <div class="meta"><span>1° semestre</span><span>Classi 2A · 2B · 2C</span><span>Novembre 2026 – gennaio 2027</span></div>
+        </div>
+        <div class="ps-mark" aria-hidden="true">Ps</div>
+    </header>
+
+    <div class="notice">
+        <div><strong>Calendario delle lezioni disponibile</strong><p>Il programma e i materiali saranno organizzati qui durante la preparazione del corso.</p></div>
+        <a href="#calendario">Vedi date e orari →</a>
+    </div>
+
+    <main>
+        <nav class="tabs" id="calendario" role="tablist" aria-label="Sezioni del corso">
+            <button class="tab-btn" type="button" role="tab" id="btn-programma" data-tab="tab-programma" aria-controls="tab-programma" aria-selected="false">Programma lezioni</button>
+            <button class="tab-btn" type="button" role="tab" id="btn-archivio" data-tab="tab-archivio" aria-controls="tab-archivio" aria-selected="false">Archivio lezioni</button>
+            <button class="tab-btn" type="button" role="tab" id="btn-appunti" data-tab="tab-appunti" aria-controls="tab-appunti" aria-selected="false">Appunti</button>
+            <button class="tab-btn" type="button" role="tab" id="btn-calendario" data-tab="tab-calendario" aria-controls="tab-calendario" aria-selected="true">Calendario</button>
+            <button class="tab-btn" type="button" role="tab" id="btn-video" data-tab="tab-video" aria-controls="tab-video" aria-selected="false">Video</button>
+            <button class="tab-btn" type="button" role="tab" id="btn-risorse" data-tab="tab-risorse" aria-controls="tab-risorse" aria-selected="false">Risorse</button>
+            <button class="tab-btn" type="button" role="tab" id="btn-scorciatoie" data-tab="tab-scorciatoie" aria-controls="tab-scorciatoie" aria-selected="false">Scorciatoie</button>
+        </nav>
+
+        <section class="panel" role="tabpanel" id="tab-programma" aria-labelledby="btn-programma" hidden>
+            <p class="kicker">Il percorso</p>
+            <h2>Programma lezioni</h2>
+            <p class="panel-intro">Qui troverai la sequenza delle lezioni, gli obiettivi e le attività del modulo.</p>
+            <div class="empty"><h3>Programma in preparazione</h3><p>Gli argomenti verranno inseriti dopo la definizione del percorso didattico. Le date già confermate sono nella scheda Calendario.</p></div>
+        </section>
+
+        <section class="panel" role="tabpanel" id="tab-archivio" aria-labelledby="btn-archivio" hidden>
+            <p class="kicker">Lezioni svolte</p>
+            <h2>Archivio lezioni</h2>
+            <p class="panel-intro">Le schede delle lezioni passate saranno raccolte qui, in ordine cronologico.</p>
+            <div class="empty"><h3>Archivio ancora vuoto</h3><p>Il corso inizia a novembre 2026. Le lezioni verranno aggiunte dopo il loro svolgimento.</p></div>
+        </section>
+
+        <section class="panel" role="tabpanel" id="tab-appunti" aria-labelledby="btn-appunti" hidden>
+            <p class="kicker">Materiale di studio</p>
+            <h2>Appunti</h2>
+            <p class="panel-intro">Spazio per spiegazioni, esempi e indicazioni da consultare tra una lezione e l'altra.</p>
+            <div class="empty"><h3>Appunti in preparazione</h3><p>Le note del corso compariranno qui quando saranno pronte.</p></div>
+        </section>
+
+        <section class="panel" role="tabpanel" id="tab-calendario" aria-labelledby="btn-calendario">
+            <p class="kicker">1° semestre · A.A. 2026/2027</p>
+            <h2>Calendario lezioni</h2>
+            <p class="panel-intro">Modulo Photoshop di Comunicazione del progetto. Cerca la tua classe: le date riportate qui sono quelle confermate.</p>
+            <div class="calendar-grid">
+                <section class="class-card" aria-labelledby="classe-2a">
+                    <h3 id="classe-2a">Classe 2A</h3>
+                    <p class="class-detail">6 incontri · 20 ore confermate</p>
+                    <ul class="schedule-list">
+                        <li><time datetime="2026-11-24">Mar 24 nov 2026</time><span>11:00–13:00</span></li>
+                        <li><time datetime="2026-12-01">Mar 1 dic 2026</time><span>11:00–13:00</span></li>
+                        <li><time datetime="2026-12-15">Mar 15 dic 2026</time><span>09:00–13:00</span></li>
+                        <li><time datetime="2027-01-12">Mar 12 gen 2027</time><span>09:00–13:00</span></li>
+                        <li><time datetime="2027-01-19">Mar 19 gen 2027</time><span>09:00–13:00</span></li>
+                        <li><time datetime="2027-01-26">Mar 26 gen 2027</time><span>09:00–13:00</span></li>
+                    </ul>
+                </section>
+                <section class="class-card" aria-labelledby="classe-2b">
+                    <h3 id="classe-2b">Classe 2B</h3>
+                    <p class="class-detail">5 incontri · 16 ore confermate</p>
+                    <ul class="schedule-list">
+                        <li><time datetime="2026-11-24">Mar 24 nov 2026</time><span>14:00–16:00</span></li>
+                        <li><time datetime="2026-12-01">Mar 1 dic 2026</time><span>14:00–16:00</span></li>
+                        <li><time datetime="2026-12-15">Mar 15 dic 2026</time><span>14:00–18:00</span></li>
+                        <li><time datetime="2027-01-12">Mar 12 gen 2027</time><span>14:00–18:00</span></li>
+                        <li><time datetime="2027-01-26">Mar 26 gen 2027</time><span>14:00–18:00</span></li>
+                    </ul>
+                </section>
+                <section class="class-card" aria-labelledby="classe-2c">
+                    <h3 id="classe-2c">Classe 2C</h3>
+                    <p class="class-detail">6 incontri · 16 ore confermate</p>
+                    <ul class="schedule-list">
+                        <li><time datetime="2026-11-20">Ven 20 nov 2026</time><span>11:00–13:00</span></li>
+                        <li><time datetime="2026-11-27">Ven 27 nov 2026</time><span>11:00–13:00</span></li>
+                        <li><time datetime="2026-12-04">Ven 4 dic 2026</time><span>11:00–13:00</span></li>
+                        <li><time datetime="2026-12-11">Ven 11 dic 2026</time><span>11:00–13:00</span></li>
+                        <li><time datetime="2026-12-18">Ven 18 dic 2026</time><span>09:00–13:00</span></li>
+                        <li><time datetime="2027-01-15">Ven 15 gen 2027</time><span>09:00–13:00</span></li>
+                    </ul>
+                </section>
+            </div>
+            <p class="calendar-note">Per 2B e 2C resta in sospeso un incontro di 4 ore per ciascuna classe. Le date qui sopra sono quelle non in discussione.</p>
+        </section>
+
+        <section class="panel" role="tabpanel" id="tab-video" aria-labelledby="btn-video" hidden>
+            <p class="kicker">Dimostrazioni</p>
+            <h2>Video</h2>
+            <p class="panel-intro">I video delle tecniche e degli esercizi saranno organizzati per argomento.</p>
+            <div class="empty"><h3>Video in preparazione</h3><p>I collegamenti compariranno qui quando saranno selezionati.</p></div>
+        </section>
+
+        <section class="panel" role="tabpanel" id="tab-risorse" aria-labelledby="btn-risorse" hidden>
+            <p class="kicker">File utili</p>
+            <h2>Risorse</h2>
+            <p class="panel-intro">Qui saranno raccolti file di lavoro, riferimenti e materiali scaricabili.</p>
+            <div class="empty"><h3>Risorse in preparazione</h3><p>I file del corso verranno aggiunti in questa sezione.</p></div>
+        </section>
+
+        <section class="panel" role="tabpanel" id="tab-scorciatoie" aria-labelledby="btn-scorciatoie" hidden>
+            <p class="kicker">Consultazione rapida</p>
+            <h2>Scorciatoie</h2>
+            <p class="panel-intro">Una guida rapida ai comandi utili di Photoshop.</p>
+            <div class="empty"><h3>Elenco in preparazione</h3><p>Le scorciatoie usate nelle lezioni saranno raccolte qui.</p></div>
+        </section>
+    </main>
+
+    <footer class="site-footer"><span>Photoshop · Interior Design · Giovanni Savelli · A.A. 2026/2027</span><a href="../../">← Tutti i corsi del docente</a></footer>
+</div>
+
+<script>
+    // Ogni scheda ha un indirizzo condivisibile. Il calendario resta la vista iniziale finché il programma è in preparazione.
+    const TAB_NAMES = {
+        "tab-programma": "programma",
+        "tab-archivio": "archivio",
+        "tab-appunti": "appunti",
+        "tab-calendario": "calendario",
+        "tab-video": "video",
+        "tab-risorse": "risorse",
+        "tab-scorciatoie": "scorciatoie"
+    };
+    const DEFAULT_TAB = "tab-calendario";
+
+    function openTab(id, updateAddress) {
+        if (!TAB_NAMES[id]) return;
+        document.querySelectorAll(".tab-btn").forEach(function (button) {
+            const selected = button.dataset.tab === id;
+            button.setAttribute("aria-selected", String(selected));
+        });
+        document.querySelectorAll(".panel").forEach(function (panel) {
+            panel.hidden = panel.id !== id;
+        });
+        if (updateAddress && location.hash !== "#" + TAB_NAMES[id]) {
+            history.pushState(null, "", "#" + TAB_NAMES[id]);
+        }
+    }
+
+    function showTabFromHash() {
+        const id = Object.keys(TAB_NAMES).find(function (key) {
+            return "#" + TAB_NAMES[key] === location.hash;
+        }) || DEFAULT_TAB;
+        openTab(id, false);
+    }
+
+    document.querySelectorAll(".tab-btn").forEach(function (button) {
+        button.addEventListener("click", function () { openTab(button.dataset.tab, true); });
+    });
+    window.addEventListener("popstate", showTabFromHash);
+    window.addEventListener("hashchange", showTabFromHash);
+    showTabFromHash();
+</script>
 </body>
 </html>
