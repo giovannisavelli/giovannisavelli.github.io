@@ -40,6 +40,12 @@ if (previewCourses[lastSlug]) {
   box.hidden = false;
 }
 
+for (const link of document.querySelectorAll('a[href*="corso.html?c="]')) {
+  const url = new URL(link.href);
+  url.searchParams.set("v", "ux-20261009-2");
+  link.href = url.href;
+}
+
 document.addEventListener("click", event => {
   const link = event.target.closest('a[href*="corso.html?c="]');
   if (!link) return;
