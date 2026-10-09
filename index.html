@@ -128,6 +128,7 @@
         .status::before { content: ''; width: 6px; height: 6px; border-radius: 50%; }
         .status.ok { color: var(--ok); } .status.ok::before { background: var(--ok); box-shadow: 0 0 8px var(--ok); }
         .status.wip { color: var(--wip); } .status.wip::before { background: transparent; border: 1.5px solid var(--wip); }
+        .status.wait { color: var(--wip); } .status.wait::before { background: transparent; border: 1.5px solid var(--wip); }
 
         .card-body { position: relative; flex: 1; }
         .card h3 { margin: 0; font-family: var(--font-head); font-weight: 700; font-size: 23px; letter-spacing: -0.01em; }
@@ -185,7 +186,8 @@
 <script>
     // =====================================================================
     //  DATI DELL'HUB: per aggiornare l'hub basta modificare questa parte.
-    //  - stato: 'disponibile' oppure 'preparazione'
+    //  - stato: 'disponibile' oppure 'preparazione' (materiali del corso)
+    //  - calendario: 'pubblicato', 'da-definire' oppure omesso
     //  - anno:  lascia '' se non vuoi mostrarlo
     // =====================================================================
     const ANNO_ACCADEMICO = 'A.A. 2026/2027';
@@ -194,9 +196,9 @@
         {
             nome: 'Interior Design', colore: '#a78bfa',
             corsi: [
-                { titolo: 'Rendering 3D', descrizione: 'Modellazione 3D e rendering fotorealistico con Corona.', anno: '2° anno', tag: ['Cinema 4D', 'Corona'], link: 'interior/rendering3d/', stato: 'disponibile', icona: 'cubo', colore: '#9146FF', glow: 'rgba(145, 70, 255, 0.16)' },
-                { titolo: 'Photoshop', descrizione: 'Calendario del 1° semestre disponibile; materiali in preparazione.', anno: '2° anno', tag: ['Photoshop'], link: 'interior/photoshop/', stato: 'preparazione', icona: 'livelli', colore: '#31A8FF', glow: 'rgba(49, 168, 255, 0.14)' },
-                { titolo: 'Intelligenza Artificiale', descrizione: 'Prompt, immagini e strumenti IA per l’Interior Design.', anno: '3° anno', tag: ['IA generativa'], link: 'interior/ia/', stato: 'disponibile', icona: 'ia', colore: '#34d399', glow: 'rgba(52, 211, 153, 0.13)' }
+                { titolo: 'Rendering 3D', descrizione: 'Materiali disponibili. Calendario del 2° semestre ancora da definire.', anno: '2° anno', tag: ['Cinema 4D', 'Corona'], link: 'interior/rendering3d/#calendario', stato: 'disponibile', calendario: 'da-definire', icona: 'cubo', colore: '#9146FF', glow: 'rgba(145, 70, 255, 0.16)' },
+                { titolo: 'Photoshop', descrizione: 'Calendario 2A, 2B e 2C del 1° semestre disponibile; materiali in preparazione.', anno: '2° anno', tag: ['Photoshop'], link: 'interior/photoshop/#calendario', stato: 'preparazione', calendario: 'pubblicato', icona: 'livelli', colore: '#31A8FF', glow: 'rgba(49, 168, 255, 0.14)' },
+                { titolo: 'Intelligenza Artificiale', descrizione: 'Calendario 3A, 3B e 3C del 1° semestre disponibile.', anno: '3° anno', tag: ['IA generativa'], link: 'interior/ia/#calendario', stato: 'disponibile', calendario: 'pubblicato', icona: 'ia', colore: '#34d399', glow: 'rgba(52, 211, 153, 0.13)' }
             ]
         },
         {
@@ -204,7 +206,7 @@
             corsi: [
                 { titolo: 'Modellazione 3D', descrizione: 'Modellazione 3D per il progetto di prodotto.', anno: '', tag: ['3D'], link: 'product/modellazione/', stato: 'preparazione', icona: 'compasso', colore: '#fb923c', glow: 'rgba(251, 146, 60, 0.14)' },
                 { titolo: 'Photoshop', descrizione: 'Fotoritocco e post-produzione per i progetti di prodotto.', anno: '', tag: ['Photoshop'], link: 'product/photoshop/', stato: 'preparazione', icona: 'livelli', colore: '#31A8FF', glow: 'rgba(49, 168, 255, 0.14)' },
-                { titolo: 'Intelligenza Artificiale', descrizione: 'Calendario del 1° semestre disponibile; materiali in preparazione.', anno: '3° anno', tag: ['IA generativa'], link: 'product/ia/', stato: 'preparazione', icona: 'ia', colore: '#34d399', glow: 'rgba(52, 211, 153, 0.13)' }
+                { titolo: 'Intelligenza Artificiale', descrizione: 'Calendario PD3 del 1° semestre disponibile; materiali in preparazione.', anno: '3° anno', tag: ['IA generativa'], link: 'product/ia/#calendario', stato: 'preparazione', calendario: 'pubblicato', icona: 'ia', colore: '#34d399', glow: 'rgba(52, 211, 153, 0.13)' }
             ]
         }
     ];
@@ -220,20 +222,25 @@
     document.getElementById('anno').textContent = ANNO_ACCADEMICO;
     document.getElementById('anno-footer').textContent = ANNO_ACCADEMICO;
 
-    let html = '', totale = 0, disponibili = 0;
+    let html = '', totale = 0, calendariPubblicati = 0;
     REPARTI.forEach((rep, i) => {
         html += `<section class="dept" style="--dept-color: ${rep.colore};">
             <div class="dept-head"><span class="dept-index">0${i + 1}</span><h2 class="dept-title">${rep.nome}</h2><span class="dept-line"></span></div>
             <div class="grid">`;
         rep.corsi.forEach(c => {
             const ok = c.stato === 'disponibile';
-            totale++; if (ok) disponibili++;
+            const hasCalendar = c.calendario === 'pubblicato';
+            const calendarPending = c.calendario === 'da-definire';
+            totale++; if (hasCalendar) calendariPubblicati++;
+            const statusText = hasCalendar ? 'Calendario disponibile' : calendarPending ? 'Date da definire' : ok ? 'Disponibile' : 'In preparazione';
+            const statusClass = hasCalendar || ok && !calendarPending ? 'ok' : calendarPending ? 'wait' : 'wip';
+            const actionText = hasCalendar ? 'Vedi calendario' : calendarPending ? 'Stato calendario' : ok ? 'Entra' : 'Info';
             const tags = (c.anno ? [c.anno] : []).concat(c.tag).map(t => `<span class="tag">${t}</span>`).join('');
             html += `
-                <a class="card ${ok ? '' : 'wip'}" href="${c.link}" style="--c: ${c.colore}; --glow: ${c.glow};">
+                <a class="card ${ok || hasCalendar ? '' : 'wip'}" href="${c.link}" style="--c: ${c.colore}; --glow: ${c.glow};">
                     <div class="card-top">
                         <span class="icon">${ICONE[c.icona]}</span>
-                        <span class="status ${ok ? 'ok' : 'wip'}">${ok ? 'Disponibile' : 'In preparazione'}</span>
+                        <span class="status ${statusClass}">${statusText}</span>
                     </div>
                     <div class="card-body">
                         <h3>${c.titolo}</h3>
@@ -241,7 +248,7 @@
                     </div>
                     <div class="card-foot">
                         <div class="tags">${tags}</div>
-                        <span class="go">${ok ? 'Entra' : 'Info'} →</span>
+                        <span class="go">${actionText} →</span>
                     </div>
                 </a>`;
         });
@@ -249,7 +256,7 @@
     });
     document.getElementById('reparti').innerHTML = html;
     document.getElementById('stats').innerHTML =
-        `<b>${totale}</b> corsi · <b>${disponibili}</b> disponibili · <b>${totale - disponibili}</b> in preparazione`;
+        `<b>${totale}</b> corsi · <b>${calendariPubblicati}</b> calendari pubblicati`;
 
     // --- Effetto luce che segue il mouse sulle card ---
     document.querySelectorAll('.card').forEach(card => {

@@ -149,6 +149,8 @@
         }
         .tab-btn:hover { border-color: var(--border-hover); color: var(--text-primary); transform: translateY(-1px); }
         .tab-btn.active { border-color: var(--accent); color: #fff; background: var(--accent); box-shadow: 0 4px 15px var(--accent-glow); }
+        .calendar-shortcut { display: flex; justify-content: space-between; align-items: center; gap: 16px; flex-wrap: wrap; margin-bottom: 1.25rem; padding: 1rem 1.5rem; border: 1px solid var(--accent); border-radius: var(--radius-lg); background: var(--accent-glow); color: var(--text-primary); text-decoration: none; font-weight: 600; }
+        .calendar-shortcut span { color: var(--accent); white-space: nowrap; }
 
         /* =========================================================
            PROJECT CARD (REFINED)
@@ -425,6 +427,8 @@
             </div>
         </div>
     </header>
+
+    <a class="calendar-shortcut" href="#calendario">Calendario del 1° semestre 2026/2027 · classi 3A, 3B e 3C <span>Vedi date e orari →</span></a>
 
     <section class="home-final-project-card" aria-label="Progetto di fine anno">
         <span class="home-final-project-icon" aria-hidden="true">🎓</span>
@@ -2994,6 +2998,7 @@ L'ambiente è un limbo bianco continuo e pulito, in high-key, senza distrazioni.
     }
 
     window.addEventListener('popstate', showTabFromHash);
+    window.addEventListener('hashchange', showTabFromHash);
 
     function openTab(id, btn, fromHistory) {
         const targetTab = document.getElementById(id);
