@@ -464,15 +464,8 @@
     </div>
 
     <div id="tab-cal" class="content-section">
-        <div class="class-selector">
-            <button class="class-btn active" onclick="showClass('2A', this)">Classe 2A</button>
-            <button class="class-btn" onclick="showClass('2B', this)">Classe 2B</button>
-            <button class="class-btn" onclick="showClass('2C', this)">Classe 2C</button>
-        </div>
-        <table class="cal-table">
-            <thead><tr><th>Data / Ora</th><th>Argomento</th></tr></thead>
-            <tbody id="calendar-body"></tbody>
-        </table>
+        <h2>Calendario lezioni</h2>
+        <p>Il calendario di Rendering 3D per il 2° semestre dell'A.A. 2026/2027 non è ancora disponibile. Le date saranno pubblicate qui appena definite dall'Accademia.</p>
     </div>
 
     <div id="tab-video" class="content-section">
@@ -668,67 +661,6 @@
         const btn = document.getElementById('btn-prog-current');
         openTab('tab-prog-current', btn);
         window.scrollTo({ top: 0, behavior: 'smooth' });
-    }
-
-    const lezioniCal = {
-        '2A': { 
-            time: "09:00–13:00", 
-            days: ["Mar 10 Mar", "Mar 17 Mar", "Mar 31 Mar", "Mar 14 Apr", "Mar 28 Apr", "Mar 05 Mag", "Mar 12 Mag", "Ven 19 Mag", "Mar 26 Mag", "Mar 16 Giu"],
-            topics: ["Presentazione + base", "Modellazione", "Modellazione", "Corona 1", "Modellazione", "Corona 2", "Spiegazione progetto", "Prima revisione", "Seconda revisione", "Consegna esame"]
-        },
-        '2B': { 
-            time: "14:00–18:00", 
-            days: ["Mar 10 Mar", "Mar 17 Mar", "Mar 31 Mar", "Mar 14 Apr", "Mar 28 Apr", "Mar 05 Mag", "Mar 12 Mag", "Ven 19 Mag", "Mar 26 Mag", "Mar 16 Giu"],
-            topics: ["Presentazione + base", "Modellazione", "Modellazione", "Corona 1", "Modellazione", "Corona 2", "Spiegazione progetto", "Prima revisione", "Seconda revisione", "Consegna esame"]
-        },
-        '2C': { 
-            time: "09:00–13:00", 
-            days: ["Ven 13 Mar", "Ven 20 Mar", "Ven 27 Mar", "Ven 10 Apr", "Ven 17 Apr", "Ven 08 Mag", "Ven 15 Mag", "Ven 22 Mag", "Ven 29 Mag", "Ven 05 Giu"],
-            topics: ["Presentazione + base", "Modellazione", "Modellazione", "Modellazione", "Corona 1", "Corona 2", "Spiegazione progetto", "Prima revisione", "Seconda revisione", "Consegna esame"]
-        }
-    };
-
-    function showClass(cl, btn) {
-        const classColors = {
-            '2A': { bg: '#9146FF', text: '#ffffff' }, 
-            '2B': { bg: '#FFC300', text: '#000000' }, 
-            '2C': { bg: '#00E5FF', text: '#000000' }  
-        };
-        
-        const activeColor = classColors[cl];
-        document.documentElement.style.setProperty('--active-class-color', activeColor.bg);
-        document.documentElement.style.setProperty('--active-class-text', activeColor.text);
-
-        document.querySelectorAll('.class-btn').forEach(b => b.classList.remove('active'));
-        btn.classList.add('active');
-        
-        let html = '';
-        const data = lezioniCal[cl];
-        
-        data.days.forEach((day, i) => {
-            let topicContent = data.topics[i];
-            
-            // LA LEZIONE 8 (Indice 7) È QUELLA ATTUALE
-            if (i < 7) {
-                topicContent = `
-                    <div style="display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: wrap;">
-                        <span style="color: #aaa; text-decoration: line-through;">${topicContent}</span>
-                        <button class="cal-link-btn" onclick="goToArchive(event)">Vedi in Archivio</button>
-                    </div>
-                `;
-            } else if (i === 7) { 
-                topicContent = `
-                    <div style="display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: wrap;">
-                        <span style="color: #fff; font-weight: bold;">${topicContent} <span class="current-badge">LEZIONE ATTUALE</span></span>
-                    </div>
-                `;
-            } else {
-                topicContent = `<span style="color: #888;">${topicContent}</span>`;
-            }
-            
-            html += `<tr><td style="color:var(--active-class-color); font-weight:bold; min-width:90px; vertical-align: middle;">${day}<br><span style="color:#666; font-weight:normal;">${data.time}</span></td><td style="vertical-align: middle;">${topicContent}</td></tr>`;
-        });
-        document.getElementById('calendar-body').innerHTML = html;
     }
 
     const agenda1 = [
@@ -1232,7 +1164,6 @@
         else if (event.key === "ArrowRight") { changeImage(1); }
     });
 
-    showClass('2A', document.querySelector('.class-btn'));
     renderArchive();
     renderProgCurrent();
     if (location.hash) showTabFromHash();

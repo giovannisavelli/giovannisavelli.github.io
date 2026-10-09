@@ -409,7 +409,7 @@
         </div>
         <div style="display: flex; align-items: center; gap: 1rem;">
             <div style="text-align: right; font-size: 0.75rem; text-transform: uppercase; color: var(--text-muted); font-weight: 600;">
-                Progresso Lezione<br><b style="color: var(--complement);">Inizio Maggio</b>
+                Progresso Lezione<br><b style="color: var(--complement);">Nov 2026 – Gen 2027</b>
             </div>
             <div class="progress-ring">
                 <svg>
@@ -2945,6 +2945,7 @@ L'ambiente è un limbo bianco continuo e pulito, in high-key, senza distrazioni.
     <!-- TAB: CALENDARIO -->
     <div id="tab-cal" class="content-section">
         <h2>Calendario Lezioni</h2>
+        <p>Modulo di Intelligenza Artificiale · 1° semestre A.A. 2026/2027. Seleziona la tua classe per vedere date e orari.</p>
         <div class="class-selector">
             <button class="class-btn active" onclick="showClass('3A', this)">Classe 3A</button>
             <button class="class-btn" onclick="showClass('3B', this)">Classe 3B</button>
@@ -3094,9 +3095,9 @@ L'ambiente è un limbo bianco continuo e pulito, in high-key, senza distrazioni.
     // LOGICA CALENDARIO
     // ==========================================
     const lezioniCal = {
-        '3A': { time: "09:00–13:00", days: ["Mer 27 Mag", "Mer 03 Giu", "Mer 10 Giu", "Mer 17 Giu", "Mer 24 Giu"], topics: ["Lezione 1", "Lezione 2", "Lezione 3", "Lezione 4", "Lezione 5"] },
-        '3B': { time: "14:00–18:00", days: ["Mer 27 Mag", "Mer 03 Giu", "Mer 10 Giu", "Mer 17 Giu", "Mer 24 Giu"], topics: ["Lezione 1", "Lezione 2", "Lezione 3", "Lezione 4", "Lezione 5"] },
-        '3C': { time: "09:00–13:00", days: ["Gio 28 Mag", "Gio 04 Giu", "Gio 11 Giu", "Gio 18 Giu", "Gio 25 Giu"], topics: ["Lezione 1", "Lezione 2", "Lezione 3", "Lezione 4", "Lezione 5"] }
+        '3A': { time: "14:00–18:00", days: ["Gio 03 Dic 2026", "Gio 10 Dic 2026", "Gio 17 Dic 2026", "Gio 14 Gen 2027", "Gio 21 Gen 2027"], topics: ["Lezione 1", "Lezione 2", "Lezione 3", "Lezione 4", "Lezione 5"] },
+        '3B': { time: "09:00–13:00", days: ["Gio 26 Nov 2026", "Gio 03 Dic 2026", "Gio 10 Dic 2026", "Gio 17 Dic 2026", "Gio 28 Gen 2027"], topics: ["Lezione 1", "Lezione 2", "Lezione 3", "Lezione 4", "Lezione 5"] },
+        '3C': { time: "14:00–18:00", days: ["Lun 23 Nov 2026", "Lun 30 Nov 2026", "Lun 21 Dic 2026", "Lun 11 Gen 2027", "Lun 25 Gen 2027"], topics: ["Lezione 1", "Lezione 2", "Lezione 3", "Lezione 4", "Lezione 5"] }
     };
 
     function showClass(cl, btn) {
