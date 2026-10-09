@@ -47,7 +47,7 @@ if (courses[lastSlug]) {
 for (const anchor of document.querySelectorAll("a[href]")) {
   const url = new URL(anchor.href);
   if (!Object.values(courses).some(course => course.path === url.pathname)) continue;
-  url.searchParams.set("v", "site-20261009");
+  url.searchParams.set("v", "lesson2-20261009");
   anchor.href = url.href;
 }
 

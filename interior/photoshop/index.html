@@ -92,7 +92,11 @@
         .lesson-end a { color: var(--accent); font-size: 13px; font-weight: 700; text-decoration: none; white-space: nowrap; }
         .lesson-end a:hover, .lesson-end a:focus-visible { text-decoration: underline; }
         .lesson-opening--second { margin-top: 46px; background: radial-gradient(circle at 90% 5%, rgba(49,168,255,.18), transparent 35%), linear-gradient(135deg, #101e2e, #0b1421 72%); }
+        .lesson-opening { scroll-margin-top: 82px; }
         .lesson-opening--second::after { content: "02"; }
+        .lesson-jumps { display: flex; gap: 9px; flex-wrap: wrap; margin: 0 0 18px; }
+        .lesson-jumps a { display: inline-flex; align-items: center; min-height: 42px; padding: 9px 13px; border: 1px solid var(--border); border-radius: 9px; background: var(--surface-strong); color: var(--text); font-size: 12px; font-weight: 700; text-decoration: none; }
+        .lesson-jumps a:hover, .lesson-jumps a:focus-visible { border-color: var(--accent); color: var(--accent); }
         .lesson-route { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; margin: 18px 0 0; }
         .lesson-route section, .exercise-card { padding: 21px; border: 1px solid var(--border); border-radius: 15px; background: var(--surface-strong); }
         .lesson-route span, .exercise-card .step-number { color: var(--accent); font: 600 11px "JetBrains Mono", monospace; letter-spacing: .06em; }
@@ -197,7 +201,7 @@
 
     <div class="notice">
         <div><strong>Le prime due lezioni sono online</strong><p>Prima ci conosciamo. Poi mettiamo alla prova livelli, pennello e lazo.</p></div>
-        <a href="#programma">Esplora il programma →</a>
+        <a href="#lezione-2">Vai alla seconda lezione →</a>
     </div>
 
     <main>
@@ -215,7 +219,8 @@
             <p class="kicker">Il percorso</p>
             <h2>Programma lezioni</h2>
             <p class="panel-intro">Due incontri da 2 ore: prima prendiamo confidenza con le nostre interfacce, poi usiamo gli strumenti essenziali per capire come si costruisce uno scontorno.</p>
-            <article class="lesson-opening" aria-labelledby="lesson-one-title">
+            <nav class="lesson-jumps" aria-label="Vai a una lezione"><a href="#lezione-1">01 · Conosciamoci</a><a href="#lezione-2">02 · Livelli, pennello, lazo</a></nav>
+            <article class="lesson-opening" id="lezione-1" aria-labelledby="lesson-one-title">
                 <p class="lesson-label">Prima lezione · 2 ore</p>
                 <h3 id="lesson-one-title">Conosciamoci<span>.</span></h3>
                 <p class="lesson-deck">Prima di lavorare insieme sulle immagini, scopriamo chi siamo e come ci si orienta nel programma.</p>
@@ -242,7 +247,7 @@
             </div>
             <div class="lesson-end"><p>Questo è il punto di partenza. Le prossime lezioni daranno profondità a ciò che oggi iniziamo a conoscere.</p><a href="#calendario">Guarda date e orari →</a></div>
 
-            <article class="lesson-opening lesson-opening--second" aria-labelledby="lesson-two-title">
+            <article class="lesson-opening lesson-opening--second" id="lezione-2" aria-labelledby="lesson-two-title">
                 <p class="lesson-label">Seconda lezione · 2 ore</p>
                 <h3 id="lesson-two-title">Non esiste uno <span>strumento unico.</span></h3>
                 <p class="lesson-deck">Una sedia e una mela, due contorni diversi. Prima capiamo come funzionano livelli e selezioni, poi proviamo pennello e lazo su entrambi.</p>
@@ -475,6 +480,10 @@
             return "#" + TAB_NAMES[key] === location.hash;
         }) || DEFAULT_TAB;
         openTab(id, false);
+        const lesson = document.getElementById(location.hash.slice(1));
+        if (lesson && lesson.classList.contains("lesson-opening")) {
+            requestAnimationFrame(function () { lesson.scrollIntoView({ block: "start" }); });
+        }
     }
 
     document.querySelectorAll(".tab-btn").forEach(function (button) {
