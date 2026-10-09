@@ -69,6 +69,22 @@
         .empty { max-width: 720px; padding: 28px; border: 1px dashed rgba(163,195,225,.26); border-radius: 16px; background: rgba(255,255,255,.02); }
         .empty h3 { margin: 0 0 8px; font-size: 18px; }
         .empty p { margin: 0; color: var(--muted); font-size: 14px; line-height: 1.65; }
+        .video-frame { position: relative; width: min(100%, 860px); aspect-ratio: 16 / 9; border: 1px solid var(--border); border-radius: 16px; overflow: hidden; background: #070d16; }
+        .video-frame iframe { display: block; width: 100%; height: 100%; border: 0; }
+        .video-frame iframe[hidden], .video-placeholder[hidden] { display: none; }
+        .video-placeholder { display: grid; place-content: center; gap: 10px; width: 100%; height: 100%; padding: 24px; color: var(--muted); text-align: center; }
+        .video-placeholder strong { color: var(--text); font-size: 18px; }
+        .video-current { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; margin: 14px 0 22px; color: var(--muted); font-size: 13px; }
+        .video-current a, .video-folder-link { color: var(--accent); font-weight: 600; text-decoration: none; }
+        .video-current a:hover, .video-folder-link:hover { text-decoration: underline; }
+        .video-list { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 10px; max-width: 860px; margin: 0; padding: 0; list-style: none; }
+        .video-choice { width: 100%; min-height: 68px; padding: 12px; border: 1px solid var(--border); border-radius: 12px; background: var(--surface-strong); color: var(--text); text-align: left; cursor: pointer; }
+        .video-choice:hover, .video-choice:focus-visible { border-color: var(--accent); }
+        .video-choice[aria-pressed="true"] { border-color: var(--accent); background: var(--accent-soft); }
+        .video-choice strong, .video-choice span { display: block; }
+        .video-choice strong { font-size: 13px; }
+        .video-choice span { margin-top: 4px; color: var(--muted); font-family: "JetBrains Mono", monospace; font-size: 11px; }
+        .video-footer { max-width: 860px; margin: 20px 0 0; color: var(--muted); font-size: 13px; line-height: 1.6; }
         .calendar-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 290px), 1fr)); gap: 16px; }
         .class-card { padding: 21px; border: 1px solid var(--border); border-radius: var(--radius); background: var(--surface-strong); }
         .class-card h3 { margin: 0 0 4px; color: var(--accent); font-family: "Space Grotesk", sans-serif; font-size: 24px; }
@@ -188,10 +204,28 @@
         </section>
 
         <section class="panel" role="tabpanel" id="tab-video" aria-labelledby="btn-video" hidden>
-            <p class="kicker">Dimostrazioni</p>
-            <h2>Video</h2>
-            <p class="panel-intro">I video delle tecniche e degli esercizi saranno organizzati per argomento.</p>
-            <div class="empty"><h3>Video in preparazione</h3><p>I collegamenti compariranno qui quando saranno selezionati.</p></div>
+            <p class="kicker">Archivio del docente · 11 video</p>
+            <h2>Photoshop base</h2>
+            <p class="panel-intro">Registrazioni precedenti per ripassare le basi del programma. Seleziona un video dall’elenco per guardarlo qui; i numeri corrispondono ai nomi originali dei file.</p>
+            <div class="video-frame">
+                <div class="video-placeholder" id="video-placeholder"><strong>Seleziona un video</strong><span>Il filmato si aprirà in questo riquadro.</span></div>
+                <iframe id="video-player" title="Video del corso Photoshop" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen hidden></iframe>
+            </div>
+            <div class="video-current"><span id="video-current-title" aria-live="polite">Nessun video selezionato</span><a id="video-direct-link" href="https://drive.google.com/drive/folders/1XXlpQSm5gdcdJXH-9yrzgJ1SRy64iHAH" target="_blank" rel="noopener noreferrer" hidden>Apri il video su Drive ↗</a></div>
+            <ol class="video-list" aria-label="Video Photoshop base">
+                <li><button class="video-choice" type="button" data-video-id="1JJ7PuRaT8MIVAGPwbThGPkCZ_6aN1Rra" data-video-number="02" aria-pressed="false"><strong>Video 02</strong><span>2.mp4</span></button></li>
+                <li><button class="video-choice" type="button" data-video-id="12ibLTFQrKCSrCTXw7qk_aAlbhxONkjOj" data-video-number="03" aria-pressed="false"><strong>Video 03</strong><span>3.mp4</span></button></li>
+                <li><button class="video-choice" type="button" data-video-id="1NoH9ndCti-ggcQSHq_dH9afikiUfixVV" data-video-number="04" aria-pressed="false"><strong>Video 04</strong><span>4.mp4</span></button></li>
+                <li><button class="video-choice" type="button" data-video-id="1UZGlqRN1quzzHZOVIG891rWyL0bDyxWG" data-video-number="05" aria-pressed="false"><strong>Video 05</strong><span>5.mp4</span></button></li>
+                <li><button class="video-choice" type="button" data-video-id="1yMCgBG5PJ2cNCWM3kZsSpTqo_eAI_Lhl" data-video-number="06" aria-pressed="false"><strong>Video 06</strong><span>6.mp4</span></button></li>
+                <li><button class="video-choice" type="button" data-video-id="124K2gtLv4GR9jPsBJwW_yOUNkZbdBgcZ" data-video-number="07" aria-pressed="false"><strong>Video 07</strong><span>7.mp4</span></button></li>
+                <li><button class="video-choice" type="button" data-video-id="1Exv6rOvGYHao5R-db70Xx-Eln5KCZUhD" data-video-number="08" aria-pressed="false"><strong>Video 08</strong><span>8.mp4</span></button></li>
+                <li><button class="video-choice" type="button" data-video-id="1NEE5Q3XluAWthFnTo2ev9rJXRqw-zQSx" data-video-number="09" aria-pressed="false"><strong>Video 09</strong><span>9.mp4</span></button></li>
+                <li><button class="video-choice" type="button" data-video-id="1ACq2mB-ty9BJqzElTX_yLPC9xber3exG" data-video-number="10" aria-pressed="false"><strong>Video 10</strong><span>10.mp4</span></button></li>
+                <li><button class="video-choice" type="button" data-video-id="12borxlBJOp3aeMt-X9Q8WPGsU2QE4Spi" data-video-number="11" aria-pressed="false"><strong>Video 11</strong><span>11.mp4</span></button></li>
+                <li><button class="video-choice" type="button" data-video-id="16kzJonMAeI9122mTfOtu4v17FGdu8IGw" data-video-number="12" aria-pressed="false"><strong>Video 12</strong><span>12.mp4</span></button></li>
+            </ol>
+            <p class="video-footer">Questi video sono stati registrati con una versione precedente di Photoshop: alcune schermate potrebbero essere diverse. <a class="video-folder-link" href="https://drive.google.com/drive/folders/1XXlpQSm5gdcdJXH-9yrzgJ1SRy64iHAH" target="_blank" rel="noopener noreferrer">Apri la cartella completa su Drive ↗</a></p>
         </section>
 
         <section class="panel" role="tabpanel" id="tab-risorse" aria-labelledby="btn-risorse" hidden>
@@ -227,6 +261,7 @@
 
     function openTab(id, updateAddress) {
         if (!TAB_NAMES[id]) return;
+        if (id !== "tab-video") stopVideo();
         document.querySelectorAll(".tab-btn").forEach(function (button) {
             const selected = button.dataset.tab === id;
             button.setAttribute("aria-selected", String(selected));
@@ -248,6 +283,32 @@
 
     document.querySelectorAll(".tab-btn").forEach(function (button) {
         button.addEventListener("click", function () { openTab(button.dataset.tab, true); });
+    });
+    function stopVideo() {
+        const player = document.getElementById("video-player");
+        if (!player || player.hidden) return;
+        player.src = "about:blank";
+        player.hidden = true;
+        document.getElementById("video-placeholder").hidden = false;
+        document.getElementById("video-current-title").textContent = "Nessun video selezionato";
+        document.getElementById("video-direct-link").hidden = true;
+        document.querySelectorAll(".video-choice").forEach(function (button) { button.setAttribute("aria-pressed", "false"); });
+    }
+    document.querySelectorAll(".video-choice").forEach(function (button) {
+        button.addEventListener("click", function () {
+            const id = button.dataset.videoId;
+            const number = button.dataset.videoNumber;
+            const player = document.getElementById("video-player");
+            player.src = "https://drive.google.com/file/d/" + id + "/preview";
+            player.title = "Video " + number + " · Photoshop base";
+            player.hidden = false;
+            document.getElementById("video-placeholder").hidden = true;
+            document.getElementById("video-current-title").textContent = "Video " + number + " · Photoshop base";
+            const directLink = document.getElementById("video-direct-link");
+            directLink.href = "https://drive.google.com/file/d/" + id + "/view";
+            directLink.hidden = false;
+            document.querySelectorAll(".video-choice").forEach(function (choice) { choice.setAttribute("aria-pressed", String(choice === button)); });
+        });
     });
     window.addEventListener("popstate", showTabFromHash);
     window.addEventListener("hashchange", showTabFromHash);
