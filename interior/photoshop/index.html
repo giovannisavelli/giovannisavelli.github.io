@@ -71,6 +71,12 @@
         .empty p { margin: 0; color: var(--muted); font-size: 14px; line-height: 1.65; }
         .shortcut-lead { max-width: 860px; margin: 0 0 24px; padding: 18px 20px; border: 1px solid rgba(49,168,255,.25); border-radius: 14px; background: var(--accent-soft); line-height: 1.65; }
         .shortcut-lead strong { color: var(--accent); }
+        .shortcut-platform { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; max-width: 860px; margin-bottom: 20px; padding: 13px 16px; border: 1px solid var(--border); border-radius: 13px; background: var(--surface-strong); }
+        .shortcut-platform span { color: var(--muted); font-size: 13px; }
+        .shortcut-platform strong { color: var(--text); }
+        .shortcut-platform button { min-height: 40px; padding: 8px 14px; border: 1px solid var(--accent); border-radius: 100px; background: var(--accent-soft); color: var(--accent); font-size: 13px; font-weight: 700; cursor: pointer; }
+        .shortcut-platform button:hover, .shortcut-platform button:focus-visible { background: var(--accent); color: #06111d; }
+        .shortcut-platform-note { max-width: 860px; margin: -7px 0 20px; color: var(--muted); font-size: 12px; line-height: 1.5; }
         .shortcut-group { margin-top: 30px; }
         .shortcut-group h3 { margin: 0 0 8px; font-family: "Space Grotesk", sans-serif; font-size: 21px; }
         .shortcut-group > p { margin: 0 0 16px; color: var(--muted); font-size: 13px; line-height: 1.6; }
@@ -253,7 +259,12 @@
         <section class="panel" role="tabpanel" id="tab-scorciatoie" aria-labelledby="btn-scorciatoie" hidden>
             <p class="kicker">Consultazione rapida</p>
             <h2>Scorciatoie</h2>
-            <p class="panel-intro">I comandi essenziali di Photoshop, da tenere a portata di mano mentre lavori. Le combinazioni qui sotto si riferiscono a Windows.</p>
+            <p class="panel-intro">I comandi essenziali di Photoshop, da tenere a portata di mano mentre lavori. Scegli la tastiera che usi per vedere le combinazioni corrette.</p>
+            <div class="shortcut-platform">
+                <span>Tasti mostrati: <strong id="shortcut-platform-name" aria-live="polite">Windows</strong></span>
+                <button type="button" id="shortcut-platform-toggle" data-platform="windows">Mostra tasti Mac</button>
+            </div>
+            <p class="shortcut-platform-note" id="shortcut-platform-note">Le combinazioni mostrate sono quelle predefinite per Windows.</p>
             <p class="shortcut-lead"><strong>Come ricordarle:</strong> molte scorciatoie riprendono l’iniziale del nome inglese dello strumento: <strong>B</strong> come <em>Brush</em> (Pennello), <strong>C</strong> come <em>Crop</em> (Ritaglia), <strong>T</strong> come <em>Type</em> (Testo). È un aiuto per orientarsi, non una regola assoluta: alcune lettere sono eccezioni.</p>
 
             <div class="shortcut-group">
@@ -284,13 +295,13 @@
                     <li><kbd>Spazio</kbd><span><strong>Mano temporanea</strong><small>Tieni premuto per spostarti nell’immagine.</small></span></li>
                     <li><kbd>D</kbd><span><strong>Colori predefiniti</strong><small>Primo piano nero, sfondo bianco: <em>Default</em>.</small></span></li>
                     <li><kbd>X</kbd><span><strong>Scambia i colori</strong><small>Inverte primo piano e sfondo.</small></span></li>
-                    <li><kbd>Ctrl + D</kbd><span><strong>Deseleziona</strong><small>Da <em>Deselect</em>.</small></span></li>
-                    <li><kbd>Ctrl + J</kbd><span><strong>Duplica il livello</strong><small>Con una selezione attiva, ne copia il contenuto su un nuovo livello.</small></span></li>
-                    <li><kbd>Ctrl + Shift + N</kbd><span><strong>Nuovo livello</strong><small>Da <em>New</em>.</small></span></li>
-                    <li><kbd>Ctrl + G</kbd><span><strong>Raggruppa i livelli</strong><small>Da <em>Group</em>.</small></span></li>
-                    <li><kbd>Ctrl + Alt + G</kbd><span><strong>Maschera di ritaglio</strong><small>Crea o rilascia la maschera di ritaglio.</small></span></li>
-                    <li><kbd>Ctrl + T</kbd><span><strong>Trasformazione libera</strong><small>Da <em>Transform</em>.</small></span></li>
-                    <li><kbd>Ctrl + Z</kbd><span><strong>Annulla</strong><small>Il comando standard per tornare indietro.</small></span></li>
+                    <li><kbd data-mac="Cmd + D">Ctrl + D</kbd><span><strong>Deseleziona</strong><small>Da <em>Deselect</em>.</small></span></li>
+                    <li><kbd data-mac="Cmd + J">Ctrl + J</kbd><span><strong>Duplica il livello</strong><small>Con una selezione attiva, ne copia il contenuto su un nuovo livello.</small></span></li>
+                    <li><kbd data-mac="Cmd + Shift + N">Ctrl + Shift + N</kbd><span><strong>Nuovo livello</strong><small>Da <em>New</em>.</small></span></li>
+                    <li><kbd data-mac="Cmd + G">Ctrl + G</kbd><span><strong>Raggruppa i livelli</strong><small>Da <em>Group</em>.</small></span></li>
+                    <li><kbd data-mac="Cmd + Option + G">Ctrl + Alt + G</kbd><span><strong>Maschera di ritaglio</strong><small>Crea o rilascia la maschera di ritaglio.</small></span></li>
+                    <li><kbd data-mac="Cmd + T">Ctrl + T</kbd><span><strong>Trasformazione libera</strong><small>Da <em>Transform</em>.</small></span></li>
+                    <li><kbd data-mac="Cmd + Z">Ctrl + Z</kbd><span><strong>Annulla</strong><small>Il comando standard per tornare indietro.</small></span></li>
                 </ul>
             </div>
             <p class="shortcut-note">Quando una lettera corrisponde a più strumenti, controlla quale icona è attiva nella barra degli strumenti. Le scorciatoie possono cambiare se sono state personalizzate. <a href="https://helpx.adobe.com/content/dam/help/en/photoshop/using/default-keyboard-shortcuts/photoshop-keyboard-shortcuts.pdf" target="_blank" rel="noopener noreferrer">Consulta l’elenco completo di Adobe ↗</a></p>
@@ -364,6 +375,25 @@
             document.querySelectorAll(".video-choice").forEach(function (choice) { choice.setAttribute("aria-pressed", String(choice === button)); });
         });
     });
+    const shortcutKeys = document.querySelectorAll("#tab-scorciatoie kbd");
+    const shortcutToggle = document.getElementById("shortcut-platform-toggle");
+    shortcutKeys.forEach(function (key) { key.dataset.windows = key.textContent; });
+
+    function showShortcutPlatform(isMac) {
+        shortcutKeys.forEach(function (key) { key.textContent = isMac && key.dataset.mac ? key.dataset.mac : key.dataset.windows; });
+        document.getElementById("shortcut-platform-name").textContent = isMac ? "Mac" : "Windows";
+        document.getElementById("shortcut-platform-note").textContent = isMac
+            ? "Su Mac, Cmd è il tasto ⌘ e Option è il tasto ⌥."
+            : "Le combinazioni mostrate sono quelle predefinite per Windows.";
+        shortcutToggle.textContent = isMac ? "Mostra tasti Windows" : "Mostra tasti Mac";
+        shortcutToggle.dataset.platform = isMac ? "mac" : "windows";
+        try { localStorage.setItem("photoshop-shortcut-platform", isMac ? "mac" : "windows"); } catch (error) { /* La guida funziona anche senza memoria locale. */ }
+    }
+
+    shortcutToggle.addEventListener("click", function () { showShortcutPlatform(shortcutToggle.dataset.platform !== "mac"); });
+    try {
+        if (localStorage.getItem("photoshop-shortcut-platform") === "mac") showShortcutPlatform(true);
+    } catch (error) { /* La guida resta su Windows se la memoria locale non è disponibile. */ }
     window.addEventListener("popstate", showTabFromHash);
     window.addEventListener("hashchange", showTabFromHash);
     showTabFromHash();
