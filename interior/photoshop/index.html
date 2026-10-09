@@ -91,6 +91,28 @@
         .lesson-end p { max-width: 650px; margin: 0; color: var(--muted); font-size: 13px; line-height: 1.6; }
         .lesson-end a { color: var(--accent); font-size: 13px; font-weight: 700; text-decoration: none; white-space: nowrap; }
         .lesson-end a:hover, .lesson-end a:focus-visible { text-decoration: underline; }
+        .lesson-opening--second { margin-top: 46px; background: radial-gradient(circle at 90% 5%, rgba(49,168,255,.18), transparent 35%), linear-gradient(135deg, #101e2e, #0b1421 72%); }
+        .lesson-opening--second::after { content: "02"; }
+        .lesson-route { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; margin: 18px 0 0; }
+        .lesson-route section, .exercise-card { padding: 21px; border: 1px solid var(--border); border-radius: 15px; background: var(--surface-strong); }
+        .lesson-route span, .exercise-card .step-number { color: var(--accent); font: 600 11px "JetBrains Mono", monospace; letter-spacing: .06em; }
+        .lesson-route h4, .exercise-card h4 { margin: 11px 0 8px; font: 700 21px/1.2 "Space Grotesk", sans-serif; }
+        .lesson-route p, .exercise-card p, .exercise-card li { margin: 0; color: var(--muted); font-size: 13px; line-height: 1.65; }
+        .lesson-route strong, .exercise-card strong { color: var(--text); }
+        .lesson-section-title { margin: 33px 0 10px; font: 700 clamp(22px, 3vw, 28px)/1.2 "Space Grotesk", sans-serif; }
+        .lesson-section-copy { max-width: 780px; margin: 0 0 17px; color: var(--muted); font-size: 14px; line-height: 1.65; }
+        .exercise-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+        .exercise-card ul { margin: 12px 0 0; padding-left: 18px; }
+        .exercise-card li + li { margin-top: 6px; }
+        .exercise-card--chair { border-color: rgba(49,168,255,.3); }
+        .exercise-card--apple { border-color: rgba(142,207,165,.3); }
+        .exercise-result { margin-top: 14px; padding: 19px 21px; border-left: 3px solid var(--accent); border-radius: 0 12px 12px 0; background: rgba(49,168,255,.08); }
+        .exercise-result p { margin: 0; color: #d8e7f3; font-size: 14px; line-height: 1.65; }
+        .exercise-result p + p { margin-top: 8px; }
+        .lesson-materials { display: flex; align-items: center; justify-content: space-between; gap: 14px; flex-wrap: wrap; margin-top: 19px; padding: 18px 20px; border: 1px solid rgba(49,168,255,.28); border-radius: 14px; background: var(--accent-soft); }
+        .lesson-materials p { max-width: 620px; margin: 4px 0 0; color: var(--muted); font-size: 13px; line-height: 1.55; }
+        .lesson-materials a, .resource-link { display: inline-flex; align-items: center; justify-content: center; min-height: 43px; padding: 10px 15px; border-radius: 9px; background: var(--accent); color: #06111d; font-size: 13px; font-weight: 700; text-decoration: none; }
+        .lesson-materials a:hover, .lesson-materials a:focus-visible, .resource-link:hover, .resource-link:focus-visible { background: #83caff; }
         .shortcut-lead { max-width: 860px; margin: 0 0 24px; padding: 18px 20px; border: 1px solid rgba(49,168,255,.25); border-radius: 14px; background: var(--accent-soft); line-height: 1.65; }
         .shortcut-lead strong { color: var(--accent); }
         .shortcut-platform { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; max-width: 860px; margin-bottom: 20px; padding: 13px 16px; border: 1px solid var(--border); border-radius: 13px; background: var(--surface-strong); }
@@ -144,7 +166,10 @@
             .ps-mark { grid-row: 1; width: 74px; border-radius: 14px; font-size: 42px; }
             .schedule-list li { flex-wrap: wrap; gap: 3px 10px; }
             .shortcut-list li { flex-wrap: wrap; }
+            .shortcut-list kbd { max-width: 100%; white-space: normal; }
             .interface-path { grid-template-columns: 1fr; }
+            .lesson-route, .exercise-grid { grid-template-columns: 1fr; }
+            .lesson-opening--second { margin-top: 32px; }
             .interface-step { min-height: 0; }
             .step-number { margin-bottom: 18px; }
         }
@@ -171,8 +196,8 @@
     </header>
 
     <div class="notice">
-        <div><strong>La prima lezione è online</strong><p>Conosciamoci: iniziamo dalle nostre interfacce.</p></div>
-        <a href="#programma">Scopri la prima lezione →</a>
+        <div><strong>Le prime due lezioni sono online</strong><p>Prima ci conosciamo. Poi mettiamo alla prova livelli, pennello e lazo.</p></div>
+        <a href="#programma">Esplora il programma →</a>
     </div>
 
     <main>
@@ -189,7 +214,7 @@
         <section class="panel" role="tabpanel" id="tab-programma" aria-labelledby="btn-programma">
             <p class="kicker">Il percorso</p>
             <h2>Programma lezioni</h2>
-            <p class="panel-intro">Il corso comincia da un primo incontro: con il docente, con la classe e con Photoshop.</p>
+            <p class="panel-intro">Due incontri da 2 ore: prima prendiamo confidenza con le nostre interfacce, poi usiamo gli strumenti essenziali per capire come si costruisce uno scontorno.</p>
             <article class="lesson-opening" aria-labelledby="lesson-one-title">
                 <p class="lesson-label">Prima lezione · 2 ore</p>
                 <h3 id="lesson-one-title">Conosciamoci<span>.</span></h3>
@@ -216,6 +241,41 @@
                 </section>
             </div>
             <div class="lesson-end"><p>Questo è il punto di partenza. Le prossime lezioni daranno profondità a ciò che oggi iniziamo a conoscere.</p><a href="#calendario">Guarda date e orari →</a></div>
+
+            <article class="lesson-opening lesson-opening--second" aria-labelledby="lesson-two-title">
+                <p class="lesson-label">Seconda lezione · 2 ore</p>
+                <h3 id="lesson-two-title">Non esiste uno <span>strumento unico.</span></h3>
+                <p class="lesson-deck">Una sedia e una mela, due contorni diversi. Prima capiamo come funzionano livelli e selezioni, poi proviamo pennello e lazo su entrambi.</p>
+                <div class="lesson-thought"><p>La domanda non è «qual è lo strumento migliore?», ma <strong>«quale controllo mi serve per questo bordo?»</strong> La forma dell’oggetto ci aiuta a scegliere.</p></div>
+            </article>
+
+            <div class="lesson-route" aria-label="I tre passaggi della seconda lezione">
+                <section><span>01 / LIVELLI</span><h4>Sopra e sotto</h4><p>Creiamo due livelli trasparenti, dipingiamo un segno su ciascuno e ne invertiamo l’ordine. <strong>Il livello sopra copre quello sotto solo dove contiene pixel visibili.</strong> Nascondiamo un livello per vedere cosa appartiene a ciascuno.</p></section>
+                <section><span>02 / PENNELLO</span><h4>Dimensione e durezza</h4><p>Proviamo un pennello grande e uno piccolo, con bordo duro e morbido. Guardiamo il contorno a ingrandimento reale: la dimensione cambia quanti pixel occupa il segno, la durezza cambia la transizione del bordo.</p></section>
+                <section><span>03 / LAZO</span><h4>Costruire la selezione</h4><p>Tracciamo un contorno e usiamo le quattro modalità nella barra delle opzioni: <strong>nuova selezione, aggiungi, sottrai e interseca.</strong> Proviamo anche il lazo poligonale sui tratti rettilinei.</p></section>
+            </div>
+
+            <h4 class="lesson-section-title">La prova: sedia e mela</h4>
+            <p class="lesson-section-copy">Apri entrambi i file. Per ogni immagine conserva l’originale, prepara due copie e crea una maschera di livello per ciascuna prova: sulla maschera il nero nasconde e il bianco ripristina. Prima scontorna con il pennello, poi riparti dall’originale e scontorna con il lazo. Sono quattro prove rapide da confrontare, non quattro scontorni da perfezionare in ogni dettaglio.</p>
+            <div class="exercise-grid">
+                <section class="exercise-card exercise-card--chair">
+                    <span class="step-number">A / SEDIA</span>
+                    <h4>Il bordo lineare</h4>
+                    <p>Fai una versione con il pennello sulla maschera e una con il lazo, trasformando poi la selezione in maschera.</p>
+                    <ul><li>Osserva gli spigoli, le gambe e gli spazi vuoti.</li><li>Confronta la precisione del lazo poligonale sui tratti dritti con il controllo del pennello nei dettagli.</li></ul>
+                </section>
+                <section class="exercise-card exercise-card--apple">
+                    <span class="step-number">B / MELA</span>
+                    <h4>Il bordo curvo</h4>
+                    <p>Ripeti le due versioni anche sulla mela, senza dare per scontato che il risultato sia identico.</p>
+                    <ul><li>Segui la curva con un pennello adatto alla scala dell’immagine.</li><li>Prova il lazo a mano libera e correggi il contorno aggiungendo o sottraendo dalla selezione.</li></ul>
+                </section>
+            </div>
+            <div class="exercise-result">
+                <p><strong>Da osservare:</strong> per questa sedia il lazo potrebbe essere più comodo sui bordi regolari; per la mela il pennello potrebbe seguire meglio la curva. Conta il risultato sul bordo, non il nome dello strumento.</p>
+                <p><strong>Dimensione e durezza:</strong> se passi da 100 px a 50 px lasciando la durezza al 100%, l’impostazione resta 100%. Il bordo occupa però meno pixel e può apparire diverso. Ingrandisci, osserva la transizione e ammorbidisci il pennello se il risultato lo richiede.</p>
+            </div>
+            <div class="lesson-materials"><div><strong>File dell’esercizio</strong><p>Nella cartella Scontorno trovi il JPG della sedia e <em>Mela.tif</em>. Scaricali prima di iniziare e conserva entrambe le versioni di ciascun oggetto in un PSD con livelli e maschere separati.</p></div><a href="https://drive.google.com/drive/folders/1P75fdlznkZRsj4Gv88O6EybMpIsw72m1" target="_blank" rel="noopener noreferrer">Apri sedia e mela ↗</a></div>
         </section>
 
         <section class="panel" role="tabpanel" id="tab-archivio" aria-labelledby="btn-archivio" hidden>
@@ -304,8 +364,8 @@
         <section class="panel" role="tabpanel" id="tab-risorse" aria-labelledby="btn-risorse" hidden>
             <p class="kicker">File utili</p>
             <h2>Risorse</h2>
-            <p class="panel-intro">Qui saranno raccolti file di lavoro, riferimenti e materiali scaricabili.</p>
-            <div class="empty"><h3>Risorse in preparazione</h3><p>I file del corso verranno aggiunti in questa sezione.</p></div>
+            <p class="panel-intro">I file di lavoro da usare durante le lezioni.</p>
+            <div class="lesson-materials"><div><strong>Lezione 02 · Scontorno</strong><p>Il JPG della sedia e <em>Mela.tif</em> per confrontare pennello e lazo sui due contorni.</p></div><a href="https://drive.google.com/drive/folders/1P75fdlznkZRsj4Gv88O6EybMpIsw72m1" target="_blank" rel="noopener noreferrer">Apri i file su Drive ↗</a></div>
         </section>
 
         <section class="panel" role="tabpanel" id="tab-scorciatoie" aria-labelledby="btn-scorciatoie" hidden>
@@ -354,6 +414,25 @@
                     <li><kbd data-mac="Cmd + Option + G">Ctrl + Alt + G</kbd><span><strong>Maschera di ritaglio</strong><small>Crea o rilascia la maschera di ritaglio.</small></span></li>
                     <li><kbd data-mac="Cmd + T">Ctrl + T</kbd><span><strong>Trasformazione libera</strong><small>Da <em>Transform</em>.</small></span></li>
                     <li><kbd data-mac="Cmd + Z">Ctrl + Z</kbd><span><strong>Annulla</strong><small>Il comando standard per tornare indietro.</small></span></li>
+                </ul>
+            </div>
+            <div class="shortcut-group">
+                <h3>Lazo: modificare una selezione</h3>
+                <p>Le stesse modalità si trovano nella barra delle opzioni. Con il lazo attivo, tieni premuti questi tasti mentre tracci un nuovo contorno.</p>
+                <ul class="shortcut-list">
+                    <li><kbd>Shift</kbd><span><strong>Aggiungi alla selezione</strong><small>Unisci un’altra area a quella già selezionata.</small></span></li>
+                    <li><kbd data-mac="Option">Alt</kbd><span><strong>Sottrai dalla selezione</strong><small>Togli un’area dalla selezione esistente.</small></span></li>
+                    <li><kbd data-mac="Shift + Option">Shift + Alt</kbd><span><strong>Interseca le selezioni</strong><small>Conserva solo la parte comune ai due contorni.</small></span></li>
+                </ul>
+            </div>
+            <div class="shortcut-group">
+                <h3>Pennello: dimensione e durezza</h3>
+                <p>Con il pennello attivo, modifica rapidamente il diametro e la morbidezza del bordo. I simboli possono trovarsi su tasti diversi secondo il layout della tastiera.</p>
+                <ul class="shortcut-list">
+                    <li><kbd>[ / ]</kbd><span><strong>Riduci / aumenta la dimensione</strong><small>Il diametro del pennello cambia senza aprire il pannello.</small></span></li>
+                    <li><kbd>{ / }</kbd><span><strong>Riduci / aumenta la durezza</strong><small>Di solito corrisponde a Shift + [ / ].</small></span></li>
+                    <li><kbd data-mac="Ctrl + Option + trascina orizzontalmente">Alt + clic destro + trascina orizzontalmente</kbd><span><strong>Dimensione con il mouse</strong><small>Trascina sul documento verso sinistra o destra.</small></span></li>
+                    <li><kbd data-mac="Ctrl + Option + trascina verticalmente">Alt + clic destro + trascina verticalmente</kbd><span><strong>Durezza con il mouse</strong><small>Trascina sul documento verso l’alto o il basso.</small></span></li>
                 </ul>
             </div>
             <p class="shortcut-note">Quando una lettera corrisponde a più strumenti, controlla quale icona è attiva nella barra degli strumenti. Le scorciatoie possono cambiare se sono state personalizzate. <a href="https://helpx.adobe.com/content/dam/help/en/photoshop/using/default-keyboard-shortcuts/photoshop-keyboard-shortcuts.pdf" target="_blank" rel="noopener noreferrer">Consulta l’elenco completo di Adobe ↗</a></p>
