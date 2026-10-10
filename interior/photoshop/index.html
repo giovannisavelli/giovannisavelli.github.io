@@ -92,8 +92,10 @@
         .lesson-end a { color: var(--accent); font-size: 13px; font-weight: 700; text-decoration: none; white-space: nowrap; }
         .lesson-end a:hover, .lesson-end a:focus-visible { text-decoration: underline; }
         .lesson-opening--second { margin-top: 46px; background: radial-gradient(circle at 90% 5%, rgba(49,168,255,.18), transparent 35%), linear-gradient(135deg, #101e2e, #0b1421 72%); }
+        .lesson-opening--third { margin-top: 46px; background: radial-gradient(circle at 90% 5%, rgba(49,168,255,.17), transparent 36%), linear-gradient(135deg, #142335, #0b1421 72%); }
         .lesson-opening { scroll-margin-top: 82px; }
         .lesson-opening--second::after { content: "02"; }
+        .lesson-opening--third::after { content: "03"; }
         .lesson-jumps { display: flex; gap: 9px; flex-wrap: wrap; margin: 0 0 18px; }
         .lesson-jumps a { display: inline-flex; align-items: center; min-height: 42px; padding: 9px 13px; border: 1px solid var(--border); border-radius: 9px; background: var(--surface-strong); color: var(--text); font-size: 12px; font-weight: 700; text-decoration: none; }
         .lesson-jumps a:hover, .lesson-jumps a:focus-visible { border-color: var(--accent); color: var(--accent); }
@@ -121,6 +123,12 @@
         .exercise-result { margin-top: 14px; padding: 19px 21px; border-left: 3px solid var(--accent); border-radius: 0 12px 12px 0; background: rgba(49,168,255,.08); }
         .exercise-result p { margin: 0; color: #d8e7f3; font-size: 14px; line-height: 1.65; }
         .exercise-result p + p { margin-top: 8px; }
+        .curve-figure { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); align-items: center; gap: 24px; max-width: 860px; margin: 18px 0 0; padding: 22px; border: 1px solid rgba(49,168,255,.28); border-radius: 16px; background: #0b1b2b; }
+        .curve-figure svg { display: block; width: 100%; height: auto; }
+        .curve-figure figcaption { color: var(--muted); font-size: 13px; line-height: 1.65; }
+        .curve-figure figcaption strong { display: block; margin-bottom: 10px; color: var(--text); font: 700 21px/1.2 "Space Grotesk", sans-serif; }
+        .curve-figure figcaption p { margin: 0 0 10px; }
+        .curve-figure figcaption small { display: block; color: #8fb0cb; font-size: 11px; }
         .lesson-materials { display: flex; align-items: center; justify-content: space-between; gap: 14px; flex-wrap: wrap; margin-top: 19px; padding: 18px 20px; border: 1px solid rgba(49,168,255,.28); border-radius: 14px; background: var(--accent-soft); }
         .lesson-materials p { max-width: 620px; margin: 4px 0 0; color: var(--muted); font-size: 13px; line-height: 1.55; }
         .lesson-materials a, .resource-link { display: inline-flex; align-items: center; justify-content: center; min-height: 43px; padding: 10px 15px; border-radius: 9px; background: var(--accent); color: #06111d; font-size: 13px; font-weight: 700; text-decoration: none; }
@@ -183,10 +191,10 @@
             .shortcut-list li { flex-wrap: wrap; }
             .shortcut-list kbd { max-width: 100%; white-space: normal; }
             .interface-path { grid-template-columns: 1fr; }
-            .lesson-route, .exercise-grid { grid-template-columns: 1fr; }
+            .lesson-route, .exercise-grid, .curve-figure { grid-template-columns: 1fr; }
             .lesson-index a { grid-template-columns: 34px minmax(0, 1fr) 18px; gap: 8px; padding: 12px; }
             .lesson-index small { display: none; }
-            .lesson-opening--second { margin-top: 32px; }
+            .lesson-opening--second, .lesson-opening--third { margin-top: 32px; }
             .interface-step { min-height: 0; }
             .step-number { margin-bottom: 18px; }
         }
@@ -213,8 +221,8 @@
     </header>
 
     <div class="notice">
-        <div><strong>Le prime due lezioni sono online</strong><p>Prima ci conosciamo. Poi mettiamo alla prova livelli, pennello e lazo.</p></div>
-        <a href="#lezione-2">Vai alla seconda lezione →</a>
+        <div><strong>Le prime tre schede sono online</strong><p>Dalle nostre interfacce ai livelli, fino alla lettura della luce con istogramma e Curve.</p></div>
+        <a href="#lezione-3">Vai alla terza lezione →</a>
     </div>
 
     <main>
@@ -231,10 +239,11 @@
         <section class="panel" role="tabpanel" id="tab-programma" aria-labelledby="btn-programma">
             <p class="kicker">Il percorso in breve</p>
             <h2>Programma lezioni</h2>
-            <p class="panel-intro">Un titolo per ogni incontro. Apri una lezione per leggere gli appunti e l'esercizio; nel calendario trovi il titolo accanto alla data della tua classe.</p>
+            <p class="panel-intro">Scegli una lezione per leggere gli appunti. Le date della tua classe sono nel calendario.</p>
             <ol class="lesson-index" aria-label="Lezioni con programma pubblicato">
                 <li><a href="#lezione-1"><span class="lesson-index-number">01</span><strong>Conosciamoci</strong><small>2 ore</small><span class="lesson-index-arrow" aria-hidden="true">→</span></a></li>
                 <li><a href="#lezione-2"><span class="lesson-index-number">02</span><strong>I primi strumenti per scontornare</strong><small>2 ore</small><span class="lesson-index-arrow" aria-hidden="true">→</span></a></li>
+                <li><a href="#lezione-3"><span class="lesson-index-number">03</span><strong>Istogramma e Curve</strong><small>Orari nel calendario</small><span class="lesson-index-arrow" aria-hidden="true">→</span></a></li>
             </ol>
             <p class="lesson-index-note">Le altre lezioni verranno nominate quando il programma sarà definito.</p>
         </section>
@@ -249,8 +258,8 @@
         <section class="panel" role="tabpanel" id="tab-appunti" aria-labelledby="btn-appunti" hidden>
             <p class="kicker">Il piccolo manuale del corso</p>
             <h2>Appunti delle lezioni</h2>
-            <p class="panel-intro">Qui trovi le spiegazioni e le prove pratiche delle lezioni già pubblicate. Il programma e il calendario mostrano solo i titoli per orientarti rapidamente.</p>
-            <nav class="lesson-jumps" aria-label="Vai a una lezione"><a href="#lezione-1">01 · Conosciamoci</a><a href="#lezione-2">02 · I primi strumenti per scontornare</a></nav>
+            <p class="panel-intro">Qui trovi le spiegazioni delle lezioni e, quando disponibili, le prove pratiche. Il programma e il calendario mostrano solo i titoli per orientarti rapidamente.</p>
+            <nav class="lesson-jumps" aria-label="Vai a una lezione"><a href="#lezione-1">01 · Conosciamoci</a><a href="#lezione-2">02 · I primi strumenti per scontornare</a><a href="#lezione-3">03 · Istogramma e Curve</a></nav>
             <article class="lesson-opening" id="lezione-1" aria-labelledby="lesson-one-title">
                 <p class="lesson-label">Prima lezione · 2 ore</p>
                 <h3 id="lesson-one-title">Conosciamoci<span>.</span></h3>
@@ -292,7 +301,7 @@
             </div>
 
             <h4 class="lesson-section-title">La prova: sedia e mela</h4>
-            <p class="lesson-section-copy">Apri entrambi i file e conserva l’immagine originale. Per ogni oggetto crea due livelli trasparenti sopra la foto, da mostrare uno alla volta. Sul primo costruisci la sagoma colorando direttamente con il pennello. Sul secondo traccia il contorno con il lazo e riempi la selezione con il colore di primo piano: <strong>Alt + Backspace</strong> su Windows, <strong>Option + Delete</strong> su Mac. Confronta le quattro prove, senza cercare di perfezionarle tutte. Le maschere arriveranno in una lezione dedicata.</p>
+            <p class="lesson-section-copy">Apri entrambi i file e conserva l’immagine originale. Per ogni oggetto crea due livelli trasparenti sopra la foto, da mostrare uno alla volta. Sul primo costruisci la sagoma colorando direttamente con il pennello. Sul secondo traccia il contorno con il lazo e riempi la selezione con il colore di primo piano: <strong>Alt + Backspace</strong> su Windows, <strong>Option + Delete</strong> su Mac. Confronta le quattro prove, senza cercare di perfezionarle tutte.</p>
             <div class="exercise-grid">
                 <section class="exercise-card exercise-card--chair">
                     <span class="step-number">A / SEDIA</span>
@@ -312,12 +321,42 @@
                 <p><strong>Dimensione e durezza:</strong> se passi da 100 px a 50 px lasciando la durezza al 100%, l’impostazione resta 100%. Il bordo occupa però meno pixel e può apparire diverso. Ingrandisci, osserva la transizione e ammorbidisci il pennello se il risultato lo richiede.</p>
             </div>
             <div class="lesson-materials"><div><strong>File dell’esercizio</strong><p>Nella cartella Scontorno trovi il JPG della sedia e <em>Mela.tif</em>. Scaricali prima di iniziare e conserva le prove in un PSD: foto originale sotto, versioni colorate su livelli trasparenti separati.</p></div><a href="https://drive.google.com/drive/folders/1P75fdlznkZRsj4Gv88O6EybMpIsw72m1" target="_blank" rel="noopener noreferrer">Apri sedia e mela ↗</a></div>
+
+            <article class="lesson-opening lesson-opening--third" id="lezione-3" aria-labelledby="lesson-three-title">
+                <p class="lesson-label">Terza lezione · Regolazioni</p>
+                <h3 id="lesson-three-title">Istogramma e <span>Curve.</span></h3>
+                <p class="lesson-deck">Dopo aver lavorato sui contorni, iniziamo a leggere la luce di un’immagine e a intervenire sul contrasto con una regolazione che possiamo modificare in seguito.</p>
+                <div class="lesson-thought"><p>Prima di muovere un punto sulla curva, chiediamoci <strong>quali toni vogliamo cambiare e perché.</strong> Il grafico ci aiuta a prendere una decisione sull’immagine.</p></div>
+            </article>
+            <div class="lesson-route" aria-label="I tre passaggi della terza lezione">
+                <section><span>01 / RIPASSO</span><h4>Ripartiamo dagli scontorni</h4><p>Rivediamo in breve le prove con sedia e mela: che cosa ha funzionato con il pennello, che cosa con il lazo e dove sono rimasti dubbi.</p></section>
+                <section><span>02 / REGOLAZIONI</span><h4>Una modifica correggibile</h4><p>Vediamo che cos’è un livello di regolazione. Cambia l’aspetto dell’immagine senza riscrivere i pixel della foto: possiamo riaprirlo, modificarlo e confrontare il prima e il dopo.</p></section>
+                <section><span>03 / ISTOGRAMMA</span><h4>Dove si trovano i toni</h4><p>A sinistra ci sono i toni scuri, al centro i mezzi toni, a destra i toni chiari. L’altezza del grafico indica quanti pixel si trovano in ciascuna zona. Lo leggiamo insieme all’immagine.</p></section>
+            </div>
+            <h4 class="lesson-section-title">Che cosa fa una Curva?</h4>
+            <p class="lesson-section-copy">Nel grafico Curve, l’asse orizzontale rappresenta i toni di partenza e quello verticale i toni dopo la regolazione. La diagonale iniziale non cambia nulla. Spostare un punto verso l’alto schiarisce quella zona tonale; spostarlo verso il basso la scurisce.</p>
+            <figure class="curve-figure">
+                <svg viewBox="0 0 360 270" role="img" aria-labelledby="curve-diagram-title curve-diagram-desc">
+                    <title id="curve-diagram-title">Schema di una curva di contrasto a S</title>
+                    <desc id="curve-diagram-desc">Un istogramma illustrativo appare dietro la diagonale originale e una curva a S. Sulla sinistra sono le ombre, al centro i mezzi toni, sulla destra le luci.</desc>
+                    <rect x="38" y="20" width="284" height="210" rx="8" fill="#10243a" stroke="#31516a"/>
+                    <path d="M109 20V230 M180 20V230 M251 20V230 M38 73H322 M38 125H322 M38 178H322" fill="none" stroke="#284258" stroke-width="1"/>
+                    <path d="M55 230V210 M79 230V196 M103 230V184 M127 230V153 M151 230V113 M175 230V96 M199 230V104 M223 230V126 M247 230V157 M271 230V185 M295 230V207" fill="none" stroke="#45647d" stroke-width="16" opacity=".6"/>
+                    <path d="M38 230L322 20" fill="none" stroke="#9bb9d0" stroke-width="2" stroke-dasharray="6 6" opacity=".75"/>
+                    <path d="M38 230C90 228 101 202 146 176C194 145 202 95 248 58C274 37 292 22 322 20" fill="none" stroke="#31a8ff" stroke-width="4" stroke-linecap="round"/>
+                    <text x="39" y="254" fill="#a7c9e2" font-size="10" font-family="monospace">OMBRE</text>
+                    <text x="150" y="254" fill="#a7c9e2" font-size="10" font-family="monospace">MEZZI TONI</text>
+                    <text x="283" y="254" fill="#a7c9e2" font-size="10" font-family="monospace">LUCI</text>
+                </svg>
+                <figcaption><strong>La curva a S</strong><p>Abbassando leggermente una zona scura e alzando leggermente una zona chiara, aumentiamo la separazione fra i toni: l’immagine acquista contrasto. Una S troppo marcata può perdere dettaglio nelle ombre o nelle luci.</p><small>Schema illustrativo: le barre non rappresentano l’istogramma di una foto reale.</small></figcaption>
+            </figure>
+            <div class="lesson-materials"><div><strong>Esercizio in arrivo</strong><p>Qui aggiungeremo l’immagine e la consegna pratica sulle Curve appena saranno scelte.</p></div></div>
         </section>
 
         <section class="panel" role="tabpanel" id="tab-calendario" aria-labelledby="btn-calendario" hidden>
             <p class="kicker">1° semestre · A.A. 2026/2027</p>
             <h2>Calendario lezioni</h2>
-            <p class="panel-intro">Scegli la tua classe. Accanto alle prime due date trovi il titolo della lezione e il collegamento ai suoi appunti; le altre date sono confermate, con programma ancora da definire.</p>
+            <p class="panel-intro">Scegli la tua classe. Le date con un titolo aprono gli appunti della lezione; per le altre il programma è ancora da definire.</p>
             <div class="calendar-grid">
                 <section class="class-card" aria-labelledby="classe-2a">
                     <h3 id="classe-2a">Classe 2A</h3>
@@ -325,7 +364,7 @@
                     <ul class="schedule-list">
                         <li><div class="schedule-lesson"><time datetime="2026-11-24">Mar 24 nov 2026</time><a href="#lezione-1">01 · Conosciamoci →</a></div><span>11:00–13:00</span></li>
                         <li><div class="schedule-lesson"><time datetime="2026-12-01">Mar 1 dic 2026</time><a href="#lezione-2">02 · I primi strumenti per scontornare →</a></div><span>11:00–13:00</span></li>
-                        <li><time datetime="2026-12-15">Mar 15 dic 2026</time><span>09:00–13:00</span></li>
+                        <li><div class="schedule-lesson"><time datetime="2026-12-15">Mar 15 dic 2026</time><a href="#lezione-3">03 · Istogramma e Curve →</a></div><span>09:00–13:00</span></li>
                         <li><time datetime="2027-01-12">Mar 12 gen 2027</time><span>09:00–13:00</span></li>
                         <li><time datetime="2027-01-19">Mar 19 gen 2027</time><span>09:00–13:00</span></li>
                         <li><time datetime="2027-01-26">Mar 26 gen 2027</time><span>09:00–13:00</span></li>
@@ -337,7 +376,7 @@
                     <ul class="schedule-list">
                         <li><div class="schedule-lesson"><time datetime="2026-11-24">Mar 24 nov 2026</time><a href="#lezione-1">01 · Conosciamoci →</a></div><span>14:00–16:00</span></li>
                         <li><div class="schedule-lesson"><time datetime="2026-12-01">Mar 1 dic 2026</time><a href="#lezione-2">02 · I primi strumenti per scontornare →</a></div><span>14:00–16:00</span></li>
-                        <li><time datetime="2026-12-15">Mar 15 dic 2026</time><span>14:00–18:00</span></li>
+                        <li><div class="schedule-lesson"><time datetime="2026-12-15">Mar 15 dic 2026</time><a href="#lezione-3">03 · Istogramma e Curve →</a></div><span>14:00–18:00</span></li>
                         <li><time datetime="2027-01-12">Mar 12 gen 2027</time><span>14:00–18:00</span></li>
                         <li><time datetime="2027-01-26">Mar 26 gen 2027</time><span>14:00–18:00</span></li>
                     </ul>
@@ -348,7 +387,7 @@
                     <ul class="schedule-list">
                         <li><div class="schedule-lesson"><time datetime="2026-11-20">Ven 20 nov 2026</time><a href="#lezione-1">01 · Conosciamoci →</a></div><span>11:00–13:00</span></li>
                         <li><div class="schedule-lesson"><time datetime="2026-11-27">Ven 27 nov 2026</time><a href="#lezione-2">02 · I primi strumenti per scontornare →</a></div><span>11:00–13:00</span></li>
-                        <li><time datetime="2026-12-04">Ven 4 dic 2026</time><span>11:00–13:00</span></li>
+                        <li><div class="schedule-lesson"><time datetime="2026-12-04">Ven 4 dic 2026</time><a href="#lezione-3">03 · Istogramma e Curve →</a></div><span>11:00–13:00</span></li>
                         <li><time datetime="2026-12-11">Ven 11 dic 2026</time><span>11:00–13:00</span></li>
                         <li><time datetime="2026-12-18">Ven 18 dic 2026</time><span>09:00–13:00</span></li>
                         <li><time datetime="2027-01-15">Ven 15 gen 2027</time><span>09:00–13:00</span></li>
