@@ -97,6 +97,14 @@
         .lesson-jumps { display: flex; gap: 9px; flex-wrap: wrap; margin: 0 0 18px; }
         .lesson-jumps a { display: inline-flex; align-items: center; min-height: 42px; padding: 9px 13px; border: 1px solid var(--border); border-radius: 9px; background: var(--surface-strong); color: var(--text); font-size: 12px; font-weight: 700; text-decoration: none; }
         .lesson-jumps a:hover, .lesson-jumps a:focus-visible { border-color: var(--accent); color: var(--accent); }
+        .lesson-index { display: grid; gap: 11px; max-width: 830px; margin: 0; padding: 0; list-style: none; }
+        .lesson-index a { display: grid; grid-template-columns: 42px minmax(0, 1fr) auto 20px; align-items: center; gap: 13px; min-height: 72px; padding: 12px 17px; border: 1px solid var(--border); border-radius: 13px; background: var(--surface-strong); color: var(--text); text-decoration: none; }
+        .lesson-index a:hover, .lesson-index a:focus-visible { border-color: var(--accent); background: #1b2c3c; }
+        .lesson-index-number { color: var(--accent); font: 700 15px "JetBrains Mono", monospace; }
+        .lesson-index strong { font: 700 clamp(18px, 2.5vw, 23px)/1.2 "Space Grotesk", sans-serif; }
+        .lesson-index small { color: var(--muted); font-size: 12px; }
+        .lesson-index-arrow { color: var(--accent); font-size: 20px; text-align: right; }
+        .lesson-index-note { margin: 18px 0 0; color: var(--muted); font-size: 13px; line-height: 1.6; }
         .lesson-route { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; margin: 18px 0 0; }
         .lesson-route section, .exercise-card { padding: 21px; border: 1px solid var(--border); border-radius: 15px; background: var(--surface-strong); }
         .lesson-route span, .exercise-card .step-number { color: var(--accent); font: 600 11px "JetBrains Mono", monospace; letter-spacing: .06em; }
@@ -161,6 +169,9 @@
         .schedule-list li { display: flex; justify-content: space-between; gap: 12px; padding: 11px 0; border-top: 1px solid var(--border); font-size: 13px; line-height: 1.4; }
         .schedule-list time { font-weight: 600; }
         .schedule-list span { color: #c1d3e5; white-space: nowrap; }
+        .schedule-lesson { display: grid; flex: 1 1 0; gap: 2px; min-width: 0; }
+        .schedule-lesson a { color: var(--accent); font-size: 13px; font-weight: 700; text-decoration: none; }
+        .schedule-lesson a:hover, .schedule-lesson a:focus-visible { text-decoration: underline; }
         .calendar-note { margin: 20px 0 0; padding: 15px 17px; border: 1px solid rgba(251,191,36,.3); border-radius: 13px; background: rgba(251,191,36,.07); color: #f9d77e; font-size: 13px; line-height: 1.6; }
         .site-footer { display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap; padding: 30px 0 40px; color: var(--muted); font-family: "JetBrains Mono", monospace; font-size: 11px; }
         .site-footer a { color: var(--text); text-decoration: none; }
@@ -168,11 +179,13 @@
         @media (max-width: 620px) {
             .hero { grid-template-columns: 1fr; }
             .ps-mark { grid-row: 1; width: 74px; border-radius: 14px; font-size: 42px; }
-            .schedule-list li { flex-wrap: wrap; gap: 3px 10px; }
+            .schedule-list li { gap: 10px; }
             .shortcut-list li { flex-wrap: wrap; }
             .shortcut-list kbd { max-width: 100%; white-space: normal; }
             .interface-path { grid-template-columns: 1fr; }
             .lesson-route, .exercise-grid { grid-template-columns: 1fr; }
+            .lesson-index a { grid-template-columns: 34px minmax(0, 1fr) 18px; gap: 8px; padding: 12px; }
+            .lesson-index small { display: none; }
             .lesson-opening--second { margin-top: 32px; }
             .interface-step { min-height: 0; }
             .step-number { margin-bottom: 18px; }
@@ -216,10 +229,28 @@
         </nav>
 
         <section class="panel" role="tabpanel" id="tab-programma" aria-labelledby="btn-programma">
-            <p class="kicker">Il percorso</p>
+            <p class="kicker">Il percorso in breve</p>
             <h2>Programma lezioni</h2>
-            <p class="panel-intro">Due incontri da 2 ore: prima prendiamo confidenza con le nostre interfacce, poi usiamo gli strumenti essenziali per capire come si costruisce uno scontorno.</p>
-            <nav class="lesson-jumps" aria-label="Vai a una lezione"><a href="#lezione-1">01 · Conosciamoci</a><a href="#lezione-2">02 · Livelli, pennello, lazo</a></nav>
+            <p class="panel-intro">Un titolo per ogni incontro. Apri una lezione per leggere gli appunti e l'esercizio; nel calendario trovi il titolo accanto alla data della tua classe.</p>
+            <ol class="lesson-index" aria-label="Lezioni con programma pubblicato">
+                <li><a href="#lezione-1"><span class="lesson-index-number">01</span><strong>Conosciamoci</strong><small>2 ore</small><span class="lesson-index-arrow" aria-hidden="true">→</span></a></li>
+                <li><a href="#lezione-2"><span class="lesson-index-number">02</span><strong>Non esiste uno strumento unico</strong><small>2 ore</small><span class="lesson-index-arrow" aria-hidden="true">→</span></a></li>
+            </ol>
+            <p class="lesson-index-note">Le altre lezioni verranno nominate quando il programma sarà definito.</p>
+        </section>
+
+        <section class="panel" role="tabpanel" id="tab-archivio" aria-labelledby="btn-archivio" hidden>
+            <p class="kicker">Lezioni svolte</p>
+            <h2>Archivio lezioni</h2>
+            <p class="panel-intro">Le schede delle lezioni passate saranno raccolte qui, in ordine cronologico.</p>
+            <div class="empty"><h3>Archivio ancora vuoto</h3><p>Il corso inizia a novembre 2026. Le lezioni verranno aggiunte dopo il loro svolgimento.</p></div>
+        </section>
+
+        <section class="panel" role="tabpanel" id="tab-appunti" aria-labelledby="btn-appunti" hidden>
+            <p class="kicker">Il piccolo manuale del corso</p>
+            <h2>Appunti delle lezioni</h2>
+            <p class="panel-intro">Qui trovi le spiegazioni e le prove pratiche delle lezioni già pubblicate. Il programma e il calendario mostrano solo i titoli per orientarti rapidamente.</p>
+            <nav class="lesson-jumps" aria-label="Vai a una lezione"><a href="#lezione-1">01 · Conosciamoci</a><a href="#lezione-2">02 · Non esiste uno strumento unico</a></nav>
             <article class="lesson-opening" id="lezione-1" aria-labelledby="lesson-one-title">
                 <p class="lesson-label">Prima lezione · 2 ore</p>
                 <h3 id="lesson-one-title">Conosciamoci<span>.</span></h3>
@@ -283,31 +314,17 @@
             <div class="lesson-materials"><div><strong>File dell’esercizio</strong><p>Nella cartella Scontorno trovi il JPG della sedia e <em>Mela.tif</em>. Scaricali prima di iniziare e conserva entrambe le versioni di ciascun oggetto in un PSD con livelli e maschere separati.</p></div><a href="https://drive.google.com/drive/folders/1P75fdlznkZRsj4Gv88O6EybMpIsw72m1" target="_blank" rel="noopener noreferrer">Apri sedia e mela ↗</a></div>
         </section>
 
-        <section class="panel" role="tabpanel" id="tab-archivio" aria-labelledby="btn-archivio" hidden>
-            <p class="kicker">Lezioni svolte</p>
-            <h2>Archivio lezioni</h2>
-            <p class="panel-intro">Le schede delle lezioni passate saranno raccolte qui, in ordine cronologico.</p>
-            <div class="empty"><h3>Archivio ancora vuoto</h3><p>Il corso inizia a novembre 2026. Le lezioni verranno aggiunte dopo il loro svolgimento.</p></div>
-        </section>
-
-        <section class="panel" role="tabpanel" id="tab-appunti" aria-labelledby="btn-appunti" hidden>
-            <p class="kicker">Materiale di studio</p>
-            <h2>Appunti</h2>
-            <p class="panel-intro">Spazio per spiegazioni, esempi e indicazioni da consultare tra una lezione e l'altra.</p>
-            <div class="empty"><h3>Appunti in preparazione</h3><p>Le note del corso compariranno qui quando saranno pronte.</p></div>
-        </section>
-
         <section class="panel" role="tabpanel" id="tab-calendario" aria-labelledby="btn-calendario" hidden>
             <p class="kicker">1° semestre · A.A. 2026/2027</p>
             <h2>Calendario lezioni</h2>
-            <p class="panel-intro">Modulo Photoshop di Comunicazione del progetto. Cerca la tua classe: le date riportate qui sono quelle confermate.</p>
+            <p class="panel-intro">Scegli la tua classe. Accanto alle prime due date trovi il titolo della lezione e il collegamento ai suoi appunti; le altre date sono confermate, con programma ancora da definire.</p>
             <div class="calendar-grid">
                 <section class="class-card" aria-labelledby="classe-2a">
                     <h3 id="classe-2a">Classe 2A</h3>
                     <p class="class-detail">6 incontri · 20 ore confermate</p>
                     <ul class="schedule-list">
-                        <li><time datetime="2026-11-24">Mar 24 nov 2026</time><span>11:00–13:00</span></li>
-                        <li><time datetime="2026-12-01">Mar 1 dic 2026</time><span>11:00–13:00</span></li>
+                        <li><div class="schedule-lesson"><time datetime="2026-11-24">Mar 24 nov 2026</time><a href="#lezione-1">01 · Conosciamoci →</a></div><span>11:00–13:00</span></li>
+                        <li><div class="schedule-lesson"><time datetime="2026-12-01">Mar 1 dic 2026</time><a href="#lezione-2">02 · Non esiste uno strumento unico →</a></div><span>11:00–13:00</span></li>
                         <li><time datetime="2026-12-15">Mar 15 dic 2026</time><span>09:00–13:00</span></li>
                         <li><time datetime="2027-01-12">Mar 12 gen 2027</time><span>09:00–13:00</span></li>
                         <li><time datetime="2027-01-19">Mar 19 gen 2027</time><span>09:00–13:00</span></li>
@@ -318,8 +335,8 @@
                     <h3 id="classe-2b">Classe 2B</h3>
                     <p class="class-detail">5 incontri · 16 ore confermate</p>
                     <ul class="schedule-list">
-                        <li><time datetime="2026-11-24">Mar 24 nov 2026</time><span>14:00–16:00</span></li>
-                        <li><time datetime="2026-12-01">Mar 1 dic 2026</time><span>14:00–16:00</span></li>
+                        <li><div class="schedule-lesson"><time datetime="2026-11-24">Mar 24 nov 2026</time><a href="#lezione-1">01 · Conosciamoci →</a></div><span>14:00–16:00</span></li>
+                        <li><div class="schedule-lesson"><time datetime="2026-12-01">Mar 1 dic 2026</time><a href="#lezione-2">02 · Non esiste uno strumento unico →</a></div><span>14:00–16:00</span></li>
                         <li><time datetime="2026-12-15">Mar 15 dic 2026</time><span>14:00–18:00</span></li>
                         <li><time datetime="2027-01-12">Mar 12 gen 2027</time><span>14:00–18:00</span></li>
                         <li><time datetime="2027-01-26">Mar 26 gen 2027</time><span>14:00–18:00</span></li>
@@ -329,8 +346,8 @@
                     <h3 id="classe-2c">Classe 2C</h3>
                     <p class="class-detail">6 incontri · 16 ore confermate</p>
                     <ul class="schedule-list">
-                        <li><time datetime="2026-11-20">Ven 20 nov 2026</time><span>11:00–13:00</span></li>
-                        <li><time datetime="2026-11-27">Ven 27 nov 2026</time><span>11:00–13:00</span></li>
+                        <li><div class="schedule-lesson"><time datetime="2026-11-20">Ven 20 nov 2026</time><a href="#lezione-1">01 · Conosciamoci →</a></div><span>11:00–13:00</span></li>
+                        <li><div class="schedule-lesson"><time datetime="2026-11-27">Ven 27 nov 2026</time><a href="#lezione-2">02 · Non esiste uno strumento unico →</a></div><span>11:00–13:00</span></li>
                         <li><time datetime="2026-12-04">Ven 4 dic 2026</time><span>11:00–13:00</span></li>
                         <li><time datetime="2026-12-11">Ven 11 dic 2026</time><span>11:00–13:00</span></li>
                         <li><time datetime="2026-12-18">Ven 18 dic 2026</time><span>09:00–13:00</span></li>
@@ -476,11 +493,11 @@
     }
 
     function showTabFromHash() {
-        const id = Object.keys(TAB_NAMES).find(function (key) {
+        const lesson = document.getElementById(location.hash.slice(1));
+        const id = lesson && lesson.classList.contains("lesson-opening") ? "tab-appunti" : Object.keys(TAB_NAMES).find(function (key) {
             return "#" + TAB_NAMES[key] === location.hash;
         }) || DEFAULT_TAB;
         openTab(id, false);
-        const lesson = document.getElementById(location.hash.slice(1));
         if (lesson && lesson.classList.contains("lesson-opening")) {
             requestAnimationFrame(function () { lesson.scrollIntoView({ block: "start" }); });
         }
