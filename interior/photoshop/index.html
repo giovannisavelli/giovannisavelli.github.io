@@ -153,7 +153,18 @@
         .shortcut-note { max-width: 860px; margin: 25px 0 0; color: var(--muted); font-size: 13px; line-height: 1.65; }
         .shortcut-note a { color: var(--accent); text-decoration: none; }
         .shortcut-note a:hover, .shortcut-note a:focus-visible { text-decoration: underline; }
-        .video-frame { position: relative; width: min(100%, 860px); aspect-ratio: 16 / 9; border: 1px solid var(--border); border-radius: 16px; overflow: hidden; background: #070d16; }
+        .video-course-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; max-width: 860px; margin: 0 0 22px; }
+        .video-course-choice { min-height: 112px; padding: 17px 19px; border: 1px solid var(--border); border-radius: 14px; background: var(--surface-strong); color: var(--text); text-align: left; cursor: pointer; }
+        .video-course-choice:hover, .video-course-choice:focus-visible, .video-course-choice[aria-pressed="true"] { border-color: var(--accent); }
+        .video-course-choice[aria-pressed="true"] { background: var(--accent-soft); }
+        .video-course-choice span, .video-course-choice strong, .video-course-choice small { display: block; }
+        .video-course-choice span { color: var(--accent); font: 600 11px "JetBrains Mono", monospace; text-transform: uppercase; }
+        .video-course-choice strong { margin: 7px 0 4px; font: 700 21px "Space Grotesk", sans-serif; }
+        .video-course-choice small { color: var(--muted); font-size: 12px; }
+        .video-course-panel[hidden] { display: none; }
+        .video-course-panel h3 { margin: 0 0 8px; font: 700 22px "Space Grotesk", sans-serif; }
+        .video-course-panel > p:first-of-type { max-width: 760px; margin: 0 0 17px; color: var(--muted); font-size: 13px; line-height: 1.6; }
+        .video-frame { position: relative; width: min(100%, 860px); aspect-ratio: 16 / 9; border: 1px solid var(--border); border-radius: 16px; overflow: hidden; background: #070d16; scroll-margin-top: 85px; }
         .video-frame iframe { display: block; width: 100%; height: 100%; border: 0; }
         .video-frame iframe[hidden], .video-placeholder[hidden] { display: none; }
         .video-placeholder { display: grid; place-content: center; gap: 10px; width: 100%; height: 100%; padding: 24px; color: var(--muted); text-align: center; }
@@ -192,6 +203,7 @@
             .shortcut-list kbd { max-width: 100%; white-space: normal; }
             .interface-path { grid-template-columns: 1fr; }
             .lesson-route, .exercise-grid, .curve-figure { grid-template-columns: 1fr; }
+            .video-course-grid { grid-template-columns: 1fr; }
             .lesson-index a { grid-template-columns: 34px minmax(0, 1fr) 18px; gap: 8px; padding: 12px; }
             .lesson-index small { display: none; }
             .lesson-opening--second, .lesson-opening--third { margin-top: 32px; }
@@ -241,8 +253,8 @@
             <h2>Programma lezioni</h2>
             <p class="panel-intro">Scegli una lezione per leggere gli appunti. Le date della tua classe sono nel calendario.</p>
             <aside class="notice" aria-label="Preparazione obbligatoria con i video">
-                <div><strong>Preparazione obbligatoria · Video Photoshop base</strong><p>Tra una lezione e l’altra guarda le registrazioni di Photoshop base. Parti dal Video 02 e prosegui nell’ordine dell’archivio. In aula useremo il tempo per esercizi, correzioni e approfondimenti, partendo dalle basi viste nei video. I video da completare prima di ogni incontro saranno indicati qui quando il programma sarà definito.</p></div>
-                <a href="#video">Apri i video →</a>
+                <div><strong>Preparazione obbligatoria · Due corsi video</strong><p>Guarda per intero <em>Ombre</em> prima dell’inizio delle lezioni. Segui anche tutto il corso <em>Photoshop base</em> durante il semestre: le registrazioni sono parte del programma. In aula useremo il tempo per esercizi, correzioni e approfondimenti.</p></div>
+                <a href="#video">Apri i corsi →</a>
             </aside>
             <ol class="lesson-index" aria-label="Lezioni con programma pubblicato">
                 <li><a href="#lezione-1"><span class="lesson-index-number">01</span><strong>Conosciamoci</strong><small>2 ore</small><span class="lesson-index-arrow" aria-hidden="true">→</span></a></li>
@@ -402,28 +414,61 @@
         </section>
 
         <section class="panel" role="tabpanel" id="tab-video" aria-labelledby="btn-video" hidden>
-            <p class="kicker">Archivio del docente · 11 video</p>
-            <h2>Photoshop base</h2>
-            <p class="panel-intro">Queste registrazioni sono materiale obbligatorio di preparazione alle lezioni. Seleziona un video dall’elenco per guardarlo qui; i numeri corrispondono ai nomi originali dei file.</p>
-            <div class="video-frame">
+            <p class="kicker">Archivio del docente · 2 corsi video</p>
+            <h2>Guarda, studia, poi sperimenta</h2>
+            <p class="panel-intro">Prima di iniziare le lezioni completa <em>Ombre</em>. Durante il semestre guarda per intero anche <em>Photoshop base</em>. Entrambi i corsi sono parte della preparazione obbligatoria; scegli un corso e apri i video qui sotto.</p>
+            <div class="video-course-grid" aria-label="Scegli un corso video">
+                <button class="video-course-choice" type="button" data-video-course="ombre" aria-pressed="true" aria-controls="video-panel-ombre"><span>01 / Prima delle lezioni</span><strong>Ombre</strong><small>18 video · luce, ombre e riflessioni</small></button>
+                <button class="video-course-choice" type="button" data-video-course="photoshop" aria-pressed="false" aria-controls="video-panel-photoshop"><span>02 / Durante il corso</span><strong>Photoshop base</strong><small>11 video · il corso completo</small></button>
+            </div>
+            <div class="video-frame" id="video-frame">
                 <div class="video-placeholder" id="video-placeholder"><strong>Seleziona un video</strong><span>Il filmato si aprirà in questo riquadro.</span></div>
                 <iframe id="video-player" title="Video del corso Photoshop" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen hidden></iframe>
             </div>
             <div class="video-current"><span id="video-current-title" aria-live="polite">Nessun video selezionato</span><a id="video-direct-link" href="https://drive.google.com/drive/folders/1XXlpQSm5gdcdJXH-9yrzgJ1SRy64iHAH" target="_blank" rel="noopener noreferrer" hidden>Apri il video su Drive ↗</a></div>
-            <ol class="video-list" aria-label="Video Photoshop base">
-                <li><button class="video-choice" type="button" data-video-id="1JJ7PuRaT8MIVAGPwbThGPkCZ_6aN1Rra" data-video-number="02" aria-pressed="false"><strong>Video 02</strong><span>2.mp4</span></button></li>
-                <li><button class="video-choice" type="button" data-video-id="12ibLTFQrKCSrCTXw7qk_aAlbhxONkjOj" data-video-number="03" aria-pressed="false"><strong>Video 03</strong><span>3.mp4</span></button></li>
-                <li><button class="video-choice" type="button" data-video-id="1NoH9ndCti-ggcQSHq_dH9afikiUfixVV" data-video-number="04" aria-pressed="false"><strong>Video 04</strong><span>4.mp4</span></button></li>
-                <li><button class="video-choice" type="button" data-video-id="1UZGlqRN1quzzHZOVIG891rWyL0bDyxWG" data-video-number="05" aria-pressed="false"><strong>Video 05</strong><span>5.mp4</span></button></li>
-                <li><button class="video-choice" type="button" data-video-id="1yMCgBG5PJ2cNCWM3kZsSpTqo_eAI_Lhl" data-video-number="06" aria-pressed="false"><strong>Video 06</strong><span>6.mp4</span></button></li>
-                <li><button class="video-choice" type="button" data-video-id="124K2gtLv4GR9jPsBJwW_yOUNkZbdBgcZ" data-video-number="07" aria-pressed="false"><strong>Video 07</strong><span>7.mp4</span></button></li>
-                <li><button class="video-choice" type="button" data-video-id="1Exv6rOvGYHao5R-db70Xx-Eln5KCZUhD" data-video-number="08" aria-pressed="false"><strong>Video 08</strong><span>8.mp4</span></button></li>
-                <li><button class="video-choice" type="button" data-video-id="1NEE5Q3XluAWthFnTo2ev9rJXRqw-zQSx" data-video-number="09" aria-pressed="false"><strong>Video 09</strong><span>9.mp4</span></button></li>
-                <li><button class="video-choice" type="button" data-video-id="1ACq2mB-ty9BJqzElTX_yLPC9xber3exG" data-video-number="10" aria-pressed="false"><strong>Video 10</strong><span>10.mp4</span></button></li>
-                <li><button class="video-choice" type="button" data-video-id="12borxlBJOp3aeMt-X9Q8WPGsU2QE4Spi" data-video-number="11" aria-pressed="false"><strong>Video 11</strong><span>11.mp4</span></button></li>
-                <li><button class="video-choice" type="button" data-video-id="16kzJonMAeI9122mTfOtu4v17FGdu8IGw" data-video-number="12" aria-pressed="false"><strong>Video 12</strong><span>12.mp4</span></button></li>
-            </ol>
-            <p class="video-footer">Questi video sono stati registrati con una versione precedente di Photoshop: alcune schermate potrebbero essere diverse. <a class="video-folder-link" href="https://drive.google.com/drive/folders/1XXlpQSm5gdcdJXH-9yrzgJ1SRy64iHAH" target="_blank" rel="noopener noreferrer">Apri la cartella completa su Drive ↗</a></p>
+            <section class="video-course-panel" id="video-panel-ombre" aria-labelledby="video-heading-ombre">
+                <h3 id="video-heading-ombre">Ombre · prima delle lezioni</h3>
+                <p>Segui il percorso completo nell’ordine qui sotto. Il corso introduce ombre, riflessioni e occlusione ambientale attraverso spiegazioni ed esercizi.</p>
+                <ol class="video-list" aria-label="Video del corso Ombre">
+                    <li><button class="video-choice" type="button" data-video-id="1C258OkecYSCu61RiD8KlzHV8h0H0bwLU" data-video-title="Ombre · Capitolo 1" aria-pressed="false"><strong>Capitolo 1</strong><span>1_Capitolo 1.mp4</span></button></li>
+                    <li><button class="video-choice" type="button" data-video-id="1d29vpYci8DhIXuLWpIXT5S6UvLthcuyx" data-video-title="Ombre · Capitolo 2" aria-pressed="false"><strong>Capitolo 2</strong><span>2_Capitolo 2.mp4</span></button></li>
+                    <li><button class="video-choice" type="button" data-video-id="1M0k6fNZhBodht-xHi7ENR7Me6BND8b1u" data-video-title="Ombre · Capitolo 2 paragrafo 1" aria-pressed="false"><strong>Capitolo 2 paragrafo 1</strong><span>3_Capitolo 2 paragrafo 1.mp4</span></button></li>
+                    <li><button class="video-choice" type="button" data-video-id="14-92fiiSaKDfvBZZoYAy1FGut0SzQW-e" data-video-title="Ombre · Costruzione ombra" aria-pressed="false"><strong>Costruzione ombra</strong><span>4_Costruzione ombra.mp4</span></button></li>
+                    <li><button class="video-choice" type="button" data-video-id="1I2J7JoO-ryi0OTwD7WdYzVgUid3ByfsK" data-video-title="Ombre · Accenni riflessione" aria-pressed="false"><strong>Accenni riflessione</strong><span>5_Accenni riflessione.mp4</span></button></li>
+                    <li><button class="video-choice" type="button" data-video-id="1tU5bn1YqywFViI8dc_pGZxKzi3GVc0Or" data-video-title="Ombre · Legge di riflessione" aria-pressed="false"><strong>Legge di riflessione</strong><span>6_Legge di riflessione.mp4</span></button></li>
+                    <li><button class="video-choice" type="button" data-video-id="1FCKPlN7zQ-DoQERs3i50xtYldk8UEOVI" data-video-title="Ombre · Conclusioni legge di riflessione" aria-pressed="false"><strong>Conclusioni legge di riflessione</strong><span>7_Conclusioni legge di riflessione.mp4</span></button></li>
+                    <li><button class="video-choice" type="button" data-video-id="1kK-HWBnw0tofAnYgnA9ZEIwL6HhGNzOG" data-video-title="Ombre · Pratica legge di riflessione" aria-pressed="false"><strong>Pratica legge di riflessione</strong><span>8_Pratica legge di riflessione.mp4</span></button></li>
+                    <li><button class="video-choice" type="button" data-video-id="1_eBAeU_U4u3jrYTs6Q_V7T3swYZaPmjR" data-video-title="Ombre · Corno" aria-pressed="false"><strong>Corno</strong><span>9_Corno.mp4</span></button></li>
+                    <li><button class="video-choice" type="button" data-video-id="1MQ_cSQzrjfRV6MDam6N_PWwzvq8LCe8o" data-video-title="Ombre · Palloncino" aria-pressed="false"><strong>Palloncino</strong><span>10_Palloncino.mp4</span></button></li>
+                    <li><button class="video-choice" type="button" data-video-id="1nxwI6_JEUDM9FWmlkpZjGDBHKOMiN0cw" data-video-title="Ombre · Paradosso degli spigoli" aria-pressed="false"><strong>Paradosso degli spigoli</strong><span>11_Paradosso degli spigoli.mp4</span></button></li>
+                    <li><button class="video-choice" type="button" data-video-id="15ws8gqtJNHEHEVkvwSH9nt54d51R5adj" data-video-title="Ombre · Spigoli conclusione" aria-pressed="false"><strong>Spigoli conclusione</strong><span>12_Spigoli conclusione.mp4</span></button></li>
+                    <li><button class="video-choice" type="button" data-video-id="19rTkp_v3vRhmw6SiF3Nk7IjvlAJCmKAU" data-video-title="Ombre · Spigoli pratica" aria-pressed="false"><strong>Spigoli pratica</strong><span>12_Spigoli pratica.mp4</span></button></li>
+                    <li><button class="video-choice" type="button" data-video-id="1GoCCciUP3EKv5pGJldxYjeDxyTxdWTTQ" data-video-title="Ombre · Occlusione ambientale" aria-pressed="false"><strong>Occlusione ambientale</strong><span>13_Occlusione ambientale.mp4</span></button></li>
+                    <li><button class="video-choice" type="button" data-video-id="1Je15PQWwyE7Q68VxbQt9gZEHYnNJlCvU" data-video-title="Ombre · Tubone" aria-pressed="false"><strong>Tubone</strong><span>14_Tubone.mp4</span></button></li>
+                    <li><button class="video-choice" type="button" data-video-id="1skhCqNXAWHgCFGnWX-wO9WSGFyWnZCL7" data-video-title="Ombre · Progetto tubone" aria-pressed="false"><strong>Progetto tubone</strong><span>15_Progetto tubone.mp4</span></button></li>
+                    <li><button class="video-choice" type="button" data-video-id="1BBk23QoEsNWw84ic3x2dxls2uuhiY37d" data-video-title="Ombre · Serpente" aria-pressed="false"><strong>Serpente</strong><span>16_Serpente.mp4</span></button></li>
+                    <li><button class="video-choice" type="button" data-video-id="1JZliEQVlDbEDVsNYKmCQ8642vNIS526I" data-video-title="Ombre · Conclusioni" aria-pressed="false"><strong>Conclusioni</strong><span>17_Conclusioni.mp4</span></button></li>
+                </ol>
+                <p class="video-footer"><a class="video-folder-link" href="https://drive.google.com/drive/folders/1fEF8wPsdwrDZ4I9gseJoe00U9U1VfbA-" target="_blank" rel="noopener noreferrer">Apri l’intero corso Ombre su Drive ↗</a></p>
+            </section>
+            <section class="video-course-panel" id="video-panel-photoshop" aria-labelledby="video-heading-photoshop" hidden>
+                <h3 id="video-heading-photoshop">Photoshop base · durante il corso</h3>
+                <p>Guarda il corso completo e usa le registrazioni per arrivare in aula con le basi già studiate.</p>
+                <ol class="video-list" aria-label="Video Photoshop base">
+                    <li><button class="video-choice" type="button" data-video-id="1JJ7PuRaT8MIVAGPwbThGPkCZ_6aN1Rra" data-video-title="Photoshop base · Video 01" aria-pressed="false"><strong>Video 01</strong><span>1.mp4</span></button></li>
+                    <li><button class="video-choice" type="button" data-video-id="12ibLTFQrKCSrCTXw7qk_aAlbhxONkjOj" data-video-title="Photoshop base · Video 02" aria-pressed="false"><strong>Video 02</strong><span>2.mp4</span></button></li>
+                    <li><button class="video-choice" type="button" data-video-id="1NoH9ndCti-ggcQSHq_dH9afikiUfixVV" data-video-title="Photoshop base · Video 03" aria-pressed="false"><strong>Video 03</strong><span>3.mp4</span></button></li>
+                    <li><button class="video-choice" type="button" data-video-id="1UZGlqRN1quzzHZOVIG891rWyL0bDyxWG" data-video-title="Photoshop base · Video 04" aria-pressed="false"><strong>Video 04</strong><span>4.mp4</span></button></li>
+                    <li><button class="video-choice" type="button" data-video-id="1yMCgBG5PJ2cNCWM3kZsSpTqo_eAI_Lhl" data-video-title="Photoshop base · Video 05" aria-pressed="false"><strong>Video 05</strong><span>5.mp4</span></button></li>
+                    <li><button class="video-choice" type="button" data-video-id="124K2gtLv4GR9jPsBJwW_yOUNkZbdBgcZ" data-video-title="Photoshop base · Video 06" aria-pressed="false"><strong>Video 06</strong><span>6.mp4</span></button></li>
+                    <li><button class="video-choice" type="button" data-video-id="1Exv6rOvGYHao5R-db70Xx-Eln5KCZUhD" data-video-title="Photoshop base · Video 07" aria-pressed="false"><strong>Video 07</strong><span>7.mp4</span></button></li>
+                    <li><button class="video-choice" type="button" data-video-id="1NEE5Q3XluAWthFnTo2ev9rJXRqw-zQSx" data-video-title="Photoshop base · Video 08" aria-pressed="false"><strong>Video 08</strong><span>8.mp4</span></button></li>
+                    <li><button class="video-choice" type="button" data-video-id="1ACq2mB-ty9BJqzElTX_yLPC9xber3exG" data-video-title="Photoshop base · Video 09" aria-pressed="false"><strong>Video 09</strong><span>9.mp4</span></button></li>
+                    <li><button class="video-choice" type="button" data-video-id="12borxlBJOp3aeMt-X9Q8WPGsU2QE4Spi" data-video-title="Photoshop base · Video 10" aria-pressed="false"><strong>Video 10</strong><span>10.mp4</span></button></li>
+                    <li><button class="video-choice" type="button" data-video-id="16kzJonMAeI9122mTfOtu4v17FGdu8IGw" data-video-title="Photoshop base · Video 11" aria-pressed="false"><strong>Video 11</strong><span>11.mp4</span></button></li>
+                </ol>
+                <p class="video-footer">Questi video sono stati registrati con una versione precedente di Photoshop: alcune schermate potrebbero essere diverse. <a class="video-folder-link" href="https://drive.google.com/drive/folders/1XXlpQSm5gdcdJXH-9yrzgJ1SRy64iHAH" target="_blank" rel="noopener noreferrer">Apri l’intero corso Photoshop base su Drive ↗</a></p>
+            </section>
         </section>
 
         <section class="panel" role="tabpanel" id="tab-risorse" aria-labelledby="btn-risorse" hidden>
@@ -560,20 +605,29 @@
         document.getElementById("video-direct-link").hidden = true;
         document.querySelectorAll(".video-choice").forEach(function (button) { button.setAttribute("aria-pressed", "false"); });
     }
+    document.querySelectorAll(".video-course-choice").forEach(function (button) {
+        button.addEventListener("click", function () {
+            const course = button.dataset.videoCourse;
+            stopVideo();
+            document.querySelectorAll(".video-course-choice").forEach(function (choice) { choice.setAttribute("aria-pressed", String(choice === button)); });
+            document.querySelectorAll(".video-course-panel").forEach(function (panel) { panel.hidden = panel.id !== "video-panel-" + course; });
+        });
+    });
     document.querySelectorAll(".video-choice").forEach(function (button) {
         button.addEventListener("click", function () {
             const id = button.dataset.videoId;
-            const number = button.dataset.videoNumber;
+            const title = button.dataset.videoTitle;
             const player = document.getElementById("video-player");
             player.src = "https://drive.google.com/file/d/" + id + "/preview";
-            player.title = "Video " + number + " · Photoshop base";
+            player.title = title;
             player.hidden = false;
             document.getElementById("video-placeholder").hidden = true;
-            document.getElementById("video-current-title").textContent = "Video " + number + " · Photoshop base";
+            document.getElementById("video-current-title").textContent = title;
             const directLink = document.getElementById("video-direct-link");
             directLink.href = "https://drive.google.com/file/d/" + id + "/view";
             directLink.hidden = false;
             document.querySelectorAll(".video-choice").forEach(function (choice) { choice.setAttribute("aria-pressed", String(choice === button)); });
+            document.getElementById("video-frame").scrollIntoView({ block: "start", behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth" });
         });
     });
     const shortcutKeys = document.querySelectorAll("#tab-scorciatoie kbd");
