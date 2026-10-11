@@ -253,7 +253,7 @@
             <h2>Programma lezioni</h2>
             <p class="panel-intro">Scegli una lezione per leggere gli appunti. Le date della tua classe sono nel calendario.</p>
             <aside class="notice" aria-label="Preparazione obbligatoria con i video">
-                <div><strong>Preparazione obbligatoria · Due corsi video</strong><p>Guarda per intero <em>Ombre</em> prima dell’inizio delle lezioni. Segui anche tutto il corso <em>Photoshop base</em> durante il semestre: le registrazioni sono parte del programma. In aula useremo il tempo per esercizi, correzioni e approfondimenti.</p></div>
+                <div><strong>Preparazione obbligatoria · Due corsi video</strong><p>Segui i corsi completi in quest’ordine: prima <em>Photoshop base</em>, poi <em>Ombre</em>, che approfondisce gli argomenti più avanzati. Le registrazioni sono parte del programma; in aula useremo il tempo per esercizi, correzioni e approfondimenti.</p></div>
                 <a href="#video">Apri i corsi →</a>
             </aside>
             <ol class="lesson-index" aria-label="Lezioni con programma pubblicato">
@@ -416,19 +416,36 @@
         <section class="panel" role="tabpanel" id="tab-video" aria-labelledby="btn-video" hidden>
             <p class="kicker">Archivio del docente · 2 corsi video</p>
             <h2>Guarda, studia, poi sperimenta</h2>
-            <p class="panel-intro">Prima di iniziare le lezioni completa <em>Ombre</em>. Durante il semestre guarda per intero anche <em>Photoshop base</em>. Entrambi i corsi sono parte della preparazione obbligatoria; scegli un corso e apri i video qui sotto.</p>
+            <p class="panel-intro">Inizia da <em>Photoshop base</em> e guardalo per intero. Poi passa a <em>Ombre</em>, il corso più avanzato. Entrambi fanno parte della preparazione obbligatoria: scegli un corso e apri i video qui sotto.</p>
             <div class="video-course-grid" aria-label="Scegli un corso video">
-                <button class="video-course-choice" type="button" data-video-course="ombre" aria-pressed="true" aria-controls="video-panel-ombre"><span>01 / Prima delle lezioni</span><strong>Ombre</strong><small>18 video · luce, ombre e riflessioni</small></button>
-                <button class="video-course-choice" type="button" data-video-course="photoshop" aria-pressed="false" aria-controls="video-panel-photoshop"><span>02 / Durante il corso</span><strong>Photoshop base</strong><small>11 video · il corso completo</small></button>
+                <button class="video-course-choice" type="button" data-video-course="photoshop" aria-pressed="true" aria-controls="video-panel-photoshop"><span>01 / Per iniziare</span><strong>Photoshop base</strong><small>11 video · il corso completo</small></button>
+                <button class="video-course-choice" type="button" data-video-course="ombre" aria-pressed="false" aria-controls="video-panel-ombre"><span>02 / Dopo le basi</span><strong>Ombre</strong><small>18 video · luce, ombre e riflessioni</small></button>
             </div>
             <div class="video-frame" id="video-frame">
                 <div class="video-placeholder" id="video-placeholder"><strong>Seleziona un video</strong><span>Il filmato si aprirà in questo riquadro.</span></div>
                 <iframe id="video-player" title="Video del corso Photoshop" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen hidden></iframe>
             </div>
             <div class="video-current"><span id="video-current-title" aria-live="polite">Nessun video selezionato</span><a id="video-direct-link" href="https://drive.google.com/drive/folders/1XXlpQSm5gdcdJXH-9yrzgJ1SRy64iHAH" target="_blank" rel="noopener noreferrer" hidden>Apri il video su Drive ↗</a></div>
-            <section class="video-course-panel" id="video-panel-ombre" aria-labelledby="video-heading-ombre">
-                <h3 id="video-heading-ombre">Ombre · prima delle lezioni</h3>
-                <p>Segui il percorso completo nell’ordine qui sotto. Il corso introduce ombre, riflessioni e occlusione ambientale attraverso spiegazioni ed esercizi.</p>
+            <section class="video-course-panel" id="video-panel-photoshop" aria-labelledby="video-heading-photoshop">
+                <h3 id="video-heading-photoshop">Photoshop base · primo corso</h3>
+                <p>Guarda il corso completo per acquisire le basi e arrivare in aula preparato. Poi passa a Ombre.</p>
+                <ol class="video-list" aria-label="Video Photoshop base">
+                    <li><button class="video-choice" type="button" data-video-id="1JJ7PuRaT8MIVAGPwbThGPkCZ_6aN1Rra" data-video-title="Photoshop base · Video 01" aria-pressed="false"><strong>Video 01</strong><span>1.mp4</span></button></li>
+                    <li><button class="video-choice" type="button" data-video-id="12ibLTFQrKCSrCTXw7qk_aAlbhxONkjOj" data-video-title="Photoshop base · Video 02" aria-pressed="false"><strong>Video 02</strong><span>2.mp4</span></button></li>
+                    <li><button class="video-choice" type="button" data-video-id="1NoH9ndCti-ggcQSHq_dH9afikiUfixVV" data-video-title="Photoshop base · Video 03" aria-pressed="false"><strong>Video 03</strong><span>3.mp4</span></button></li>
+                    <li><button class="video-choice" type="button" data-video-id="1UZGlqRN1quzzHZOVIG891rWyL0bDyxWG" data-video-title="Photoshop base · Video 04" aria-pressed="false"><strong>Video 04</strong><span>4.mp4</span></button></li>
+                    <li><button class="video-choice" type="button" data-video-id="1yMCgBG5PJ2cNCWM3kZsSpTqo_eAI_Lhl" data-video-title="Photoshop base · Video 05" aria-pressed="false"><strong>Video 05</strong><span>5.mp4</span></button></li>
+                    <li><button class="video-choice" type="button" data-video-id="124K2gtLv4GR9jPsBJwW_yOUNkZbdBgcZ" data-video-title="Photoshop base · Video 06" aria-pressed="false"><strong>Video 06</strong><span>6.mp4</span></button></li>
+                    <li><button class="video-choice" type="button" data-video-id="1Exv6rOvGYHao5R-db70Xx-Eln5KCZUhD" data-video-title="Photoshop base · Video 07" aria-pressed="false"><strong>Video 07</strong><span>7.mp4</span></button></li>
+                    <li><button class="video-choice" type="button" data-video-id="1NEE5Q3XluAWthFnTo2ev9rJXRqw-zQSx" data-video-title="Photoshop base · Video 08" aria-pressed="false"><strong>Video 08</strong><span>8.mp4</span></button></li>
+                    <li><button class="video-choice" type="button" data-video-id="1ACq2mB-ty9BJqzElTX_yLPC9xber3exG" data-video-title="Photoshop base · Video 09" aria-pressed="false"><strong>Video 09</strong><span>9.mp4</span></button></li>
+                    <li><button class="video-choice" type="button" data-video-id="12borxlBJOp3aeMt-X9Q8WPGsU2QE4Spi" data-video-title="Photoshop base · Video 10" aria-pressed="false"><strong>Video 10</strong><span>10.mp4</span></button></li>
+                    <li><button class="video-choice" type="button" data-video-id="16kzJonMAeI9122mTfOtu4v17FGdu8IGw" data-video-title="Photoshop base · Video 11" aria-pressed="false"><strong>Video 11</strong><span>11.mp4</span></button></li>
+                </ol>
+                <p class="video-footer">Questi video sono stati registrati con una versione precedente di Photoshop: alcune schermate potrebbero essere diverse. <a class="video-folder-link" href="https://drive.google.com/drive/folders/1XXlpQSm5gdcdJXH-9yrzgJ1SRy64iHAH" target="_blank" rel="noopener noreferrer">Apri l’intero corso Photoshop base su Drive ↗</a></p>
+            </section>            <section class="video-course-panel" id="video-panel-ombre" aria-labelledby="video-heading-ombre" hidden>
+                <h3 id="video-heading-ombre">Ombre · dopo Photoshop base</h3>
+                <p>Dopo aver studiato Photoshop base, segui questo percorso completo nell’ordine qui sotto. Approfondisce ombre, riflessioni e occlusione ambientale attraverso spiegazioni ed esercizi.</p>
                 <ol class="video-list" aria-label="Video del corso Ombre">
                     <li><button class="video-choice" type="button" data-video-id="1C258OkecYSCu61RiD8KlzHV8h0H0bwLU" data-video-title="Ombre · Capitolo 1" aria-pressed="false"><strong>Capitolo 1</strong><span>1_Capitolo 1.mp4</span></button></li>
                     <li><button class="video-choice" type="button" data-video-id="1d29vpYci8DhIXuLWpIXT5S6UvLthcuyx" data-video-title="Ombre · Capitolo 2" aria-pressed="false"><strong>Capitolo 2</strong><span>2_Capitolo 2.mp4</span></button></li>
@@ -451,24 +468,7 @@
                 </ol>
                 <p class="video-footer"><a class="video-folder-link" href="https://drive.google.com/drive/folders/1fEF8wPsdwrDZ4I9gseJoe00U9U1VfbA-" target="_blank" rel="noopener noreferrer">Apri l’intero corso Ombre su Drive ↗</a></p>
             </section>
-            <section class="video-course-panel" id="video-panel-photoshop" aria-labelledby="video-heading-photoshop" hidden>
-                <h3 id="video-heading-photoshop">Photoshop base · durante il corso</h3>
-                <p>Guarda il corso completo e usa le registrazioni per arrivare in aula con le basi già studiate.</p>
-                <ol class="video-list" aria-label="Video Photoshop base">
-                    <li><button class="video-choice" type="button" data-video-id="1JJ7PuRaT8MIVAGPwbThGPkCZ_6aN1Rra" data-video-title="Photoshop base · Video 01" aria-pressed="false"><strong>Video 01</strong><span>1.mp4</span></button></li>
-                    <li><button class="video-choice" type="button" data-video-id="12ibLTFQrKCSrCTXw7qk_aAlbhxONkjOj" data-video-title="Photoshop base · Video 02" aria-pressed="false"><strong>Video 02</strong><span>2.mp4</span></button></li>
-                    <li><button class="video-choice" type="button" data-video-id="1NoH9ndCti-ggcQSHq_dH9afikiUfixVV" data-video-title="Photoshop base · Video 03" aria-pressed="false"><strong>Video 03</strong><span>3.mp4</span></button></li>
-                    <li><button class="video-choice" type="button" data-video-id="1UZGlqRN1quzzHZOVIG891rWyL0bDyxWG" data-video-title="Photoshop base · Video 04" aria-pressed="false"><strong>Video 04</strong><span>4.mp4</span></button></li>
-                    <li><button class="video-choice" type="button" data-video-id="1yMCgBG5PJ2cNCWM3kZsSpTqo_eAI_Lhl" data-video-title="Photoshop base · Video 05" aria-pressed="false"><strong>Video 05</strong><span>5.mp4</span></button></li>
-                    <li><button class="video-choice" type="button" data-video-id="124K2gtLv4GR9jPsBJwW_yOUNkZbdBgcZ" data-video-title="Photoshop base · Video 06" aria-pressed="false"><strong>Video 06</strong><span>6.mp4</span></button></li>
-                    <li><button class="video-choice" type="button" data-video-id="1Exv6rOvGYHao5R-db70Xx-Eln5KCZUhD" data-video-title="Photoshop base · Video 07" aria-pressed="false"><strong>Video 07</strong><span>7.mp4</span></button></li>
-                    <li><button class="video-choice" type="button" data-video-id="1NEE5Q3XluAWthFnTo2ev9rJXRqw-zQSx" data-video-title="Photoshop base · Video 08" aria-pressed="false"><strong>Video 08</strong><span>8.mp4</span></button></li>
-                    <li><button class="video-choice" type="button" data-video-id="1ACq2mB-ty9BJqzElTX_yLPC9xber3exG" data-video-title="Photoshop base · Video 09" aria-pressed="false"><strong>Video 09</strong><span>9.mp4</span></button></li>
-                    <li><button class="video-choice" type="button" data-video-id="12borxlBJOp3aeMt-X9Q8WPGsU2QE4Spi" data-video-title="Photoshop base · Video 10" aria-pressed="false"><strong>Video 10</strong><span>10.mp4</span></button></li>
-                    <li><button class="video-choice" type="button" data-video-id="16kzJonMAeI9122mTfOtu4v17FGdu8IGw" data-video-title="Photoshop base · Video 11" aria-pressed="false"><strong>Video 11</strong><span>11.mp4</span></button></li>
-                </ol>
-                <p class="video-footer">Questi video sono stati registrati con una versione precedente di Photoshop: alcune schermate potrebbero essere diverse. <a class="video-folder-link" href="https://drive.google.com/drive/folders/1XXlpQSm5gdcdJXH-9yrzgJ1SRy64iHAH" target="_blank" rel="noopener noreferrer">Apri l’intero corso Photoshop base su Drive ↗</a></p>
-            </section>
+
         </section>
 
         <section class="panel" role="tabpanel" id="tab-risorse" aria-labelledby="btn-risorse" hidden>
