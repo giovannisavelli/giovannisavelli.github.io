@@ -67,3 +67,16 @@ a{color:inherit}button{font:inherit}svg{display:block}::selection{background:var
 @media(max-width:760px){.hub-hero{padding:36px 0 32px}.workbench{display:none}.featured-strip{display:none}.quick-access{margin-top:26px}.course-status{margin:12px 0 20px}}
 @media(max-width:560px){.hub-hero h1{margin-top:18px;font-size:clamp(49px,13vw,67px)}.hero-copy{margin-top:16px;font-size:14px;line-height:1.5}.hero-actions{margin-top:17px}.quick-heading{align-items:start}.quick-heading small{max-width:92px}.last-course{grid-template-columns:1fr}.last-course>span{grid-column:auto}.quick-row{grid-template-columns:minmax(0,1fr) auto auto;gap:4px}.quick-row a{padding:7px;font-size:10px}.quick-row small{font-size:9px}.department{margin-top:45px}.course-hero{margin-top:12px}.course-intro{padding:14px 0 12px}.course-intro h1{margin:16px 0 12px;font-size:clamp(43px,12vw,60px)}.course-intro p{font-size:14px;line-height:1.45}.course-meta{margin-top:14px}.course-cover{display:none}.course-status{padding:14px;gap:8px}.section-nav{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:7px;scroll-margin-top:12px}.section-nav button{min-height:44px;padding:9px 7px;text-align:center;line-height:1.2}.content-shell{min-height:320px}.class-picker{gap:10px}.date-grid.one{grid-template-columns:minmax(0,1fr)}}
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}.primary-link,.course-card{transition:none}}
+
+/* Il nome del corso è una destinazione diretta; i pulsanti accanto portano alla sezione richiesta. */
+.quick-row{grid-template-columns:minmax(0,1fr) repeat(3,auto)}
+.quick-row a.quick-course-link{display:inline;min-height:0;padding:0;border:0;border-radius:0;background:none;color:var(--text);font:inherit;text-align:left;white-space:normal}
+.quick-row a.quick-course-link:hover{color:var(--lime);text-decoration:underline;text-underline-offset:3px}
+.quick-row a.quick-course-link:focus-visible{outline:2px solid var(--lime);outline-offset:3px}
+@media(max-width:560px){
+  .quick-row{display:flex;align-items:stretch;flex-wrap:wrap;gap:7px;padding:11px 0}
+  .quick-row>div{flex:1 0 100%}
+  .quick-row strong{font-size:13px}
+  .quick-row small{font-size:10px}
+  .quick-row>a:not(.quick-course-link){flex:1 1 70px;min-height:42px}
+}

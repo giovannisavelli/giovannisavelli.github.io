@@ -153,7 +153,7 @@
         .shortcut-note { max-width: 860px; margin: 25px 0 0; color: var(--muted); font-size: 13px; line-height: 1.65; }
         .shortcut-note a { color: var(--accent); text-decoration: none; }
         .shortcut-note a:hover, .shortcut-note a:focus-visible { text-decoration: underline; }
-        .video-course-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; max-width: 860px; margin: 0 0 22px; }
+        .video-course-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; margin: 0 0 14px; }
         .video-course-choice { min-height: 112px; padding: 17px 19px; border: 1px solid var(--border); border-radius: 14px; background: var(--surface-strong); color: var(--text); text-align: left; cursor: pointer; }
         .video-course-choice:hover, .video-course-choice:focus-visible, .video-course-choice[aria-pressed="true"] { border-color: var(--accent); }
         .video-course-choice[aria-pressed="true"] { background: var(--accent-soft); }
@@ -164,15 +164,15 @@
         .video-course-panel[hidden] { display: none; }
         .video-course-panel h3 { margin: 0 0 8px; font: 700 22px "Space Grotesk", sans-serif; }
         .video-course-panel > p:first-of-type { max-width: 760px; margin: 0 0 17px; color: var(--muted); font-size: 13px; line-height: 1.6; }
-        .video-frame { position: relative; width: min(100%, 860px); aspect-ratio: 16 / 9; border: 1px solid var(--border); border-radius: 16px; overflow: hidden; background: #070d16; scroll-margin-top: 85px; }
+        .video-start { display: inline-flex; align-items: center; justify-content: center; min-height: 44px; margin: 0 0 23px; padding: 10px 17px; border: 1px solid var(--accent); border-radius: 9px; background: var(--accent); color: #06111d; font-size: 13px; font-weight: 700; cursor: pointer; }
+        .video-start:hover, .video-start:focus-visible { background: #83caff; }
+        .video-frame { position: relative; width: min(100%, 960px); aspect-ratio: 16 / 9; margin: 0 auto; border: 1px solid var(--border); border-radius: 16px; overflow: hidden; background: #070d16; scroll-margin-top: 85px; }
         .video-frame iframe { display: block; width: 100%; height: 100%; border: 0; }
-        .video-frame iframe[hidden], .video-placeholder[hidden] { display: none; }
-        .video-placeholder { display: grid; place-content: center; gap: 10px; width: 100%; height: 100%; padding: 24px; color: var(--muted); text-align: center; }
-        .video-placeholder strong { color: var(--text); font-size: 18px; }
-        .video-current { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; margin: 14px 0 22px; color: var(--muted); font-size: 13px; }
+        .video-frame iframe[hidden] { display: none; }
+        .video-current { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; max-width: 960px; margin: 14px auto 26px; color: var(--muted); font-size: 13px; }
         .video-current a, .video-folder-link { color: var(--accent); font-weight: 600; text-decoration: none; }
         .video-current a:hover, .video-folder-link:hover { text-decoration: underline; }
-        .video-list { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 180px), 1fr)); grid-auto-rows: 1fr; gap: 10px; max-width: 860px; margin: 0; padding: 0; list-style: none; }
+        .video-list { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); grid-auto-rows: 1fr; gap: 10px; margin: 0; padding: 0; list-style: none; }
         .video-list li { min-width: 0; }
         .video-choice { display: flex; flex-direction: column; justify-content: space-between; width: 100%; height: 100%; min-height: 112px; padding: 13px 14px; border: 1px solid var(--border); border-radius: 12px; background: var(--surface-strong); color: var(--text); text-align: left; cursor: pointer; }
         .video-choice:hover, .video-choice:focus-visible { border-color: var(--accent); }
@@ -196,6 +196,7 @@
         .site-footer { display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap; padding: 30px 0 40px; color: var(--muted); font-family: "JetBrains Mono", monospace; font-size: 11px; }
         .site-footer a { color: var(--text); text-decoration: none; }
         .site-footer a:hover { color: var(--accent); }
+        @media (min-width: 621px) and (max-width: 900px) { .video-list { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
         @media (max-width: 620px) {
             .hero { grid-template-columns: 1fr; }
             .ps-mark { grid-row: 1; width: 74px; border-radius: 14px; font-size: 42px; }
@@ -204,7 +205,11 @@
             .shortcut-list kbd { max-width: 100%; white-space: normal; }
             .interface-path { grid-template-columns: 1fr; }
             .lesson-route, .exercise-grid, .curve-figure { grid-template-columns: 1fr; }
-            .video-course-grid { grid-template-columns: 1fr; }
+            .video-course-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+            .video-course-choice { min-height: 100px; padding: 12px; }
+            .video-course-choice span { font-size: 9px; }
+            .video-course-choice strong { font-size: 17px; }
+            .video-course-choice small { font-size: 11px; }
             .lesson-index a { grid-template-columns: 34px minmax(0, 1fr) 18px; gap: 8px; padding: 12px; }
             .lesson-index small { display: none; }
             .lesson-opening--second, .lesson-opening--third { margin-top: 32px; }
@@ -214,8 +219,8 @@
         }
         @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
     </style>
-    <link rel="stylesheet" href="../../design/course.css?v=site-20261009">
-    <script src="../../design/course.js?v=site-20261009" defer></script>
+    <link rel="stylesheet" href="../../design/course.css?v=ux-20261012">
+    <script src="../../design/course.js?v=ux-20261012" defer></script>
 </head>
 <body class="gs-course gs-course--photoshop">
 <div class="shell">
@@ -423,11 +428,11 @@
                 <button class="video-course-choice" type="button" data-video-course="photoshop" aria-pressed="true" aria-controls="video-panel-photoshop"><span>01 / Per iniziare</span><strong>Photoshop base</strong><small>11 video · il corso completo</small></button>
                 <button class="video-course-choice" type="button" data-video-course="ombre" aria-pressed="false" aria-controls="video-panel-ombre"><span>02 / Dopo le basi</span><strong>Ombre</strong><small>18 video · luce, ombre e riflessioni</small></button>
             </div>
-            <div class="video-frame" id="video-frame">
-                <div class="video-placeholder" id="video-placeholder"><strong>Seleziona un video</strong><span>Il filmato si aprirà in questo riquadro.</span></div>
+            <button class="video-start" id="video-start" type="button">Inizia dal video 01 →</button>
+            <div class="video-frame" id="video-frame" hidden>
                 <iframe id="video-player" title="Video del corso Photoshop" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen hidden></iframe>
             </div>
-            <div class="video-current"><span id="video-current-title" aria-live="polite">Nessun video selezionato</span><a id="video-direct-link" href="https://drive.google.com/drive/folders/1XXlpQSm5gdcdJXH-9yrzgJ1SRy64iHAH" target="_blank" rel="noopener noreferrer" hidden>Apri il video su Drive ↗</a></div>
+            <div class="video-current" id="video-current" hidden><span id="video-current-title" aria-live="polite">Nessun video selezionato</span><a id="video-direct-link" href="https://drive.google.com/drive/folders/1XXlpQSm5gdcdJXH-9yrzgJ1SRy64iHAH" target="_blank" rel="noopener noreferrer" hidden>Apri il video su Drive ↗</a></div>
             <section class="video-course-panel" id="video-panel-photoshop" aria-labelledby="video-heading-photoshop">
                 <h3 id="video-heading-photoshop">Photoshop base · primo corso</h3>
                 <p>Guarda il corso completo per acquisire le basi e arrivare in aula preparato. Poi passa a Ombre.</p>
@@ -445,7 +450,8 @@
                     <li><button class="video-choice" type="button" data-video-id="16kzJonMAeI9122mTfOtu4v17FGdu8IGw" data-video-title="Photoshop base · Video 11" aria-pressed="false"><strong>Video 11</strong><span>11.mp4</span></button></li>
                 </ol>
                 <p class="video-footer">Questi video sono stati registrati con una versione precedente di Photoshop: alcune schermate potrebbero essere diverse. <a class="video-folder-link" href="https://drive.google.com/drive/folders/1XXlpQSm5gdcdJXH-9yrzgJ1SRy64iHAH" target="_blank" rel="noopener noreferrer">Apri l’intero corso Photoshop base su Drive ↗</a></p>
-            </section>            <section class="video-course-panel" id="video-panel-ombre" aria-labelledby="video-heading-ombre" hidden>
+            </section>
+            <section class="video-course-panel" id="video-panel-ombre" aria-labelledby="video-heading-ombre" hidden>
                 <h3 id="video-heading-ombre">Ombre · dopo Photoshop base</h3>
                 <p>Dopo aver studiato Photoshop base, segui questo percorso completo nell’ordine qui sotto. Approfondisce ombre, riflessioni e occlusione ambientale attraverso spiegazioni ed esercizi.</p>
                 <ol class="video-list" aria-label="Video del corso Ombre">
@@ -602,17 +608,22 @@
         if (!player || player.hidden) return;
         player.src = "about:blank";
         player.hidden = true;
-        document.getElementById("video-placeholder").hidden = false;
+        document.getElementById("video-frame").hidden = true;
+        document.getElementById("video-current").hidden = true;
         document.getElementById("video-current-title").textContent = "Nessun video selezionato";
         document.getElementById("video-direct-link").hidden = true;
         document.querySelectorAll(".video-choice").forEach(function (button) { button.setAttribute("aria-pressed", "false"); });
     }
+    document.getElementById("video-start").addEventListener("click", function () {
+        document.querySelector(".video-course-panel:not([hidden]) .video-choice")?.click();
+    });
     document.querySelectorAll(".video-course-choice").forEach(function (button) {
         button.addEventListener("click", function () {
             const course = button.dataset.videoCourse;
             stopVideo();
             document.querySelectorAll(".video-course-choice").forEach(function (choice) { choice.setAttribute("aria-pressed", String(choice === button)); });
             document.querySelectorAll(".video-course-panel").forEach(function (panel) { panel.hidden = panel.id !== "video-panel-" + course; });
+            document.getElementById("video-start").textContent = course === "ombre" ? "Inizia dal capitolo 1 →" : "Inizia dal video 01 →";
         });
     });
     document.querySelectorAll(".video-choice").forEach(function (button) {
@@ -623,7 +634,8 @@
             player.src = "https://drive.google.com/file/d/" + id + "/preview";
             player.title = title;
             player.hidden = false;
-            document.getElementById("video-placeholder").hidden = true;
+            document.getElementById("video-frame").hidden = false;
+            document.getElementById("video-current").hidden = false;
             document.getElementById("video-current-title").textContent = title;
             const directLink = document.getElementById("video-direct-link");
             directLink.href = "https://drive.google.com/file/d/" + id + "/view";

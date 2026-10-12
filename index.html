@@ -12,8 +12,8 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="/design/hub.css?v=site-20261009">
-  <script src="/design/hub.js?v=video-grid-20261011" defer></script>
+  <link rel="stylesheet" href="/design/hub.css?v=ux-20261012">
+  <script src="/design/hub.js?v=ux-20261012" defer></script>
 </head>
 <body>
   <div class="shell">
@@ -33,14 +33,14 @@
             <div class="last-course" id="last-course" hidden><span>ULTIMO CORSO APERTO</span><strong id="last-course-name"></strong><div><a id="last-course-open" href="#">Apri corso →</a><a id="last-course-calendar" href="#">Calendario →</a></div></div>
             <div class="dept-switch" role="group" aria-label="Scegli il reparto"><button type="button" data-dept="interior" aria-pressed="true" aria-controls="quick-interior">Interior Design</button><button type="button" data-dept="product" aria-pressed="false" aria-controls="quick-product">Product Design</button></div>
             <div class="quick-panel" id="quick-interior" data-dept-panel="interior">
-              <div class="quick-row"><div><strong>Rendering 3D</strong><small>2° anno · Cinema 4D e Corona</small></div><a href="/interior/rendering3d/#programma">Programma</a><a href="/interior/rendering3d/#calendario">Stato date</a></div>
-              <div class="quick-row"><div><strong>Photoshop</strong><small>2° anno · classi 2A, 2B, 2C</small></div><a href="/interior/photoshop/#programma">Programma</a><a href="/interior/photoshop/#calendario">Date</a></div>
-              <div class="quick-row"><div><strong>Intelligenza Artificiale</strong><small>3° anno · classi 3A, 3B, 3C</small></div><a href="/interior/ia/#programma">Programma</a><a href="/interior/ia/#calendario">Date</a></div>
+              <div class="quick-row"><div><strong><a class="quick-course-link" href="/interior/rendering3d/#programma">Rendering 3D</a></strong><small>2° anno · Cinema 4D e Corona</small></div><a href="/interior/rendering3d/#programma">Programma</a><a href="/interior/rendering3d/#calendario">Stato date</a></div>
+              <div class="quick-row"><div><strong><a class="quick-course-link" href="/interior/photoshop/#programma">Photoshop</a></strong><small>2° anno · classi 2A, 2B, 2C</small></div><a href="/interior/photoshop/#programma">Programma</a><a href="/interior/photoshop/#calendario">Date</a><a href="/interior/photoshop/#video">Video</a></div>
+              <div class="quick-row"><div><strong><a class="quick-course-link" href="/interior/ia/#programma">Intelligenza Artificiale</a></strong><small>3° anno · classi 3A, 3B, 3C</small></div><a href="/interior/ia/#programma">Programma</a><a href="/interior/ia/#calendario">Date</a></div>
             </div>
             <div class="quick-panel" id="quick-product" data-dept-panel="product" hidden>
-              <div class="quick-row"><div><strong>Modellazione 3D</strong><small>Corso in preparazione</small></div><a href="/product/modellazione/">Stato corso</a></div>
-              <div class="quick-row"><div><strong>Photoshop</strong><small>Corso in preparazione</small></div><a href="/product/photoshop/">Stato corso</a></div>
-              <div class="quick-row"><div><strong>Intelligenza Artificiale</strong><small>PD3 · calendario disponibile</small></div><a href="/product/ia/">Stato corso</a><a href="/product/ia/#calendario">Date</a></div>
+              <div class="quick-row"><div><strong><a class="quick-course-link" href="/product/modellazione/">Modellazione 3D</a></strong><small>Corso in preparazione</small></div><a href="/product/modellazione/">Stato corso</a></div>
+              <div class="quick-row"><div><strong><a class="quick-course-link" href="/product/photoshop/">Photoshop</a></strong><small>Corso in preparazione</small></div><a href="/product/photoshop/">Stato corso</a></div>
+              <div class="quick-row"><div><strong><a class="quick-course-link" href="/product/ia/#calendario">Intelligenza Artificiale</a></strong><small>PD3 · calendario disponibile</small></div><a href="/product/ia/">Stato corso</a><a href="/product/ia/#calendario">Date</a></div>
             </div>
           </div>
           <div class="hero-actions"><a class="all-courses-link" href="#interior">Esplora tutti i corsi ↓</a><span class="micro-note">A.A. 2026/2027 · 6 corsi</span></div>
@@ -65,7 +65,7 @@
         <div class="section-head"><div><span class="department-code">01 / REPARTO</span><h2 id="interior-title">Interior Design</h2></div><p>Dallo spazio tridimensionale alla comunicazione visiva del progetto.</p></div>
         <div class="course-grid">
           <a class="course-card" href="/interior/rendering3d/#programma" data-course="rendering-interior" style="--course:#b58aff;--wash:rgba(145,70,255,.32)"><div class="course-art" data-mark="3D"><span class="art-top">GEOMETRIA / LUCE</span><span class="art-stroke"></span></div><div class="card-inner"><div class="card-topline"><span>02 / ANNO</span><span class="card-status">Materiali disponibili</span></div><h3>Rendering 3D</h3><p>Modellazione, Cinema 4D e Corona per raccontare gli spazi.</p><div class="card-bottom"><small>CINEMA 4D · CORONA</small><b>Entra nel corso ↗</b></div></div></a>
-          <a class="course-card" href="/interior/photoshop/#programma" data-course="photoshop-interior" style="--course:#59b8ff;--wash:rgba(49,168,255,.32)"><div class="course-art" data-mark="Ps"><span class="art-top">IMMAGINE / LIVELLI</span><span class="art-stroke"></span></div><div class="card-inner"><div class="card-topline"><span>02 / ANNO</span><span class="card-status">2 lezioni online</span></div><h3>Photoshop</h3><p>Conosciamoci; poi livelli, pennello e lazo con sedia e mela.</p><div class="card-bottom"><small>2A · 2B · 2C</small><b>Entra nel corso ↗</b></div></div></a>
+          <a class="course-card" href="/interior/photoshop/#programma" data-course="photoshop-interior" style="--course:#59b8ff;--wash:rgba(49,168,255,.32)"><div class="course-art" data-mark="Ps"><span class="art-top">IMMAGINE / LIVELLI</span><span class="art-stroke"></span></div><div class="card-inner"><div class="card-topline"><span>02 / ANNO</span><span class="card-status">3 lezioni online</span></div><h3>Photoshop</h3><p>Interfaccia, scontorno, istogramma e Curve: le prime tre lezioni.</p><div class="card-bottom"><small>2A · 2B · 2C</small><b>Entra nel corso ↗</b></div></div></a>
           <a class="course-card" href="/interior/ia/#programma" data-course="ia-interior" style="--course:#77e7b7;--wash:rgba(52,211,153,.28)"><div class="course-art" data-mark="AI"><span class="art-top">METODO / POSSIBILITÀ</span><span class="art-stroke"></span></div><div class="card-inner"><div class="card-topline"><span>03 / ANNO</span><span class="card-status">Materiali disponibili</span></div><h3>Intelligenza Artificiale</h3><p>Strumenti e processi per esplorare nuove forme di progettazione.</p><div class="card-bottom"><small>3A · 3B · 3C</small><b>Entra nel corso ↗</b></div></div></a>
         </div>
       </section>
