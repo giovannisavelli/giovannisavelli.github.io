@@ -57,7 +57,7 @@ export function mountTestina(canvas, loading) {
   });
 
   function rotate(sign) {
-    const offset = camera.position.clone().sub(controls.target).applyAxisAngle(new THREE.Vector3(0, 1, 0), sign * Math.PI / 5);
+    const offset = camera.position.clone().sub(controls.target).applyAxisAngle(new THREE.Vector3(0, 1, 0), -sign * Math.PI / 5);
     camera.position.copy(controls.target).add(offset);
     controls.update();
     if (!reduceMotion) velocity += sign * 3.5;
