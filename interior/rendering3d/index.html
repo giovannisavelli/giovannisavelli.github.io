@@ -80,20 +80,21 @@
     .percorso svg { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
     .percorso path { fill: none; stroke-linecap: round; stroke-linejoin: round; }
     .p-base { stroke: rgba(255, 255, 255, .13); stroke-width: 2; stroke-dasharray: 2 9; }
-    .p-fatto { stroke: var(--accent); stroke-width: 4; filter: drop-shadow(0 0 8px color-mix(in srgb, var(--accent) 70%, transparent)); transition: stroke-dashoffset 2.2s var(--ease); }
+    .p-fatto { stroke: var(--accent); stroke-width: 4; filter: drop-shadow(0 0 8px color-mix(in srgb, var(--accent) 70%, transparent)); }
     .tappe { position: absolute; inset: 0; z-index: 2; list-style: none; margin: 0; padding: 0; pointer-events: none; }
     /* anello che scorre lungo la linea fino alla lezione aperta */
     .cursore { position: absolute; left: 0; top: 0; z-index: 1; width: 52px; height: 52px; margin: -26px 0 0 -26px; border-radius: 50%; border: 2px solid var(--accent); pointer-events: none;
       box-shadow: 0 0 26px color-mix(in srgb, var(--accent) 55%, transparent), inset 0 0 14px color-mix(in srgb, var(--accent) 35%, transparent); }
     .tappa { position: absolute; display: grid; place-items: center; width: 48px; height: 48px; margin: -24px 0 0 -24px; padding: 0; border: 0; border-radius: 50%; background: none; cursor: pointer; pointer-events: auto; }
     .t-punto { position: relative; display: grid; place-items: center; width: 22px; height: 22px; border-radius: 50%; background: var(--bg); box-shadow: inset 0 0 0 2px rgba(255, 255, 255, .35); font: 600 0px/1 var(--mono); transition: transform .4s var(--ease), box-shadow .3s ease, width .3s var(--ease), height .3s var(--ease); }
-    .tappa.fatto .t-punto, .tappa.ultima .t-punto { background: var(--accent); box-shadow: 0 0 14px color-mix(in srgb, var(--accent) 60%, transparent); }
+    /* "accesa": la linea viola è arrivata fin qui */
+    .tappa.accesa .t-punto { background: var(--accent); box-shadow: 0 0 14px color-mix(in srgb, var(--accent) 60%, transparent); }
     .tappa.esame .t-punto { width: 26px; height: 26px; border-radius: 7px; background: var(--ink); color: var(--bg); font-size: 12px; box-shadow: none; }
     .tappa:hover .t-punto { transform: scale(1.25); }
     /* la lezione aperta: pallino grande col numero, pulsazione, "Sei qui". Tutto si sposta con lei */
     .tappa[aria-pressed="true"] .t-punto { width: 32px; height: 32px; font-size: 13px; transform: none; }
-    .tappa.fatto[aria-pressed="true"] .t-punto, .tappa.ultima[aria-pressed="true"] .t-punto { color: #101016; box-shadow: 0 0 30px var(--accent); }
-    .tappa.poi[aria-pressed="true"] .t-punto { color: var(--accent); box-shadow: inset 0 0 0 2px var(--accent); }
+    .tappa.accesa[aria-pressed="true"] .t-punto { color: #101016; box-shadow: 0 0 30px var(--accent); }
+    .tappa.esame.accesa .t-punto { background: var(--accent); color: #101016; }
     .tappa[aria-pressed="true"]::before { content: ""; position: absolute; width: 34px; height: 34px; border-radius: 50%; border: 2px solid var(--accent); animation: onda 2.4s ease-out infinite; }
     @keyframes onda { from { transform: scale(1); opacity: .9; } to { transform: scale(2.6); opacity: 0; } }
     /* lezione con tutte le voci spuntate */
@@ -112,9 +113,11 @@
     .tappa.sopra .qui-mini { order: 3; margin: 6px 0 2px; }
     .tappa[aria-pressed="true"] .qui-mini { display: block; }
     /* percorso in verticale (telefono e tablet): i nomi stanno a destra */
-    .percorso.verticale .t-testo, .percorso.verticale .tappa.sopra .t-testo { left: 100%; top: 50%; bottom: auto; display: block; width: auto; min-width: 220px; margin: 0; padding: 0 0 0 12px; text-align: left; transform: translateY(-50%); }
+    .percorso.verticale .t-testo, .percorso.verticale .tappa.sopra .t-testo { left: 100%; right: auto; top: 50%; bottom: auto; display: grid; grid-template-columns: auto 1fr; grid-template-areas: "etichetta qui" "nome nome"; column-gap: 8px; align-items: center; justify-items: start; width: auto; min-width: 220px; margin: 0; padding: 0 0 0 12px; text-align: left; transform: translateY(-50%); }
+    .percorso.verticale .t-testo small { grid-area: etichetta; }
+    .percorso.verticale .t-testo b { grid-area: nome; }
     .percorso.verticale .tappa[aria-pressed="true"] .t-testo { padding-left: 16px; }
-    .percorso.verticale .tappa[aria-pressed="true"] .qui-mini { display: inline-block; margin: 0 0 0 8px; padding: 3px 6px; vertical-align: 1px; }
+    .percorso.verticale .tappa[aria-pressed="true"] .qui-mini { display: block; grid-area: qui; margin: 0; padding: 3px 6px; }
     .nota-percorso { margin: 8px 0 0; color: var(--ink-3); font-size: 15px; }
     /* ---------- La lezione aperta ---------- */
     .lezione { margin-top: 34px; padding: clamp(22px, 3vw, 38px); border: 1px solid var(--line); border-radius: 22px; background: var(--bg-2); }
@@ -330,7 +333,7 @@
     <section class="pannello" id="lezioni" role="tabpanel" aria-labelledby="t-lezioni">
       <div class="testa">
         <h2>Il percorso</h2>
-        <p>Le tappe accese sono le lezioni già fatte. Tocca una tappa per aprirla e spuntare gli argomenti: la ✓ indica una lezione spuntata tutta.</p>
+        <p>Tocca una tappa: la linea viola arriva fin lì e sotto si apre la lezione, con gli argomenti da spuntare. La ✓ indica una lezione spuntata tutta.</p>
       </div>
       <div class="percorso" id="percorso">
         <svg aria-hidden="true"><path class="p-base" id="p-base"/><path class="p-fatto" id="p-fatto"/></svg>
@@ -642,12 +645,12 @@ const shortcuts = [
     const y = pannello.getBoundingClientRect().top + scrollY - sopra;
     if (scrollY > y + 4) scrollTo({ top: y, behavior: Studio.fermo ? 'auto' : 'smooth' });
   }
-  function daIndirizzo(scorri) {
+  function daIndirizzo(scorri, modo) {
     const h = decodeURIComponent(location.hash.slice(1));
     const lez = h.match(/^lezione-(\d+|E)$/);
     if (lez) apriScheda('lezioni', true), mostraTappa(lez[1] === 'E' ? 'E' : Number(lez[1]), false);
     else apriScheda(TAB_NAMES[h] ? h : ALIAS[h] || 'lezioni', true);
-    if (scorri === true && h) (lez ? $('#lezioni') : box).scrollIntoView({ behavior: Studio.fermo ? 'auto' : 'smooth', block: 'start' });
+    if (scorri === true && h) (lez ? $('#lezioni') : box).scrollIntoView({ behavior: modo || (Studio.fermo ? 'auto' : 'smooth'), block: 'start' });
   }
   $('#schede').addEventListener('click', e => {
     const t = e.target.closest('.scheda[role=tab]'); if (!t) return;
@@ -709,16 +712,19 @@ const shortcuts = [
   }
 
   let lunghezze = [], selezionata = idxQui, cursoreL = null, rafCursore = 0, percorsoVisto = false;
+  // anello, punta della linea viola e pallini accesi si muovono insieme
   function posaCursore(L) {
-    const p = $('#p-base').getPointAtLength(L);
+    const base = $('#p-base'), p = base.getPointAtLength(L);
     cursore.style.transform = `translate(${p.x}px, ${p.y}px)`;
+    $('#p-fatto').style.strokeDashoffset = base.getTotalLength() - L;
+    bottoni.forEach((b, i) => b.classList.toggle('accesa', lunghezze[i] <= L + 1));
     cursoreL = L;
   }
   // l'anello scorre lungo la linea, avanti o indietro, fino alla lezione scelta
-  function muoviCursore(verso) {
+  function muoviCursore(verso, durataMax = 1000) {
     cancelAnimationFrame(rafCursore);
     const da = cursoreL === null ? verso : cursoreL, t0 = performance.now();
-    const durata = Studio.fermo ? 0 : Math.min(1000, 350 + Math.abs(verso - da) * .55);
+    const durata = Studio.fermo ? 0 : Math.min(durataMax, 350 + Math.abs(verso - da) * .55);
     (function passo(ora) {
       const k = durata ? Math.min(1, (ora - t0) / durata) : 1;
       const e = k < .5 ? 4 * k * k * k : 1 - Math.pow(-2 * k + 2, 3) / 2;
@@ -750,9 +756,9 @@ const shortcuts = [
     const c = campiona(base, verticale);
     const punti = posizioni.map(a => { const [b, l] = suCurva(c, a); return verticale ? [b, a, l] : [a, b, l]; });
     lunghezze = punti.map(p => p[2]);
-    const totale = base.getTotalLength(), Lq = lunghezze[idxQui];
-    fatto.style.strokeDasharray = `${Lq} ${totale * 2}`;
-    if (!percorsoVisto) { fatto.style.transition = 'none'; fatto.style.strokeDashoffset = Lq; void fatto.getBoundingClientRect(); fatto.style.transition = ''; }
+    // la linea viola è lunga quanto tutta la curva; lo spostamento del tratteggio decide fin dove si vede
+    const totale = base.getTotalLength();
+    fatto.style.strokeDasharray = `${totale} ${totale * 2}`;
     // il nome di ogni tappa va dove la linea non passa: sopra sulle gobbe, sotto negli avvallamenti,
     // in diagonale sulle salite e discese
     bottoni.forEach((b, i) => {
@@ -768,15 +774,16 @@ const shortcuts = [
       b.classList.toggle('lato-dx', !gobba && !valle && dx <= sx);
     });
     cancelAnimationFrame(rafCursore);
-    posaCursore(lunghezze[selezionata]);
+    // finché il percorso non si vede la linea resta all'inizio: parte quando entra nello schermo
+    posaCursore(percorsoVisto ? lunghezze[selezionata] : 0);
   }
   new ResizeObserver(disegnaPercorso).observe(percorso);
-  new IntersectionObserver(([e], oss) => {
-    if (!e.isIntersecting) return;
-    percorsoVisto = true; oss.disconnect();
-    setTimeout(() => { $('#p-fatto').style.strokeDashoffset = 0; }, 150);
-  }, { threshold: .4 }).observe(percorso);
   if (Studio.fermo) percorsoVisto = true;
+  else new IntersectionObserver(([e], oss) => {
+    if (!e.isIntersecting || !lunghezze.length) return;
+    percorsoVisto = true; oss.disconnect();
+    setTimeout(() => muoviCursore(lunghezze[selezionata], 1600), 150);
+  }, { threshold: .4 }).observe(percorso);
 
   percorso.addEventListener('click', e => {
     const b = e.target.closest('.tappa'); if (!b) return;
@@ -800,7 +807,7 @@ const shortcuts = [
     const f = TAPPE.find(x => x.n === n) || TAPPE[idxQui];
     selezionata = TAPPE.indexOf(f);
     bottoni.forEach(b => b.setAttribute('aria-pressed', String(b.dataset.n === String(f.n))));
-    if (lunghezze.length) muoviCursore(lunghezze[selezionata]);
+    if (lunghezze.length && percorsoVisto) muoviCursore(lunghezze[selezionata]);
     const d = $('#dettaglio');
     if (f.esame) {
       d.innerHTML = `<div class="l-testa"><h3><small>Capolinea</small>${esc(f.titolo)}</h3><span class="chip">Fine corso</span></div>
@@ -935,7 +942,11 @@ const shortcuts = [
   /* ---------- Avvio ---------- */
   mostraTappa(LEZIONE_CORRENTE, false);
   daIndirizzo();
-  if (/^#lezione-/.test(location.hash)) setTimeout(() => daIndirizzo(true), 300);   // arrivo da un link alla lezione
+  // arrivo da un link a una lezione (#lezione-4): si scorre quando la pagina e i font sono pronti, altrimenti si sbaglia posto
+  if (/^#lezione-/.test(location.hash)) {
+    const vai = () => document.fonts.ready.then(() => requestAnimationFrame(() => daIndirizzo(true, 'auto')));
+    if (document.readyState === 'complete') vai(); else addEventListener('load', vai, { once: true });
+  }
   requestAnimationFrame(() => $('#hero').classList.add('pronta'));
 </script>
 
