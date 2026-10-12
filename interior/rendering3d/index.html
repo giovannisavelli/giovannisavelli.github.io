@@ -81,11 +81,15 @@
     .percorso path { fill: none; stroke-linecap: round; stroke-linejoin: round; }
     .p-base { stroke: rgba(255, 255, 255, .13); stroke-width: 2; stroke-dasharray: 2 9; }
     .p-fatto { stroke: var(--accent); stroke-width: 4; filter: drop-shadow(0 0 8px color-mix(in srgb, var(--accent) 70%, transparent)); transition: stroke-dashoffset 2.2s var(--ease); }
-    .tappe { list-style: none; margin: 0; padding: 0; }
+    .tappe { position: absolute; inset: 0; z-index: 2; list-style: none; margin: 0; padding: 0; pointer-events: none; }
+    .tappa { pointer-events: auto; }
+    /* anello che scorre lungo la linea fino alla lezione aperta */
+    .cursore { position: absolute; left: 0; top: 0; z-index: 1; width: 52px; height: 52px; margin: -26px 0 0 -26px; border-radius: 50%; border: 2px solid var(--accent); pointer-events: none;
+      box-shadow: 0 0 26px color-mix(in srgb, var(--accent) 55%, transparent), inset 0 0 14px color-mix(in srgb, var(--accent) 35%, transparent); }
     .tappa { position: absolute; display: grid; place-items: center; width: 48px; height: 48px; margin: -24px 0 0 -24px; padding: 0; border: 0; border-radius: 50%; background: none; cursor: pointer; }
-    .t-punto { display: grid; place-items: center; width: 22px; height: 22px; border-radius: 50%; background: var(--bg); box-shadow: inset 0 0 0 2px rgba(255, 255, 255, .35); font: 600 0px/1 var(--mono); transition: transform .4s var(--ease), box-shadow .3s ease; }
+    .t-punto { position: relative; display: grid; place-items: center; width: 22px; height: 22px; border-radius: 50%; background: var(--bg); box-shadow: inset 0 0 0 2px rgba(255, 255, 255, .35); font: 600 0px/1 var(--mono); transition: transform .4s var(--ease), box-shadow .3s ease; }
     .tappa.fatto .t-punto { background: var(--accent); box-shadow: 0 0 14px color-mix(in srgb, var(--accent) 60%, transparent); }
-    .tappa.qui .t-punto { width: 34px; height: 34px; background: var(--accent); color: #101016; font-size: 13px; box-shadow: 0 0 0 6px var(--bg), 0 0 0 8px var(--accent), 0 0 34px var(--accent); }
+    .tappa.qui .t-punto { width: 32px; height: 32px; background: var(--accent); color: #101016; font-size: 13px; box-shadow: 0 0 30px var(--accent); }
     .tappa.qui::before { content: ""; position: absolute; width: 34px; height: 34px; border-radius: 50%; border: 2px solid var(--accent); animation: onda 2.4s ease-out infinite; }
     .tappa.esame .t-punto { width: 26px; height: 26px; border-radius: 7px; background: var(--ink); color: var(--bg); font-size: 12px; box-shadow: none; }
     .tappa:hover .t-punto { transform: scale(1.25); }
@@ -96,7 +100,12 @@
     .t-testo b { display: block; margin-top: 2px; font-size: 15px; font-weight: 600; line-height: 1.2; letter-spacing: -.01em; transition: color .3s ease; }
     .tappa.poi .t-testo b { color: var(--ink-2); font-weight: 500; }
     .tappa[aria-pressed="true"] .t-testo b { color: var(--accent); }
-    .tappa[aria-pressed="true"] .t-punto { transform: scale(1.18); }
+    .tappa[aria-pressed="true"] .t-punto { width: 30px; height: 30px; font-size: 12px; transform: none; }
+    .tappa.fatto[aria-pressed="true"] .t-punto { color: #101016; }
+    .tappa.poi[aria-pressed="true"] .t-punto { color: var(--accent); box-shadow: inset 0 0 0 2px var(--accent); }
+    .tappa.qui[aria-pressed="true"] .t-punto { width: 32px; height: 32px; font-size: 13px; }
+    /* lezione con tutte le voci spuntate */
+    .tappa.completa .t-punto::after { content: "\2713"; position: absolute; top: -7px; right: -9px; display: grid; place-items: center; width: 17px; height: 17px; border-radius: 50%; background: var(--ink); color: #101016; font: 700 10px/1 var(--sans); box-shadow: 0 0 0 2px var(--bg); }
     .sei-qui { position: absolute; left: 50%; bottom: calc(100% + 6px); transform: translateX(-50%); padding: 5px 9px; border-radius: 6px; background: var(--accent); color: #101016; font: 600 11px/1 var(--mono); letter-spacing: .06em; text-transform: uppercase; white-space: nowrap; pointer-events: none; }
     .tappa.qui.sopra .sei-qui { bottom: auto; top: calc(100% + 6px); }
     .qui-mini { display: none; }
@@ -321,10 +330,11 @@
     <section class="pannello" id="lezioni" role="tabpanel" aria-labelledby="t-lezioni">
       <div class="testa">
         <h2>Il percorso</h2>
-        <p>Le tappe accese sono le lezioni già fatte. Tocca una tappa per aprire la lezione.</p>
+        <p>Le tappe accese sono le lezioni già fatte. Tocca una tappa per aprirla e spuntare gli argomenti: la ✓ indica una lezione spuntata tutta.</p>
       </div>
       <div class="percorso" id="percorso">
-        <svg aria-hidden="true"><path class="p-base" id="p-base"/><path class="p-fatto" id="p-fatto"/></svg>
+        <svg aria-hidden="true"><path class="p-base" id="p-base"/><path class="p-fatto" id="p-fatto"/><path id="p-misura" fill="none" stroke="none"/></svg>
+        <span class="cursore" id="cursore" aria-hidden="true"></span>
         <ol class="tappe" id="tappe"></ol>
       </div>
       <p class="nota-percorso">Date delle classi 2A, 2B e 2C: secondo semestre, in arrivo.</p>
@@ -656,54 +666,88 @@ const shortcuts = [
   // la barra prende lo sfondo quando resta attaccata in alto
   addEventListener('scroll', () => box.classList.toggle('attaccata', box.getBoundingClientRect().top <= 76), { passive: true });
 
-  /* ---------- Il percorso: tracciato curvo calcolato sulla larghezza ---------- */
-  const percorso = $('#percorso');
+  /* ---------- Il percorso: una curva di Bézier con due gobbe e due avvallamenti di altezza diversa ---------- */
+  const percorso = $('#percorso'), cursore = $('#cursore');
   const idxQui = TAPPE.findIndex(f => f.n === LEZIONE_CORRENTE);
-  $('#tappe').innerHTML = TAPPE.map((f, i) => {
+  $('#tappe').innerHTML = TAPPE.map(f => {
     const stato = f.esame ? 'esame' : f.n < LEZIONE_CORRENTE ? 'fatto' : f.n === LEZIONE_CORRENTE ? 'qui' : 'poi';
     return `<li><button class="tappa ${stato}" type="button" data-n="${f.n}" aria-pressed="false">
       ${stato === 'qui' ? '<span class="sei-qui">Sei qui</span>' : ''}
-      <span class="t-punto" aria-hidden="true">${f.esame ? 'E' : stato === 'qui' ? f.n : ''}</span>
+      <span class="t-punto" aria-hidden="true">${f.esame ? 'E' : f.n}</span>
       <span class="t-testo"><small>${f.esame ? 'Capolinea' : 'Lezione ' + f.n}${stato === 'qui' ? '<em class="qui-mini">Sei qui</em>' : ''}</small><b>${esc(f.breve)}</b></span>
     </button></li>`;
   }).join('');
   const bottoni = [...document.querySelectorAll('.tappa')];
 
-  // curva morbida che passa per tutti i punti (Catmull-Rom convertita in Bézier)
-  function curva(p) {
-    let d = `M${p[0][0]},${p[0][1]}`;
-    for (let i = 0; i < p.length - 1; i++) {
-      const p0 = p[i - 1] || p[i], p1 = p[i], p2 = p[i + 1], p3 = p[i + 2] || p2;
-      d += ` C${p1[0] + (p2[0] - p0[0]) / 6},${p1[1] + (p2[1] - p0[1]) / 6} ${p2[0] - (p3[0] - p1[0]) / 6},${p2[1] - (p3[1] - p1[1]) / 6} ${p2[0]},${p2[1]}`;
+  // Profilo disegnato a mano (+ scende, − sale): avvallamento, gobba alta, avvallamento profondo, gobba più bassa.
+  // Vale per qualunque numero di tappe: se aggiungi la lezione 9 la curva si ridistribuisce da sola.
+  const PROFILO = [[0, .15], [.18, .6], [.38, -.8], [.62, .85], [.86, -.45], [1, -.1]];
+  function altezza(t) {
+    for (let k = 1; k < PROFILO.length; k++) {
+      const [t0, y0] = PROFILO[k - 1], [t1, y1] = PROFILO[k];
+      if (t <= t1) return y0 + (y1 - y0) * (1 - Math.cos(Math.PI * (t - t0) / (t1 - t0))) / 2;
     }
-    return d;
+    return PROFILO[PROFILO.length - 1][1];
   }
-  let percorsoVisto = false;
+  // un tratto di Bézier fra una tappa e l'altra (Catmull-Rom): la curva passa morbida per tutte le tappe
+  const tratti = p => p.slice(0, -1).map((p1, i) => {
+    const p0 = p[i - 1] || p1, p2 = p[i + 1], p3 = p[i + 2] || p2;
+    return ` C${p1[0] + (p2[0] - p0[0]) / 6},${p1[1] + (p2[1] - p0[1]) / 6} ${p2[0] - (p3[0] - p1[0]) / 6},${p2[1] - (p3[1] - p1[1]) / 6} ${p2[0]},${p2[1]}`;
+  });
+
+  let lunghezze = [], selezionata = idxQui, cursoreL = null, rafCursore = 0, percorsoVisto = false;
+  function posaCursore(L) {
+    const p = $('#p-base').getPointAtLength(L);
+    cursore.style.transform = `translate(${p.x}px, ${p.y}px)`;
+    cursoreL = L;
+  }
+  // l'anello scorre lungo la linea, avanti o indietro, fino alla lezione scelta
+  function muoviCursore(verso) {
+    cancelAnimationFrame(rafCursore);
+    const da = cursoreL === null ? verso : cursoreL, t0 = performance.now();
+    const durata = Studio.fermo ? 0 : Math.min(1000, 350 + Math.abs(verso - da) * .55);
+    (function passo(ora) {
+      const k = durata ? Math.min(1, (ora - t0) / durata) : 1;
+      const e = k < .5 ? 4 * k * k * k : 1 - Math.pow(-2 * k + 2, 3) / 2;
+      posaCursore(da + (verso - da) * e);
+      if (k < 1) rafCursore = requestAnimationFrame(passo);
+    })(t0);
+  }
+
   function disegnaPercorso() {
     const w = percorso.clientWidth; if (!w) return;
     const telefono = w < 640, n = TAPPE.length;
     let punti;
     if (telefono) {
-      // in verticale: scende serpeggiando, i nomi stanno a destra
+      // in verticale: scende serpeggiando appena, i nomi stanno a destra
       const passo = 78;
       percorso.style.height = (n - 1) * passo + 60 + 'px';
-      punti = TAPPE.map((_, i) => [40 + Math.sin(i * Math.PI / 2) * 16, 30 + i * passo]);
+      punti = TAPPE.map((_, i) => [42 + altezza(i / (n - 1)) * 18, 30 + i * passo]);
     } else {
-      const h = 330, mx = 70;
+      const h = 340, mx = 70;
       percorso.style.height = h + 'px';
-      punti = TAPPE.map((_, i) => [mx + i * (w - 2 * mx) / (n - 1), h / 2 + Math.sin(i * Math.PI / 2 + .35) * 64]);
+      punti = TAPPE.map((_, i) => [mx + i * (w - 2 * mx) / (n - 1), h / 2 + altezza(i / (n - 1)) * 92]);
     }
-    const base = $('#p-base'), fatto = $('#p-fatto');
-    base.setAttribute('d', curva(punti));
-    fatto.setAttribute('d', curva(punti.slice(0, idxQui + 1)));
-    const L = fatto.getTotalLength();
-    fatto.style.strokeDasharray = L;
-    if (!percorsoVisto) { fatto.style.transition = 'none'; fatto.style.strokeDashoffset = L; void fatto.getBoundingClientRect(); fatto.style.transition = ''; }
+    const t = tratti(punti), d = `M${punti[0][0]},${punti[0][1]}` + t.join('');
+    const base = $('#p-base'), fatto = $('#p-fatto'), misura = $('#p-misura');
+    base.setAttribute('d', d);
+    fatto.setAttribute('d', d);   // la parte viola è la stessa curva, solo "tagliata": niente doppia linea
+    lunghezze = punti.map((p, i) => {
+      if (!i) return 0;
+      misura.setAttribute('d', `M${punti[0][0]},${punti[0][1]}` + t.slice(0, i).join(''));
+      return misura.getTotalLength();
+    });
+    const totale = lunghezze[n - 1], Lq = lunghezze[idxQui];
+    fatto.style.strokeDasharray = `${Lq} ${totale * 2}`;
+    if (!percorsoVisto) { fatto.style.transition = 'none'; fatto.style.strokeDashoffset = Lq; void fatto.getBoundingClientRect(); fatto.style.transition = ''; }
     bottoni.forEach((b, i) => {
       b.style.left = punti[i][0] + 'px'; b.style.top = punti[i][1] + 'px';
-      // il nome va dal lato opposto alla curva, così non la copre
-      b.classList.toggle('sopra', !telefono && punti[i][1] < (punti[i - 1] || punti[i + 1])[1] && punti[i][1] < (punti[i + 1] || punti[i - 1])[1]);
+      // il nome va sopra solo sulle gobbe, così non copre la linea
+      const prima = punti[i - 1] || punti[i + 1], dopo = punti[i + 1] || punti[i - 1];
+      b.classList.toggle('sopra', !telefono && punti[i][1] < prima[1] && punti[i][1] < dopo[1]);
     });
+    cancelAnimationFrame(rafCursore);
+    posaCursore(lunghezze[selezionata]);
   }
   new ResizeObserver(disegnaPercorso).observe(percorso);
   new IntersectionObserver(([e], oss) => {
@@ -718,14 +762,24 @@ const shortcuts = [
     mostraTappa(b.dataset.n === 'E' ? 'E' : Number(b.dataset.n), true);
   });
 
-  /* ---------- La lezione aperta ---------- */
-  const chiaveVoce = (s, i) => `c4d-final-26-L8-${s}-${i}`; // stessa chiave del sito ufficiale
+  /* ---------- La lezione aperta: ogni lezione si può spuntare ---------- */
+  // per la lezione 8 è la stessa chiave del sito di prima, così le spunte già messe restano
+  const chiaveVoce = (n, s, i) => `c4d-final-26-L${n}-${s}-${i}`;
+  const chiaviLezione = f => f.agenda.flatMap((sez, s) => sez.items.map((_, i) => chiaveVoce(f.n, s, i)));
   const immagini = v => v.images || (v.image ? [v.image] : null);
   const SPUNTA = '<span class="sp-box"><span class="sp-fill"></span><svg class="sp-tick" viewBox="0 0 24 24"><path pathLength="1" d="M5 12.5l4.5 4.5L19 7.5"/></svg></span>';
+  function segnaComplete() {
+    bottoni.forEach((b, i) => {
+      const f = TAPPE[i], k = f.esame ? [] : chiaviLezione(f);
+      b.classList.toggle('completa', k.length > 0 && k.every(x => leggi(x) === 'true'));
+    });
+  }
 
   function mostraTappa(n, aggiornaIndirizzo) {
     const f = TAPPE.find(x => x.n === n) || TAPPE[idxQui];
+    selezionata = TAPPE.indexOf(f);
     bottoni.forEach(b => b.setAttribute('aria-pressed', String(b.dataset.n === String(f.n))));
+    if (lunghezze.length) muoviCursore(lunghezze[selezionata]);
     const d = $('#dettaglio');
     if (f.esame) {
       d.innerHTML = `<div class="l-testa"><h3><small>Capolinea</small>${esc(f.titolo)}</h3><span class="chip">Fine corso</span></div>
@@ -736,21 +790,17 @@ const shortcuts = [
       const stato = f.n < LEZIONE_CORRENTE ? 'Fatta' : corrente ? 'Sei qui' : 'Prossima';
       const blocchi = f.agenda.map((sez, s) => {
         const voci = sez.items.map((v, i) => {
-          const imgs = immagini(v);
+          const imgs = immagini(v), k = chiaveVoce(f.n, s, i);
           const ref = imgs ? `<button class="ref" type="button" data-ref='${esc(JSON.stringify(imgs))}' data-titolo="${esc(v.name)}">Reference${imgs.length > 1 ? ' · ' + imgs.length : ''}</button>` : '';
-          if (corrente) {
-            const k = chiaveVoce(s, i);
-            return `<li><label class="spunta"><input type="checkbox" data-k="${k}" ${leggi(k) === 'true' ? 'checked' : ''}>${SPUNTA}<span class="sp-testo"><span class="sp-parole">${esc(v.name)}</span>${ref}</span></label></li>`;
-          }
-          return `<li><div class="voce"><span>${esc(v.name)}${ref}</span></div></li>`;
+          return `<li><label class="spunta"><input type="checkbox" data-k="${k}" ${leggi(k) === 'true' ? 'checked' : ''}>${SPUNTA}<span class="sp-testo"><span class="sp-parole">${esc(v.name)}</span>${ref}</span></label></li>`;
         }).join('');
         return `<div class="l-blocco ${sez.full ? 'largo' : ''}"><h4>${esc(sez.title.replace(/^\d+\.\s*/, ''))}</h4><ul class="voci">${voci}</ul></div>`;
       }).join('');
       d.innerHTML = `<div class="l-testa"><h3><small>Lezione ${f.n}</small>${esc(f.titolo)}</h3><span class="chip ${corrente ? 'qui' : ''}">${stato}</span>
-          ${corrente ? '<div class="avanzamento" id="avanzamento"><span id="conta"></span><i></i></div>' : ''}</div>
+          <div class="avanzamento" id="avanzamento"><span id="conta"></span><i></i></div></div>
         <div class="l-blocchi">${blocchi}</div>
-        ${corrente ? '<button class="azzera" type="button" id="azzera">Togli tutte le spunte</button>' : ''}`;
-      if (corrente) contaSpunte();
+        <button class="azzera" type="button" id="azzera">Togli tutte le spunte di questa lezione</button>`;
+      contaSpunte();
     }
     d.classList.remove('entra'); void d.offsetWidth; d.classList.add('entra');
     if (aggiornaIndirizzo) history.replaceState(null, '', '#lezione-' + f.n);
@@ -759,6 +809,7 @@ const shortcuts = [
     const tutte = [...document.querySelectorAll('#dettaglio input[data-k]')], fatte = tutte.filter(x => x.checked).length;
     $('#conta').textContent = `${fatte} di ${tutte.length} fatti`;
     $('#avanzamento').style.setProperty('--fatto', (tutte.length ? fatte / tutte.length * 100 : 0) + '%');
+    segnaComplete();
   }
   $('#dettaglio').addEventListener('change', e => {
     const c = e.target.closest('input[data-k]'); if (!c) return;
@@ -769,6 +820,7 @@ const shortcuts = [
     document.querySelectorAll('#dettaglio input[data-k]').forEach(c => { c.checked = false; salva(c.dataset.k, 'false'); });
     contaSpunte();
   });
+  segnaComplete();
 
   /* ---------- Appunti ---------- */
   $('#lista-tutorial').innerHTML = TUTORIAL.map(t => `
