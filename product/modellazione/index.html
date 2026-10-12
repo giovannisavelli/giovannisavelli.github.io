@@ -45,6 +45,9 @@
             font-family: 'JetBrains Mono', monospace; font-weight: 600; font-size: 13px; border: 1px solid var(--c); background: var(--glow); transition: transform 0.2s ease;
         }
         a.back:hover { transform: translateY(-2px); }
+        .actions { display: flex; flex-wrap: wrap; justify-content: center; gap: 12px; }
+        a.demo { background: var(--c); border-color: var(--c); color: #19120c; }
+        a.demo:hover { background: #ffae69; }
         footer { margin-top: 48px; font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--muted); }
     </style>
     <link rel="stylesheet" href="../../design/course.css?v=ux-20261012">
@@ -60,7 +63,10 @@
         <h1>Modellazione 3D</h1>
         <span class="status">In preparazione</span>
         <p>Il corso è in preparazione. Programma e materiali compariranno qui quando saranno pronti. Le date saranno pubblicate dopo la conferma del calendario.</p>
-        <a class="back" href="../../">← Torna all'hub dei corsi</a>
+        <div class="actions">
+            <a class="back demo" href="testina.html">Esplora Testolona in 3D →</a>
+            <a class="back" href="../../">← Torna all'hub dei corsi</a>
+        </div>
         <footer>Giovanni Savelli · A.A. 2026/2027</footer>
     </div>
 </body>
