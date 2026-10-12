@@ -1,87 +1,413 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="it">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
-  <meta name="theme-color" content="#0a0e13">
-  <title>Hub docente · Giovanni Savelli | AANT</title>
-  <meta name="description" content="Programmi, calendari, video e materiali dei corsi di Giovanni Savelli per Interior e Product Design all'AANT.">
-  <meta property="og:title" content="Hub docente · Giovanni Savelli | AANT">
-  <meta property="og:description" content="Programmi, calendari, video e materiali dei corsi Interior e Product Design.">
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='22' fill='%23121922'/><text x='50' y='65' text-anchor='middle' font-size='47' font-family='Arial' fill='%23def675'>GS</text></svg>">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Giovanni Savelli · Corsi AANT 2026/27</title>
+  <meta name="description" content="Rendering 3D, Photoshop e Intelligenza Artificiale per Interior e Product Design all'AANT. Programmi, prossime lezioni, video e materiali.">
+  <meta name="theme-color" content="#0a0a0d">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect width='64' height='64' rx='14' fill='%230a0a0d'/><text x='32' y='42' font-family='Arial' font-weight='700' font-size='26' text-anchor='middle' fill='%23f4f1ec'>GS</text></svg>">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="/design/hub.css?v=ux-20261012">
-  <script src="/design/hub.js?v=ux-20261012" defer></script>
+  <link href="https://fonts.googleapis.com/css2?family=Geist:wght@300..800&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/studio.css">
+  <style>
+    /* ---------- Apertura con la scena 3D ---------- */
+    .hero { position: relative; min-height: 100svh; display: flex; align-items: flex-end; overflow: hidden; }
+    #scena { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+    .hero::before { content: ""; position: absolute; inset: 0; z-index: 1; pointer-events: none;
+      background: linear-gradient(90deg, rgba(10, 10, 13, .92) 0%, rgba(10, 10, 13, .55) 38%, transparent 62%), linear-gradient(0deg, var(--bg) 0%, transparent 32%); }
+    .hero .wrap { position: relative; z-index: 2; padding: 0 0 72px; }
+    .hero h1 { margin: 0; max-width: 9.5em; font: 600 clamp(56px, 8.6vw, 148px)/.88 var(--sans); letter-spacing: -.055em; }
+    .hero h1 .r { display: block; overflow: hidden; padding-bottom: .06em; }
+    .hero h1 .r > span { display: inline-block; transform: translateY(105%); filter: blur(8px); opacity: 0; transition: transform 1.3s var(--ease), filter 1.3s var(--ease), opacity 1.3s var(--ease); }
+    .hero.pronta h1 .r > span { transform: none; filter: none; opacity: 1; }
+    .hero h1 .r:nth-child(2) > span { transition-delay: .09s; }
+    .hero h1 em { font-style: normal; color: transparent; -webkit-text-stroke: 1.5px var(--ink); }
+    .hero-basso { display: flex; flex-direction: column; align-items: flex-start; gap: 26px; margin-top: 30px; }
+    .hero p { max-width: 34ch; margin: 0; color: var(--ink-2); font-size: 19px; line-height: 1.5; opacity: 0; transform: translateY(14px); transition: opacity 1s var(--ease) .5s, transform 1s var(--ease) .5s; }
+    .azioni { display: flex; flex-wrap: wrap; gap: 10px; opacity: 0; transform: translateY(14px); transition: opacity 1s var(--ease) .65s, transform 1s var(--ease) .65s; }
+    .hero.pronta p, .hero.pronta .azioni { opacity: 1; transform: none; }
+    .didascalia { position: absolute; z-index: 2; right: 32px; bottom: 30px; color: var(--ink-3); font: 400 12px/1.4 var(--mono); text-align: right; }
+
+    /* ---------- Corsi: righe grandi con effetto al passaggio ---------- */
+    .reparto { display: flex; align-items: center; gap: 14px; margin: 46px 0 6px; color: var(--ink-3); font: 500 14px/1 var(--mono); }
+    .reparto::after { content: ""; flex: 1; height: 1px; background: var(--line); }
+    .corsi { list-style: none; margin: 0; padding: 0; }
+    .corso { --c: var(--accent); position: relative; display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 300px) 140px 56px; align-items: center; gap: 24px; padding: 30px 28px; border-bottom: 1px solid var(--line); isolation: isolate; overflow: hidden; border-radius: 4px; transition: color .5s var(--ease); }
+    .corso::before { content: ""; position: absolute; inset: 0; z-index: -1; background: var(--c); transform: scaleY(0); transform-origin: bottom; transition: transform .6s var(--ease); }
+    .corso .nome { display: flex; align-items: center; gap: 18px; font: 600 clamp(34px, 4.6vw, 72px)/1 var(--sans); letter-spacing: -.045em; transition: transform .6s var(--ease); }
+    .corso .nome i { width: 14px; height: 14px; flex: none; border-radius: 50%; background: var(--c); box-shadow: 0 0 22px var(--c); transition: background-color .5s ease, box-shadow .5s ease; }
+    .corso .info { color: var(--ink-2); font-size: 15px; line-height: 1.45; transition: color .5s ease; }
+    .corso .info b { display: block; color: var(--ink); font-weight: 500; transition: color .5s ease; }
+    .corso .stato { justify-self: start; padding: 7px 12px; border: 1px solid var(--line); border-radius: 999px; font: 500 12px/1 var(--mono); color: var(--ink-2); white-space: nowrap; transition: color .5s ease, border-color .5s ease; }
+    .corso .freccia { display: grid; place-items: center; width: 56px; height: 56px; border-radius: 50%; border: 1px solid rgba(255, 255, 255, .2); transition: transform .6s var(--ease), background-color .5s ease, border-color .5s ease; }
+    .corso .freccia svg { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+    .corso:hover, .corso:focus-visible { color: #0a0a0d; }
+    .corso:hover::before, .corso:focus-visible::before { transform: scaleY(1); }
+    .corso:hover .nome, .corso:focus-visible .nome { transform: translateX(14px); }
+    .corso:hover .nome i, .corso:focus-visible .nome i { background: #0a0a0d; box-shadow: none; }
+    .corso:hover .info, .corso:hover .info b, .corso:hover .stato { color: #0a0a0d; border-color: rgba(10, 10, 13, .3); }
+    .corso:hover .freccia { transform: rotate(-45deg); background: #0a0a0d; color: var(--ink); border-color: #0a0a0d; }
+    .corso.presto .nome { color: var(--ink-3); }
+    .corso.presto:hover .nome { color: #0a0a0d; }
+
+    /* ---------- Prossime lezioni: le date sono un tabellone a palette ---------- */
+    .lezioni-box { display: grid; grid-template-columns: 300px minmax(0, 1fr); gap: 48px; }
+    .filtro h3 { margin: 0 0 14px; font: 500 14px/1 var(--mono); color: var(--ink-3); }
+    .classi { display: flex; flex-wrap: wrap; gap: 8px; }
+    .classi button { min-width: 64px; height: 44px; padding: 0 16px; border: 1px solid var(--line); border-radius: 999px; background: var(--panel); font: 500 15px/1 var(--mono); cursor: pointer; transition: background-color .3s ease, color .3s ease, border-color .3s ease, transform .3s var(--ease); }
+    .classi button:hover { border-color: rgba(255, 255, 255, .3); transform: translateY(-2px); }
+    .classi button[aria-pressed="true"] { background: var(--ink); color: var(--bg); border-color: var(--ink); }
+    .quando { margin: 28px 0 0; font: 600 30px/1.1 var(--sans); letter-spacing: -.03em; }
+    .quando span { color: var(--accent); }
+    .nota { margin: 14px 0 0; color: var(--ink-3); font-size: 15px; }
+    .elenco { list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--line); }
+    .lez { display: grid; grid-template-columns: 124px minmax(0, 1fr) auto; align-items: center; gap: 22px; padding: 18px 8px; border-bottom: 1px solid var(--line); transition: background-color .3s ease, padding .5s var(--ease); }
+    .lez:hover { background: rgba(255, 255, 255, .035); padding-left: 16px; }
+    .lez .giorno { font: 500 30px/1 var(--mono); }
+    .lez .giorno small { display: block; margin-top: 8px; color: var(--ink-3); font-size: 12px; letter-spacing: 0; text-transform: uppercase; }
+    .lez .cosa b { display: flex; align-items: center; gap: 10px; font-weight: 600; font-size: 18px; letter-spacing: -.01em; }
+    .lez .cosa b i { width: 9px; height: 9px; border-radius: 50%; background: var(--c); box-shadow: 0 0 14px var(--c); }
+    .lez .cosa span { display: block; margin-top: 3px; color: var(--ink-2); font-size: 15px; }
+    .lez .classe { padding: 7px 12px; border-radius: 999px; background: var(--panel); border: 1px solid var(--line); font: 500 13px/1 var(--mono); }
+
+    @media (max-width: 1000px) {
+      .corso { grid-template-columns: minmax(0, 1fr) 56px; gap: 14px 18px; padding: 24px 18px; }
+      .corso .info { grid-column: 1; grid-row: 2; }
+      .corso .stato { grid-column: 1; grid-row: 3; }
+      .corso .freccia { grid-column: 2; grid-row: 1 / span 3; align-self: center; }
+      .lezioni-box { grid-template-columns: 1fr; gap: 30px; }
+    }
+    @media (max-width: 700px) {
+      .hero { min-height: 0; flex-direction: column; align-items: stretch; padding-top: 66px; }
+      #scena { position: relative; inset: auto; height: 46svh; min-height: 300px; }
+      .hero::before { background: linear-gradient(0deg, var(--bg) 0%, transparent 18%); top: 66px; height: 46svh; min-height: 300px; bottom: auto; }
+      .hero .wrap { padding: 8px 0 20px; }
+      .hero h1 { font-size: clamp(52px, 15vw, 76px); }
+      .hero p { font-size: 17px; }
+      .didascalia { display: none; }
+      .lez { grid-template-columns: 96px minmax(0, 1fr); gap: 16px; }
+      .lez .giorno { font-size: 24px; }
+      .lez .classe { grid-column: 2; justify-self: start; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .hero h1 .r > span, .hero p, .azioni { opacity: 1 !important; transform: none !important; filter: none !important; }
+    }
+  </style>
 </head>
 <body>
-  <div class="shell">
-    <header class="site-header">
-      <a class="brand" href="/" aria-label="Hub docente, pagina iniziale"><span class="brand-mark">GS</span><span class="brand-label"><strong>Giovanni Savelli</strong><small>Hub docente / AANT</small></span></a>
-      <nav class="header-links" aria-label="Navigazione principale"><a href="#interior">Interior Design</a><a href="#product">Product Design</a><a class="header-live" href="#quick-title">Trova il tuo corso ↓</a></nav>
-    </header>
+<div class="alone" id="alone" aria-hidden="true"></div>
 
-    <main>
-      <section class="hub-hero" aria-labelledby="hub-title">
-        <div>
-          <p class="eyebrow">Uno spazio per imparare a progettare</p>
-          <h1 id="hub-title">Dall'idea<br>all'<em>immagine.</em></h1>
-          <p class="hero-copy">Programmi, calendari, video e materiali dei corsi di <strong>Giovanni Savelli</strong> all'AANT. Scegli il tuo corso e vai subito a ciò che ti serve.</p>
-          <div class="quick-access" aria-labelledby="quick-title">
-            <div class="quick-heading"><div><span>ACCESSO RAPIDO</span><h2 id="quick-title">Vai al tuo corso.</h2></div><small>Programma e date in un tocco</small></div>
-            <div class="last-course" id="last-course" hidden><span>ULTIMO CORSO APERTO</span><strong id="last-course-name"></strong><div><a id="last-course-open" href="#">Apri corso →</a><a id="last-course-calendar" href="#">Calendario →</a></div></div>
-            <div class="dept-switch" role="group" aria-label="Scegli il reparto"><button type="button" data-dept="interior" aria-pressed="true" aria-controls="quick-interior">Interior Design</button><button type="button" data-dept="product" aria-pressed="false" aria-controls="quick-product">Product Design</button></div>
-            <div class="quick-panel" id="quick-interior" data-dept-panel="interior">
-              <div class="quick-row"><div><strong><a class="quick-course-link" href="/interior/rendering3d/#programma">Rendering 3D</a></strong><small>2° anno · Cinema 4D e Corona</small></div><a href="/interior/rendering3d/#programma">Programma</a><a href="/interior/rendering3d/#calendario">Stato date</a></div>
-              <div class="quick-row"><div><strong><a class="quick-course-link" href="/interior/photoshop/#programma">Photoshop</a></strong><small>2° anno · classi 2A, 2B, 2C</small></div><a href="/interior/photoshop/#programma">Programma</a><a href="/interior/photoshop/#calendario">Date</a><a href="/interior/photoshop/#video">Video</a></div>
-              <div class="quick-row"><div><strong><a class="quick-course-link" href="/interior/ia/#programma">Intelligenza Artificiale</a></strong><small>3° anno · classi 3A, 3B, 3C</small></div><a href="/interior/ia/#programma">Programma</a><a href="/interior/ia/#calendario">Date</a></div>
-            </div>
-            <div class="quick-panel" id="quick-product" data-dept-panel="product" hidden>
-              <div class="quick-row"><div><strong><a class="quick-course-link" href="/product/modellazione/">Modellazione 3D</a></strong><small>Corso in preparazione</small></div><a href="/product/modellazione/">Stato corso</a></div>
-              <div class="quick-row"><div><strong><a class="quick-course-link" href="/product/photoshop/">Photoshop</a></strong><small>Corso in preparazione</small></div><a href="/product/photoshop/">Stato corso</a></div>
-              <div class="quick-row"><div><strong><a class="quick-course-link" href="/product/ia/#calendario">Intelligenza Artificiale</a></strong><small>PD3 · calendario disponibile</small></div><a href="/product/ia/">Stato corso</a><a href="/product/ia/#calendario">Date</a></div>
-            </div>
-          </div>
-          <div class="hero-actions"><a class="all-courses-link" href="#interior">Esplora tutti i corsi ↓</a><span class="micro-note">A.A. 2026/2027 · 6 corsi</span></div>
-        </div>
-        <div class="workbench" aria-hidden="true">
-          <div class="workbench-top"><span class="traffic"><i></i><i></i><i></i></span><span>GS / CREATIVE WORKSPACE</span><span>001</span></div>
-          <div class="workbench-body">
-            <div class="tool-strip"><b>✳</b><span>⌗</span><span>◫</span><span>╱</span><span>◎</span></div>
-            <div class="artboard">
-              <svg viewBox="0 0 350 350" focusable="false"><path d="M174 20 293 89 174 158 55 89Z"/><path d="M55 89v140l119 70V158Z"/><path d="M293 89v140l-119 70V158Z"/><path d="M174 20v138M55 89l119 69 119-69M55 229l119-69 119 69M174 158v141"/><path d="M91 110v88l83 49 83-49v-88M91 198l83-48 83 48"/><path d="M112 123v62l62 36 62-36v-62M112 185l62-36 62 36"/></svg>
-              <span class="artboard-label">FORM / LIGHT / IDEA</span>
-            </div>
-            <div class="layer-strip"><small>Livelli</small><div class="layer-line"></div><div class="layer-line"></div><div class="layer-line"></div><div class="layer-line"></div></div>
-          </div>
-          <div class="workbench-bottom"><span>INTERIOR × PRODUCT</span><span>PROGETTO IN CORSO ●</span></div>
-        </div>
-      </section>
-
-      <a class="featured-strip" href="/interior/photoshop/#lezione-3"><b>Novità / Photoshop Interior</b><span>Terza lezione: «Istogramma e Curve».</span><strong>Apri la lezione →</strong></a>
-
-      <section class="department" id="interior" aria-labelledby="interior-title">
-        <div class="section-head"><div><span class="department-code">01 / REPARTO</span><h2 id="interior-title">Interior Design</h2></div><p>Dallo spazio tridimensionale alla comunicazione visiva del progetto.</p></div>
-        <div class="course-grid">
-          <a class="course-card" href="/interior/rendering3d/#programma" data-course="rendering-interior" style="--course:#b58aff;--wash:rgba(145,70,255,.32)"><div class="course-art" data-mark="3D"><span class="art-top">GEOMETRIA / LUCE</span><span class="art-stroke"></span></div><div class="card-inner"><div class="card-topline"><span>02 / ANNO</span><span class="card-status">Materiali disponibili</span></div><h3>Rendering 3D</h3><p>Modellazione, Cinema 4D e Corona per raccontare gli spazi.</p><div class="card-bottom"><small>CINEMA 4D · CORONA</small><b>Entra nel corso ↗</b></div></div></a>
-          <a class="course-card" href="/interior/photoshop/#programma" data-course="photoshop-interior" style="--course:#59b8ff;--wash:rgba(49,168,255,.32)"><div class="course-art" data-mark="Ps"><span class="art-top">IMMAGINE / LIVELLI</span><span class="art-stroke"></span></div><div class="card-inner"><div class="card-topline"><span>02 / ANNO</span><span class="card-status">3 lezioni online</span></div><h3>Photoshop</h3><p>Interfaccia, scontorno, istogramma e Curve: le prime tre lezioni.</p><div class="card-bottom"><small>2A · 2B · 2C</small><b>Entra nel corso ↗</b></div></div></a>
-          <a class="course-card" href="/interior/ia/#programma" data-course="ia-interior" style="--course:#77e7b7;--wash:rgba(52,211,153,.28)"><div class="course-art" data-mark="AI"><span class="art-top">METODO / POSSIBILITÀ</span><span class="art-stroke"></span></div><div class="card-inner"><div class="card-topline"><span>03 / ANNO</span><span class="card-status">Materiali disponibili</span></div><h3>Intelligenza Artificiale</h3><p>Strumenti e processi per esplorare nuove forme di progettazione.</p><div class="card-bottom"><small>3A · 3B · 3C</small><b>Entra nel corso ↗</b></div></div></a>
-        </div>
-      </section>
-
-      <section class="department" id="product" aria-labelledby="product-title">
-        <div class="section-head"><div><span class="department-code">02 / REPARTO</span><h2 id="product-title">Product Design</h2></div><p>Forma, immagine e nuovi strumenti al servizio dell'oggetto.</p></div>
-        <div class="course-grid">
-          <a class="course-card" href="/product/modellazione/" data-course="modellazione-product" style="--course:#ffb77d;--wash:rgba(251,146,60,.29)"><div class="course-art" data-mark="3D"><span class="art-top">VOLUME / FORMA</span><span class="art-stroke"></span></div><div class="card-inner"><div class="card-topline"><span>PRODUCT</span><span class="card-status pending">In preparazione</span></div><h3>Modellazione 3D</h3><p>Il corso è in preparazione: qui troverai programma e materiali.</p><div class="card-bottom"><small>MODELLAZIONE</small><b>Stato corso ↗</b></div></div></a>
-          <a class="course-card" href="/product/photoshop/" data-course="photoshop-product" style="--course:#59b8ff;--wash:rgba(49,168,255,.32)"><div class="course-art" data-mark="Ps"><span class="art-top">IMMAGINE / PRODOTTO</span><span class="art-stroke"></span></div><div class="card-inner"><div class="card-topline"><span>PRODUCT</span><span class="card-status pending">In preparazione</span></div><h3>Photoshop</h3><p>Il corso è in preparazione: qui troverai programma e materiali.</p><div class="card-bottom"><small>POSTPRODUZIONE</small><b>Stato corso ↗</b></div></div></a>
-          <a class="course-card" href="/product/ia/#calendario" data-course="ia-product" style="--course:#77e7b7;--wash:rgba(52,211,153,.28)"><div class="course-art" data-mark="AI"><span class="art-top">ESPLORAZIONE / DESIGN</span><span class="art-stroke"></span></div><div class="card-inner"><div class="card-topline"><span>03 / ANNO</span><span class="card-status">Calendario online</span></div><h3>Intelligenza Artificiale</h3><p>Il calendario PD3 è disponibile; i materiali arriveranno qui.</p><div class="card-bottom"><small>PD3</small><b>Vedi le date ↗</b></div></div></a>
-        </div>
-      </section>
-
-      <section class="rationale" id="come-funziona" aria-labelledby="rationale-title"><h2 id="rationale-title">Tutto a portata<br>di mano.</h2><article><b>01 / SCEGLI</b><h3>Trova il tuo corso</h3><p>Seleziona Interior o Product e apri direttamente il programma o il calendario.</p></article><article><b>02 / TORNA</b><h3>Riprendi da qui</h3><p>Il corso aperto più di recente resta in evidenza quando torni sulla home.</p></article><article><b>03 / ESPLORA</b><h3>Studia con calma</h3><p>In ogni corso trovi sezioni dedicate a lezioni, materiali e risorse disponibili.</p></article></section>
-    </main>
-    <footer class="site-footer"><span>Giovanni Savelli · AANT · A.A. 2026/2027</span><a href="#quick-title">Torna ai corsi ↑</a></footer>
+<header class="top" id="top">
+  <div class="wrap">
+    <a class="marchio" href="index.html"><i>GS</i><span>Giovanni Savelli<small>Corsi AANT 2026/27</small></span></a>
+    <nav class="menu" aria-label="Menu">
+      <a class="solo-desk" href="#corsi">Corsi</a>
+      <a class="solo-desk" href="#lezioni">Prossime lezioni</a>
+      <button type="button" id="btn-leggibile" aria-pressed="false" aria-label="Alta leggibilità">Aa</button>
+    </nav>
   </div>
+</header>
+
+<main>
+  <section class="hero" id="hero">
+    <canvas id="scena" aria-hidden="true"></canvas>
+    <div class="wrap">
+      <h1><span class="r"><span>Dai forma</span></span><span class="r"><span>alla <em>luce.</em></span></span></h1>
+      <div class="hero-basso">
+        <p>Rendering 3D, Photoshop e Intelligenza Artificiale per Interior e Product Design. I corsi di Giovanni Savelli all'AANT.</p>
+        <div class="azioni">
+          <a class="btn pieno" href="#corsi">Scegli il tuo corso <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M6 13l6 6 6-6"/></svg></a>
+          <a class="btn vuoto" href="#lezioni">Prossime lezioni</a>
+        </div>
+      </div>
+    </div>
+    <div class="didascalia" aria-hidden="true">Scena in tempo reale<br>gesso, vetro, cromo, terracotta</div>
+  </section>
+
+  <section class="blocco wrap" id="corsi">
+    <div class="testa" data-svela>
+      <h2>I corsi</h2>
+      <p>Programma lezione per lezione, video, appunti e materiali. Tutto in una pagina per corso.</p>
+    </div>
+
+    <div class="reparto" data-svela>Interior Design</div>
+    <ul class="corsi">
+      <li data-svela><a class="corso" href="interior/rendering3d/" style="--c: var(--r)" data-luce="#9d7bff">
+        <span class="nome"><i></i>Rendering 3D</span>
+        <span class="info"><b>Cinema 4D e Corona</b>2° anno, classi 2A 2B 2C</span>
+        <span class="stato">2° semestre</span>
+        <span class="freccia"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+      </a></li>
+      <li data-svela><a class="corso" href="interior/photoshop/" style="--c: var(--p)" data-luce="#38bdf8">
+        <span class="nome"><i></i>Photoshop</span>
+        <span class="info"><b>Immagine e post-produzione</b>2° anno, classi 2A 2B 2C</span>
+        <span class="stato">dal 20 nov</span>
+        <span class="freccia"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+      </a></li>
+      <li data-svela><a class="corso" href="interior/ia/" style="--c: var(--ia)" data-luce="#34d399">
+        <span class="nome"><i></i>Intelligenza Artificiale</span>
+        <span class="info"><b>Prompt, immagini, strumenti</b>3° anno, classi 3A 3B 3C</span>
+        <span class="stato">dal 23 nov</span>
+        <span class="freccia"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+      </a></li>
+    </ul>
+
+    <div class="reparto" data-svela>Product Design</div>
+    <ul class="corsi">
+      <li data-svela><a class="corso presto" href="product/modellazione/" style="--c: var(--m)" data-luce="#fb923c">
+        <span class="nome"><i></i>Modellazione 3D</span>
+        <span class="info"><b>Dal concept all'oggetto</b>Il corso si sta preparando</span>
+        <span class="stato">in arrivo</span>
+        <span class="freccia"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+      </a></li>
+      <li data-svela><a class="corso presto" href="product/photoshop/" style="--c: var(--p)" data-luce="#38bdf8">
+        <span class="nome"><i></i>Photoshop</span>
+        <span class="info"><b>Immagine di prodotto</b>Il corso si sta preparando</span>
+        <span class="stato">in arrivo</span>
+        <span class="freccia"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+      </a></li>
+      <li data-svela><a class="corso" href="product/ia/#calendario" style="--c: var(--ia)" data-luce="#34d399">
+        <span class="nome"><i></i>Intelligenza Artificiale</span>
+        <span class="info"><b>3° anno, classe PD3</b>Calendario disponibile</span>
+        <span class="stato">dal 21 dic</span>
+        <span class="freccia"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+      </a></li>
+    </ul>
+  </section>
+
+  <section class="blocco wrap" id="lezioni">
+    <div class="testa" data-svela>
+      <h2>Prossime lezioni</h2>
+      <p>Scegli la tua classe: il sito se la ricorda e ti mostra solo le tue date.</p>
+    </div>
+    <div class="lezioni-box" data-svela>
+      <div class="filtro">
+        <h3>La tua classe</h3>
+        <div class="classi" id="classi" role="group" aria-label="Scegli la tua classe"></div>
+        <p class="quando" id="quando" aria-live="polite"></p>
+        <p class="nota" id="nota" hidden>Rendering 3D è nel 2° semestre: le date arrivano appena l'Accademia le pubblica.</p>
+      </div>
+      <ol class="elenco" id="elenco"></ol>
+    </div>
+  </section>
+</main>
+
+<footer class="wrap">
+  <div class="grande-firma" aria-hidden="true">Savelli · AANT</div>
+  <div class="piede"><span>Giovanni Savelli, Accademia delle Arti e Nuove Tecnologie</span><span>Anno accademico 2026/27</span></div>
+</footer>
+
+<script src="assets/fx/effetti.js"></script>
+<script src="assets/studio.js"></script>
+<script>
+  const { leggi, salva } = Studio;
+
+  /* ---------- Colore della luce: cambia passando sui corsi ---------- */
+  window.coloreLuce = '#9d7bff';
+  document.querySelectorAll('[data-luce]').forEach(a => {
+    a.addEventListener('pointerenter', () => { window.coloreLuce = a.dataset.luce; document.documentElement.style.setProperty('--accent', a.dataset.luce); });
+  });
+
+  /* ---------- Prossime lezioni (calendario 2026/27) ---------- */
+  const BASE = '';
+  const CORSI = {
+    p:   { nome: 'Photoshop', c: 'var(--p)', href: BASE + '/interior/photoshop/' },
+    ia:  { nome: 'Intelligenza Artificiale', c: 'var(--ia)', href: BASE + '/interior/ia/' },
+    iap: { nome: 'IA, Product Design', c: 'var(--ia)', href: BASE + '/product/ia/' }
+  };
+  const CALENDARI = [
+    ['p', '2A', '11:00', ['2026-11-24', '2026-12-01'], ['Conosciamoci', 'I primi strumenti per scontornare']],
+    ['p', '2A', '09:00', ['2026-12-15', '2027-01-12', '2027-01-19', '2027-01-26'], ['Istogramma e Curve'], 3],
+    ['p', '2B', '14:00', ['2026-11-24', '2026-12-01', '2026-12-15', '2027-01-12', '2027-01-26'], ['Conosciamoci', 'I primi strumenti per scontornare', 'Istogramma e Curve']],
+    ['p', '2C', '11:00', ['2026-11-20', '2026-11-27', '2026-12-04', '2026-12-11'], ['Conosciamoci', 'I primi strumenti per scontornare']],
+    ['p', '2C', '09:00', ['2026-12-18', '2027-01-15'], [], 5],
+    ['ia', '3A', '14:00', ['2026-12-03', '2026-12-10', '2026-12-17', '2027-01-14', '2027-01-21'], []],
+    ['ia', '3B', '09:00', ['2026-11-26', '2026-12-03', '2026-12-10', '2026-12-17', '2027-01-28'], []],
+    ['ia', '3C', '14:00', ['2026-11-23', '2026-11-30', '2026-12-21', '2027-01-11', '2027-01-25'], []],
+    ['iap', 'PD3', '09:00', ['2026-12-21', '2027-01-11', '2027-01-18', '2027-01-25'], []]
+  ];
+  const CLASSI = ['Tutte', '2A', '2B', '2C', '3A', '3B', '3C', 'PD3'];
+  const LEZ = [];
+  CALENDARI.forEach(([corso, classe, ora, date, temi, primo = 1]) => date.forEach((d, i) => LEZ.push({ corso, classe, ora, d, n: primo + i, tema: temi[i] || '' })));
+  LEZ.sort((a, b) => (a.d + a.ora).localeCompare(b.d + b.ora) || a.classe.localeCompare(b.classe));
+  const GG = ['dom', 'lun', 'mar', 'mer', 'gio', 'ven', 'sab'];
+  const oggi = new Date(); oggi.setHours(0, 0, 0, 0);
+  const daISO = s => { const [y, m, g] = s.split('-').map(Number); return new Date(y, m - 1, g); };
+  const dueCifre = n => String(n).padStart(2, '0');
+  let scelta = leggi('gs-classe'); if (!CLASSI.includes(scelta)) scelta = 'Tutte';
+  const boxClassi = document.getElementById('classi');
+  boxClassi.innerHTML = CLASSI.map(c => `<button type="button" data-c="${c}" aria-pressed="${c === scelta}">${c}</button>`).join('');
+  boxClassi.addEventListener('click', e => {
+    const b = e.target.closest('button'); if (!b) return;
+    scelta = b.dataset.c; salva('gs-classe', scelta);
+    boxClassi.querySelectorAll('button').forEach(x => x.setAttribute('aria-pressed', String(x === b))); disegna();
+  });
+
+  /* Le date girano come un tabellone delle partenze: dalla data di prima a quella nuova.
+     La prima volta partono da 00.00 quando l'elenco entra nello schermo. */
+  const elenco = document.getElementById('elenco');
+  let dateMostrate = [], elencoVisto = false, inAttesa = [];
+  new IntersectionObserver(([e], oss) => {
+    if (!e.isIntersecting) return;
+    elencoVisto = true; oss.disconnect();
+    inAttesa.forEach(f => f()); inAttesa = [];
+  }, { threshold: .3 }).observe(elenco);
+
+  function disegna() {
+    const pr = LEZ.filter(l => daISO(l.d) >= oggi && (scelta === 'Tutte' || l.classe === scelta));
+    elenco.innerHTML = pr.slice(0, 6).map(l => {
+      const c = CORSI[l.corso], dt = daISO(l.d);
+      return `<li><a class="lez" href="${c.href + (l.corso === 'p' && l.tema ? '#lezione-' + l.n : '#calendario')}" style="--c:${c.c}">
+        <span class="giorno"><span class="data" data-data="${dueCifre(dt.getDate())}.${dueCifre(dt.getMonth() + 1)}"></span><small>${GG[dt.getDay()]}, ${l.ora}</small></span>
+        <span class="cosa"><b><i></i>${c.nome}</b><span>Lezione ${l.n}${l.tema ? ': ' + l.tema : ''}</span></span>
+        <span class="classe">${l.classe}</span></a></li>`;
+    }).join('') || '<li class="lez"><span class="cosa"><span>Nessuna lezione in calendario per questa classe.</span></span></li>';
+    const celle = [...elenco.querySelectorAll('.data')];
+    celle.forEach((el, i) => {
+      const t = Effetti.tabellone(el, dateMostrate[i] || '00.00');
+      const gira = () => setTimeout(() => t.vai(el.dataset.data), i * 90);
+      if (elencoVisto) gira(); else inAttesa.push(gira);
+    });
+    dateMostrate = celle.map(el => el.dataset.data);
+    const q = document.getElementById('quando');
+    if (pr.length) {
+      const g = Math.round((daISO(pr[0].d) - oggi) / 86400000);
+      q.innerHTML = `${scelta === 'Tutte' ? 'Si parte' : 'La tua prossima lezione è'} <span>${g === 0 ? 'oggi' : g === 1 ? 'domani' : 'tra ' + g + ' giorni'}</span>.`;
+    } else q.textContent = '';
+    document.getElementById('nota').hidden = !['Tutte', '2A', '2B', '2C'].includes(scelta);
+  }
+  disegna();
+
+  requestAnimationFrame(() => document.getElementById('hero').classList.add('pronta'));
+</script>
+
+<!-- ---------- La scena 3D in tempo reale (Three.js) ---------- -->
+<script type="importmap">{ "imports": { "three": "https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.js", "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.170.0/examples/jsm/" } }</script>
+<script type="module">
+  import * as THREE from 'three';
+  import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
+  import { RoundedBoxGeometry } from 'three/addons/geometries/RoundedBoxGeometry.js';
+
+  const canvas = document.getElementById('scena');
+  const hero = document.getElementById('hero');
+  const fermo = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const piccolo = () => innerWidth < 700;
+
+  const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true, powerPreference: 'high-performance' });
+  renderer.setPixelRatio(Math.min(devicePixelRatio, piccolo() ? 1.4 : 1.75));
+  renderer.outputColorSpace = THREE.SRGBColorSpace;
+  renderer.toneMapping = THREE.ACESFilmicToneMapping;
+  renderer.toneMappingExposure = 1.05;
+  renderer.shadowMap.enabled = true;
+  renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+
+  const scene = new THREE.Scene();
+  scene.fog = new THREE.Fog(0x0a0a0d, 14, 30);
+  const pmrem = new THREE.PMREMGenerator(renderer);
+  scene.environment = pmrem.fromScene(new RoomEnvironment(), .04).texture;
+  scene.environmentIntensity = .55;
+
+  const camera = new THREE.PerspectiveCamera(30, 1, .1, 100);
+
+  /* Fondale curvo da studio fotografico (infinity cove) */
+  const cove = new THREE.PlaneGeometry(44, 26, 1, 90);
+  const pos = cove.attributes.position;
+  const R = 4.5, FONDO = -5.2;
+  for (let i = 0; i < pos.count; i++) {
+    const x = pos.getX(i), t = pos.getY(i) + 13;      // 0..26 lungo il fondale
+    let y, z;
+    if (t < 14) { y = 0; z = 8.8 - t; }
+    else {
+      const a = Math.min((t - 14) / R, Math.PI / 2), oltre = Math.max(0, t - 14 - R * Math.PI / 2);
+      z = FONDO - R * Math.sin(a); y = R * (1 - Math.cos(a)) + oltre;
+    }
+    pos.setXYZ(i, x, y, z);
+  }
+  cove.computeVertexNormals();
+  const fondale = new THREE.Mesh(cove, new THREE.MeshStandardMaterial({ color: 0x1b1a21, roughness: .92 }));
+  fondale.receiveShadow = true; scene.add(fondale);
+
+  /* Arco in gesso */
+  const W = 1.15, H = 2.9, w = .78, base = H - W;
+  const arcoForma = new THREE.Shape();
+  arcoForma.moveTo(-W, 0); arcoForma.lineTo(-W, base); arcoForma.absarc(0, base, W, Math.PI, 0, true);
+  arcoForma.lineTo(W, 0); arcoForma.lineTo(w, 0); arcoForma.lineTo(w, base); arcoForma.absarc(0, base, w, 0, Math.PI, false);
+  arcoForma.lineTo(-w, 0); arcoForma.closePath();
+  const arcoGeo = new THREE.ExtrudeGeometry(arcoForma, { depth: .5, bevelEnabled: true, bevelThickness: .03, bevelSize: .03, bevelSegments: 4, curveSegments: 64 });
+  arcoGeo.translate(0, 0, -.25);
+  const arco = new THREE.Mesh(arcoGeo, new THREE.MeshStandardMaterial({ color: 0xe6dfd4, roughness: .88 }));
+  arco.position.set(-1.25, 0, -1.7); arco.rotation.y = .28; arco.castShadow = arco.receiveShadow = true; scene.add(arco);
+
+  /* Sfera di vetro */
+  const vetro = new THREE.MeshPhysicalMaterial({ color: 0xffffff, roughness: .03, transmission: 1, thickness: 1.8, ior: 1.48, attenuationColor: new THREE.Color('#9d7bff'), attenuationDistance: 7, clearcoat: 1, clearcoatRoughness: .05 });
+  const sfera = new THREE.Mesh(new THREE.SphereGeometry(.95, 96, 96), vetro);
+  sfera.position.set(.55, .95, .55); sfera.castShadow = true; scene.add(sfera);
+
+  /* Anello cromato */
+  const anello = new THREE.Mesh(new THREE.TorusGeometry(.72, .17, 64, 160), new THREE.MeshStandardMaterial({ color: 0xdedede, metalness: 1, roughness: .12 }));
+  anello.position.set(2.45, .9, -.9); anello.castShadow = true; scene.add(anello);
+
+  /* Cubo in terracotta */
+  const cubo = new THREE.Mesh(new RoundedBoxGeometry(.95, .95, .95, 8, .12), new THREE.MeshStandardMaterial({ color: 0xb8613d, roughness: .72 }));
+  cubo.position.set(1.85, .475, 1.55); cubo.rotation.y = .55; cubo.castShadow = cubo.receiveShadow = true; scene.add(cubo);
+
+  /* Pallina d'ottone */
+  const ottone = new THREE.Mesh(new THREE.SphereGeometry(.26, 48, 48), new THREE.MeshStandardMaterial({ color: 0xd7a756, metalness: 1, roughness: .28 }));
+  ottone.position.set(-.55, .26, 1.45); ottone.castShadow = true; scene.add(ottone);
+
+  /* Luci: chiave calda, luce colorata del corso, controluce */
+  const chiave = new THREE.DirectionalLight(0xfff0de, 2.4);
+  chiave.position.set(-5, 8, 6); chiave.castShadow = true;
+  chiave.shadow.mapSize.set(2048, 2048);
+  Object.assign(chiave.shadow.camera, { left: -7, right: 7, top: 7, bottom: -7, near: 1, far: 30 });
+  chiave.shadow.bias = -.0004; chiave.shadow.normalBias = .02; chiave.shadow.radius = 4;
+  scene.add(chiave);
+  const colore = new THREE.SpotLight(0x9d7bff, 160, 24, .62, 1, 1.6);
+  colore.position.set(6, 4.6, 3); colore.target.position.set(.6, .9, 0); scene.add(colore, colore.target);
+  const retro = new THREE.PointLight(0x9d7bff, 40, 14, 2);
+  retro.position.set(-2.6, 3.4, -4); scene.add(retro);
+  scene.add(new THREE.HemisphereLight(0xffffff, 0x1b1a21, .25));
+
+  /* Inquadratura che si adatta allo schermo */
+  function inquadra() {
+    const r = canvas.getBoundingClientRect();
+    renderer.setSize(r.width, r.height, false);
+    camera.aspect = r.width / r.height;
+    camera.fov = piccolo() ? 36 : 30;
+    camera.updateProjectionMatrix();
+  }
+  new ResizeObserver(inquadra).observe(canvas); inquadra();
+
+  let mx = 0, my = 0, cmx = 0, cmy = 0;
+  addEventListener('pointermove', e => { mx = e.clientX / innerWidth - .5; my = e.clientY / innerHeight - .5; }, { passive: true });
+  const targetColore = new THREE.Color('#9d7bff');
+  let visibile = true;
+  new IntersectionObserver(([e]) => { visibile = e.isIntersecting; }).observe(hero);
+
+  const orologio = new THREE.Clock();
+  function fotogramma() {
+    const t = orologio.getElapsedTime();
+    cmx += (mx - cmx) * .045; cmy += (my - cmy) * .045;
+    const ang = Math.sin(t * .12) * .1 + cmx * .32;
+    const dist = piccolo() ? 10.6 : 13.2;
+    const cx = piccolo() ? .45 : -1.85;   // da computer la scena sta a destra del testo
+    camera.position.set(cx + Math.sin(ang) * dist, 2.35 - cmy * .9, Math.cos(ang) * dist);
+    camera.lookAt(cx + .05, piccolo() ? .95 : .6, 0);
+
+    anello.rotation.y = t * .5; anello.rotation.x = Math.sin(t * .4) * .25;
+    sfera.position.y = .95 + Math.sin(t * 1.1) * .07;
+    ottone.position.y = .26 + Math.abs(Math.sin(t * 1.6)) * .05;
+
+    targetColore.set(window.coloreLuce || '#9d7bff');
+    colore.color.lerp(targetColore, .05); retro.color.lerp(targetColore, .05);
+    vetro.attenuationColor.lerp(targetColore, .05);
+
+    renderer.render(scene, camera);
+  }
+  if (fermo) { fotogramma(); }
+  else renderer.setAnimationLoop(() => { if (visibile) fotogramma(); });
+</script>
 </body>
 </html>
