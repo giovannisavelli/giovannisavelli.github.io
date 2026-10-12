@@ -68,49 +68,54 @@
     .scheda[aria-selected="true"] { background: var(--accent); border-color: var(--accent); color: #101016; }
     .scheda.fuori { margin-left: auto; border-style: dashed; color: var(--ink-2); }
     .scheda.fuori:hover { color: var(--ink); }
-    .pannello { position: relative; z-index: 2; padding-top: 44px; }
+    .pannello { position: relative; z-index: 2; padding-top: 44px; scroll-margin-top: 110px; }
     .pannello > .testa { margin-bottom: 26px; }
     .pannello > .testa h2 { font-size: clamp(36px, 4.4vw, 64px); }
     .entra { animation: entra .7s var(--ease) both; }
     @keyframes entra { from { opacity: 0; transform: translateY(18px); } }
 
-    /* ---------- Il percorso delle lezioni: un tracciato curvo ---------- */
-    .percorso { position: relative; height: 330px; margin: 6px 0 0; scroll-margin-top: 170px; }
+    /* ---------- Il percorso delle lezioni: una curva di Bézier morbida ---------- */
+    .percorso { position: relative; height: 340px; margin: 6px 0 0; scroll-margin-top: 170px; }
     .schede-box { scroll-margin-top: 76px; }
     .percorso svg { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
     .percorso path { fill: none; stroke-linecap: round; stroke-linejoin: round; }
     .p-base { stroke: rgba(255, 255, 255, .13); stroke-width: 2; stroke-dasharray: 2 9; }
     .p-fatto { stroke: var(--accent); stroke-width: 4; filter: drop-shadow(0 0 8px color-mix(in srgb, var(--accent) 70%, transparent)); transition: stroke-dashoffset 2.2s var(--ease); }
     .tappe { position: absolute; inset: 0; z-index: 2; list-style: none; margin: 0; padding: 0; pointer-events: none; }
-    .tappa { pointer-events: auto; }
     /* anello che scorre lungo la linea fino alla lezione aperta */
     .cursore { position: absolute; left: 0; top: 0; z-index: 1; width: 52px; height: 52px; margin: -26px 0 0 -26px; border-radius: 50%; border: 2px solid var(--accent); pointer-events: none;
       box-shadow: 0 0 26px color-mix(in srgb, var(--accent) 55%, transparent), inset 0 0 14px color-mix(in srgb, var(--accent) 35%, transparent); }
-    .tappa { position: absolute; display: grid; place-items: center; width: 48px; height: 48px; margin: -24px 0 0 -24px; padding: 0; border: 0; border-radius: 50%; background: none; cursor: pointer; }
-    .t-punto { position: relative; display: grid; place-items: center; width: 22px; height: 22px; border-radius: 50%; background: var(--bg); box-shadow: inset 0 0 0 2px rgba(255, 255, 255, .35); font: 600 0px/1 var(--mono); transition: transform .4s var(--ease), box-shadow .3s ease; }
-    .tappa.fatto .t-punto { background: var(--accent); box-shadow: 0 0 14px color-mix(in srgb, var(--accent) 60%, transparent); }
-    .tappa.qui .t-punto { width: 32px; height: 32px; background: var(--accent); color: #101016; font-size: 13px; box-shadow: 0 0 30px var(--accent); }
-    .tappa.qui::before { content: ""; position: absolute; width: 34px; height: 34px; border-radius: 50%; border: 2px solid var(--accent); animation: onda 2.4s ease-out infinite; }
+    .tappa { position: absolute; display: grid; place-items: center; width: 48px; height: 48px; margin: -24px 0 0 -24px; padding: 0; border: 0; border-radius: 50%; background: none; cursor: pointer; pointer-events: auto; }
+    .t-punto { position: relative; display: grid; place-items: center; width: 22px; height: 22px; border-radius: 50%; background: var(--bg); box-shadow: inset 0 0 0 2px rgba(255, 255, 255, .35); font: 600 0px/1 var(--mono); transition: transform .4s var(--ease), box-shadow .3s ease, width .3s var(--ease), height .3s var(--ease); }
+    .tappa.fatto .t-punto, .tappa.ultima .t-punto { background: var(--accent); box-shadow: 0 0 14px color-mix(in srgb, var(--accent) 60%, transparent); }
     .tappa.esame .t-punto { width: 26px; height: 26px; border-radius: 7px; background: var(--ink); color: var(--bg); font-size: 12px; box-shadow: none; }
     .tappa:hover .t-punto { transform: scale(1.25); }
+    /* la lezione aperta: pallino grande col numero, pulsazione, "Sei qui". Tutto si sposta con lei */
+    .tappa[aria-pressed="true"] .t-punto { width: 32px; height: 32px; font-size: 13px; transform: none; }
+    .tappa.fatto[aria-pressed="true"] .t-punto, .tappa.ultima[aria-pressed="true"] .t-punto { color: #101016; box-shadow: 0 0 30px var(--accent); }
+    .tappa.poi[aria-pressed="true"] .t-punto { color: var(--accent); box-shadow: inset 0 0 0 2px var(--accent); }
+    .tappa[aria-pressed="true"]::before { content: ""; position: absolute; width: 34px; height: 34px; border-radius: 50%; border: 2px solid var(--accent); animation: onda 2.4s ease-out infinite; }
     @keyframes onda { from { transform: scale(1); opacity: .9; } to { transform: scale(2.6); opacity: 0; } }
-    .t-testo { position: absolute; left: 50%; top: 100%; width: 132px; margin-left: -66px; padding-top: 6px; text-align: center; pointer-events: none; }
+    /* lezione con tutte le voci spuntate */
+    .tappa.completa .t-punto::after { content: "\2713"; position: absolute; top: -7px; right: -9px; display: grid; place-items: center; width: 17px; height: 17px; border-radius: 50%; background: var(--ink); color: #101016; font: 700 10px/1 var(--sans); box-shadow: 0 0 0 2px var(--bg); }
+    .t-testo { position: absolute; left: 50%; top: 100%; display: flex; flex-direction: column; align-items: center; width: 140px; margin-left: -70px; padding-top: 6px; text-align: center; pointer-events: none; }
     .tappa.sopra .t-testo { top: auto; bottom: 100%; padding: 0 0 6px; }
+    /* sulle salite e discese il nome scende in diagonale, dove la linea non passa */
+    .tappa.lato-sx .t-testo { left: auto; right: 50%; margin: 0 -10px 0 0; align-items: flex-end; text-align: right; }
+    .tappa.lato-dx .t-testo { left: 50%; margin: 0 0 0 -10px; align-items: flex-start; text-align: left; }
     .t-testo small { display: block; color: var(--ink-3); font: 500 11px/1.3 var(--mono); letter-spacing: .06em; text-transform: uppercase; }
     .t-testo b { display: block; margin-top: 2px; font-size: 15px; font-weight: 600; line-height: 1.2; letter-spacing: -.01em; transition: color .3s ease; }
     .tappa.poi .t-testo b { color: var(--ink-2); font-weight: 500; }
     .tappa[aria-pressed="true"] .t-testo b { color: var(--accent); }
-    .tappa[aria-pressed="true"] .t-punto { width: 30px; height: 30px; font-size: 12px; transform: none; }
-    .tappa.fatto[aria-pressed="true"] .t-punto { color: #101016; }
-    .tappa.poi[aria-pressed="true"] .t-punto { color: var(--accent); box-shadow: inset 0 0 0 2px var(--accent); }
-    .tappa.qui[aria-pressed="true"] .t-punto { width: 32px; height: 32px; font-size: 13px; }
-    /* lezione con tutte le voci spuntate */
-    .tappa.completa .t-punto::after { content: "\2713"; position: absolute; top: -7px; right: -9px; display: grid; place-items: center; width: 17px; height: 17px; border-radius: 50%; background: var(--ink); color: #101016; font: 700 10px/1 var(--sans); box-shadow: 0 0 0 2px var(--bg); }
-    .sei-qui { position: absolute; left: 50%; bottom: calc(100% + 6px); transform: translateX(-50%); padding: 5px 9px; border-radius: 6px; background: var(--accent); color: #101016; font: 600 11px/1 var(--mono); letter-spacing: .06em; text-transform: uppercase; white-space: nowrap; pointer-events: none; }
-    .tappa.qui.sopra .sei-qui { bottom: auto; top: calc(100% + 6px); }
-    .qui-mini { display: none; }
+    /* "Sei qui" dentro il blocco del nome, sempre dal lato del pallino: non può toccare la linea */
+    .qui-mini { display: none; order: -1; margin: 2px 0 6px; padding: 4px 8px; border-radius: 5px; background: var(--accent); color: #101016; font: 600 11px/1 var(--mono); font-style: normal; letter-spacing: .06em; text-transform: uppercase; white-space: nowrap; }
+    .tappa.sopra .qui-mini { order: 3; margin: 6px 0 2px; }
+    .tappa[aria-pressed="true"] .qui-mini { display: block; }
+    /* percorso in verticale (telefono e tablet): i nomi stanno a destra */
+    .percorso.verticale .t-testo, .percorso.verticale .tappa.sopra .t-testo { left: 100%; top: 50%; bottom: auto; display: block; width: auto; min-width: 220px; margin: 0; padding: 0 0 0 12px; text-align: left; transform: translateY(-50%); }
+    .percorso.verticale .tappa[aria-pressed="true"] .t-testo { padding-left: 16px; }
+    .percorso.verticale .tappa[aria-pressed="true"] .qui-mini { display: inline-block; margin: 0 0 0 8px; padding: 3px 6px; vertical-align: 1px; }
     .nota-percorso { margin: 8px 0 0; color: var(--ink-3); font-size: 15px; }
-
     /* ---------- La lezione aperta ---------- */
     .lezione { margin-top: 34px; padding: clamp(22px, 3vw, 38px); border: 1px solid var(--line); border-radius: 22px; background: var(--bg-2); }
     .l-testa { display: flex; flex-wrap: wrap; align-items: center; gap: 12px 18px; padding-bottom: 20px; border-bottom: 1px solid var(--line); }
@@ -121,9 +126,9 @@
     .avanzamento { display: grid; gap: 7px; min-width: 170px; color: var(--ink-2); font: 500 13px/1 var(--mono); }
     .avanzamento i { display: block; height: 4px; border-radius: 4px; background: var(--line); overflow: hidden; }
     .avanzamento i::after { content: ""; display: block; height: 100%; width: var(--fatto, 0%); background: var(--accent); border-radius: inherit; transition: width .6s var(--molla); }
-    .l-blocchi { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 6px 48px; }
-    .l-blocco { padding-top: 22px; }
-    .l-blocco.largo { grid-column: 1 / -1; }
+    .l-blocchi { columns: 2; column-gap: 48px; }
+    .l-blocco { padding-top: 22px; break-inside: avoid; }
+    .l-blocco.largo { column-span: all; }
     .l-blocco h4 { margin: 0 0 6px; color: var(--ink-3); font: 500 12px/1.3 var(--mono); letter-spacing: .08em; text-transform: uppercase; }
     .voci { list-style: none; margin: 0; padding: 0; }
     .voci li { border-top: 1px solid var(--line); }
@@ -210,7 +215,7 @@
     @media (min-width: 1001px) {
       .schede-box { position: sticky; top: 75px; }
       /* fascia scura a tutta larghezza: l'ombra la allarga senza rendere la pagina più larga dello schermo */
-      .schede-box::before { content: ""; position: absolute; inset: 0; z-index: -1; background: rgba(10, 10, 13, .94); box-shadow: 0 0 0 100vmax rgba(10, 10, 13, .94), 0 1px 0 100vmax var(--line); clip-path: inset(0 -100vmax -1px); opacity: 0; transition: opacity .3s ease; }
+      .schede-box::before { content: ""; position: absolute; inset: 0; z-index: -1; background: var(--bg); box-shadow: 0 0 0 100vmax var(--bg), 0 1px 0 100vmax #1c1c22; clip-path: inset(0 -100vmax -1px); opacity: 0; transition: opacity .3s ease; }
       .schede-box.attaccata::before { opacity: 1; }
     }
     @media (max-width: 1000px) {
@@ -224,7 +229,7 @@
       .docs { grid-template-columns: 1fr; gap: 10px; }
       .doc { min-height: 0; grid-template-columns: minmax(0, 1fr) auto; align-items: center; }
       .b-gruppo { grid-template-columns: 1fr; gap: 12px; }
-      .l-blocchi { grid-template-columns: 1fr; }
+      .l-blocchi { columns: 1; }
       .scheda.fuori { margin-left: 0; }
     }
     @media (max-width: 700px) {
@@ -235,11 +240,6 @@
       .scheda { flex: 1 1 auto; justify-content: center; padding: 0 14px; }
       .passo .corpo { padding-left: 0; }
       .percorso { margin-top: 0; }
-      .t-testo { left: 100%; top: 50%; width: auto; min-width: 200px; margin: 0; padding: 0 0 0 10px; text-align: left; transform: translateY(-50%); }
-      .tappa.sopra .t-testo { top: 50%; bottom: auto; padding: 0 0 0 10px; }
-      .sei-qui { display: none; }
-      .qui-mini { display: inline-block; margin-left: 8px; padding: 3px 6px; border-radius: 4px; background: var(--accent); color: #101016; font-style: normal; }
-      .tappa.qui .t-testo { padding-left: 16px; }
       .l-testa h3 { flex-basis: 100%; }
       .tasti li { min-height: 60px; }
     }
@@ -333,7 +333,7 @@
         <p>Le tappe accese sono le lezioni già fatte. Tocca una tappa per aprirla e spuntare gli argomenti: la ✓ indica una lezione spuntata tutta.</p>
       </div>
       <div class="percorso" id="percorso">
-        <svg aria-hidden="true"><path class="p-base" id="p-base"/><path class="p-fatto" id="p-fatto"/><path id="p-misura" fill="none" stroke="none"/></svg>
+        <svg aria-hidden="true"><path class="p-base" id="p-base"/><path class="p-fatto" id="p-fatto"/></svg>
         <span class="cursore" id="cursore" aria-hidden="true"></span>
         <ol class="tappe" id="tappe"></ol>
       </div>
@@ -391,7 +391,7 @@
   /* =====================================================================
      DATI DEL CORSO (copiati dalla pagina ufficiale di Rendering 3D)
      ===================================================================== */
-  const LEZIONE_CORRENTE = 8;   // la tappa "Sei qui"
+  const LEZIONE_CORRENTE = 8;   // l'ultima lezione fatta: la linea viola arriva fin qui
 
 const agenda1 = [
         { title: "Introduzione", items: [{ name: "Presentazione alunni" }, { name: "Presentazione corso" }] },
@@ -647,7 +647,7 @@ const shortcuts = [
     const lez = h.match(/^lezione-(\d+|E)$/);
     if (lez) apriScheda('lezioni', true), mostraTappa(lez[1] === 'E' ? 'E' : Number(lez[1]), false);
     else apriScheda(TAB_NAMES[h] ? h : ALIAS[h] || 'lezioni', true);
-    if (scorri === true && h) (lez ? $('#percorso') : box).scrollIntoView({ behavior: Studio.fermo ? 'auto' : 'smooth', block: 'start' });
+    if (scorri === true && h) (lez ? $('#lezioni') : box).scrollIntoView({ behavior: Studio.fermo ? 'auto' : 'smooth', block: 'start' });
   }
   $('#schede').addEventListener('click', e => {
     const t = e.target.closest('.scheda[role=tab]'); if (!t) return;
@@ -666,34 +666,47 @@ const shortcuts = [
   // la barra prende lo sfondo quando resta attaccata in alto
   addEventListener('scroll', () => box.classList.toggle('attaccata', box.getBoundingClientRect().top <= 76), { passive: true });
 
-  /* ---------- Il percorso: una curva di Bézier con due gobbe e due avvallamenti di altezza diversa ---------- */
+  /* ---------- Il percorso: una curva di Bézier morbida, con le tappe appoggiate sopra ---------- */
   const percorso = $('#percorso'), cursore = $('#cursore');
   const idxQui = TAPPE.findIndex(f => f.n === LEZIONE_CORRENTE);
   $('#tappe').innerHTML = TAPPE.map(f => {
-    const stato = f.esame ? 'esame' : f.n < LEZIONE_CORRENTE ? 'fatto' : f.n === LEZIONE_CORRENTE ? 'qui' : 'poi';
+    const stato = f.esame ? 'esame' : f.n < LEZIONE_CORRENTE ? 'fatto' : f.n === LEZIONE_CORRENTE ? 'ultima' : 'poi';
     return `<li><button class="tappa ${stato}" type="button" data-n="${f.n}" aria-pressed="false">
-      ${stato === 'qui' ? '<span class="sei-qui">Sei qui</span>' : ''}
       <span class="t-punto" aria-hidden="true">${f.esame ? 'E' : f.n}</span>
-      <span class="t-testo"><small>${f.esame ? 'Capolinea' : 'Lezione ' + f.n}${stato === 'qui' ? '<em class="qui-mini">Sei qui</em>' : ''}</small><b>${esc(f.breve)}</b></span>
+      <span class="t-testo"><em class="qui-mini">Sei qui</em><small>${f.esame ? 'Capolinea' : 'Lezione ' + f.n}</small><b>${esc(f.breve)}</b></span>
     </button></li>`;
   }).join('');
   const bottoni = [...document.querySelectorAll('.tappa')];
 
-  // Profilo disegnato a mano (+ scende, − sale): avvallamento, gobba alta, avvallamento profondo, gobba più bassa.
-  // Vale per qualunque numero di tappe: se aggiungi la lezione 9 la curva si ridistribuisce da sola.
-  const PROFILO = [[0, .15], [.18, .6], [.38, -.8], [.62, .85], [.86, -.45], [1, -.1]];
-  function altezza(t) {
-    for (let k = 1; k < PROFILO.length; k++) {
-      const [t0, y0] = PROFILO[k - 1], [t1, y1] = PROFILO[k];
-      if (t <= t1) return y0 + (y1 - y0) * (1 - Math.cos(Math.PI * (t - t0) / (t1 - t0))) / 2;
+  // Punti di controllo della curva: posizione da 0 a 1 lungo il percorso e altezza (+ scende, − sale).
+  // Un avvallamento, una gobba alta, un avvallamento profondo, una gobba più bassa.
+  const PROFILO = [[0, .05], [.125, .55], [.375, -.8], [.625, .85], [.875, -.45], [1, -.15]];
+  // Bézier con le maniglie parallele al percorso su ogni punto di controllo: nessuno spigolo
+  function curvaMorbida(p, verticale) {
+    let d = `M${p[0][0]},${p[0][1]}`;
+    for (let i = 1; i < p.length; i++) {
+      const [x0, y0] = p[i - 1], [x1, y1] = p[i];
+      if (verticale) { const m = (y1 - y0) / 2; d += ` C${x0},${y0 + m} ${x1},${y1 - m} ${x1},${y1}`; }
+      else { const m = (x1 - x0) / 2; d += ` C${x0 + m},${y0} ${x1 - m},${y1} ${x1},${y1}`; }
     }
-    return PROFILO[PROFILO.length - 1][1];
+    return d;
   }
-  // un tratto di Bézier fra una tappa e l'altra (Catmull-Rom): la curva passa morbida per tutte le tappe
-  const tratti = p => p.slice(0, -1).map((p1, i) => {
-    const p0 = p[i - 1] || p1, p2 = p[i + 1], p3 = p[i + 2] || p2;
-    return ` C${p1[0] + (p2[0] - p0[0]) / 6},${p1[1] + (p2[1] - p0[1]) / 6} ${p2[0] - (p3[0] - p1[0]) / 6},${p2[1] - (p3[1] - p1[1]) / 6} ${p2[0]},${p2[1]}`;
-  });
+  // campioni della curva: [coordinata lungo il percorso, coordinata trasversale, lunghezza percorsa]
+  function campiona(path, verticale) {
+    const L = path.getTotalLength(), N = 700, c = [];
+    for (let i = 0; i <= N; i++) {
+      const l = L * i / N, p = path.getPointAtLength(l);
+      c.push(verticale ? [p.y, p.x, l] : [p.x, p.y, l]);
+    }
+    return c;
+  }
+  // il punto della curva in corrispondenza di una posizione lungo il percorso
+  function suCurva(c, a) {
+    let lo = 0, hi = c.length - 1;
+    while (hi - lo > 1) { const m = (lo + hi) >> 1; if (c[m][0] < a) lo = m; else hi = m; }
+    const [a0, b0, l0] = c[lo], [a1, b1, l1] = c[hi], f = a1 === a0 ? 0 : Math.min(1, Math.max(0, (a - a0) / (a1 - a0)));
+    return [b0 + (b1 - b0) * f, l0 + (l1 - l0) * f];
+  }
 
   let lunghezze = [], selezionata = idxQui, cursoreL = null, rafCursore = 0, percorsoVisto = false;
   function posaCursore(L) {
@@ -716,35 +729,43 @@ const shortcuts = [
 
   function disegnaPercorso() {
     const w = percorso.clientWidth; if (!w) return;
-    const telefono = w < 640, n = TAPPE.length;
-    let punti;
-    if (telefono) {
-      // in verticale: scende serpeggiando appena, i nomi stanno a destra
-      const passo = 78;
-      percorso.style.height = (n - 1) * passo + 60 + 'px';
-      punti = TAPPE.map((_, i) => [42 + altezza(i / (n - 1)) * 18, 30 + i * passo]);
+    // sotto gli 880 px i nomi non ci stanno in orizzontale: il percorso scende in verticale
+    const verticale = w < 880, n = TAPPE.length;
+    percorso.classList.toggle('verticale', verticale);
+    let ancore, posizioni;
+    if (verticale) {
+      const passo = 78, y0 = 30, lungo = (n - 1) * passo;
+      percorso.style.height = lungo + 2 * y0 + 'px';
+      ancore = PROFILO.map(([t, v]) => [40 + v * 20, y0 + t * lungo]);
+      posizioni = TAPPE.map((_, i) => y0 + i * passo);
     } else {
       const h = 340, mx = 70;
       percorso.style.height = h + 'px';
-      punti = TAPPE.map((_, i) => [mx + i * (w - 2 * mx) / (n - 1), h / 2 + altezza(i / (n - 1)) * 92]);
+      ancore = PROFILO.map(([t, v]) => [mx + t * (w - 2 * mx), h / 2 + v * 92]);
+      posizioni = TAPPE.map((_, i) => mx + i * (w - 2 * mx) / (n - 1));
     }
-    const t = tratti(punti), d = `M${punti[0][0]},${punti[0][1]}` + t.join('');
-    const base = $('#p-base'), fatto = $('#p-fatto'), misura = $('#p-misura');
+    const base = $('#p-base'), fatto = $('#p-fatto'), d = curvaMorbida(ancore, verticale);
     base.setAttribute('d', d);
-    fatto.setAttribute('d', d);   // la parte viola è la stessa curva, solo "tagliata": niente doppia linea
-    lunghezze = punti.map((p, i) => {
-      if (!i) return 0;
-      misura.setAttribute('d', `M${punti[0][0]},${punti[0][1]}` + t.slice(0, i).join(''));
-      return misura.getTotalLength();
-    });
-    const totale = lunghezze[n - 1], Lq = lunghezze[idxQui];
+    fatto.setAttribute('d', d);   // la parte viola è la stessa curva, solo "tagliata"
+    const c = campiona(base, verticale);
+    const punti = posizioni.map(a => { const [b, l] = suCurva(c, a); return verticale ? [b, a, l] : [a, b, l]; });
+    lunghezze = punti.map(p => p[2]);
+    const totale = base.getTotalLength(), Lq = lunghezze[idxQui];
     fatto.style.strokeDasharray = `${Lq} ${totale * 2}`;
     if (!percorsoVisto) { fatto.style.transition = 'none'; fatto.style.strokeDashoffset = Lq; void fatto.getBoundingClientRect(); fatto.style.transition = ''; }
+    // il nome di ogni tappa va dove la linea non passa: sopra sulle gobbe, sotto negli avvallamenti,
+    // in diagonale sulle salite e discese
     bottoni.forEach((b, i) => {
-      b.style.left = punti[i][0] + 'px'; b.style.top = punti[i][1] + 'px';
-      // il nome va sopra solo sulle gobbe, così non copre la linea
-      const prima = punti[i - 1] || punti[i + 1], dopo = punti[i + 1] || punti[i - 1];
-      b.classList.toggle('sopra', !telefono && punti[i][1] < prima[1] && punti[i][1] < dopo[1]);
+      const [x, y] = punti[i];
+      b.style.left = x + 'px'; b.style.top = y + 'px';
+      if (verticale) { b.classList.remove('sopra', 'lato-sx', 'lato-dx'); return; }
+      const sx = suCurva(c, x - 55)[0], dx = suCurva(c, x + 55)[0];
+      const gobba = (i === 0 || sx > y + 3) && (i === n - 1 || dx > y + 3);
+      const valle = (i === 0 || sx < y - 3) && (i === n - 1 || dx < y - 3);
+      b.classList.toggle('sopra', gobba);
+      // in discesa la linea occupa alto-sinistra e basso-destra: il nome va in basso a sinistra (e viceversa)
+      b.classList.toggle('lato-sx', !gobba && !valle && dx > sx);
+      b.classList.toggle('lato-dx', !gobba && !valle && dx <= sx);
     });
     cancelAnimationFrame(rafCursore);
     posaCursore(lunghezze[selezionata]);
@@ -787,7 +808,7 @@ const shortcuts = [
         <a class="doc luce esame" style="max-width:460px" href="${ESAME}" target="_blank" rel="noopener"><span class="etichetta">Esame · PDF</span><span><strong>Linee guida del progetto d'esame</strong><small>Si apre su Google Drive</small></span><span class="freccia">${FUORI}</span></a>`;
     } else {
       const corrente = f.n === LEZIONE_CORRENTE;
-      const stato = f.n < LEZIONE_CORRENTE ? 'Fatta' : corrente ? 'Sei qui' : 'Prossima';
+      const stato = f.n < LEZIONE_CORRENTE ? 'Fatta' : corrente ? 'In corso' : 'Prossima';
       const blocchi = f.agenda.map((sez, s) => {
         const voci = sez.items.map((v, i) => {
           const imgs = immagini(v), k = chiaveVoce(f.n, s, i);
