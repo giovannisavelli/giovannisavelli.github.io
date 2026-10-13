@@ -1,0 +1,176 @@
+/* Photoshop Interior nel sistema visivo Studio 3D. I contenuti e le schede
+   continuano a vivere in index.html; qui cambia soltanto la presentazione. */
+body.gs-course--photoshop {
+  --gs-bg:#0a0a0d; --gs-panel:#111116; --gs-line:rgba(244,241,236,.13);
+  --gs-text:#f4f1ec; --gs-muted:#c0bbbd; --gs-accent:#38bdf8;
+  --gs-wash:rgba(56,189,248,.13); --gs-display:'Geist',system-ui,sans-serif;
+  --gs-mono:'Geist Mono',ui-monospace,monospace;
+  --bg:#0a0a0d; --surface:#111116; --surface-strong:#191920;
+  --border:rgba(244,241,236,.14); --text:#f4f1ec; --muted:#c0bbbd;
+  --accent:#38bdf8; --accent-soft:rgba(56,189,248,.1);
+  background:var(--bg); color:var(--ink); font:400 16px/1.6 var(--sans);
+}
+body.gs-course--photoshop .shell { position:relative; z-index:2; width:min(1320px,calc(100% - 64px)); max-width:none; }
+body.gs-course--photoshop :is(h1,h2,h3,h4,.interface-step h4,.lesson-index strong,.video-course-choice strong,.class-card h3) { font-family:var(--sans); }
+body.gs-course--photoshop :is(.eyebrow,.kicker,.meta,.lesson-label,.step-number,.lesson-index-number,.shortcut-list kbd,.video-choice span,.class-detail,.site-footer) { font-family:var(--mono); }
+body.gs-course--photoshop :is(a,button) { -webkit-tap-highlight-color:transparent; }
+body.gs-course--photoshop :is(a,button):focus-visible { outline:2px solid var(--accent); outline-offset:4px; }
+
+/* La testata comune rimane, con materiali e proporzioni della nuova home. */
+body.gs-course--photoshop .gs-global-header { border-color:var(--line); background:rgba(10,10,13,.94); backdrop-filter:blur(16px) saturate(1.25); }
+body.gs-course--photoshop .gs-global-header-inner { width:min(1320px,calc(100% - 64px)); min-height:76px; }
+body.gs-course--photoshop .gs-brand { gap:12px; }
+body.gs-course--photoshop .gs-brand-mark { width:38px; height:38px; border:0; border-radius:11px; background:var(--ink); color:var(--bg); font:700 14px/1 var(--sans); }
+body.gs-course--photoshop .gs-brand-copy strong { font:600 14px/1.2 var(--sans); }
+body.gs-course--photoshop .gs-brand-copy small { color:var(--ink-3); font:400 12px/1.2 var(--sans); }
+body.gs-course--photoshop .gs-header-actions a,
+body.gs-course--photoshop .gs-header-actions .gs-sections-button { min-height:40px; padding:8px 15px; border:1px solid transparent; border-radius:999px; background:none; color:var(--ink-2); font:500 14px/1.2 var(--sans); }
+body.gs-course--photoshop .gs-header-actions a:hover,
+body.gs-course--photoshop .gs-header-actions .gs-sections-button:hover { border-color:var(--line-2); background:rgba(244,241,236,.06); color:var(--ink); }
+body.gs-course--photoshop .gs-header-actions .gs-all-courses { border-color:var(--line-2); color:var(--ink); }
+
+/* Si mostra la testata originale del corso, con i suoi dati aggiornati. */
+body.gs-course--photoshop .gs-course-hero { display:none; }
+body.gs-course--photoshop .shell > .hero { position:relative; display:grid; grid-template-columns:minmax(0,1.02fr) minmax(0,.98fr); align-items:center; gap:0; min-height:clamp(560px,76svh,760px); margin:0; padding:30px 0 40px; border:0; border-radius:0; background:none; box-shadow:none; overflow:hidden; }
+body.gs-course--photoshop .shell > .hero::before { content:""; position:absolute; inset:8% -10% 0 37%; pointer-events:none; background:radial-gradient(ellipse at 50% 46%,rgba(56,189,248,.11),transparent 55%); }
+body.gs-course--photoshop .hero-copy { position:relative; z-index:2; padding:30px 0 54px; }
+body.gs-course--photoshop .hero .eyebrow { margin:0 0 24px; color:var(--ink-3); font:500 12px/1.35 var(--mono); letter-spacing:.08em; }
+body.gs-course--photoshop .hero h1 { margin:0; color:var(--ink); font:600 clamp(64px,8.5vw,128px)/.89 var(--sans); letter-spacing:-.055em; }
+body.gs-course--photoshop .hero h1 span { color:var(--accent); }
+body.gs-course--photoshop .hero .subtitle { max-width:41ch; margin:26px 0 0; color:var(--ink-2); font:400 clamp(17px,1.5vw,20px)/1.55 var(--sans); }
+body.gs-course--photoshop .hero .meta { gap:8px; margin-top:25px; }
+body.gs-course--photoshop .hero .meta span { padding:7px 11px; border-color:var(--line-2); border-radius:6px; color:var(--ink-2); font:500 11px/1.35 var(--mono); }
+body.gs-course--photoshop .hero-actions { display:flex; flex-wrap:wrap; gap:9px; margin-top:34px; }
+body.gs-course--photoshop .hero-actions a { display:inline-flex; align-items:center; justify-content:space-between; gap:24px; min-height:48px; padding:11px 18px; border:1px solid var(--line-2); border-radius:999px; color:var(--ink); font:600 14px/1.25 var(--sans); text-decoration:none; transition:transform .25s var(--ease),border-color .25s,background-color .25s; }
+body.gs-course--photoshop .hero-actions a:first-child { border-color:var(--accent); background:var(--accent); color:#08141a; }
+body.gs-course--photoshop .hero-actions a:hover { transform:translateY(-2px); border-color:var(--accent); }
+body.gs-course--photoshop .hero-actions a:not(:first-child):hover { background:rgba(56,189,248,.1); }
+
+/* Una pila di livelli: illustrazione CSS, senza immagini o modelli esterni. */
+body.gs-course--photoshop .ps-art { position:relative; height:600px; min-width:0; border:0; background:none; box-shadow:none; }
+.ps-art-frame { position:absolute; top:50%; left:50%; width:570px; height:540px; transform:translate(-50%,-50%); perspective:1000px; }
+.ps-art-image,.ps-art-mask,.ps-art-layers,.ps-art-curve { position:absolute; border:1px solid var(--line-2); box-shadow:0 24px 55px rgba(0,0,0,.34); }
+.ps-art-image { left:80px; top:95px; width:355px; height:370px; overflow:hidden; border-radius:19px; background:#182630; transform:rotate(-10deg); }
+.ps-art-image-label,.ps-art-mask>span,.ps-art-layers>span,.ps-art-curve>span { position:absolute; z-index:2; top:15px; left:17px; color:var(--ink-2); font:500 10px/1.2 var(--mono); letter-spacing:.07em; }
+.ps-art-wall { position:absolute; inset:0 0 29%; background:linear-gradient(115deg,#2e4851,#8099a0 58%,#d7d9cf); }
+.ps-art-floor { position:absolute; inset:71% 0 0; background:linear-gradient(9deg,#212b31,#718087); }
+.ps-art-light { position:absolute; left:44%; top:25%; width:43%; height:40%; border-radius:50%; background:rgba(244,241,236,.42); filter:blur(33px); }
+.ps-art-mask { left:139px; top:43px; width:355px; height:370px; overflow:hidden; border-color:rgba(56,189,248,.48); border-radius:19px; background:linear-gradient(150deg,rgba(18,33,42,.91),rgba(5,16,23,.68)); transform:rotate(8deg); transition:transform .6s var(--ease); }
+.ps-art-mask::after { content:""; position:absolute; inset:61px 24px 24px; border:1px dashed rgba(244,241,236,.34); border-radius:8px; }
+.ps-art-mask strong { position:absolute; z-index:1; right:27px; bottom:4px; color:rgba(56,189,248,.8); font:600 210px/.9 var(--sans); letter-spacing:-.13em; }
+.ps-art-mask>span { color:var(--accent); }
+.ps-art-layers { z-index:3; right:0; top:195px; width:195px; padding:42px 11px 11px; border-radius:12px; background:#1b1b23; transform:rotate(5deg); transition:transform .6s var(--ease); }
+.ps-art-layers>span { top:13px; left:13px; color:var(--ink-3); }
+.ps-art-layers div { display:flex; align-items:center; gap:8px; min-height:38px; padding:6px 7px; border-top:1px solid var(--line); color:var(--ink-2); font:500 11px/1.2 var(--sans); }
+.ps-art-layers div:first-of-type { border-top-color:var(--accent); background:rgba(56,189,248,.08); }
+.ps-art-layers i { flex:none; width:20px; height:20px; border:1px solid var(--line-2); border-radius:4px; background:linear-gradient(135deg,#263b46,#526570); }
+.ps-art-layers div:first-of-type i { background:linear-gradient(135deg,#0d2835,#38bdf8); }
+.ps-art-layers b { margin-left:auto; color:var(--ink-3); font-size:11px; font-weight:400; }
+.ps-art-curve { z-index:4; left:10px; bottom:12px; width:183px; height:159px; padding:34px 12px 10px; border-radius:12px; background:#1d1d25; transform:rotate(-6deg); transition:transform .6s var(--ease); }
+.ps-art-curve>span { top:12px; left:14px; color:var(--ink-3); }
+.ps-art-curve svg { display:block; width:100%; height:100%; }
+.ps-art-grid { fill:none; stroke:rgba(244,241,236,.1); stroke-width:1; }
+.ps-art-diagonal { fill:none; stroke:rgba(244,241,236,.24); stroke-width:1; stroke-dasharray:3 4; }
+.ps-art-curve-line { fill:none; stroke:var(--accent); stroke-width:2.6; stroke-linecap:round; }
+.ps-art-caption { position:absolute; right:8px; bottom:6px; color:var(--ink-3); font:500 11px/1.2 var(--mono); letter-spacing:.08em; }
+@media (hover:hover) and (prefers-reduced-motion:no-preference) {
+  .ps-art:hover .ps-art-mask { transform:translate(10px,-10px) rotate(10deg); }
+  .ps-art:hover .ps-art-layers { transform:translate(7px,-6px) rotate(7deg); }
+  .ps-art:hover .ps-art-curve { transform:translate(-8px,4px) rotate(-8deg); }
+}
+
+/* Programma, appunti, calendario e video usano superfici neutre e ritmo aperto. */
+body.gs-course--photoshop .shell > .notice { margin:0 0 22px; padding:18px 0; border:0; border-top:1px solid var(--line-2); border-bottom:1px solid var(--line-2); border-radius:0; background:transparent; }
+body.gs-course--photoshop .notice strong { color:var(--ink); font:600 16px/1.3 var(--sans); }
+body.gs-course--photoshop .notice p { color:var(--ink-2); font:400 13px/1.55 var(--sans); }
+body.gs-course--photoshop .notice a { min-height:44px; border-radius:999px; background:var(--accent); color:#07141b; font:600 13px/1.25 var(--sans); }
+body.gs-course--photoshop .notice a:hover { background:#77d3fb; }
+body.gs-course--photoshop .tabs { position:sticky; top:76px; z-index:40; display:flex; flex-wrap:wrap; gap:8px; width:100%; margin:0; padding:13px 0; border-bottom:1px solid var(--line); background:rgba(10,10,13,.95); backdrop-filter:blur(14px); scroll-margin-top:80px; }
+body.gs-course--photoshop .tabs > .tab-btn { min-height:46px; padding:9px 18px; border:1px solid var(--line-2); border-radius:999px; background:transparent; color:var(--ink-2); font:500 14px/1.2 var(--sans); }
+body.gs-course--photoshop .tabs > .tab-btn:hover { border-color:var(--accent); color:var(--ink); }
+body.gs-course--photoshop .tabs > .tab-btn[aria-selected="true"] { border-color:var(--accent); background:var(--accent); color:#07141b; }
+body.gs-course--photoshop .panel { min-height:320px; padding:clamp(28px,4vw,54px) 0 60px; border:0; border-radius:0; background:transparent; scroll-margin-top:156px; }
+body.gs-course--photoshop .panel h2 { margin:0 0 14px; color:var(--ink); font:600 clamp(40px,5vw,70px)/1 var(--sans); letter-spacing:-.045em; }
+body.gs-course--photoshop .panel-intro { max-width:65ch; color:var(--ink-2); font-size:16px; }
+body.gs-course--photoshop .kicker { margin-bottom:15px; color:var(--accent); font:500 11px/1.2 var(--mono); }
+body.gs-course--photoshop .panel .notice { padding:20px 22px; border:1px solid rgba(56,189,248,.32); border-radius:16px; background:rgba(56,189,248,.08); }
+body.gs-course--photoshop .empty { border-color:var(--line-2); background:var(--bg-2); }
+
+body.gs-course--photoshop :is(.lesson-index a,.interface-step,.lesson-route section,.exercise-card,.class-card,.video-course-choice,.video-choice,.shortcut-list li,.shortcut-platform) { border-color:var(--line); border-radius:16px; background:var(--bg-2); color:var(--ink); }
+body.gs-course--photoshop :is(.lesson-index a,.video-course-choice,.video-choice) { transition:border-color .25s,background-color .25s,transform .3s var(--ease); }
+body.gs-course--photoshop :is(.lesson-index a,.video-course-choice,.video-choice):hover { border-color:rgba(56,189,248,.55); background:#1c242b; transform:translateY(-2px); }
+body.gs-course--photoshop :is(.video-course-choice,.video-choice)[aria-pressed="true"] { border-color:var(--accent); background:rgba(56,189,248,.1); }
+body.gs-course--photoshop :is(.lesson-index-number,.lesson-index-arrow,.step-number,.video-course-choice span,.class-card h3) { color:var(--accent); }
+body.gs-course--photoshop :is(.interface-step:nth-child(2),.interface-step:nth-child(3)) { border-color:var(--line); background:var(--bg-2); }
+body.gs-course--photoshop :is(.lesson-thought,.exercise-result) { border-left:1px solid var(--accent); border-radius:12px; background:rgba(56,189,248,.07); }
+body.gs-course--photoshop :is(.lesson-thought p,.exercise-result p,.lesson-deck,.schedule-list span) { color:var(--ink-2); }
+body.gs-course--photoshop .lesson-thought strong { color:var(--accent); }
+body.gs-course--photoshop .lesson-label::before { box-shadow:0 0 0 5px rgba(56,189,248,.12); }
+body.gs-course--photoshop .lesson-opening { border-color:var(--line-2); border-radius:22px; background:radial-gradient(ellipse at 95% 0,rgba(56,189,248,.12),transparent 48%),var(--bg-2); }
+body.gs-course--photoshop .lesson-opening h3 { color:var(--ink); font:600 clamp(38px,6vw,68px)/1.02 var(--sans); }
+body.gs-course--photoshop .lesson-label { color:var(--accent); }
+body.gs-course--photoshop .lesson-opening::after { color:rgba(244,241,236,.05); font-family:var(--sans); }
+body.gs-course--photoshop :is(.lesson-route h4,.exercise-card h4,.lesson-section-title,.shortcut-group h3,.video-course-panel h3,.curve-figure figcaption strong) { font-family:var(--sans); }
+body.gs-course--photoshop :is(.exercise-card--chair,.exercise-card--apple) { border-color:var(--line-2); }
+body.gs-course--photoshop .curve-figure { border-color:var(--line-2); background:var(--bg-2); }
+body.gs-course--photoshop .curve-figure figcaption small { color:var(--ink-3); }
+body.gs-course--photoshop :is(.lesson-materials,.shortcut-lead) { border-color:rgba(56,189,248,.3); background:rgba(56,189,248,.07); }
+body.gs-course--photoshop :is(.lesson-materials a,.resource-link,.video-start) { border-radius:999px; background:var(--accent); color:#07141b; }
+body.gs-course--photoshop :is(.lesson-materials a,.resource-link,.video-start):hover { background:#77d3fb; }
+body.gs-course--photoshop .shortcut-list kbd { border-color:rgba(56,189,248,.42); background:#14232b; color:var(--accent); }
+body.gs-course--photoshop :is(.video-frame,.video-list li,.shortcut-list li,.class-card) { min-width:0; }
+body.gs-course--photoshop .video-frame { border-color:var(--line-2); background:#05070b; }
+body.gs-course--photoshop .video-choice span { color:var(--ink-2); }
+body.gs-course--photoshop .calendar-note { border-color:rgba(251,191,36,.35); }
+body.gs-course--photoshop .schedule-list span { white-space:normal; text-align:right; }
+
+body.gs-course--photoshop .site-footer { position:relative; display:flex; flex-wrap:wrap; gap:12px 24px; align-items:flex-end; justify-content:space-between; margin:70px 0 0; padding:110px 0 38px; border-top:1px solid var(--line); color:var(--ink-3); font:400 12px/1.5 var(--mono); overflow:hidden; }
+body.gs-course--photoshop .site-footer::before { content:"SAVELLI"; position:absolute; left:0; top:5px; color:transparent; -webkit-text-stroke:1px rgba(244,241,236,.2); font:600 clamp(70px,11vw,165px)/1 var(--sans); letter-spacing:-.06em; pointer-events:none; }
+body.gs-course--photoshop .site-footer a { color:var(--ink); }
+body.gs-course--photoshop .site-footer a:hover { color:var(--accent); }
+
+@media (max-width:1000px) {
+  body.gs-course--photoshop .shell > .hero { grid-template-columns:minmax(0,1fr) minmax(0,.9fr); min-height:570px; }
+  body.gs-course--photoshop .ps-art { height:480px; }
+  .ps-art-frame { transform:translate(-50%,-50%) scale(.82); }
+}
+@media (max-width:760px) {
+  body.gs-course--photoshop .shell { width:calc(100% - 32px); }
+  body.gs-course--photoshop .gs-global-header-inner { width:calc(100% - 32px); min-height:64px; }
+  body.gs-course--photoshop .gs-brand-copy small { font-size:10px; }
+  body.gs-course--photoshop .gs-header-actions .gs-all-courses { min-height:40px; padding:7px 11px; font-size:12px; }
+  body.gs-course--photoshop .shell > .hero { grid-template-columns:1fr; min-height:0; padding:35px 0 8px; }
+  body.gs-course--photoshop .hero-copy { padding:20px 0 0; }
+  body.gs-course--photoshop .hero .eyebrow { margin-bottom:16px; font-size:10px; }
+  body.gs-course--photoshop .hero h1 { font-size:clamp(56px,13vw,86px); }
+  body.gs-course--photoshop .hero .subtitle { margin-top:18px; font-size:16px; }
+  body.gs-course--photoshop .hero .meta { margin-top:18px; }
+  body.gs-course--photoshop .hero-actions { margin-top:25px; gap:7px; }
+  body.gs-course--photoshop .hero-actions a { min-height:44px; gap:12px; padding:9px 13px; font-size:12px; }
+  body.gs-course--photoshop .ps-art { height:355px; margin-top:8px; }
+  .ps-art-frame { top:0; transform:translateX(-50%) scale(.64); transform-origin:top center; }
+  body.gs-course--photoshop .shell > .notice { margin-bottom:12px; }
+  body.gs-course--photoshop .tabs { position:relative; top:auto; display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:7px; padding:12px 0; background:none; backdrop-filter:none; }
+  body.gs-course--photoshop .tabs > .tab-btn { width:100%; min-height:45px; padding:9px 7px; font-size:12px; }
+  body.gs-course--photoshop .panel { padding:34px 0 45px; scroll-margin-top:80px; }
+  body.gs-course--photoshop .panel h2 { font-size:clamp(36px,9vw,54px); }
+  body.gs-course--photoshop .gs-mobile-actions { border-color:var(--line); background:rgba(10,10,13,.96); backdrop-filter:blur(14px); }
+  body.gs-course--photoshop .gs-mobile-actions a,
+  body.gs-course--photoshop .gs-mobile-actions button.gs-sections-button { border-color:var(--line-2); border-radius:999px; background:none; color:var(--ink); font:600 12px/1.2 var(--sans); }
+  body.gs-course--photoshop .gs-mobile-actions a[aria-current="true"] { border-color:var(--accent); color:var(--accent); }
+  body.gs-course--photoshop .site-footer { padding-top:82px; }
+}
+@media (max-width:380px) {
+  body.gs-course--photoshop .hero h1 { font-size:clamp(51px,15vw,60px); }
+  body.gs-course--photoshop .ps-art { height:310px; }
+  .ps-art-frame { transform:translateX(-50%) scale(.55); }
+  body.gs-course--photoshop .hero-actions a { flex:1 1 auto; }
+  body.gs-course--photoshop .hero .meta span { font-size:10px; }
+}
+@media (prefers-reduced-motion:reduce) {
+  body.gs-course--photoshop .hero-actions a,
+  body.gs-course--photoshop :is(.lesson-index a,.video-course-choice,.video-choice),
+  .ps-art-mask,.ps-art-layers,.ps-art-curve { transition:none; }
+  body.gs-course--photoshop :is(.lesson-index a,.video-course-choice,.video-choice):hover,
+  body.gs-course--photoshop .hero-actions a:hover { transform:none; }
+}
