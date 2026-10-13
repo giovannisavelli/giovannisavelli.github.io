@@ -281,7 +281,7 @@
         <button type="button" id="avviso-chiudi" aria-label="Chiudi l'avviso"><svg class="icona" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
       </div>
       <div class="c-azioni">
-        <a class="btn pieno" href="#lezione-8" id="vai-qui">Vai alla lezione di oggi <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M6 13l6 6 6-6"/></svg></a>
+        <a class="btn pieno" href="#lezioni" id="vai-qui">Vai alle lezioni <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M6 13l6 6 6-6"/></svg></a>
         <a class="btn vuoto" href="#video">Video</a>
       </div>
     </div>
@@ -617,8 +617,6 @@ const shortcuts = [
   const { leggi, salva, esc } = Studio;
   const $ = s => document.querySelector(s);
   const FUORI = '<svg class="icona" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 17L17 7M8 7h9v9"/></svg>';
-  $('#vai-qui').href = '#lezione-' + LEZIONE_CORRENTE;
-  $('#vai-qui').firstChild.textContent = `Vai alla lezione ${LEZIONE_CORRENTE} `;
 
   /* ---------- Avviso ---------- */
   const CHIAVE_AVVISO = 'studio-avviso-c4d-2026.1.4';
@@ -824,6 +822,8 @@ const shortcuts = [
   function mostraTappa(n, aggiornaIndirizzo) {
     const f = TAPPE.find(x => x.n === n) || TAPPE[idxQui];
     selezionata = TAPPE.indexOf(f);
+    $('#vai-qui').href = '#lezione-' + f.n;
+    $('#vai-qui').firstChild.textContent = f.esame ? "Vai all'esame " : `Vai alla lezione ${f.n} `;
     bottoni.forEach(b => b.setAttribute('aria-pressed', String(b.dataset.n === String(f.n))));
     if (lunghezze.length && percorsoVisto) muoviCursore(lunghezze[selezionata]);
     const d = $('#dettaglio');
