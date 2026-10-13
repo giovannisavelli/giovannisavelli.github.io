@@ -224,8 +224,8 @@
     </style>
     <link rel="stylesheet" href="../../design/course.css?v=ux-20261012">
     <link rel="stylesheet" href="../../assets/studio.css">
-    <link rel="stylesheet" href="studio-photoshop.css?v=studio-20261013">
-    <script src="../../design/course.js?v=ux-20261012" defer></script>
+    <link rel="stylesheet" href="studio-photoshop.css?v=check-20261013">
+    <script src="../../design/course.js?v=check-20261013" defer></script>
     <script src="../../assets/studio.js" defer></script>
 </head>
 <body class="gs-course gs-course--photoshop">
@@ -596,6 +596,7 @@
         document.querySelectorAll(".tab-btn").forEach(function (button) {
             const selected = button.dataset.tab === id;
             button.setAttribute("aria-selected", String(selected));
+            button.tabIndex = selected ? 0 : -1;
         });
         document.querySelectorAll(".panel").forEach(function (panel) {
             panel.hidden = panel.id !== id;
@@ -603,34 +604,59 @@
         if (updateAddress && location.hash !== "#" + TAB_NAMES[id]) {
             history.pushState(null, "", "#" + TAB_NAMES[id]);
         }
+        document.dispatchEvent(new CustomEvent("course:sectionchange"));
     }
 
-    function showTabFromHash() {
-        const lesson = document.getElementById(location.hash.slice(1));
-        const id = lesson && lesson.classList.contains("lesson-opening") ? "tab-appunti" : Object.keys(TAB_NAMES).find(function (key) {
-            return "#" + TAB_NAMES[key] === location.hash;
-        }) || DEFAULT_TAB;
-        openTab(id, false);
-        if (lesson && lesson.classList.contains("lesson-opening")) {
-            requestAnimationFrame(function () { lesson.scrollIntoView({ block: "start" }); });
-        }
-    }
-
-    document.querySelectorAll(".tab-btn").forEach(function (button) {
-        button.addEventListener("click", function () { openTab(button.dataset.tab, true); });
-    });
-    document.querySelectorAll('a[href^="#"]').forEach(function (link) {
-        const hash = link.getAttribute("href").slice(1);
-        const tab = Object.keys(TAB_NAMES).find(function (key) { return TAB_NAMES[key] === hash; });
-        if (!tab) return;
-        link.addEventListener("click", function (event) {
-            event.preventDefault();
-            openTab(tab, true);
-            document.querySelector(".tabs").scrollIntoView({
+    function scrollToCourseContent(target) {
+        requestAnimationFrame(function () {
+            target.scrollIntoView({
                 block: "start",
                 behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth"
             });
         });
+    }
+
+    function showTabFromHash() {
+        const lesson = document.getElementById(location.hash.slice(1));
+        const isLesson = lesson && lesson.classList.contains("lesson-opening");
+        const tab = Object.keys(TAB_NAMES).find(function (key) {
+            return "#" + TAB_NAMES[key] === location.hash;
+        });
+        openTab(isLesson ? "tab-appunti" : tab || DEFAULT_TAB, false);
+        if (isLesson) scrollToCourseContent(lesson);
+        else if (tab) scrollToCourseContent(document.querySelector(".tabs"));
+    }
+
+    const courseTabs = Array.from(document.querySelectorAll(".tabs > .tab-btn"));
+    courseTabs.forEach(function (button, index) {
+        button.addEventListener("click", function () {
+            openTab(button.dataset.tab, true);
+            scrollToCourseContent(document.querySelector(".tabs"));
+        });
+        button.addEventListener("keydown", function (event) {
+            let next;
+            if (event.key === "ArrowRight") next = (index + 1) % courseTabs.length;
+            else if (event.key === "ArrowLeft") next = (index - 1 + courseTabs.length) % courseTabs.length;
+            else if (event.key === "Home") next = 0;
+            else if (event.key === "End") next = courseTabs.length - 1;
+            else return;
+            event.preventDefault();
+            courseTabs[next].focus({ preventScroll: true });
+            courseTabs[next].click();
+        });
+    });
+    document.addEventListener("click", function (event) {
+        if (event.defaultPrevented || event.button !== 0 || event.ctrlKey || event.metaKey || event.shiftKey || event.altKey) return;
+        const link = event.target.closest('a[href^="#"]');
+        if (!link || link.target === "_blank") return;
+        const hash = link.getAttribute("href");
+        const target = document.getElementById(hash.slice(1));
+        const isLesson = target && target.classList.contains("lesson-opening");
+        const isTab = Object.values(TAB_NAMES).includes(hash.slice(1));
+        if (!isLesson && !isTab) return;
+        event.preventDefault();
+        if (location.hash !== hash) history.pushState(null, "", hash);
+        showTabFromHash();
     });
     function stopVideo() {
         const player = document.getElementById("video-player");
@@ -694,6 +720,7 @@
     } catch (error) { /* La guida resta su Windows se la memoria locale non è disponibile. */ }
     window.addEventListener("popstate", showTabFromHash);
     window.addEventListener("hashchange", showTabFromHash);
+    window.addEventListener("load", function () { if (location.hash) showTabFromHash(); }, { once: true });
     showTabFromHash();
 </script>
 </body>

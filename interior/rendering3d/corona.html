@@ -117,6 +117,8 @@
         .video-card { background: var(--card); border-radius: 12px; overflow: hidden; border: 1px solid var(--border); display: flex; flex-direction: column; }
         .video-wrapper { position: relative; padding-bottom: 56.25%; height: 0; background-color: #000; border-radius: 8px 8px 0 0; overflow: hidden; }
         .video-wrapper iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0; }
+        .video-start { position: absolute; inset: 0; width: 100%; height: 100%; padding: 0; border: 0; background: transparent center/cover; cursor: pointer; color: inherit; }
+        .video-start:focus-visible { outline: 2px solid var(--accent); outline-offset: -3px; }
         .video-info { padding: 15px; flex-grow: 1; }
         .video-info h3 { font-size: 13px; margin: 0 0 5px 0; color: var(--text); font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; }
         .video-info p { margin: 0; color: var(--subtext); font-size: 11px; line-height: 1.4; }
@@ -137,7 +139,7 @@
         .footer { text-align: center; margin-top: auto; color: #555; font-size: 9px; text-transform: uppercase; padding: 40px 0 20px 0; width: 100%; }
     </style>
     <link rel="stylesheet" href="../../design/course.css?v=ux-20261012">
-    <script src="../../design/course.js?v=ux-20261012" defer></script>
+    <script src="../../design/course.js?v=check-20261013" defer></script>
 </head>
 
 <body class="gs-course gs-course--corona">
@@ -252,8 +254,10 @@
             <span class="macro-title">🎬 Inizio Percorso (Base)</span>
             <div class="video-grid">
                 <div class="video-card">
-                    <div class="video-wrapper" style="background: url('https://drive.google.com/thumbnail?id=1dF76yqoBlC1WVoJ4Umma8l3PlfAvMf4m&sz=w800') center/cover; cursor: pointer;" onclick="this.style.background='none'; this.innerHTML='<iframe src=\'https://drive.google.com/file/d/1dF76yqoBlC1WVoJ4Umma8l3PlfAvMf4m/preview\' allowfullscreen></iframe>'; this.onclick=null;">
-                        <div class="play-btn"></div>
+                    <div class="video-wrapper">
+                        <button type="button" class="video-start" data-video-id="1dF76yqoBlC1WVoJ4Umma8l3PlfAvMf4m" aria-label="Avvia video" style="background-image: url('https://drive.google.com/thumbnail?id=1dF76yqoBlC1WVoJ4Umma8l3PlfAvMf4m&sz=w800')">
+                            <span class="play-btn" aria-hidden="true"></span>
+                        </button>
                     </div>
                     <div class="video-info">
                         <h3>Introduzione a Corona</h3>
@@ -261,8 +265,10 @@
                     </div>
                 </div>
                 <div class="video-card">
-                    <div class="video-wrapper" style="background: url('https://drive.google.com/thumbnail?id=1V_I3eWoWNTbYgSo58jSatvunc97u7T6h&sz=w800') center/cover; cursor: pointer;" onclick="this.style.background='none'; this.innerHTML='<iframe src=\'https://drive.google.com/file/d/1V_I3eWoWNTbYgSo58jSatvunc97u7T6h/preview\' allowfullscreen></iframe>'; this.onclick=null;">
-                        <div class="play-btn"></div>
+                    <div class="video-wrapper">
+                        <button type="button" class="video-start" data-video-id="1V_I3eWoWNTbYgSo58jSatvunc97u7T6h" aria-label="Avvia video" style="background-image: url('https://drive.google.com/thumbnail?id=1V_I3eWoWNTbYgSo58jSatvunc97u7T6h&sz=w800')">
+                            <span class="play-btn" aria-hidden="true"></span>
+                        </button>
                     </div>
                     <div class="video-info">
                         <h3>Riassunto: Introduzione a Corona</h3>
@@ -277,8 +283,10 @@
             <span class="macro-title">🪵 Tecniche Avanzate (Pavimenti & Workflow)</span>
             <div class="video-grid">
                 <div class="video-card">
-                    <div class="video-wrapper" style="background: url('https://drive.google.com/thumbnail?id=1yaZCMEVIx9Wd3r2I2eGBZ2D2OCIE0Ria&sz=w800') center/cover; cursor: pointer;" onclick="this.style.background='none'; this.innerHTML='<iframe src=\'https://drive.google.com/file/d/1yaZCMEVIx9Wd3r2I2eGBZ2D2OCIE0Ria/preview\' allowfullscreen></iframe>'; this.onclick=null;">
-                        <div class="play-btn"></div>
+                    <div class="video-wrapper">
+                        <button type="button" class="video-start" data-video-id="1yaZCMEVIx9Wd3r2I2eGBZ2D2OCIE0Ria" aria-label="Avvia video" style="background-image: url('https://drive.google.com/thumbnail?id=1yaZCMEVIx9Wd3r2I2eGBZ2D2OCIE0Ria&sz=w800')">
+                            <span class="play-btn" aria-hidden="true"></span>
+                        </button>
                     </div>
                     <div class="video-info">
                         <h3>Mapping Randomizer</h3>
@@ -286,8 +294,10 @@
                     </div>
                 </div>
                 <div class="video-card">
-                    <div class="video-wrapper" style="background: url('https://drive.google.com/thumbnail?id=1iCa64ynHExNFwVM_oybuPfFKB9fIrkyZ&sz=w800') center/cover; cursor: pointer;" onclick="this.style.background='none'; this.innerHTML='<iframe src=\'https://drive.google.com/file/d/1iCa64ynHExNFwVM_oybuPfFKB9fIrkyZ/preview\' allowfullscreen></iframe>'; this.onclick=null;">
-                        <div class="play-btn"></div>
+                    <div class="video-wrapper">
+                        <button type="button" class="video-start" data-video-id="1iCa64ynHExNFwVM_oybuPfFKB9fIrkyZ" aria-label="Avvia video" style="background-image: url('https://drive.google.com/thumbnail?id=1iCa64ynHExNFwVM_oybuPfFKB9fIrkyZ&sz=w800')">
+                            <span class="play-btn" aria-hidden="true"></span>
+                        </button>
                     </div>
                     <div class="video-info">
                         <h3>Corona Multishader</h3>
@@ -295,8 +305,10 @@
                     </div>
                 </div>
                 <div class="video-card">
-                    <div class="video-wrapper" style="background: url('https://drive.google.com/thumbnail?id=1aUcuu19rus5BWlqGnva1QEwxgxMOLxqc&sz=w800') center/cover; cursor: pointer;" onclick="this.style.background='none'; this.innerHTML='<iframe src=\'https://drive.google.com/file/d/1aUcuu19rus5BWlqGnva1QEwxgxMOLxqc/preview\' allowfullscreen></iframe>'; this.onclick=null;">
-                        <div class="play-btn"></div>
+                    <div class="video-wrapper">
+                        <button type="button" class="video-start" data-video-id="1aUcuu19rus5BWlqGnva1QEwxgxMOLxqc" aria-label="Avvia video" style="background-image: url('https://drive.google.com/thumbnail?id=1aUcuu19rus5BWlqGnva1QEwxgxMOLxqc&sz=w800')">
+                            <span class="play-btn" aria-hidden="true"></span>
+                        </button>
                     </div>
                     <div class="video-info">
                         <h3>Randomizer + Tile + Approfondimenti</h3>
@@ -304,8 +316,10 @@
                     </div>
                 </div>
                 <div class="video-card">
-                    <div class="video-wrapper" style="background: url('https://drive.google.com/thumbnail?id=1s5Da3rPlMQSRCfNVkQ_A30O4Zs8K8ho5&sz=w800') center/cover; cursor: pointer;" onclick="this.style.background='none'; this.innerHTML='<iframe src=\'https://drive.google.com/file/d/1s5Da3rPlMQSRCfNVkQ_A30O4Zs8K8ho5/preview\' allowfullscreen></iframe>'; this.onclick=null;">
-                        <div class="play-btn"></div>
+                    <div class="video-wrapper">
+                        <button type="button" class="video-start" data-video-id="1s5Da3rPlMQSRCfNVkQ_A30O4Zs8K8ho5" aria-label="Avvia video" style="background-image: url('https://drive.google.com/thumbnail?id=1s5Da3rPlMQSRCfNVkQ_A30O4Zs8K8ho5&sz=w800')">
+                            <span class="play-btn" aria-hidden="true"></span>
+                        </button>
                     </div>
                     <div class="video-info">
                         <h3>Corona Decal</h3>
@@ -313,8 +327,10 @@
                     </div>
                 </div>
                 <div class="video-card">
-                    <div class="video-wrapper" style="background: url('https://drive.google.com/thumbnail?id=1LFzrG7YWz9HnpFDsckkTL6wBs15qdudR&sz=w800') center/cover; cursor: pointer;" onclick="this.style.background='none'; this.innerHTML='<iframe src=\'https://drive.google.com/file/d/1LFzrG7YWz9HnpFDsckkTL6wBs15qdudR/preview\' allowfullscreen></iframe>'; this.onclick=null;">
-                        <div class="play-btn"></div>
+                    <div class="video-wrapper">
+                        <button type="button" class="video-start" data-video-id="1LFzrG7YWz9HnpFDsckkTL6wBs15qdudR" aria-label="Avvia video" style="background-image: url('https://drive.google.com/thumbnail?id=1LFzrG7YWz9HnpFDsckkTL6wBs15qdudR&sz=w800')">
+                            <span class="play-btn" aria-hidden="true"></span>
+                        </button>
                     </div>
                     <div class="video-info">
                         <h3>Come salvare i progetti con Texture e Cosmos</h3>
@@ -366,8 +382,10 @@
     }
 
     window.addEventListener('popstate', showTabFromHash);
+    window.addEventListener('hashchange', showTabFromHash);
 
     function openTab(id, btn, fromHistory) {
+        if (id !== 'tab-videoteca') stopCourseVideos();
         document.querySelectorAll('.content-section').forEach(s => s.classList.remove('active'));
         document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
         document.getElementById(id).classList.add('active');
@@ -377,6 +395,7 @@
 
     // --- SCRIPT: APERTURA SOTTO-TAB VIDEOTECA (Sottocartelle) ---
     function openSubTab(subId, btn) {
+        stopCourseVideos();
         document.querySelectorAll('.sub-content-section').forEach(s => s.classList.remove('active'));
         document.querySelectorAll('.sub-tab-btn').forEach(b => b.classList.remove('active'));
         document.getElementById(subId).classList.add('active');
@@ -522,6 +541,27 @@
         if(query !== "") { searchInput.style.borderColor = "var(--accent)"; } 
         else { searchInput.style.borderColor = "var(--border)"; }
     }
+
+    const activeVideos = new Map();
+    function stopCourseVideos() {
+        activeVideos.forEach((button, frame) => frame.replaceWith(button));
+        activeVideos.clear();
+    }
+    document.querySelectorAll('.video-start').forEach(button => {
+        const title = button.closest('.video-card')?.querySelector('h3')?.textContent.trim() || 'Video Corona';
+        button.setAttribute('aria-label', 'Avvia: ' + title);
+        button.addEventListener('click', () => {
+            stopCourseVideos();
+            const frame = document.createElement('iframe');
+            frame.src = `https://drive.google.com/file/d/${button.dataset.videoId}/preview`;
+            frame.title = title;
+            frame.allow = 'autoplay; fullscreen';
+            frame.allowFullscreen = true;
+            activeVideos.set(frame, button);
+            button.replaceWith(frame);
+            frame.focus();
+        });
+    });
 
     // Inizializzazione automatica al caricamento
     window.onload = () => {

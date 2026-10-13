@@ -267,6 +267,8 @@
         .doc-sidebar a:hover { background: var(--border); color: var(--text-primary); }
 
         .doc-content { flex: 1; padding: 2rem; overflow-y: auto; background: var(--bg); scroll-behavior: smooth; }
+        @media (max-width: 767px) { .doc-layout { height: auto; overflow: visible; } .doc-sidebar { max-height: 40vh; } .doc-content { overflow: visible; min-height: 0; } }
+        @media (prefers-reduced-motion: reduce) { .doc-content { scroll-behavior: auto; } }
         .doc-article { max-width: 700px; margin: 0 auto; }
         .doc-article h1 { font-size: 2rem; margin-bottom: 0.5rem; }
         .doc-article .doc-subtitle { font-size: 1.1rem; color: var(--text-secondary); margin-bottom: 2rem; padding-bottom: 1rem; border-bottom: 1px solid var(--border); }
@@ -324,7 +326,7 @@
            PROMPTOTHECA & SLIDER
            ========================================================= */
         .prompt-gallery-nav { display: flex; gap: 1rem; overflow-x: auto; padding-bottom: 1rem; margin-bottom: 1rem; scroll-snap-type: x mandatory;}
-        .gallery-thumb { flex: 0 0 140px; height: 85px; border-radius: var(--radius-sm); overflow: hidden; cursor: pointer; opacity: 0.5; border: 2px solid transparent; transition: var(--transition); scroll-snap-align: start; position: relative;}
+        .gallery-thumb { padding: 0; background: transparent; color: inherit; font: inherit; text-align: left; flex: 0 0 140px; height: 85px; border-radius: var(--radius-sm); overflow: hidden; cursor: pointer; opacity: 0.5; border: 2px solid transparent; transition: var(--transition); scroll-snap-align: start; position: relative;}
         .gallery-thumb:hover { opacity: 0.8; transform: translateY(-2px); }
         .gallery-thumb.active { opacity: 1; border-color: var(--accent); box-shadow: 0 4px 12px var(--accent-glow);}
         .gallery-thumb img { width: 100%; height: 100%; object-fit: cover; filter: grayscale(50%); transition: var(--transition);}
@@ -342,7 +344,8 @@
         .comparison-container { width: 100%; height: 100%; position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; background: #000; overflow: hidden; user-select: none; touch-action: none; cursor: ew-resize;}
         .comparison-img-base, .comparison-img-over { position: absolute; width: 100%; height: 100%; object-fit: contain; pointer-events: none; padding: 1.5rem;}
         .comparison-img-over { clip-path: polygon(0 0, 50% 0, 50% 100%, 0 100%); }
-        .comparison-slider-input { display: none; }
+        .comparison-slider-input { position: absolute; inset: 0; width: 100%; height: 100%; margin: 0; opacity: 0; z-index: 7; cursor: ew-resize; }
+        .comparison-container:focus-within { box-shadow: inset 0 0 0 3px var(--accent); }
         .comparison-handle { position: absolute; top: 0; bottom: 0; left: 50%; width: 2px; background: var(--accent); transform: translateX(-50%); pointer-events: none; z-index: 5; box-shadow: 0 0 10px rgba(59,130,246,0.5);}
         .comparison-handle::after { content: '↔'; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 34px; height: 34px; background: var(--bg-elevated); color: var(--text-primary); border: 2px solid var(--accent); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 16px; font-weight: bold;}
         .comparison-label { position: absolute; top: 1rem; padding: 0.2rem 0.6rem; background: rgba(0,0,0,0.8); font-size: 0.7rem; font-family: 'Orbitron', sans-serif; border-radius: 4px; border: 1px solid; z-index: 6; letter-spacing: 1px;}
@@ -391,7 +394,7 @@
         body.arcade-mode .prompt-code pre { background: #05000a; color: #0f0; border-color: #0f0; font-size: 1.2rem; }
     </style>
     <link rel="stylesheet" href="../../design/course.css?v=ux-20261012">
-    <script src="../../design/course.js?v=ux-20261012" defer></script>
+    <script src="../../design/course.js?v=check-20261013" defer></script>
 </head>
 
 <body class="gs-course gs-course--ia">
@@ -684,26 +687,26 @@
                 
                 <div class="doc-category">📄 Manuale: NotebookLM</div>
                 <ul>
-                    <li><a onclick="scrollToChapter('cap-0')">Introduzione</a></li>
-                    <li><a onclick="scrollToChapter('cap-1')">1. Che cos’è davvero NotebookLM</a></li>
-                    <li><a onclick="scrollToChapter('cap-2')">2. Le tre fasi del lavoro</a></li>
-                    <li><a onclick="scrollToChapter('cap-3')">3. Prima del prompt: il notebook</a></li>
-                    <li><a onclick="scrollToChapter('cap-4')">4. Le fonti: meno quantità, più controllo</a></li>
-                    <li><a onclick="scrollToChapter('cap-5')">5. Il perimetro del notebook</a></li>
-                    <li><a onclick="scrollToChapter('cap-6')">6. La selezione dinamica delle fonti</a></li>
-                    <li><a onclick="scrollToChapter('cap-7')">7. La sezione Studio</a></li>
-                    <li><a onclick="scrollToChapter('cap-8')">8. Il prompt per slide: non è una frase</a></li>
-                    <li><a onclick="scrollToChapter('cap-9')">9-15. La struttura di un prompt</a></li>
-                    <li><a onclick="scrollToChapter('cap-16')">16-20. Stile, Concept e Identità Visiva</a></li>
-                    <li><a onclick="scrollToChapter('cap-21')">21-27. Regole Editoriali e di Layout</a></li>
-                    <li><a onclick="scrollToChapter('cap-28')">28-30. Tono di voce e Restrizioni</a></li>
-                    <li><a onclick="scrollToChapter('cap-31')">31. Template madre completo</a></li>
-                    <li><a onclick="scrollToChapter('cap-32')">32. Versione breve per studenti</a></li>
-                    <li><a onclick="scrollToChapter('cap-33')">33. Le dieci domande fondamentali</a></li>
-                    <li><a onclick="scrollToChapter('cap-34')">34. Esempio 1: Editorial Business Pop</a></li>
-                    <li><a onclick="scrollToChapter('cap-35')">35. Esempio 2: Material Industrial Zen</a></li>
-                    <li><a onclick="scrollToChapter('cap-36')">36. Struttura per un'app didattica</a></li>
-                    <li><a onclick="scrollToChapter('cap-37')">37-38. Checklist e Sintesi finale</a></li>
+                    <li><a href="#cap-0">Introduzione</a></li>
+                    <li><a href="#cap-1">1. Che cos’è davvero NotebookLM</a></li>
+                    <li><a href="#cap-2">2. Le tre fasi del lavoro</a></li>
+                    <li><a href="#cap-3">3. Prima del prompt: il notebook</a></li>
+                    <li><a href="#cap-4">4. Le fonti: meno quantità, più controllo</a></li>
+                    <li><a href="#cap-5">5. Il perimetro del notebook</a></li>
+                    <li><a href="#cap-6">6. La selezione dinamica delle fonti</a></li>
+                    <li><a href="#cap-7">7. La sezione Studio</a></li>
+                    <li><a href="#cap-8">8. Il prompt per slide: non è una frase</a></li>
+                    <li><a href="#cap-9">9-15. La struttura di un prompt</a></li>
+                    <li><a href="#cap-16">16-20. Stile, Concept e Identità Visiva</a></li>
+                    <li><a href="#cap-21">21-27. Regole Editoriali e di Layout</a></li>
+                    <li><a href="#cap-28">28-30. Tono di voce e Restrizioni</a></li>
+                    <li><a href="#cap-31">31. Template madre completo</a></li>
+                    <li><a href="#cap-32">32. Versione breve per studenti</a></li>
+                    <li><a href="#cap-33">33. Le dieci domande fondamentali</a></li>
+                    <li><a href="#cap-34">34. Esempio 1: Editorial Business Pop</a></li>
+                    <li><a href="#cap-35">35. Esempio 2: Material Industrial Zen</a></li>
+                    <li><a href="#cap-36">36. Struttura per un'app didattica</a></li>
+                    <li><a href="#cap-37">37-38. Checklist e Sintesi finale</a></li>
                 </ul>
             </aside>
 
@@ -1461,22 +1464,22 @@ The deck must feel like one designed editorial object, not a collection of unrel
         <p style="color: var(--text-secondary); margin-bottom: 1.5rem;">Confronto interattivo strutturato (JSON) vs narrativo (TXT) nella generazione visiva.</p>
         
         <div class="prompt-gallery-nav">
-            <div class="gallery-thumb active" onclick="switchPrompt('prompt-1', this)">
+            <button type="button" class="gallery-thumb active" onclick="switchPrompt('prompt-1', this)" aria-pressed="true">
                 <img src="https://drive.google.com/thumbnail?id=1raXNgsRsLHBljmLOqadjqJIc4IpWIb29&sz=w400" alt="Pascal Neutro">
-                <div class="thumb-label">1. Pascal Neutro</div>
-            </div>
-            <div class="gallery-thumb" onclick="switchPrompt('prompt-2', this)">
+                <span class="thumb-label">1. Pascal Neutro</span>
+            </button>
+            <button type="button" class="gallery-thumb" onclick="switchPrompt('prompt-2', this)" aria-pressed="false">
                 <img src="https://drive.google.com/thumbnail?id=1smc_9M1PndWWMEVBGlA0l8SvimfBDZjs&sz=w400" alt="Pascal Rabbia">
-                <div class="thumb-label">2. Pascal Rabbia</div>
-            </div>
-            <div class="gallery-thumb" onclick="switchPrompt('prompt-3', this)">
+                <span class="thumb-label">2. Pascal Rabbia</span>
+            </button>
+            <button type="button" class="gallery-thumb" onclick="switchPrompt('prompt-3', this)" aria-pressed="false">
                 <img src="https://drive.google.com/thumbnail?id=1sNsNjM2sN33R_TZo6zVEpojCY2zdUqG6&sz=w400" alt="Pugh Neutro">
-                <div class="thumb-label">3. Pugh Neutro</div>
-            </div>
-            <div class="gallery-thumb" onclick="switchPrompt('prompt-4', this)">
+                <span class="thumb-label">3. Pugh Neutro</span>
+            </button>
+            <button type="button" class="gallery-thumb" onclick="switchPrompt('prompt-4', this)" aria-pressed="false">
                 <img src="https://drive.google.com/thumbnail?id=139YrltzXOCCQ0Neisxh5rTSLhoxzRtAq&sz=w400" alt="Pugh Smorfia">
-                <div class="thumb-label">4. Pugh Smorfia</div>
-            </div>
+                <span class="thumb-label">4. Pugh Smorfia</span>
+            </button>
         </div>
 
         <div class="prompt-grid">
@@ -1487,7 +1490,7 @@ The deck must feel like one designed editorial object, not a collection of unrel
                     <div class="comparison-container">
                         <img src="https://drive.google.com/thumbnail?id=13M6myY0KmbFcR3yIYXRye3iB-ljJAojR&sz=w800" class="comparison-img-base" alt="TXT">
                         <img src="https://drive.google.com/thumbnail?id=1raXNgsRsLHBljmLOqadjqJIc4IpWIb29&sz=w800" class="comparison-img-over" alt="JSON" id="comp-img-1">
-                        <input type="range" min="0" max="100" value="50" class="comparison-slider-input" oninput="updateSlider(this.value, '1')">
+                        <input type="range" min="0" max="100" value="50" class="comparison-slider-input" aria-label="Confronto immagini: percentuale immagine JSON" oninput="updateSlider(this.value, '1')">
                         <div class="comparison-handle" id="comp-handle-1"></div>
                         <div class="comparison-label comp-label-json">SYS: JSON</div>
                         <div class="comparison-label comp-label-txt">SYS: TXT</div>
@@ -1811,7 +1814,7 @@ Vincoli: nessuna persona extra, nessun oggetto extra, nessun testo, nessuna fili
                     <div class="comparison-container">
                         <img src="https://drive.google.com/thumbnail?id=15sTcJIJ1uSgb9RdznSPZciJ3CdNBP5Hb&sz=w800" class="comparison-img-base" alt="TXT">
                         <img src="https://drive.google.com/thumbnail?id=1smc_9M1PndWWMEVBGlA0l8SvimfBDZjs&sz=w800" class="comparison-img-over" alt="JSON" id="comp-img-2">
-                        <input type="range" min="0" max="100" value="50" class="comparison-slider-input" oninput="updateSlider(this.value, '2')">
+                        <input type="range" min="0" max="100" value="50" class="comparison-slider-input" aria-label="Confronto immagini: percentuale immagine JSON" oninput="updateSlider(this.value, '2')">
                         <div class="comparison-handle" id="comp-handle-2"></div>
                         <div class="comparison-label comp-label-json">SYS: JSON</div>
                         <div class="comparison-label comp-label-txt">SYS: TXT</div>
@@ -2146,7 +2149,7 @@ Vincoli: nessuna persona extra, nessun oggetto extra, nessun testo, nessuna fili
                     <div class="comparison-container">
                         <img src="https://drive.google.com/thumbnail?id=1pbmr9t3IBLMCkhjrH9etGyqQU3vjmQ4t&sz=w800" class="comparison-img-base" alt="TXT">
                         <img src="https://drive.google.com/thumbnail?id=1sNsNjM2sN33R_TZo6zVEpojCY2zdUqG6&sz=w800" class="comparison-img-over" alt="JSON" id="comp-img-3">
-                        <input type="range" min="0" max="100" value="50" class="comparison-slider-input" oninput="updateSlider(this.value, '3')">
+                        <input type="range" min="0" max="100" value="50" class="comparison-slider-input" aria-label="Confronto immagini: percentuale immagine JSON" oninput="updateSlider(this.value, '3')">
                         <div class="comparison-handle" id="comp-handle-3"></div>
                         <div class="comparison-label comp-label-json">SYS: JSON</div>
                         <div class="comparison-label comp-label-txt">SYS: TXT</div>
@@ -2470,7 +2473,7 @@ L'ambiente è un limbo bianco continuo (cyclorama) in high-key, completamente pu
                     <div class="comparison-container">
                         <img src="https://drive.google.com/thumbnail?id=1winAyx8WlPRg2wv-iOjSzOmS12P_7_xI&sz=w800" class="comparison-img-base" alt="TXT">
                         <img src="https://drive.google.com/thumbnail?id=139YrltzXOCCQ0Neisxh5rTSLhoxzRtAq&sz=w800" class="comparison-img-over" alt="JSON" id="comp-img-4">
-                        <input type="range" min="0" max="100" value="50" class="comparison-slider-input" oninput="updateSlider(this.value, '4')">
+                        <input type="range" min="0" max="100" value="50" class="comparison-slider-input" aria-label="Confronto immagini: percentuale immagine JSON" oninput="updateSlider(this.value, '4')">
                         <div class="comparison-handle" id="comp-handle-4"></div>
                         <div class="comparison-label comp-label-json">SYS: JSON</div>
                         <div class="comparison-label comp-label-txt">SYS: TXT</div>
@@ -2817,7 +2820,7 @@ L'ambiente è un limbo bianco continuo e pulito, in high-key, senza distrazioni.
             <div class="disclaimer-box">
                 <div class="disclaimer-box-icon">🎲</div>
                 <div class="disclaimer-box-content">
-                    <strong>ATTENZIONE: FATTORE "LANCIO DEI DADI" <a class="link-ai" onclick="openTab('tab-tester', document.querySelectorAll('.tab-btn')[4])">(Varianza IA)</a></strong>
+                    <strong>ATTENZIONE: FATTORE "LANCIO DEI DADI" <a class="link-ai" href="#vibe-coding">(Varianza IA)</a></strong>
                     <p>È fondamentale ricordare che, per quanto un prompt possa essere ingegnerizzato o strutturato, l'IA Generativa mantiene una natura intrinsecamente probabilistica. <strong>Non si otterranno mai due immagini identiche in sequenza usando lo stesso identico prompt.</strong> Il prompt serve a "restringere il recinto" delle probabilità, ma il risultato esatto conserverà sempre un grado ineliminabile di casualità e interpretazione.</p>
                 </div>
             </div>
@@ -2995,8 +2998,11 @@ L'ambiente è un limbo bianco continuo e pulito, in high-key, senza distrazioni.
     };
 
     function showTabFromHash() {
-        const id = Object.keys(TAB_NAMES).find(k => '#' + TAB_NAMES[k] === location.hash) || 'tab-prog';
+        const chapterId = location.hash.slice(1);
+        const chapter = /^cap-\d+$/.test(chapterId) && document.getElementById(chapterId);
+        const id = chapter ? 'tab-biblio' : Object.keys(TAB_NAMES).find(k => '#' + TAB_NAMES[k] === location.hash) || 'tab-prog';
         openTab(id, document.querySelector(`.tab-btn[onclick*="'${id}'"]`), true);
+        if (chapter) requestAnimationFrame(() => scrollToChapter(chapterId));
     }
 
     window.addEventListener('popstate', showTabFromHash);
@@ -3020,9 +3026,28 @@ L'ambiente è un limbo bianco continuo e pulito, in high-key, senza distrazioni.
         const targetElement = document.getElementById(chapterId);
         const container = document.querySelector('.doc-content');
         if (targetElement && container) {
-            container.scrollTo({ top: targetElement.offsetTop - 30, behavior: 'smooth' });
+            const behavior = window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'instant' : 'smooth';
+            const headerHeight = document.querySelector('.gs-global-header')?.getBoundingClientRect().height || 0;
+            const offset = headerHeight + 16;
+            const hasInnerScroll = getComputedStyle(container).overflowY === 'auto' && container.scrollHeight > container.clientHeight;
+            if (hasInnerScroll) {
+                const top = targetElement.getBoundingClientRect().top - container.getBoundingClientRect().top + container.scrollTop - 30;
+                container.scrollTo({ top, behavior });
+                window.scrollTo({ top: window.scrollY + container.getBoundingClientRect().top - offset, behavior });
+            } else {
+                window.scrollTo({ top: window.scrollY + targetElement.getBoundingClientRect().top - offset, behavior });
+            }
         }
     }
+
+    document.querySelector('.doc-sidebar').addEventListener('click', event => {
+        const link = event.target.closest('a[href^="#cap-"]');
+        if (!link || event.button !== 0 || event.ctrlKey || event.metaKey || event.shiftKey || event.altKey) return;
+        event.preventDefault();
+        const chapterId = link.hash.slice(1);
+        if (location.hash !== link.hash) history.pushState(null, '', link.hash);
+        scrollToChapter(chapterId);
+    });
 
     // ==========================================
     // LOGICA AVANZAMENTO PROGRAMMA
@@ -3095,6 +3120,11 @@ L'ambiente è un limbo bianco continuo e pulito, in high-key, senza distrazioni.
             if (!topbar || topbar.dataset.archiveReady === 'true') return;
             topbar.dataset.archiveReady = 'true';
             topbar.addEventListener('click', () => toggleArchivedLesson(shell));
+            topbar.addEventListener('keydown', event => {
+                if (event.target !== topbar || event.repeat || !['Enter', ' '].includes(event.key)) return;
+                event.preventDefault();
+                toggleArchivedLesson(shell);
+            });
         });
     }
 
@@ -3155,6 +3185,7 @@ L'ambiente è un limbo bianco continuo e pulito, in high-key, senza distrazioni.
             
             container.addEventListener('pointerdown', (event) => {
                 event.preventDefault();
+                container.querySelector('.comparison-slider-input')?.focus({ preventScroll: true });
                 container.setPointerCapture(event.pointerId);
                 setComparisonPosition(container, getComparisonValueFromPointer(container, event));
             });
@@ -3172,14 +3203,18 @@ L'ambiente è un limbo bianco continuo e pulito, in high-key, senza distrazioni.
     function switchPromptMode(mode, btn) {
         const container = btn.closest('.prompt-code');
         container.querySelectorAll('.prompt-view').forEach(view => view.style.display = 'none');
-        container.querySelector(`.view-${mode}`).style.display = 'block';
+        const activeView = container.querySelector(`.view-${mode}`);
+        activeView.style.display = 'block';
+        const translated = container.querySelector('.translate-btn').classList.contains('active-translation');
+        activeView.querySelector('.lang-en').style.display = translated ? 'none' : 'block';
+        activeView.querySelector('.lang-it').style.display = translated ? 'block' : 'none';
         container.querySelectorAll('.code-mode-btn').forEach(b => b.classList.remove('active-json', 'active-txt'));
         btn.classList.add(mode === 'json' ? 'active-json' : 'active-txt');
     }
 
     function toggleTranslation(btn) {
         const container = btn.closest('.prompt-code');
-        const activeView = container.querySelector('.prompt-view[style*="display: block"]');
+        const activeView = [...container.querySelectorAll('.prompt-view')].find(view => getComputedStyle(view).display !== 'none');
         if(!activeView) return;
         const enCode = activeView.querySelector('.lang-en');
         const itCode = activeView.querySelector('.lang-it');
@@ -3199,7 +3234,10 @@ L'ambiente è un limbo bianco continuo e pulito, in high-key, senza distrazioni.
 
     function switchPrompt(id, thumbEl) {
         document.querySelectorAll('.prompt-card').forEach(c => c.classList.remove('active-card'));
-        document.querySelectorAll('.gallery-thumb').forEach(t => t.classList.remove('active'));
+        document.querySelectorAll('.gallery-thumb').forEach(t => {
+            t.classList.remove('active');
+            t.setAttribute('aria-pressed', String(t === thumbEl));
+        });
         document.getElementById(id).classList.add('active-card');
         thumbEl.classList.add('active');
         

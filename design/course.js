@@ -37,7 +37,8 @@
     }
   };
 
-  const course = entries[location.pathname];
+  const coursePath = location.pathname.replace(/\/index\.html$/, "/");
+  const course = entries[coursePath];
   if (!course) return;
   document.body.classList.add("gs-course", `gs-course--${course.css}`);
 
@@ -80,6 +81,16 @@
   }
 
   const tabs = document.querySelector(".tabs, .nav-tabs");
+  function measureNavigation() {
+    document.documentElement.style.setProperty("--course-header-height", `${Math.ceil(topbar.getBoundingClientRect().height)}px`);
+    if (tabs) document.documentElement.style.setProperty("--course-tabs-height", `${Math.ceil(tabs.getBoundingClientRect().height)}px`);
+  }
+  measureNavigation();
+  if (typeof ResizeObserver !== "undefined") {
+    const navigationObserver = new ResizeObserver(measureNavigation);
+    navigationObserver.observe(topbar);
+    if (tabs) navigationObserver.observe(tabs);
+  } else window.addEventListener("resize", measureNavigation, { passive: true });
   if (tabs) {
     const sectionsButton = document.createElement("button");
     sectionsButton.type = "button";
@@ -96,7 +107,7 @@
   }
   function scrollToSection(hash) {
     const target = tabs || document.getElementById(hash);
-    if (target) target.scrollIntoView({ block: "start", behavior: "smooth" });
+    if (target) target.scrollIntoView({ block: "start", behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth" });
   }
   document.querySelectorAll("[data-gs-jump]").forEach(link => {
     link.addEventListener("click", event => {
@@ -109,7 +120,7 @@
     });
   });
   function updateActions() {
-    for (const link of document.querySelectorAll(".gs-mobile-actions a")) {
+    for (const link of document.querySelectorAll("[data-gs-jump]")) {
       link.setAttribute("aria-current", String(link.hash === location.hash));
     }
     savePosition();
@@ -119,6 +130,7 @@
     if (course.actions.some(([hash]) => `#${hash}` === location.hash)) requestAnimationFrame(() => scrollToSection(location.hash.slice(1)));
   });
   window.addEventListener("popstate", updateActions);
+  document.addEventListener("course:sectionchange", updateActions);
   if (tabs) tabs.addEventListener("click", () => setTimeout(updateActions, 0));
   updateActions();
 
@@ -166,7 +178,7 @@
     const url = new URL(anchor.href);
     if (url.origin !== location.origin) continue;
     if (url.pathname !== "/" && (url.pathname === location.pathname || !entries[url.pathname])) continue;
-    url.searchParams.set("v", "ux-20261012");
+    url.searchParams.set("v", "check-20261013");
     anchor.href = url.href;
   }
 

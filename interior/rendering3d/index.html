@@ -631,8 +631,13 @@ const shortcuts = [
   const box = $('#schede-box');
 
   function apriScheda(id, daStoria) {
+    if (id !== 'video') fermaVideo();
     const cambia = $('#' + id).hidden;
-    document.querySelectorAll('.scheda[role=tab]').forEach(t => t.setAttribute('aria-selected', String(t.dataset.tab === id)));
+    document.querySelectorAll('.scheda[role=tab]').forEach(t => {
+      const selezionata = t.dataset.tab === id;
+      t.setAttribute('aria-selected', String(selezionata));
+      t.tabIndex = selezionata ? 0 : -1;
+    });
     document.querySelectorAll('.pannello').forEach(p => p.hidden = p.id !== id);
     if (cambia) { const p = $('#' + id); p.classList.remove('entra'); void p.offsetWidth; p.classList.add('entra'); }
     if (id === 'lezioni') disegnaPercorso();
@@ -656,8 +661,20 @@ const shortcuts = [
     const t = e.target.closest('.scheda[role=tab]'); if (!t) return;
     apriScheda(t.dataset.tab); inizioScheda();
   });
+  $('#schede').addEventListener('keydown', e => {
+    const t = e.target.closest('.scheda[role=tab]'); if (!t) return;
+    const schede = [...document.querySelectorAll('.scheda[role=tab]')], i = schede.indexOf(t);
+    let next;
+    if (e.key === 'ArrowRight') next = (i + 1) % schede.length;
+    else if (e.key === 'ArrowLeft') next = (i - 1 + schede.length) % schede.length;
+    else if (e.key === 'Home') next = 0;
+    else if (e.key === 'End') next = schede.length - 1;
+    else return;
+    e.preventDefault(); schede[next].focus({ preventScroll: true }); schede[next].click();
+  });
   // i link interni (#video, #lezione-8...) aprono la scheda giusta e ci portano lì
   document.addEventListener('click', e => {
+    if (e.defaultPrevented || e.button !== 0 || e.ctrlKey || e.metaKey || e.shiftKey || e.altKey) return;
     const a = e.target.closest('a[href^="#"]'); if (!a) return;
     const h = a.getAttribute('href').slice(1);
     if (!TAB_NAMES[h] && !ALIAS[h] && !/^lezione-/.test(h)) return;
@@ -666,6 +683,7 @@ const shortcuts = [
     daIndirizzo(true);
   });
   addEventListener('popstate', () => { if ($('#ref').open) $('#ref').close(); daIndirizzo(); });
+  addEventListener('hashchange', () => daIndirizzo(true));
   // la barra prende lo sfondo quando resta attaccata in alto
   addEventListener('scroll', () => box.classList.toggle('attaccata', box.getBoundingClientRect().top <= 76), { passive: true });
 
@@ -871,10 +889,20 @@ const shortcuts = [
       ${c.videos && c.videos.length ? `<div class="v-griglia">${c.videos.map(schedaVideo).join('')}</div>` : ''}
       ${(c.subcategories || []).map(s => `<h4>${esc(s.title)}</h4><div class="v-griglia">${s.videos.map(schedaVideo).join('')}</div>`).join('')}
     </section>`).join('');
+  const videoAvviati = new Map();
+  function fermaVideo() {
+    videoAvviati.forEach((pulsante, player) => player.replaceWith(pulsante));
+    videoAvviati.clear();
+  }
   $('#lista-video').addEventListener('click', e => {
     const b = e.target.closest('.v-schermo[data-src]'); if (!b) return;
-    b.innerHTML = `<iframe src="${b.dataset.src}" allow="autoplay; fullscreen; encrypted-media" allowfullscreen title="Video"></iframe>`;
-    b.removeAttribute('data-src'); b.style.backgroundImage = 'none'; b.style.cursor = 'default';
+    fermaVideo();
+    const player = document.createElement('div');
+    player.className = 'v-schermo'; player.style.cursor = 'default';
+    const frame = document.createElement('iframe');
+    frame.src = b.dataset.src; frame.allow = 'autoplay; fullscreen; encrypted-media'; frame.allowFullscreen = true;
+    frame.title = b.getAttribute('aria-label').replace(/^Guarda: /, '');
+    player.appendChild(frame); videoAvviati.set(player, b); b.replaceWith(player); frame.focus();
   });
 
   /* ---------- Brand ---------- */
