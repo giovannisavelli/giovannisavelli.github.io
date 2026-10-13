@@ -3007,6 +3007,9 @@ L'ambiente è un limbo bianco continuo e pulito, in high-key, senza distrazioni.
 
     window.addEventListener('popstate', showTabFromHash);
     window.addEventListener('hashchange', showTabFromHash);
+    window.addEventListener('load', () => {
+        if (/^#cap-\d+$/.test(location.hash)) showTabFromHash();
+    }, { once: true });
 
     function openTab(id, btn, fromHistory) {
         const targetTab = document.getElementById(id);
