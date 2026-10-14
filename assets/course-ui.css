@@ -80,7 +80,7 @@ body.course-page .schede-box { scroll-margin-top:calc(var(--course-header-height
 body.course-page .pannello { scroll-margin-top:calc(var(--course-header-height) + 84px); }
 body.course-page :is(.panel-intro,.course-panel-intro) { color:var(--ink-2); max-width:68ch; font:400 17px/1.6 var(--sans); }
 body.course-page .gs-mobile-actions { background:rgba(10,10,13,.97); border-color:var(--line); }
-body.course-page .gs-mobile-actions :is(a,button.gs-sections-button) { min-height:44px; padding:8px; border:1px solid var(--line-2); border-radius:999px; background:transparent; color:var(--ink-2); font:500 12px/1.2 var(--sans); }
+body.course-page .gs-mobile-actions a { min-height:44px; padding:8px; border:1px solid var(--line-2); border-radius:999px; background:transparent; color:var(--ink-2); font:500 12px/1.2 var(--sans); }
 body.course-page .gs-mobile-actions a[aria-current="true"] { border-color:var(--accent); background:var(--accent); color:var(--bg); }
 
 /* Shell Product: stessa tipografia e controlli, contenuti specifici del corso. */
@@ -141,7 +141,6 @@ body.course-page .course-footer .piede svg { width:18px; height:18px; fill:none;
   body.course-page .gs-brand-copy small { display:none; }
   body.course-page .gs-header-actions .gs-all-courses { padding:8px 12px; font-size:13px; }
   body.course-page .fab-accessibility { padding:8px 11px; font-size:13px; }
-  body.course-page .gs-header-actions .gs-sections-button { display:none; }
   body.course-page .gs-header-actions a:not(.gs-all-courses) { display:none; }
   body.course-page .btn,
   body.course-page :is(.hero-actions,.notice,.lesson-materials) a,

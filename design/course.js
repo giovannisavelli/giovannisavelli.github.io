@@ -91,20 +91,6 @@
     navigationObserver.observe(topbar);
     if (tabs) navigationObserver.observe(tabs);
   } else window.addEventListener("resize", measureNavigation, { passive: true });
-  if (tabs) {
-    const sectionsButton = document.createElement("button");
-    sectionsButton.type = "button";
-    sectionsButton.className = "gs-sections-button";
-    sectionsButton.textContent = "Tutte le sezioni";
-    sectionsButton.setAttribute("aria-label", "Vai alle sezioni del corso");
-    topbar.querySelector(".gs-header-actions").appendChild(sectionsButton);
-    const mobileSectionsButton = sectionsButton.cloneNode(true);
-    mobileSectionsButton.textContent = "Sezioni ↑";
-    document.querySelector(".gs-mobile-actions")?.appendChild(mobileSectionsButton);
-    [sectionsButton, mobileSectionsButton].forEach(button => button.addEventListener("click", () => {
-      tabs.scrollIntoView({ block: "start", behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth" });
-    }));
-  }
   function scrollToSection(hash) {
     const target = tabs || document.getElementById(hash);
     if (target) target.scrollIntoView({ block: "start", behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth" });
@@ -178,7 +164,7 @@
     const url = new URL(anchor.href);
     if (url.origin !== location.origin) continue;
     if (url.pathname !== "/" && (url.pathname === location.pathname || !entries[url.pathname])) continue;
-    url.searchParams.set("v", "unified-20261014");
+    url.searchParams.set("v", "sections-20261014");
     anchor.href = url.href;
   }
 
