@@ -7,10 +7,11 @@
     <meta name="description" content="Corso di Intelligenza Artificiale per l'Interior Design - Prof. Giovanni Savelli - AANT">
     <meta property="og:title" content="Intelligenza Artificiale · Interior Design">
     <meta property="og:description" content="Programma, promptoteca, bibliografia e calendario del corso - Prof. Giovanni Savelli - AANT">
-    <meta name="theme-color" content="#090a0f">
+    <meta name="theme-color" content="#0a0a0d">
     <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🤖</text></svg>">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Lexend:wght@300;400;500;600;700&family=Orbitron:wght@400;700;900&family=VT323&display=swap" rel="stylesheet">
     
+    <link href="https://fonts.googleapis.com/css2?family=Geist:wght@300..800&amp;family=Geist+Mono:wght@400;500&amp;display=swap" rel="stylesheet">
     <style>
         /* =========================================================
            PALETTE & DESIGN SYSTEM (PREMIUM DARK MODE)
@@ -394,10 +395,17 @@
         body.arcade-mode .prompt-code pre { background: #05000a; color: #0f0; border-color: #0f0; font-size: 1.2rem; }
     </style>
     <link rel="stylesheet" href="../../design/course.css?v=ux-20261012">
-    <script src="../../design/course.js?v=check-20261013" defer></script>
+    <link rel="stylesheet" href="../../assets/studio.css">
+    <link rel="stylesheet" href="../../assets/course-legacy.css?v=unified-20261014">
+    <link rel="stylesheet" href="../../assets/course-ui.css?v=unified-20261014">
+    <script src="../../design/course.js?v=unified-20261014" defer></script>
+    <script src="../../assets/fx/effetti.js" defer></script>
+    <script src="../../assets/studio.js" defer></script>
 </head>
 
-<body class="gs-course gs-course--ia">
+<body class="gs-course gs-course--ia course-page course-legacy">
+
+<button id="btn-leggibile" class="fab-accessibility" type="button" aria-pressed="false" aria-label="Attiva alta leggibilità"><span class="fab-icon" aria-hidden="true">Aa</span><span class="fab-text">Leggi</span></button>
 
 <div class="app-container">
 
@@ -2966,12 +2974,17 @@ L'ambiente è un limbo bianco continuo e pulito, in high-key, senza distrazioni.
         </table>
     </div>
 
-    <div style="text-align: center; margin-top: auto; padding-top: 2.5rem;"><a href="../../" style="display: inline-block; color: var(--text-muted); text-decoration: none; border: 1px solid var(--border); padding: 0.5rem 1rem; border-radius: var(--radius-pill); font-size: 0.8rem; font-weight: 500;">← Tutti i corsi del docente</a></div>
-    <div class="footer" style="margin-top: 0; padding-top: 1rem;">
-        Intelligenza Artificiale | Giovanni Savelli | 2026/27
-        <button class="easter-egg-btn" onclick="toggleArcadeMode()" title="Sorpresa...">👾</button>
-    </div>
 </div>
+
+<footer class="wrap course-footer course-footer--ia">
+    <div class="grande-firma" aria-hidden="true">Intelligenza</div>
+    <div class="grande-firma" aria-hidden="true">artificiale</div>
+    <div class="piede">
+        <a href="../../">← Tutti i corsi</a>
+        <span>Intelligenza Artificiale · Giovanni Savelli · 2026/27</span>
+        <button class="easter-egg-btn" onclick="toggleArcadeMode()" title="Sorpresa..." aria-label="Attiva o disattiva lo stile arcade">👾</button>
+    </div>
+</footer>
 
 <script>
     // ==========================================

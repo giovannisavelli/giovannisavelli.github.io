@@ -1,85 +1,93 @@
 <!DOCTYPE html>
 <html lang="it">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Intelligenza Artificiale · Product Design | AANT</title>
-    <meta name="description" content="Calendario di Intelligenza Artificiale per il terzo anno di Product Design - Prof. Giovanni Savelli - AANT.">
-    <meta property="og:title" content="Intelligenza Artificiale · Product Design">
-    <meta property="og:description" content="Calendario del primo semestre 2026/2027 disponibile; materiali del corso in preparazione.">
-    <meta name="theme-color" content="#07080c">
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🤖</text></svg>">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&family=JetBrains+Mono:wght@400;600&family=Space+Grotesk:wght@700&display=swap" rel="stylesheet">
-
-    <!-- =====================================================================
-         PAGINA PROVVISORIA "IN PREPARAZIONE".
-         Quando il corso è pronto, sostituisci questo file con la pagina completa
-         (stesso nome: index.html, stessa cartella) e nell'hub (../../index.html)
-         cambia lo stato del corso da 'preparazione' a 'disponibile'.
-         ===================================================================== -->
-    <style>
-        :root { --bg: #07080c; --border: rgba(255,255,255,0.08); --text: #f5f5f7; --muted: #8b8b94; --c: #34d399; --glow: rgba(52, 211, 153, 0.13); --wip: #fbbf24; }
-        *, *::before, *::after { box-sizing: border-box; }
-        body {
-            margin: 0; min-height: 100vh; background: var(--bg); color: var(--text); font-family: 'Inter', -apple-system, sans-serif;
-            -webkit-font-smoothing: antialiased; display: flex; align-items: center; justify-content: center; padding: 16px; overflow-x: hidden;
-        }
-        .bg-grid {
-            position: fixed; inset: 0; z-index: -2; pointer-events: none;
-            background-image: linear-gradient(rgba(255,255,255,0.035) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.035) 1px, transparent 1px);
-            background-size: 48px 48px;
-            -webkit-mask-image: radial-gradient(ellipse 70% 60% at 50% 40%, #000 20%, transparent 100%);
-                    mask-image: radial-gradient(ellipse 70% 60% at 50% 40%, #000 20%, transparent 100%);
-        }
-        .bg-glow { position: fixed; z-index: -1; width: 520px; height: 520px; border-radius: 50%; background: var(--c); filter: blur(110px); opacity: 0.22; top: 50%; left: 50%; transform: translate(-50%, -60%); pointer-events: none; }
-        .box { width: 100%; max-width: 650px; text-align: center; }
-        .icon { width: 64px; height: 64px; margin: 0 auto 22px; border-radius: 16px; display: grid; place-items: center; color: var(--c); background: var(--glow); border: 1px solid var(--border); }
-        .icon svg { width: 32px; height: 32px; fill: none; stroke: currentColor; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
-        .dept { font-family: 'JetBrains Mono', monospace; font-size: 12px; letter-spacing: 1px; text-transform: uppercase; color: var(--muted); }
-        h1 { margin: 10px 0 16px; font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: clamp(34px, 9vw, 52px); line-height: 1.05; letter-spacing: -0.02em; }
-        .status { display: inline-flex; align-items: center; gap: 8px; font-family: 'JetBrains Mono', monospace; font-size: 12px; text-transform: uppercase; letter-spacing: 0.5px; color: var(--c); padding: 6px 12px; border-radius: 50px; border: 1px solid var(--border); }
-        .status::before { content: ''; width: 7px; height: 7px; border-radius: 50%; background: var(--c); }
-        p { margin: 22px 0 32px; color: var(--muted); font-size: 15px; line-height: 1.6; }
-        .calendar { margin: 32px 0; padding: 20px; border: 1px solid var(--border); border-radius: 16px; background: rgba(255,255,255,0.03); text-align: left; }
-        .calendar h2 { margin: 0 0 8px; font-family: 'Space Grotesk', sans-serif; font-size: 25px; }
-        .calendar p { margin: 0 0 16px; }
-        .schedule-list { margin: 0; padding: 0; list-style: none; }
-        .schedule-list li { display: flex; justify-content: space-between; gap: 16px; padding: 12px 0; border-top: 1px solid var(--border); font-size: 14px; }
-        .schedule-list time { font-weight: 600; }
-        .schedule-list span { color: var(--muted); white-space: nowrap; }
-        @media (max-width: 480px) { .schedule-list li { flex-wrap: wrap; gap: 3px 12px; } }
-        a.back {
-            display: inline-block; padding: 14px 24px; border-radius: 50px; text-decoration: none; color: var(--text);
-            font-family: 'JetBrains Mono', monospace; font-weight: 600; font-size: 13px; border: 1px solid var(--c); background: var(--glow); transition: transform 0.2s ease;
-        }
-        a.back:hover { transform: translateY(-2px); }
-        footer { margin-top: 48px; font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--muted); }
-    </style>
-    <link rel="stylesheet" href="../../design/course.css?v=ux-20261012">
-    <script src="../../design/course.js?v=check-20261013" defer></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Intelligenza artificiale · Product Design | AANT</title>
+  <meta name="description" content="Intelligenza artificiale per Product Design · Giovanni Savelli · AANT. Calendario disponibile.">
+  <meta property="og:title" content="Intelligenza artificiale · Product Design">
+  <meta property="og:description" content="Calendario disponibile · Giovanni Savelli · AANT 2026/27">
+  <meta name="theme-color" content="#0a0a0d">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='24' fill='%230a0a0d'/%3E%3Ctext x='50' y='66' text-anchor='middle' font-family='sans-serif' font-size='48' font-weight='700' fill='%2334d399'%3EIA%3C/text%3E%3C/svg%3E">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Geist:wght@100..900&family=Geist+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../assets/studio.css">
+  <link rel="stylesheet" href="../../assets/course-ui.css?v=unified-20261014">
 </head>
-<body class="gs-course gs-course--ia-product">
-    <div class="bg-grid"></div>
-    <div class="bg-glow"></div>
-
-    <div class="box" role="main">
-        <div class="icon"><svg viewBox="0 0 24 24"><path d="M10 3.5 11.8 8.2 16.5 10l-4.7 1.8L10 16.5l-1.8-4.7L3.5 10l4.7-1.8z"/><path d="m18 14 .9 2.1L21 17l-2.1.9L18 20l-.9-2.1L15 17l2.1-.9z"/><path d="m18 3 .6 1.4L20 5l-1.4.6L18 7l-.6-1.4L16 5l1.4-.6z"/></svg></div>
-        <span class="dept">AANT · Product Design</span>
-        <h1>Intelligenza Artificiale</h1>
-        <span class="status">Calendario disponibile</span>
-        <p>Le date del primo semestre per PD3 sono qui sotto. Il materiale didattico è ancora in preparazione.</p>
-        <section class="calendar" id="calendario" aria-labelledby="calendar-title">
-            <h2 id="calendar-title">Calendario lezioni · 2026/2027</h2>
-            <p>3° anno Product Design · modulo Computer graphic III - AI.</p>
-            <ul class="schedule-list">
-                <li><time datetime="2026-12-21">Lun 21 dic 2026</time><span>09:00–13:00</span></li>
-                <li><time datetime="2027-01-11">Lun 11 gen 2027</time><span>09:00–13:00</span></li>
-                <li><time datetime="2027-01-18">Lun 18 gen 2027</time><span>09:00–13:00</span></li>
-                <li><time datetime="2027-01-25">Lun 25 gen 2027</time><span>09:00–13:00</span></li>
-            </ul>
-        </section>
-        <a class="back" href="../../">← Torna all'hub dei corsi</a>
-        <footer>Giovanni Savelli · A.A. 2026/2027</footer>
+<body class="course-page" style="--accent: #34d399">
+<header class="top" id="top">
+  <div class="wrap">
+    <a class="marchio" href="../../"><i>GS</i><span>Giovanni Savelli<small>Corsi AANT 2026/27</small></span></a>
+    <nav class="menu" aria-label="Menu principale">
+      <a class="bordo" href="../../"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 12H5M11 6l-6 6 6 6"/></svg><span class="solo-desk">Tutti i corsi</span><span class="solo-tel">Corsi</span></a>
+      <button type="button" id="btn-leggibile" aria-pressed="false" aria-label="Alta leggibilità">Aa</button>
+    </nav>
+  </div>
+</header>
+<main class="wrap">
+  <section class="course-hero" aria-labelledby="course-title">
+    <div>
+      <nav class="course-crumbs" aria-label="Sei in">
+        <ol><li><a href="../../">Corsi</a></li><li><a href="../../#corsi">Product Design</a></li><li aria-current="page">Intelligenza artificiale</li></ol>
+      </nav>
+      <p class="course-status etichetta">Calendario disponibile</p>
+      <h1 class="course-heading" id="course-title">Intelligenza artificiale</h1>
+      <p class="course-lead">Intelligenza artificiale per Product Design. Terzo anno, classe PD3.</p>
+      <div class="course-actions">
+        <a class="btn pieno" href="#calendario">Consulta il calendario<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+        <a class="btn vuoto" href="../../#corsi">Tutti i corsi</a>
+      </div>
     </div>
+    <div class="course-hero-mark" aria-hidden="true"><span>IA</span><small>Esplorazione / Design</small></div>
+  </section>
+  <div class="course-facts">
+    <dl>
+        <div><dt>Docente</dt><dd>Giovanni Savelli</dd></div>
+        <div><dt>Anno accademico</dt><dd>2026/27</dd></div>
+        <div><dt>Indirizzo</dt><dd>Product Design</dd></div>
+        <div><dt>Classe</dt><dd>PD3</dd></div>
+        <div><dt>Quando</dt><dd>1° semestre</dd></div>
+    </dl>
+  </div>
+  <div class="course-content">
+    <nav class="course-tabs" role="tablist" aria-label="Sezioni del corso" data-initial-tab="calendario">
+      <button class="course-tab" id="tab-programma" type="button" role="tab" aria-controls="programma" aria-selected="false" tabindex="-1" data-panel="programma">Programma</button>
+      <button class="course-tab" id="tab-calendario" type="button" role="tab" aria-controls="calendario" aria-selected="true" tabindex="0" data-panel="calendario">Calendario</button>
+    </nav>
+    <section class="course-panel" id="programma" role="tabpanel" aria-labelledby="tab-programma" hidden>
+      <div class="course-empty">
+        <p class="etichetta">Programma · Product Design</p>
+        <h2>Il corso prende forma</h2>
+        <p>Il programma è in preparazione. Le lezioni, gli appunti, i video e le risorse del corso saranno raccolti in questo spazio.</p>
+        <p>Le date delle lezioni sono già disponibili nella sezione Calendario.</p>
+      </div>
+    </section>
+    <section class="course-panel" id="calendario" role="tabpanel" aria-labelledby="tab-calendario">
+      <div class="course-section-head">
+        <p class="etichetta">PD3 · Primo semestre</p>
+        <h2>Calendario lezioni</h2>
+        <p class="course-panel-intro">3° anno Product Design · modulo Computer graphic III - AI.</p>
+      </div>
+      <ol class="course-schedule" aria-label="Date delle lezioni PD3">
+        <li><span class="etichetta">Lezione 1</span><time datetime="2026-12-21">Lunedì 21 dicembre 2026</time><span>09:00–13:00</span></li>
+        <li><span class="etichetta">Lezione 2</span><time datetime="2027-01-11">Lunedì 11 gennaio 2027</time><span>09:00–13:00</span></li>
+        <li><span class="etichetta">Lezione 3</span><time datetime="2027-01-18">Lunedì 18 gennaio 2027</time><span>09:00–13:00</span></li>
+        <li><span class="etichetta">Lezione 4</span><time datetime="2027-01-25">Lunedì 25 gennaio 2027</time><span>09:00–13:00</span></li>
+      </ol>
+    </section>
+  </div>
+</main>
+<footer class="wrap course-footer">
+  <div class="grande-firma" aria-hidden="true">Intelligenza</div>
+  <div class="grande-firma" aria-hidden="true">artificiale</div>
+  <div class="piede">
+    <a href="../../"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 12H5M11 6l-6 6 6 6"/></svg>Tutti i corsi del docente</a>
+    <span>Intelligenza artificiale · Product Design · Giovanni Savelli · 2026/27</span>
+  </div>
+</footer>
+<script src="../../assets/fx/effetti.js"></script>
+<script src="../../assets/studio.js"></script>
+<script src="../../assets/course-tabs.js?v=unified-20261014"></script>
 </body>
 </html>

@@ -42,10 +42,6 @@ body.gs-course--photoshop .hero .subtitle { max-width:41ch; margin:26px 0 0; col
 body.gs-course--photoshop .hero .meta { gap:8px; margin-top:25px; }
 body.gs-course--photoshop .hero .meta span { padding:7px 11px; border-color:var(--line-2); border-radius:6px; color:var(--ink-2); font:500 11px/1.35 var(--mono); }
 body.gs-course--photoshop .hero-actions { display:flex; flex-wrap:wrap; gap:9px; margin-top:34px; }
-body.gs-course--photoshop .hero-actions a { display:inline-flex; align-items:center; justify-content:space-between; gap:24px; min-height:48px; padding:11px 18px; border:1px solid var(--line-2); border-radius:999px; color:var(--ink); font:600 14px/1.25 var(--sans); text-decoration:none; transition:transform .25s var(--ease),border-color .25s,background-color .25s; }
-body.gs-course--photoshop .hero-actions a:first-child { border-color:var(--accent); background:var(--accent); color:#08141a; }
-body.gs-course--photoshop .hero-actions a:hover { transform:translateY(-2px); border-color:var(--accent); }
-body.gs-course--photoshop .hero-actions a:not(:first-child):hover { background:rgba(56,189,248,.1); }
 
 /* Una pila di livelli: illustrazione CSS, senza immagini o modelli esterni. */
 body.gs-course--photoshop .ps-art { position:relative; height:600px; min-width:0; border:0; background:none; box-shadow:none; }
@@ -84,16 +80,10 @@ body.gs-course--photoshop .ps-art { position:relative; height:600px; min-width:0
 body.gs-course--photoshop .shell > .notice { margin:0 0 22px; padding:18px 0; border:0; border-top:1px solid var(--line-2); border-bottom:1px solid var(--line-2); border-radius:0; background:transparent; }
 body.gs-course--photoshop .notice strong { color:var(--ink); font:600 16px/1.3 var(--sans); }
 body.gs-course--photoshop .notice p { color:var(--ink-2); font:400 13px/1.55 var(--sans); }
-body.gs-course--photoshop .notice a { min-height:44px; border-radius:999px; background:var(--accent); color:#07141b; font:600 13px/1.25 var(--sans); }
-body.gs-course--photoshop .notice a:hover { background:#77d3fb; }
 body.gs-course--photoshop .tabs { position:sticky; top:var(--course-header-height,76px); z-index:40; display:flex; flex-wrap:wrap; gap:8px; width:100%; margin:0; padding:13px 0; border-bottom:1px solid var(--line); background:rgba(10,10,13,.95); backdrop-filter:blur(14px); scroll-margin-top:calc(var(--course-header-height,76px) + 4px); }
-body.gs-course--photoshop .tabs > .tab-btn { min-height:46px; padding:9px 18px; border:1px solid var(--line-2); border-radius:999px; background:transparent; color:var(--ink-2); font:500 14px/1.2 var(--sans); }
-body.gs-course--photoshop .tabs > .tab-btn:hover { border-color:var(--accent); color:var(--ink); }
-body.gs-course--photoshop .tabs > .tab-btn[aria-selected="true"] { border-color:var(--accent); background:var(--accent); color:#07141b; }
 body.gs-course--photoshop .panel { min-height:320px; padding:clamp(28px,4vw,54px) 0 60px; border:0; border-radius:0; background:transparent; scroll-margin-top:var(--course-scroll-offset); }
 body.gs-course--photoshop :is(.lesson-opening,.video-frame) { scroll-margin-top:var(--course-scroll-offset); }
 body.gs-course--photoshop .lesson-jumps a { min-height:44px; }
-body.gs-course--photoshop .panel h2 { margin:0 0 14px; color:var(--ink); font:600 clamp(40px,5vw,70px)/1 var(--sans); letter-spacing:-.045em; }
 body.gs-course--photoshop .panel-intro { max-width:65ch; color:var(--ink-2); font-size:16px; }
 body.gs-course--photoshop .kicker { margin-bottom:15px; color:var(--accent); font:500 11px/1.2 var(--mono); }
 body.gs-course--photoshop .panel .notice { padding:20px 22px; border:1px solid rgba(56,189,248,.32); border-radius:16px; background:rgba(56,189,248,.08); }
@@ -129,10 +119,6 @@ body.gs-course--photoshop .video-choice span { color:var(--ink-2); }
 body.gs-course--photoshop .calendar-note { border-color:rgba(251,191,36,.35); }
 body.gs-course--photoshop .schedule-list span { white-space:normal; text-align:right; }
 
-body.gs-course--photoshop .site-footer { position:relative; display:flex; flex-wrap:wrap; gap:12px 24px; align-items:flex-end; justify-content:space-between; margin:70px 0 0; padding:110px 0 38px; border-top:1px solid var(--line); color:var(--ink-3); font:400 12px/1.5 var(--mono); overflow:hidden; }
-body.gs-course--photoshop .site-footer::before { content:"SAVELLI"; position:absolute; left:0; top:5px; color:transparent; -webkit-text-stroke:1px rgba(244,241,236,.2); font:600 clamp(70px,11vw,165px)/1 var(--sans); letter-spacing:-.06em; pointer-events:none; }
-body.gs-course--photoshop .site-footer a { color:var(--ink); }
-body.gs-course--photoshop .site-footer a:hover { color:var(--accent); }
 
 @media (max-width:1000px) {
   body.gs-course--photoshop .shell > .hero { grid-template-columns:minmax(0,1fr) minmax(0,.9fr); min-height:570px; }
@@ -164,7 +150,6 @@ body.gs-course--photoshop .site-footer a:hover { color:var(--accent); }
   body.gs-course--photoshop .gs-mobile-actions a,
   body.gs-course--photoshop .gs-mobile-actions button.gs-sections-button { border-color:var(--line-2); border-radius:999px; background:none; color:var(--ink); font:600 12px/1.2 var(--sans); }
   body.gs-course--photoshop .gs-mobile-actions a[aria-current="true"] { border-color:var(--accent); color:var(--accent); }
-  body.gs-course--photoshop .site-footer { padding-top:82px; }
 }
 @media (max-width:380px) {
   body.gs-course--photoshop .hero h1 { font-size:clamp(51px,15vw,60px); }

@@ -60,7 +60,7 @@
   const actionLinks = course.actions.map(([hash, label]) => `<a href="#${hash}" data-gs-jump="${hash}">${label}</a>`).join("");
   const topbar = document.createElement("div");
   topbar.className = "gs-global-header";
-  topbar.innerHTML = `<div class="gs-global-header-inner"><a class="gs-brand" href="/" aria-label="Tutti i corsi di Giovanni Savelli"><span class="gs-brand-mark">GS</span><span class="gs-brand-copy"><strong>Giovanni Savelli</strong><small>Hub docente / AANT</small></span></a><nav class="gs-header-actions" aria-label="Navigazione del corso"><a class="gs-all-courses" href="/">Tutti i corsi ↗</a>${actionLinks}</nav></div>`;
+  topbar.innerHTML = `<div class="gs-global-header-inner"><a class="gs-brand" href="/" aria-label="Tutti i corsi di Giovanni Savelli"><span class="gs-brand-mark">GS</span><span class="gs-brand-copy"><strong>Giovanni Savelli</strong><small>Corsi AANT 2026/27</small></span></a><nav class="gs-header-actions" aria-label="Navigazione del corso"><a class="gs-all-courses" href="/">Tutti i corsi ↗</a>${actionLinks}</nav></div>`;
   document.body.insertBefore(topbar, document.body.firstChild);
   const accessibilityButton = document.querySelector(".fab-accessibility");
   if (accessibilityButton) topbar.querySelector(".gs-global-header-inner").appendChild(accessibilityButton);
@@ -178,7 +178,7 @@
     const url = new URL(anchor.href);
     if (url.origin !== location.origin) continue;
     if (url.pathname !== "/" && (url.pathname === location.pathname || !entries[url.pathname])) continue;
-    url.searchParams.set("v", "check-20261013");
+    url.searchParams.set("v", "unified-20261014");
     anchor.href = url.href;
   }
 

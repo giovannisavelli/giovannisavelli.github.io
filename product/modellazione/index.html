@@ -1,67 +1,86 @@
 <!DOCTYPE html>
 <html lang="it">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Modellazione 3D · Product Design | AANT</title>
-    <meta name="description" content="Corso di Modellazione 3D per Product Design - Prof. Giovanni Savelli - AANT. In preparazione.">
-    <meta property="og:title" content="Modellazione 3D · Product Design">
-    <meta property="og:description" content="Corso in preparazione - Prof. Giovanni Savelli - AANT">
-    <meta name="theme-color" content="#07080c">
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📐</text></svg>">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&family=JetBrains+Mono:wght@400;600&family=Space+Grotesk:wght@700&display=swap" rel="stylesheet">
-
-    <!-- =====================================================================
-         PAGINA PROVVISORIA "IN PREPARAZIONE".
-         Quando il corso è pronto, sostituisci questo file con la pagina completa
-         (stesso nome: index.html, stessa cartella) e nell'hub (../../index.html)
-         cambia lo stato del corso da 'preparazione' a 'disponibile'.
-         ===================================================================== -->
-    <style>
-        :root { --bg: #07080c; --border: rgba(255,255,255,0.08); --text: #f5f5f7; --muted: #8b8b94; --c: #fb923c; --glow: rgba(251, 146, 60, 0.14); --wip: #fbbf24; }
-        *, *::before, *::after { box-sizing: border-box; }
-        body {
-            margin: 0; min-height: 100vh; background: var(--bg); color: var(--text); font-family: 'Inter', -apple-system, sans-serif;
-            -webkit-font-smoothing: antialiased; display: flex; align-items: center; justify-content: center; padding: 16px; overflow-x: hidden;
-        }
-        .bg-grid {
-            position: fixed; inset: 0; z-index: -2; pointer-events: none;
-            background-image: linear-gradient(rgba(255,255,255,0.035) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.035) 1px, transparent 1px);
-            background-size: 48px 48px;
-            -webkit-mask-image: radial-gradient(ellipse 70% 60% at 50% 40%, #000 20%, transparent 100%);
-                    mask-image: radial-gradient(ellipse 70% 60% at 50% 40%, #000 20%, transparent 100%);
-        }
-        .bg-glow { position: fixed; z-index: -1; width: 520px; height: 520px; border-radius: 50%; background: var(--c); filter: blur(110px); opacity: 0.22; top: 50%; left: 50%; transform: translate(-50%, -60%); pointer-events: none; }
-        .box { width: 100%; max-width: 520px; text-align: center; }
-        .icon { width: 64px; height: 64px; margin: 0 auto 22px; border-radius: 16px; display: grid; place-items: center; color: var(--c); background: var(--glow); border: 1px solid var(--border); }
-        .icon svg { width: 32px; height: 32px; fill: none; stroke: currentColor; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
-        .dept { font-family: 'JetBrains Mono', monospace; font-size: 12px; letter-spacing: 1px; text-transform: uppercase; color: var(--muted); }
-        h1 { margin: 10px 0 16px; font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: clamp(34px, 9vw, 52px); line-height: 1.05; letter-spacing: -0.02em; }
-        .status { display: inline-flex; align-items: center; gap: 8px; font-family: 'JetBrains Mono', monospace; font-size: 12px; text-transform: uppercase; letter-spacing: 0.5px; color: var(--wip); padding: 6px 12px; border-radius: 50px; border: 1px solid var(--border); }
-        .status::before { content: ''; width: 7px; height: 7px; border-radius: 50%; border: 1.5px solid var(--wip); }
-        p { margin: 22px 0 32px; color: var(--muted); font-size: 15px; line-height: 1.6; }
-        a.back {
-            display: inline-block; padding: 14px 24px; border-radius: 50px; text-decoration: none; color: var(--text);
-            font-family: 'JetBrains Mono', monospace; font-weight: 600; font-size: 13px; border: 1px solid var(--c); background: var(--glow); transition: transform 0.2s ease;
-        }
-        a.back:hover { transform: translateY(-2px); }
-        footer { margin-top: 48px; font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--muted); }
-    </style>
-    <link rel="stylesheet" href="../../design/course.css?v=ux-20261012">
-    <script src="../../design/course.js?v=check-20261013" defer></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Modellazione 3D · Product Design | AANT</title>
+  <meta name="description" content="Modellazione 3D per Product Design · Giovanni Savelli · AANT. Corso in preparazione.">
+  <meta property="og:title" content="Modellazione 3D · Product Design">
+  <meta property="og:description" content="Corso in preparazione · Giovanni Savelli · AANT 2026/27">
+  <meta name="theme-color" content="#0a0a0d">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='24' fill='%230a0a0d'/%3E%3Ctext x='50' y='66' text-anchor='middle' font-family='sans-serif' font-size='48' font-weight='700' fill='%239d7bff'%3E3D%3C/text%3E%3C/svg%3E">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Geist:wght@100..900&family=Geist+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../assets/studio.css">
+  <link rel="stylesheet" href="../../assets/course-ui.css?v=unified-20261014">
 </head>
-<body class="gs-course gs-course--modellazione-product">
-    <div class="bg-grid"></div>
-    <div class="bg-glow"></div>
-
-    <div class="box" role="main">
-        <div class="icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="5" r="2"/><path d="M11 6.8 5.5 21"/><path d="M13 6.8 18.5 21"/><path d="M7.6 15.5h8.8"/></svg></div>
-        <span class="dept">AANT · Product Design</span>
-        <h1>Modellazione 3D</h1>
-        <span class="status">In preparazione</span>
-        <p>Il corso è in preparazione. Programma e materiali compariranno qui quando saranno pronti. Le date saranno pubblicate dopo la conferma del calendario.</p>
-        <a class="back" href="../../">← Torna all'hub dei corsi</a>
-        <footer>Giovanni Savelli · A.A. 2026/2027</footer>
+<body class="course-page" style="--accent: #9d7bff">
+<header class="top" id="top">
+  <div class="wrap">
+    <a class="marchio" href="../../"><i>GS</i><span>Giovanni Savelli<small>Corsi AANT 2026/27</small></span></a>
+    <nav class="menu" aria-label="Menu principale">
+      <a class="bordo" href="../../"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 12H5M11 6l-6 6 6 6"/></svg><span class="solo-desk">Tutti i corsi</span><span class="solo-tel">Corsi</span></a>
+      <button type="button" id="btn-leggibile" aria-pressed="false" aria-label="Alta leggibilità">Aa</button>
+    </nav>
+  </div>
+</header>
+<main class="wrap">
+  <section class="course-hero" aria-labelledby="course-title">
+    <div>
+      <nav class="course-crumbs" aria-label="Sei in">
+        <ol><li><a href="../../">Corsi</a></li><li><a href="../../#corsi">Product Design</a></li><li aria-current="page">Modellazione 3D</li></ol>
+      </nav>
+      <p class="course-status etichetta">Corso in preparazione</p>
+      <h1 class="course-heading" id="course-title">Modellazione 3D</h1>
+      <p class="course-lead">Modellazione tridimensionale per Product Design.</p>
+      <div class="course-actions">
+        <a class="btn pieno" href="#programma">Programma del corso<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+        <a class="btn vuoto" href="../../#corsi">Tutti i corsi</a>
+      </div>
     </div>
+    <div class="course-hero-mark" aria-hidden="true"><span>3D</span><small>Volume / Forma</small></div>
+  </section>
+  <div class="course-facts">
+    <dl>
+        <div><dt>Docente</dt><dd>Giovanni Savelli</dd></div>
+        <div><dt>Anno accademico</dt><dd>2026/27</dd></div>
+        <div><dt>Indirizzo</dt><dd>Product Design</dd></div>
+        <div><dt>Programma</dt><dd>In preparazione</dd></div>
+        <div><dt>Calendario</dt><dd>Date in arrivo</dd></div>
+    </dl>
+  </div>
+  <div class="course-content">
+    <nav class="course-tabs" role="tablist" aria-label="Sezioni del corso" data-initial-tab="programma">
+      <button class="course-tab" id="tab-programma" type="button" role="tab" aria-controls="programma" aria-selected="true" tabindex="0" data-panel="programma">Programma</button>
+      <button class="course-tab" id="tab-calendario" type="button" role="tab" aria-controls="calendario" aria-selected="false" tabindex="-1" data-panel="calendario">Calendario</button>
+    </nav>
+    <section class="course-panel" id="programma" role="tabpanel" aria-labelledby="tab-programma">
+      <div class="course-empty">
+        <p class="etichetta">Programma · Product Design</p>
+        <h2>Il corso prende forma</h2>
+        <p>Il programma è in preparazione. Le lezioni, gli appunti, i video e le risorse del corso saranno raccolti in questo spazio.</p>
+        <p>Le date verranno pubblicate dopo la conferma del calendario.</p>
+      </div>
+    </section>
+    <section class="course-panel" id="calendario" role="tabpanel" aria-labelledby="tab-calendario" hidden>
+      <div class="course-empty">
+        <p class="etichetta">Calendario · 2026/27</p>
+        <h2>Le date sono in arrivo</h2>
+        <p>Il calendario verrà pubblicato qui dopo la conferma dell’Accademia.</p>
+      </div>
+    </section>
+  </div>
+</main>
+<footer class="wrap course-footer">
+  <div class="grande-firma" aria-hidden="true">Modellazione 3D</div>
+  <div class="piede">
+    <a href="../../"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 12H5M11 6l-6 6 6 6"/></svg>Tutti i corsi del docente</a>
+    <span>Modellazione 3D · Product Design · Giovanni Savelli · 2026/27</span>
+  </div>
+</footer>
+<script src="../../assets/fx/effetti.js"></script>
+<script src="../../assets/studio.js"></script>
+<script src="../../assets/course-tabs.js?v=unified-20261014"></script>
 </body>
 </html>

@@ -224,11 +224,14 @@
     </style>
     <link rel="stylesheet" href="../../design/course.css?v=ux-20261012">
     <link rel="stylesheet" href="../../assets/studio.css">
-    <link rel="stylesheet" href="studio-photoshop.css?v=check-20261013">
-    <script src="../../design/course.js?v=check-20261013" defer></script>
+    <link rel="stylesheet" href="studio-photoshop.css?v=unified-20261014">
+    <script src="../../design/course.js?v=unified-20261014" defer></script>
+    <link rel="stylesheet" href="../../assets/course-ui.css?v=unified-20261014">
+    <script src="../../assets/fx/effetti.js" defer></script>
     <script src="../../assets/studio.js" defer></script>
 </head>
-<body class="gs-course gs-course--photoshop">
+<body class="course-page gs-course gs-course--photoshop">
+<button class="fab-accessibility" type="button" id="btn-leggibile" aria-pressed="false" aria-label="Alta leggibilità">Aa</button>
 <div class="alone" id="alone" aria-hidden="true"></div>
 <div class="shell">
     <div class="topbar">
@@ -255,15 +258,10 @@
         </div>
     </header>
 
-    <div class="notice">
-        <div><strong>Le prime tre schede sono online</strong><p>Dalle nostre interfacce ai livelli, fino alla lettura della luce con istogramma e Curve.</p></div>
-        <a href="#lezione-3">Vai alla terza lezione →</a>
-    </div>
-
     <main>
         <nav class="tabs" id="calendario" role="tablist" aria-label="Sezioni del corso">
-            <button class="tab-btn" type="button" role="tab" id="btn-programma" data-tab="tab-programma" aria-controls="tab-programma" aria-selected="true">Programma lezioni</button>
-            <button class="tab-btn" type="button" role="tab" id="btn-archivio" data-tab="tab-archivio" aria-controls="tab-archivio" aria-selected="false">Archivio lezioni</button>
+            <button class="tab-btn" type="button" role="tab" id="btn-programma" data-tab="tab-programma" aria-controls="tab-programma" aria-selected="true">Lezioni</button>
+            <button class="tab-btn" type="button" role="tab" id="btn-archivio" data-tab="tab-archivio" aria-controls="tab-archivio" aria-selected="false">Archivio</button>
             <button class="tab-btn" type="button" role="tab" id="btn-appunti" data-tab="tab-appunti" aria-controls="tab-appunti" aria-selected="false">Appunti</button>
             <button class="tab-btn" type="button" role="tab" id="btn-calendario" data-tab="tab-calendario" aria-controls="tab-calendario" aria-selected="false">Calendario</button>
             <button class="tab-btn" type="button" role="tab" id="btn-video" data-tab="tab-video" aria-controls="tab-video" aria-selected="false">Video</button>
@@ -284,7 +282,7 @@
                 <li><a href="#lezione-2"><span class="lesson-index-number">02</span><strong>I primi strumenti per scontornare</strong><small>2 ore</small><span class="lesson-index-arrow" aria-hidden="true">→</span></a></li>
                 <li><a href="#lezione-3"><span class="lesson-index-number">03</span><strong>Istogramma e Curve</strong><small>4 ore · 2A e 2B</small><span class="lesson-index-arrow" aria-hidden="true">→</span></a></li>
             </ol>
-            <p class="lesson-index-note">Le altre lezioni verranno nominate quando il programma sarà definito.</p>
+            <p class="lesson-index-note">Sono disponibili le prime tre lezioni. Le altre verranno nominate quando il programma sarà definito.</p>
         </section>
 
         <section class="panel" role="tabpanel" id="tab-archivio" aria-labelledby="btn-archivio" hidden>
@@ -574,8 +572,11 @@
         </section>
     </main>
 
-    <footer class="site-footer"><span>Photoshop · Interior Design · Giovanni Savelli · A.A. 2026/2027</span><a href="../../">← Tutti i corsi del docente</a></footer>
 </div>
+<footer class="wrap course-footer">
+    <div class="grande-firma" aria-hidden="true">Photoshop</div>
+    <div class="piede"><a href="../../">← Tutti i corsi del docente</a><span>Photoshop · Interior Design · Giovanni Savelli · 2026/27</span></div>
+</footer>
 
 <script>
     // Ogni scheda ha un indirizzo condivisibile. Il programma apre la pagina ora che la prima lezione è disponibile.
