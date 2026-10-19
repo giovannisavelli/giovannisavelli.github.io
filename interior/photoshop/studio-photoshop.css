@@ -105,6 +105,10 @@ body.gs-course--photoshop :is(.lesson-route h4,.exercise-card h4,.lesson-section
 body.gs-course--photoshop :is(.exercise-card--chair,.exercise-card--apple) { border-color:var(--line-2); }
 body.gs-course--photoshop .curve-figure { border-color:var(--line-2); background:var(--bg-2); }
 body.gs-course--photoshop .curve-figure figcaption small { color:var(--ink-3); }
+body.gs-course--photoshop .adjustment-list { max-width:860px; margin:16px 0 0; padding:0; list-style:none; border-top:1px solid var(--line-2); }
+body.gs-course--photoshop .adjustment-list li { display:grid; grid-template-columns:minmax(180px,.42fr) minmax(0,1fr); gap:22px; padding:15px 0; border-bottom:1px solid var(--line-2); }
+body.gs-course--photoshop .adjustment-list strong { color:var(--ink); font:600 15px/1.5 var(--sans); }
+body.gs-course--photoshop .adjustment-list span { color:var(--ink-2); font:400 14px/1.55 var(--sans); }
 body.gs-course--photoshop :is(.lesson-materials,.shortcut-lead) { border-color:rgba(56,189,248,.3); background:rgba(56,189,248,.07); }
 body.gs-course--photoshop :is(.lesson-materials a,.resource-link,.video-start) { border-radius:999px; background:var(--accent); color:#07141b; }
 body.gs-course--photoshop :is(.lesson-materials a,.resource-link,.video-start):hover { background:#77d3fb; }
@@ -154,6 +158,9 @@ body.gs-course--photoshop .schedule-list span { white-space:normal; text-align:r
   .ps-art-frame { transform:translateX(-50%) scale(.55); }
   body.gs-course--photoshop .hero-actions a { flex:1 1 auto; }
   body.gs-course--photoshop .hero .meta span { font-size:10px; }
+}
+@media (max-width:620px) {
+  body.gs-course--photoshop .adjustment-list li { grid-template-columns:1fr; gap:3px; }
 }
 @media (prefers-reduced-motion:reduce) {
   body.gs-course--photoshop .hero-actions a,
