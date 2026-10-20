@@ -81,7 +81,25 @@ body.gs-course--photoshop .notice p { color:var(--ink-2); font:400 13px/1.55 var
 body.gs-course--photoshop .tabs { position:sticky; top:var(--course-header-height,76px); z-index:40; display:flex; flex-wrap:wrap; gap:8px; width:100%; margin:0; padding:13px 0; border-bottom:1px solid var(--line); background:rgba(10,10,13,.95); backdrop-filter:blur(14px); scroll-margin-top:calc(var(--course-header-height,76px) + 4px); }
 body.gs-course--photoshop .panel { min-height:320px; padding:clamp(28px,4vw,54px) 0 60px; border:0; border-radius:0; background:transparent; scroll-margin-top:var(--course-scroll-offset); }
 body.gs-course--photoshop :is(.lesson-opening,.video-frame) { scroll-margin-top:var(--course-scroll-offset); }
-body.gs-course--photoshop .lesson-jumps a { min-height:44px; }
+body.gs-course--photoshop .lesson-notes { margin-top:34px; border-top:1px solid var(--line-2); }
+body.gs-course--photoshop .lesson-note { border-bottom:1px solid var(--line-2); scroll-margin-top:var(--course-scroll-offset); }
+body.gs-course--photoshop .lesson-note > summary { display:grid; grid-template-columns:44px minmax(0,1fr) 38px; align-items:center; gap:18px; min-height:92px; padding:16px 10px; border-radius:12px; list-style:none; cursor:pointer; transition:background-color .2s ease; }
+body.gs-course--photoshop .lesson-note > summary::-webkit-details-marker { display:none; }
+body.gs-course--photoshop .lesson-note > summary::marker { content:""; }
+body.gs-course--photoshop .lesson-note > summary:hover,
+body.gs-course--photoshop .lesson-note[open] > summary { background:rgba(56,189,248,.065); }
+body.gs-course--photoshop .lesson-note > summary:focus-visible { outline:2px solid var(--accent); outline-offset:-2px; }
+body.gs-course--photoshop .lesson-note-number { color:var(--accent); font:500 14px/1 var(--mono); }
+body.gs-course--photoshop .lesson-note-main { display:flex; flex-direction:column; gap:6px; min-width:0; }
+body.gs-course--photoshop .lesson-note-main strong { color:var(--ink); font:600 clamp(19px,2.5vw,27px)/1.18 var(--sans); letter-spacing:-.025em; }
+body.gs-course--photoshop .lesson-note-main small { color:var(--ink-2); font:500 11px/1.3 var(--mono); }
+body.gs-course--photoshop .lesson-note-toggle { position:relative; width:38px; height:38px; border:1px solid var(--line-2); border-radius:50%; color:var(--accent); }
+body.gs-course--photoshop .lesson-note-toggle::before,
+body.gs-course--photoshop .lesson-note-toggle::after { content:""; position:absolute; top:50%; left:50%; width:12px; height:1.5px; border-radius:2px; background:currentColor; transform:translate(-50%,-50%); }
+body.gs-course--photoshop .lesson-note-toggle::after { transform:translate(-50%,-50%) rotate(90deg); }
+body.gs-course--photoshop .lesson-note[open] .lesson-note-toggle::after { opacity:0; }
+body.gs-course--photoshop .lesson-note-content { padding:16px 0 36px; }
+body.gs-course--photoshop .lesson-note .lesson-opening { margin-top:0; }
 body.gs-course--photoshop .panel-intro { max-width:65ch; color:var(--ink-2); font-size:16px; }
 body.gs-course--photoshop .kicker { margin-bottom:15px; color:var(--accent); font:500 11px/1.2 var(--mono); }
 body.gs-course--photoshop .panel .notice { padding:20px 22px; border:1px solid rgba(56,189,248,.32); border-radius:16px; background:rgba(56,189,248,.08); }
@@ -175,6 +193,11 @@ body.gs-course--photoshop .schedule-list span { white-space:normal; text-align:r
   body.gs-course--photoshop .hero .meta span { font-size:10px; }
 }
 @media (max-width:620px) {
+  body.gs-course--photoshop .lesson-notes { margin-top:26px; }
+  body.gs-course--photoshop .lesson-note > summary { grid-template-columns:30px minmax(0,1fr) 34px; gap:10px; min-height:78px; padding:12px 4px; }
+  body.gs-course--photoshop .lesson-note-main strong { font-size:18px; }
+  body.gs-course--photoshop .lesson-note-toggle { width:34px; height:34px; }
+  body.gs-course--photoshop .lesson-note-content { padding:12px 0 28px; }
   body.gs-course--photoshop .adjustment-item summary { min-height:60px; padding:12px; }
   body.gs-course--photoshop .adjustment-content { padding:0 28px 20px 12px; }
 }
@@ -182,6 +205,7 @@ body.gs-course--photoshop .schedule-list span { white-space:normal; text-align:r
   body.gs-course--photoshop .hero-actions a,
   body.gs-course--photoshop :is(.lesson-index a,.video-course-choice,.video-choice),
   body.gs-course--photoshop .adjustment-item summary,
+  body.gs-course--photoshop .lesson-note > summary,
   .ps-art-mask,.ps-art-layers,.ps-art-curve { transition:none; }
   body.gs-course--photoshop :is(.lesson-index a,.video-course-choice,.video-choice):hover,
   body.gs-course--photoshop .hero-actions a:hover { transform:none; }

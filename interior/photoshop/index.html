@@ -99,9 +99,6 @@
         .lesson-opening { scroll-margin-top: 82px; }
         .lesson-opening--second::after { content: "02"; }
         .lesson-opening--third::after { content: "03"; }
-        .lesson-jumps { display: flex; gap: 9px; flex-wrap: wrap; margin: 0 0 18px; }
-        .lesson-jumps a { display: inline-flex; align-items: center; min-height: 42px; padding: 9px 13px; border: 1px solid var(--border); border-radius: 9px; background: var(--surface-strong); color: var(--text); font-size: 12px; font-weight: 700; text-decoration: none; }
-        .lesson-jumps a:hover, .lesson-jumps a:focus-visible { border-color: var(--accent); color: var(--accent); }
         .lesson-index { display: grid; gap: 11px; max-width: 830px; margin: 0; padding: 0; list-style: none; }
         .lesson-index a { display: grid; grid-template-columns: 42px minmax(0, 1fr) auto 20px; align-items: center; gap: 13px; min-height: 72px; padding: 12px 17px; border: 1px solid var(--border); border-radius: 13px; background: var(--surface-strong); color: var(--text); text-decoration: none; }
         .lesson-index a:hover, .lesson-index a:focus-visible { border-color: var(--accent); background: #1b2c3c; }
@@ -224,7 +221,7 @@
     </style>
     <link rel="stylesheet" href="../../design/course.css?v=sections-20261014">
     <link rel="stylesheet" href="../../assets/studio.css">
-    <link rel="stylesheet" href="studio-photoshop.css?v=esempi-regolazioni-20261019">
+    <link rel="stylesheet" href="studio-photoshop.css?v=appunti-compatti-20261020">
     <script src="../../design/course.js?v=sections-20261014" defer></script>
     <link rel="stylesheet" href="../../assets/course-ui.css?v=sections-20261014">
     <script src="../../assets/fx/effetti.js" defer></script>
@@ -295,9 +292,12 @@
         <section class="panel" role="tabpanel" id="tab-appunti" aria-labelledby="btn-appunti" hidden>
             <p class="kicker">Il piccolo manuale del corso</p>
             <h2>Appunti delle lezioni</h2>
-            <p class="panel-intro">Qui trovi le spiegazioni delle lezioni e, quando disponibili, le prove pratiche. Il programma e il calendario mostrano solo i titoli per orientarti rapidamente.</p>
-            <nav class="lesson-jumps" aria-label="Vai a una lezione"><a href="#lezione-1">01 · Conosciamoci</a><a href="#lezione-2">02 · I primi strumenti per scontornare</a><a href="#lezione-3">03 · Istogramma e regolazioni</a></nav>
-            <article class="lesson-opening" id="lezione-1" aria-labelledby="lesson-one-title">
+            <p class="panel-intro">Qui trovi le spiegazioni delle lezioni e, quando disponibili, le prove pratiche. Apri la lezione che ti serve.</p>
+            <div class="lesson-notes" role="group" aria-label="Appunti delle lezioni">
+            <details class="lesson-note" id="lezione-1" name="appunti-lezioni">
+                <summary><span class="lesson-note-number">01</span><span class="lesson-note-main"><strong>Conosciamoci</strong><small>2 ore</small></span><span class="lesson-note-toggle" aria-hidden="true"></span></summary>
+                <div class="lesson-note-content">
+            <article class="lesson-opening" aria-labelledby="lesson-one-title">
                 <p class="lesson-label">Prima lezione · 2 ore</p>
                 <h3 id="lesson-one-title">Conosciamoci<span>.</span></h3>
                 <p class="lesson-deck">Prima di lavorare insieme sulle immagini, scopriamo chi siamo e come ci si orienta nel programma.</p>
@@ -323,8 +323,13 @@
                 </section>
             </div>
             <div class="lesson-end"><p>Questo è il punto di partenza. Le prossime lezioni daranno profondità a ciò che oggi iniziamo a conoscere.</p><a href="#calendario">Guarda date e orari →</a></div>
+                </div>
+            </details>
 
-            <article class="lesson-opening lesson-opening--second" id="lezione-2" aria-labelledby="lesson-two-title">
+            <details class="lesson-note" id="lezione-2" name="appunti-lezioni">
+                <summary><span class="lesson-note-number">02</span><span class="lesson-note-main"><strong>I primi strumenti per scontornare</strong><small>2 ore</small></span><span class="lesson-note-toggle" aria-hidden="true"></span></summary>
+                <div class="lesson-note-content">
+            <article class="lesson-opening lesson-opening--second" aria-labelledby="lesson-two-title">
                 <p class="lesson-label">Seconda lezione · 2 ore</p>
                 <h3 id="lesson-two-title">Non esiste uno <span>strumento unico.</span></h3>
                 <p class="lesson-deck">Una sedia e una mela, due contorni diversi. Prima capiamo come funzionano livelli e selezioni, poi proviamo pennello e lazo su entrambi.</p>
@@ -358,8 +363,13 @@
                 <p><strong>Dimensione e durezza:</strong> se passi da 100 px a 50 px lasciando la durezza al 100%, l’impostazione resta 100%. Il bordo occupa però meno pixel e può apparire diverso. Ingrandisci, osserva la transizione e ammorbidisci il pennello se il risultato lo richiede.</p>
             </div>
             <div class="lesson-materials"><div><strong>File dell’esercizio</strong><p>Nella cartella Scontorno trovi il JPG della sedia e <em>Mela.tif</em>. Scaricali prima di iniziare e conserva le prove in un PSD: foto originale sotto, versioni colorate su livelli trasparenti separati.</p></div><a href="https://drive.google.com/drive/folders/1P75fdlznkZRsj4Gv88O6EybMpIsw72m1" target="_blank" rel="noopener noreferrer">Apri sedia e mela ↗</a></div>
+                </div>
+            </details>
 
-            <article class="lesson-opening lesson-opening--third" id="lezione-3" aria-labelledby="lesson-three-title">
+            <details class="lesson-note" id="lezione-3" name="appunti-lezioni">
+                <summary><span class="lesson-note-number">03</span><span class="lesson-note-main"><strong>Istogramma e regolazioni</strong><small>4 ore</small></span><span class="lesson-note-toggle" aria-hidden="true"></span></summary>
+                <div class="lesson-note-content">
+            <article class="lesson-opening lesson-opening--third" aria-labelledby="lesson-three-title">
                 <p class="lesson-label">Terza lezione · 4 ore</p>
                 <h3 id="lesson-three-title">Istogramma e <span>regolazioni.</span></h3>
                 <p class="lesson-deck">Leggiamo i toni con l’istogramma e scegliamo come intervenire su luce, contrasto e colore. Le Curve sono il punto di partenza; poi confrontiamo altre cinque regolazioni utili.</p>
@@ -408,6 +418,9 @@
                 <details class="adjustment-item"><summary><strong>Che cos’è un alpha?</strong><span class="adjustment-icon" aria-hidden="true"></span></summary><div class="adjustment-content"><p>È una mappa in scala di grigi che conserva una sagoma: il bianco indica la zona da selezionare, il nero quella da escludere, i grigi un passaggio parziale. <em>Alpha.jpg</em> mostra la sagoma delle due sedie. Quando il file contiene un canale Alpha, apri <strong>Canali</strong> e fai <strong>Ctrl + clic</strong> su Windows o <strong>Command + clic</strong> su Mac sulla miniatura del canale per caricarlo come selezione.</p></div></details>
             </div>
             <div class="lesson-materials"><div><strong>Materiali · La stanza delle due sedie</strong><p>Apri le immagini della cartella, scegli la scena su cui lavorare e scarica il TIFF per esaminarlo in Photoshop: l’anteprima di Drive non riesce a mostrarlo perché è molto grande. Conserva il tuo lavoro in un file modificabile.</p></div><a href="https://drive.google.com/drive/folders/1p9wFOKeZNj1hH_lYF1ByswBp-PjsTHUo?usp=sharing" target="_blank" rel="noopener noreferrer">Apri i file dell’esercizio ↗</a></div>
+                </div>
+            </details>
+            </div>
         </section>
 
         <section class="panel" role="tabpanel" id="tab-calendario" aria-labelledby="btn-calendario" hidden>
@@ -639,12 +652,15 @@
 
     function showTabFromHash() {
         const lesson = document.getElementById(location.hash.slice(1));
-        const isLesson = lesson && lesson.classList.contains("lesson-opening");
+        const isLesson = lesson && lesson.classList.contains("lesson-note");
         const tab = Object.keys(TAB_NAMES).find(function (key) {
             return "#" + TAB_NAMES[key] === location.hash;
         });
         openTab(isLesson ? "tab-appunti" : tab || DEFAULT_TAB, false);
-        if (isLesson) scrollToCourseContent(lesson);
+        if (isLesson) {
+            lesson.open = true;
+            scrollToCourseContent(lesson);
+        }
         else if (tab) scrollToCourseContent(document.querySelector(".tabs"));
     }
 
@@ -672,7 +688,7 @@
         if (!link || link.target === "_blank") return;
         const hash = link.getAttribute("href");
         const target = document.getElementById(hash.slice(1));
-        const isLesson = target && target.classList.contains("lesson-opening");
+        const isLesson = target && target.classList.contains("lesson-note");
         const isTab = Object.values(TAB_NAMES).includes(hash.slice(1));
         if (!isLesson && !isTab) return;
         event.preventDefault();
