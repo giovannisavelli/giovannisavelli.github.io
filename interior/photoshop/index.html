@@ -95,10 +95,11 @@
         .lesson-end a { color: var(--accent); font-size: 13px; font-weight: 700; text-decoration: none; white-space: nowrap; }
         .lesson-end a:hover, .lesson-end a:focus-visible { text-decoration: underline; }
         .lesson-opening--second { margin-top: 46px; background: radial-gradient(circle at 90% 5%, rgba(49,168,255,.18), transparent 35%), linear-gradient(135deg, #101e2e, #0b1421 72%); }
-        .lesson-opening--third { margin-top: 46px; background: radial-gradient(circle at 90% 5%, rgba(49,168,255,.17), transparent 36%), linear-gradient(135deg, #142335, #0b1421 72%); }
+        .lesson-opening--third, .lesson-opening--fourth { margin-top: 46px; background: radial-gradient(circle at 90% 5%, rgba(49,168,255,.17), transparent 36%), linear-gradient(135deg, #142335, #0b1421 72%); }
         .lesson-opening { scroll-margin-top: 82px; }
         .lesson-opening--second::after { content: "02"; }
         .lesson-opening--third::after { content: "03"; }
+        .lesson-opening--fourth::after { content: "04"; }
         .lesson-index { display: grid; gap: 11px; max-width: 830px; margin: 0; padding: 0; list-style: none; }
         .lesson-index a { display: grid; grid-template-columns: 42px minmax(0, 1fr) auto 20px; align-items: center; gap: 13px; min-height: 72px; padding: 12px 17px; border: 1px solid var(--border); border-radius: 13px; background: var(--surface-strong); color: var(--text); text-decoration: none; }
         .lesson-index a:hover, .lesson-index a:focus-visible { border-color: var(--accent); background: #1b2c3c; }
@@ -212,7 +213,7 @@
             .video-course-choice small { font-size: 11px; }
             .lesson-index a { grid-template-columns: 34px minmax(0, 1fr) 18px; gap: 8px; padding: 12px; }
             .lesson-index small { display: none; }
-            .lesson-opening--second, .lesson-opening--third { margin-top: 32px; }
+            .lesson-opening--second, .lesson-opening--third, .lesson-opening--fourth { margin-top: 32px; }
             .video-list { grid-template-columns: repeat(2, minmax(0, 1fr)); }
             .interface-step { min-height: 0; }
             .step-number { margin-bottom: 18px; }
@@ -278,8 +279,9 @@
                 <li><a href="#lezione-1"><span class="lesson-index-number">01</span><strong>Conosciamoci</strong><small>2 ore</small><span class="lesson-index-arrow" aria-hidden="true">→</span></a></li>
                 <li><a href="#lezione-2"><span class="lesson-index-number">02</span><strong>I primi strumenti per scontornare</strong><small>2 ore</small><span class="lesson-index-arrow" aria-hidden="true">→</span></a></li>
                 <li><a href="#lezione-3"><span class="lesson-index-number">03</span><strong>Istogramma e regolazioni</strong><small>4 ore · 2A e 2B</small><span class="lesson-index-arrow" aria-hidden="true">→</span></a></li>
+                <li><a href="#lezione-4"><span class="lesson-index-number">04</span><strong>Fotoinserimento: le due sedie</strong><small>4 ore · 2A e 2B</small><span class="lesson-index-arrow" aria-hidden="true">→</span></a></li>
             </ol>
-            <p class="lesson-index-note">Sono disponibili le prime tre lezioni. Le altre verranno nominate quando il programma sarà definito.</p>
+            <p class="lesson-index-note">Le prime tre lezioni e la traccia del laboratorio della quarta sono disponibili. Le successive verranno definite più avanti.</p>
         </section>
 
         <section class="panel" role="tabpanel" id="tab-archivio" aria-labelledby="btn-archivio" hidden>
@@ -372,7 +374,7 @@
             <article class="lesson-opening lesson-opening--third" aria-labelledby="lesson-three-title">
                 <p class="lesson-label">Terza lezione · 4 ore</p>
                 <h3 id="lesson-three-title">Istogramma e <span>regolazioni.</span></h3>
-                <p class="lesson-deck">Leggiamo i toni con l’istogramma e scegliamo come intervenire su luce, contrasto e colore. Le Curve sono il punto di partenza; poi confrontiamo altre cinque regolazioni utili.</p>
+                <p class="lesson-deck">Leggiamo i toni con l’istogramma e scegliamo come intervenire su luce, contrasto e colore. Le Curve sono il punto di partenza; poi usiamo pennelli e regolazioni per dare volume a una sfera disegnata.</p>
                 <div class="lesson-thought"><p>Prima di scegliere un controllo, chiediamoci <strong>che cosa vogliamo cambiare nell’immagine e perché.</strong> La regolazione viene dopo la decisione.</p></div>
             </article>
             <div class="lesson-route" aria-label="I tre passaggi della terza lezione">
@@ -407,7 +409,31 @@
                 <details class="adjustment-item"><summary><strong>Bilanciamento colore</strong><span class="adjustment-icon" aria-hidden="true"></span></summary><div class="adjustment-content"><p>Sposta il rapporto fra i colori separatamente nelle ombre, nei mezzi toni e nelle luci. Serve a correggere una dominante e a rendere più coerente la luce dell’immagine.</p><p class="adjustment-example"><strong>Esempio</strong> Una stanza illuminata da lampade calde sembra troppo gialla: raffreddi leggermente i mezzi toni senza rendere blu anche tutte le ombre.</p></div></details>
                 <details class="adjustment-item"><summary><strong>Bianco e nero</strong><span class="adjustment-icon" aria-hidden="true"></span></summary><div class="adjustment-content"><p>Converte l’immagine in scala di grigi lasciandoti decidere quanto chiaro diventa ciascun colore di partenza. Hai più controllo che togliendo semplicemente la saturazione.</p><p class="adjustment-example"><strong>Esempio</strong> Una poltrona rossa e una parete verde diventano grigi troppo simili: regoli i cursori dei rossi e dei verdi per distinguerle.</p></div></details>
             </div>
-            <h4 class="lesson-section-title">La stanza delle due sedie</h4>
+            <div class="lesson-materials">
+                <div><strong>Prima dell’esercizio · Perché percepiamo la terza dimensione</strong><p>Un’animazione narrata per osservare come luce e ombra fanno apparire tridimensionale una forma. Premi «Avvia» per iniziare; puoi anche seguirla senza voce.</p></div>
+                <a href="animazioni/ombre-capitolo-2/">Apri l’animazione →</a>
+            </div>
+            <h4 class="lesson-section-title">La sfera: costruire il volume</h4>
+            <p class="lesson-section-copy">Un cerchio rimane un’immagine piatta. Con il pennello, le sfumature, le luci e le ombre proviamo a farlo apparire come una sfera appoggiata su un piano. La direzione della luce è fissata in alto a sinistra, così ogni scelta può essere confrontata con la stessa sorgente.</p>
+            <div class="lesson-route" aria-label="I passaggi dell’esercizio della sfera">
+                <section><span>01 / SAGOMA</span><h4>Parti da un cerchio</h4><p>Lavora su un livello trasparente. Puoi tracciare la sagoma con il lazo oppure dipingerla con un pennello a durezza 100. Tieni il piano e l’ombra su livelli separati.</p></section>
+                <section><span>02 / VOLUME</span><h4>Fai leggere la luce</h4><p>Osserva come un bordo netto e una transizione morbida cambiano la forma percepita. Prova pennelli, sfumature, Curve ed Esposizione per costruire zone chiare e scure coerenti con la luce.</p></section>
+                <section><span>03 / CONTATTO</span><h4>Appoggiala sul piano</h4><p>Aggiungi l’ombra portata dalla sfera sul piano e una zona più scura nel punto di contatto. È lì che l’occlusione ambientale aiuta a farla sembrare davvero appoggiata.</p></section>
+            </div>
+            <div class="exercise-result"><p><strong>Da osservare:</strong> non conta rendere il cerchio perfetto. Confronta la sagoma iniziale e il risultato: quali passaggi fanno percepire il volume e quali fanno capire dove la sfera tocca il piano?</p></div>
+            <!-- Inserire qui il video dimostrativo della sfera quando Giovanni lo invia. -->
+                </div>
+            </details>
+
+            <details class="lesson-note" id="lezione-4" name="appunti-lezioni">
+                <summary><span class="lesson-note-number">04</span><span class="lesson-note-main"><strong>Fotoinserimento: le due sedie</strong><small>4 ore · 2A e 2B</small></span><span class="lesson-note-toggle" aria-hidden="true"></span></summary>
+                <div class="lesson-note-content">
+            <article class="lesson-opening lesson-opening--fourth" aria-labelledby="lesson-four-title">
+                <p class="lesson-label">Quarta lezione · 4 ore · 2A e 2B</p>
+                <h3 id="lesson-four-title">La stanza delle <span>due sedie.</span></h3>
+                <p class="lesson-deck">Dopo aver costruito luce e ombra su una forma semplice, proviamo a inserire un oggetto in una stanza: prospettiva, sagoma, appoggio e colore devono raccontare la stessa scena.</p>
+            </article>
+            <h4 class="lesson-section-title">Il laboratorio</h4>
             <p class="lesson-section-copy">Due sedie renderizzate, più versioni di una stanza e una mappa alpha. Il laboratorio è una prova di fotoinserimento: non devi usare ogni file, ma far sembrare credibile la presenza delle sedie nell’ambiente che scegli.</p>
             <div class="lesson-route" aria-label="I tre obiettivi del laboratorio con le sedie">
                 <section><span>01 / PROSPETTIVA</span><h4>Prima di inserire</h4><p>Confronta il punto di vista delle sedie con quello della stanza. Se la prospettiva non coincide, colore e ombre da soli non basteranno a convincere.</p></section>
@@ -435,7 +461,7 @@
                         <li><div class="schedule-lesson"><time datetime="2026-11-24">Mar 24 nov 2026</time><a href="#lezione-1">01 · Conosciamoci →</a></div><span>11:00–13:00</span></li>
                         <li><div class="schedule-lesson"><time datetime="2026-12-01">Mar 1 dic 2026</time><a href="#lezione-2">02 · I primi strumenti per scontornare →</a></div><span>11:00–13:00</span></li>
                         <li><div class="schedule-lesson"><time datetime="2026-12-15">Mar 15 dic 2026</time><a href="#lezione-3">03 · Istogramma e regolazioni →</a></div><span>09:00–13:00</span></li>
-                        <li><time datetime="2027-01-12">Mar 12 gen 2027</time><span>09:00–13:00</span></li>
+                        <li><div class="schedule-lesson"><time datetime="2027-01-12">Mar 12 gen 2027</time><a href="#lezione-4">04 · Fotoinserimento: le due sedie →</a></div><span>09:00–13:00</span></li>
                         <li><time datetime="2027-01-19">Mar 19 gen 2027</time><span>09:00–13:00</span></li>
                         <li><time datetime="2027-01-26">Mar 26 gen 2027</time><span>09:00–13:00</span></li>
                     </ul>
@@ -447,7 +473,7 @@
                         <li><div class="schedule-lesson"><time datetime="2026-11-24">Mar 24 nov 2026</time><a href="#lezione-1">01 · Conosciamoci →</a></div><span>14:00–16:00</span></li>
                         <li><div class="schedule-lesson"><time datetime="2026-12-01">Mar 1 dic 2026</time><a href="#lezione-2">02 · I primi strumenti per scontornare →</a></div><span>14:00–16:00</span></li>
                         <li><div class="schedule-lesson"><time datetime="2026-12-15">Mar 15 dic 2026</time><a href="#lezione-3">03 · Istogramma e regolazioni →</a></div><span>14:00–18:00</span></li>
-                        <li><time datetime="2027-01-12">Mar 12 gen 2027</time><span>14:00–18:00</span></li>
+                        <li><div class="schedule-lesson"><time datetime="2027-01-12">Mar 12 gen 2027</time><a href="#lezione-4">04 · Fotoinserimento: le due sedie →</a></div><span>14:00–18:00</span></li>
                         <li><time datetime="2027-01-26">Mar 26 gen 2027</time><span>14:00–18:00</span></li>
                     </ul>
                 </section>
