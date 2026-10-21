@@ -1,0 +1,867 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#0a0a0d">
+<title>Perché percepiamo la terza dimensione? · Photoshop Interior</title>
+<meta name="description" content="Un'animazione narrata su luce, ombra e percezione del volume. Dal corso Photoshop Interior di Giovanni Savelli.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500&family=Bebas+Neue&family=Barlow:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root { --bg:#0a0a0d; --panel:#111116; --line:rgba(244,241,236,.14); --ink:#f4f1ec; --muted:#c0bbbd; --accent:#38bdf8; }
+  *, *::before, *::after { box-sizing:border-box; }
+  html { background:var(--bg); }
+  body { margin:0; min-height:100svh; background:radial-gradient(ellipse at 82% 0%,rgba(56,189,248,.09),transparent 38%),var(--bg); color:var(--ink); font:400 16px/1.5 Geist,system-ui,sans-serif; -webkit-font-smoothing:antialiased; }
+  a { color:inherit; }
+  a:focus-visible, button:focus-visible { outline:2px solid var(--accent); outline-offset:3px; }
+  ::selection { background:var(--accent); color:#07141b; }
+  .site-header { border-bottom:1px solid var(--line); background:rgba(10,10,13,.94); }
+  .header-inner, .page-shell { width:min(1320px,calc(100% - 64px)); margin-inline:auto; }
+  .header-inner { display:flex; align-items:center; justify-content:space-between; gap:16px; min-height:76px; }
+  .brand { display:inline-flex; align-items:center; gap:12px; min-width:0; text-decoration:none; }
+  .brand-mark { display:grid; place-items:center; flex:none; width:38px; height:38px; border-radius:11px; background:var(--ink); color:var(--bg); font:700 14px/1 Geist,sans-serif; }
+  .brand-copy { display:grid; gap:1px; line-height:1.2; }
+  .brand-copy strong { font-size:14px; font-weight:600; }
+  .brand-copy small { color:var(--muted); font-size:12px; }
+  .brand:hover .brand-copy strong { color:var(--accent); }
+  .return-link { display:inline-flex; align-items:center; justify-content:center; gap:9px; min-height:44px; padding:10px 16px; border:1px solid rgba(56,189,248,.48); border-radius:999px; background:rgba(56,189,248,.1); color:var(--ink); font-size:14px; font-weight:600; text-decoration:none; transition:background .2s,border-color .2s; }
+  .return-link:hover { border-color:var(--accent); background:rgba(56,189,248,.19); }
+  .return-link svg { flex:none; width:17px; height:17px; stroke:var(--accent); }
+  .page-shell { padding:clamp(18px,2vw,26px) 0 48px; }
+  .intro, .stage-frame, .page-footer { width:min(100%,max(560px,calc(177.78svh - 586.67px)),1120px); margin-inline:auto; }
+  .intro { margin-bottom:16px; }
+  .context { margin:0 0 6px; color:var(--accent); font:500 11px/1.4 'Geist Mono',monospace; letter-spacing:.06em; text-transform:uppercase; }
+  h1 { margin:0; font:600 clamp(32px,3vw,44px)/1.06 Geist,system-ui,sans-serif; letter-spacing:-.045em; text-wrap:balance; }
+  h1 span { color:var(--accent); }
+  .intro p:last-child { max-width:75ch; margin:8px 0 0; color:var(--muted); font-size:14px; line-height:1.5; }
+  .stage-frame { padding:12px; border:1px solid var(--line); border-radius:18px; background:var(--panel); box-shadow:0 20px 50px rgba(0,0,0,.24); }
+  .palco { width:100%; aspect-ratio:16/9; position:relative; }
+  canvas { width:100%; height:100%; display:block; border-radius:10px; }
+  .comandi { display:flex; align-items:center; gap:9px; flex-wrap:wrap; padding-top:12px; }
+  button { min-height:44px; padding:9px 14px; border:1px solid rgba(244,241,236,.19); border-radius:9px; background:#1c1c22; color:var(--ink); font:600 14px/1.2 Geist,system-ui,sans-serif; cursor:pointer; transition:background .2s,border-color .2s; }
+  button:hover { border-color:rgba(56,189,248,.62); background:#292a31; }
+  button.primario { min-width:106px; border-color:var(--accent); background:var(--accent); color:#07141b; }
+  button.primario:hover { background:#7dd4fc; }
+  #indietro, #avanti, #ricomincia { width:44px; padding:0; }
+  .punti { display:flex; align-items:center; flex:1; gap:3px; min-width:136px; min-height:44px; flex-wrap:nowrap; }
+  .punti span { flex:1; min-width:4px; height:7px; border-radius:4px; background:#393943; cursor:pointer; transition:background .3s; }
+  .punti span.fatto { background:#246889; }
+  .punti span.ora { background:var(--accent); }
+  .contatore { min-width:82px; color:var(--muted); font:500 12px/1.2 'Geist Mono',monospace; font-variant-numeric:tabular-nums; text-align:right; }
+  .page-footer { display:flex; align-items:center; justify-content:space-between; gap:18px; flex-wrap:wrap; padding-top:20px; }
+  .page-footer p { margin:0; color:var(--muted); font-size:13px; }
+  .page-footer a { color:var(--accent); font-size:14px; font-weight:600; text-underline-offset:4px; }
+  .page-footer a:hover { color:#9bddff; }
+  @media (max-width:760px) {
+    .header-inner, .page-shell { width:calc(100% - 32px); }
+    .header-inner { min-height:0; padding:12px 0; }
+    .intro { margin-bottom:18px; }
+    h1 { font-size:clamp(34px,8vw,46px); }
+    .intro p:last-child { font-size:14px; }
+    .stage-frame { padding:8px; border-radius:13px; }
+    .comandi { gap:7px; }
+    #play { flex:1 1 calc(100% - 102px); }
+    .punti { order:4; flex:1 1 auto; min-width:0; min-height:24px; gap:2px; }
+    .punti span { min-width:4px; height:9px; }
+    .contatore { order:5; flex:0 0 82px; min-width:0; text-align:right; }
+    #voce { order:6; flex:1 1 auto; }
+    #ricomincia { order:7; }
+  }
+  @media (max-width:540px) {
+    .header-inner { flex-wrap:wrap; }
+    .return-link { width:100%; }
+    .page-shell { padding-top:24px; }
+    .page-footer { display:block; }
+    .page-footer a { display:inline-block; margin-top:8px; }
+  }
+  @media (prefers-reduced-motion:reduce) { *, *::before, *::after { transition:none !important; scroll-behavior:auto !important; } }
+</style>
+</head>
+<body>
+<header class="site-header">
+  <div class="header-inner">
+    <a class="brand" href="../../#lezione-3" aria-label="Torna al corso Photoshop Interior, lezione 3"><span class="brand-mark" aria-hidden="true">GS</span><span class="brand-copy"><strong>Giovanni Savelli</strong><small>Photoshop · Interior Design</small></span></a>
+    <a class="return-link" href="../../#lezione-3"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 12H5m7 7-7-7 7-7"/></svg>Torna alla lezione 3</a>
+  </div>
+</header>
+<main class="page-shell">
+  <div class="intro">
+    <div><p class="context">Photoshop · Interior / Lezione 3 / Animazione · 5:38</p><h1>Perché percepiamo la <span>terza dimensione?</span></h1><p>La luce e le ombre fanno apparire tridimensionale una forma. Guarda l’animazione con la voce, oppure seguila senza narrazione.</p></div>
+  </div>
+  <div class="stage-frame">
+    <div class="palco"><canvas id="c" width="1920" height="1080" aria-label="Animazione: perché percepiamo la terza dimensione"></canvas></div>
+    <div class="comandi" aria-label="Comandi dell’animazione">
+      <button id="indietro" title="Passaggio precedente (freccia sinistra)" aria-label="Passaggio precedente">◀</button>
+      <button id="play" class="primario" title="Avvia o ferma (barra spaziatrice)">▶ Avvia</button>
+      <button id="avanti" title="Passaggio successivo (freccia destra)" aria-label="Passaggio successivo">▶</button>
+      <div class="punti" id="punti"></div>
+      <span class="contatore" id="contatore"></span>
+      <button id="voce" title="Attiva o disattiva la narrazione">🔊 Con la voce</button>
+      <button id="ricomincia" title="Ricomincia da capo" aria-label="Ricomincia da capo">↺</button>
+    </div>
+  </div>
+  <div class="page-footer"><p>Materiale del corso di Photoshop · Interior Design</p><a href="../../#lezione-3">← Torna agli appunti della lezione 3</a></div>
+</main>
+
+<script>
+// ===================== SCENA 3D (proiezione ortogonale) =====================
+const cv = document.getElementById('c'), ctx = cv.getContext('2d');
+const W = 1920, H = 1080;
+const S = 175;                      // pixel per unità
+const OX = 840, OY = 800;           // dove cade a schermo l'origine del pavimento
+const PITCH = 16 * Math.PI / 180, cp = Math.cos(PITCH), sp = Math.sin(PITCH);
+const R = 1, C = [0, 1, 0], L = [-3.6, 3.6, 0.7];
+const VIEW = [0, sp, cp];           // verso la camera
+
+const add = (a, b) => [a[0]+b[0], a[1]+b[1], a[2]+b[2]];
+const sub = (a, b) => [a[0]-b[0], a[1]-b[1], a[2]-b[2]];
+const mul = (a, k) => [a[0]*k, a[1]*k, a[2]*k];
+const dot = (a, b) => a[0]*b[0] + a[1]*b[1] + a[2]*b[2];
+const len = a => Math.hypot(a[0], a[1], a[2]);
+const norm = a => mul(a, 1 / len(a));
+const cross = (a, b) => [a[1]*b[2]-a[2]*b[1], a[2]*b[0]-a[0]*b[2], a[0]*b[1]-a[1]*b[0]];
+const proj = P => [OX + P[0]*S, OY - (P[1]*cp - P[2]*sp)*S];
+const clamp = (x, a=0, b=1) => Math.min(b, Math.max(a, x));
+const mix = (a, b, t) => a + (b - a) * t;
+const smooth = (e0, e1, x) => { const t = clamp((x - e0) / (e1 - e0)); return t*t*(3 - 2*t); };
+const ease = t => t < .5 ? 4*t*t*t : 1 - Math.pow(-2*t + 2, 3) / 2;
+
+const LS = proj(L), CS = proj(C), RP = S * R;
+const toL = sub(L, C), dL = len(toL), U = mul(toL, 1 / dL);         // asse sfera → luce
+const E1 = norm(cross(U, [0, 1, 0])), E2 = cross(U, E1);
+const TERM = Math.acos(R / dL);                                       // angolo dell'equatore (tangenza)
+const TC = add(C, mul(U, R*R/dL)), TR = R * Math.sqrt(1 - R*R/(dL*dL));
+const POLE = add(C, mul(U, R));
+const ringPt = (th, ph) => add(C, add(mul(U, R*Math.cos(th)), mul(add(mul(E1, Math.cos(ph)), mul(E2, Math.sin(ph))), R*Math.sin(th))));
+const toGround = P => { const t = L[1] / (L[1] - P[1]); return add(L, mul(sub(P, L), t)); };
+const visible = P => dot(sub(P, C), VIEW) > 0;
+
+// raggi a ventaglio: si fermano sulla sfera o arrivano al pavimento
+const FAN = (() => {
+  const D = norm(sub(C, L)), up = [0, cp, -sp];
+  const w = norm(sub(up, mul(D, dot(up, D))));
+  const out = [];
+  for (const s of [-1.55, -1.15, -0.75, -0.4, -0.05, 0.3, 0.65, 0.95, 1.3]) {
+    const dir = norm(sub(add(C, mul(w, s*R)), L));
+    const b = dot(dir, sub(L, C)), c = dot(sub(L, C), sub(L, C)) - R*R, disc = b*b - c;
+    let t;
+    if (disc > 0) t = -b - Math.sqrt(disc);
+    else if (dir[1] < 0) t = L[1] / -dir[1];
+    else continue;
+    out.push({ end: proj(add(L, mul(dir, t))), hit: disc > 0 });
+  }
+  return out;
+})();
+// raggi tangenti: sfiorano l'equatore e disegnano il contorno dell'ombra
+const TANG = Array.from({ length: 10 }, (_, i) => {
+  const ph = i / 10 * Math.PI * 2 + 0.3;
+  const P = add(TC, add(mul(E1, TR*Math.cos(ph)), mul(E2, TR*Math.sin(ph))));
+  return { t: proj(P), g: proj(toGround(P)), vis: visible(P) };
+});
+const SHADOW = Array.from({ length: 72 }, (_, i) => {
+  const ph = i / 72 * Math.PI * 2;
+  return proj(toGround(add(TC, add(mul(E1, TR*Math.cos(ph)), mul(E2, TR*Math.sin(ph))))));
+});
+const CONTACT = proj([0, 0, 0]);
+// raggi che rimbalzano dal pavimento illuminato verso la sfera
+const BOUNCE = [[0.2, 0, 1.75], [0.85, 0, 1.55], [1.45, 0, 1.2]].map(G => {
+  const T = add(C, mul(norm(sub(G, C)), R));
+  return { g: proj(G), t: proj(T) };
+});
+// punti per le etichette
+const FAR_PT = proj(ringPt(2.35, Math.PI * 0.62));
+const PT_POLE = proj(POLE);
+const PT_TERM = (() => { let best = null; for (let i = 0; i < 360; i++) { const P = ringPt(TERM, i / 360 * Math.PI * 2); if (!visible(P)) continue; const q = proj(P); if (!best || q[1] < best[1]) best = q; } return best; })();
+const PT_CORE = proj(add(C, mul(norm([0.55, -0.35, 0.75]), R)));
+const PT_BOUNCE = proj(add(C, mul(norm([0.35, -0.75, 0.55]), R)));
+const PT_CAST = proj([2.6, 0, -0.5]);
+// ostacolo dell'introduzione, coincide con la sfera
+const A_PT = LS, B_PT = [LS[0] + 1330*Math.cos(0.4), LS[1] + 1330*Math.sin(0.4)];
+
+// ===================== SFERA (calcolata pixel per pixel) =====================
+const sph = document.createElement('canvas'), sz = Math.ceil(RP*2) + 4;
+sph.width = sph.height = sz;
+const sctx = sph.getContext('2d'), img = sctx.createImageData(sz, sz);
+const ORANGE = [240, 132, 76], PEACH = [255, 226, 192], HI = [255, 248, 236],
+      SHAD = [74, 34, 14], DEEP = [30, 16, 8], GREENB = [92, 128, 58], PAPER = [255, 196, 150];
+let sphKey = '';
+function renderSphere(p) {
+  const key = [p.paper, p.lit, p.core, p.bounce].map(v => v.toFixed(3)).join();
+  if (key === sphKey) return;
+  sphKey = key;
+  const d = img.data, half = sz / 2;
+  const edgeL = p.lit * 1.85, edgeC = TERM - 0.35 + p.core * (Math.PI - TERM + 0.7);
+  for (let y = 0; y < sz; y++) for (let x = 0; x < sz; x++) {
+    const i = (y*sz + x) * 4;
+    const dx = (x + .5 - half) / RP, dy = -(y + .5 - half) / RP, r2 = dx*dx + dy*dy;
+    const dist = Math.sqrt(r2) * RP;
+    const cover = clamp(RP - dist + 0.5);
+    if (cover <= 0) { d[i+3] = 0; continue; }
+    const nz = Math.sqrt(Math.max(0, 1 - r2));
+    const n = [dx, dy*cp + nz*sp, -dy*sp + nz*cp];
+    const P = add(C, n), l = norm(sub(L, P));
+    const s = dot(n, l), a = Math.acos(clamp(dot(n, U), -1, 1));
+    let c = ORANGE.slice();
+    for (let k = 0; k < 3; k++) c[k] = mix(c[k], PAPER[k], p.paper * 0.38);
+    // a luce o ombra spente le maschere devono valere zero ovunque (prima restava un pallino sul polo)
+    const litMask = smooth(edgeL + 0.14, edgeL - 0.14, a) * smooth(0, 0.06, p.lit);
+    const la = clamp(s);
+    const lighten = litMask * Math.pow(la, 0.85) * 0.88, hi = litMask * Math.pow(la, 9) * 0.6;
+    const darkAmt = smooth(0.38, -0.5, s);
+    const coreMask = smooth(edgeC + 0.18, edgeC - 0.18, a) * smooth(0, 0.06, p.core);
+    const down = clamp(-n[1]);
+    const bAmt = p.bounce * Math.pow(down, 1.1) * darkAmt * 0.78;
+    const ao = Math.exp(-P[1] * 7) * coreMask;
+    for (let k = 0; k < 3; k++) {
+      let v = mix(c[k], PEACH[k], lighten);
+      v = mix(v, HI[k], hi);
+      v = mix(v, SHAD[k], coreMask * darkAmt * 0.86);
+      v = mix(v, DEEP[k], coreMask * darkAmt * darkAmt * 0.45);
+      v = mix(v, GREENB[k], bAmt);
+      v = mix(v, DEEP[k], ao * 0.55);
+      c[k] = v;
+    }
+    d[i] = c[0]; d[i+1] = c[1]; d[i+2] = c[2]; d[i+3] = 255 * cover;
+  }
+  sctx.putImageData(img, 0, 0);
+}
+
+// ===================== PASSAGGI DELLA LEZIONE =====================
+const DEF = { light:0, intro:0, ab:0, dir:0, obst:0, opaque:0, wedge:0, sph:0, dims:0, paper:0,
+  rays:0, raysA:1, parts:0, par:0, lines:1, eqLine:1, lit:0, tan:0, inset:0, beam:0, core:0,
+  nearFar:0, mer:0, cast:0, castRays:0, eq:0, hint:0, poppy:0, poppyT:0, bRays:0, bounce:0, labels:0 };
+
+const STEPS = [
+  { h:['Perché percepiamo', 'la terza dimensione'],
+    txt:'Per capirlo dobbiamo fare un piccolo passo indietro e tornare a parlare della luce.', set:{} },
+  { h:['01 · La luce', 'va da A a B'],
+    txt:'Un fascio luminoso è un flusso di particelle che viaggiano in linea retta, da un punto A a un punto B.',
+    set:{ light:1, intro:[1, .6, 2.2], ab:[1, 1.6] } },
+  { h:['02 · La luce', 'diretta'],
+    txt:'Sole, torcia, neon, lampadina: qualunque sia la sorgente, i raggi proseguono dritti finché non incontrano qualcosa. Questa è la luce diretta.',
+    set:{ ab:0, dir:1 } },
+  { h:['03 · Un oggetto', 'che diffonde'],
+    txt:'Se sul loro cammino si mette un oggetto che diffonde la luce, le particelle si sparpagliano: dietro nasce un\'ombra morbida.',
+    set:{ dir:0, obst:1, wedge:[1, .5] } },
+  { h:['04 · Un oggetto', 'che blocca'],
+    txt:'Se invece l\'oggetto blocca del tutto la luce, dietro di lui si forma un cono d\'ombra. È proprio questo cono che ci aiuta a percepire la terza dimensione.',
+    set:{ opaque:[1, 0, 2] } },
+  { h:['05 · Cosa stiamo', 'guardando?'],
+    txt:'Un cerchio arancione su un fondo verde. Potrebbe essere un foglio di carta visto dall\'alto: il cervello legge solo due dimensioni, altezza e larghezza.',
+    set:{ light:0, intro:0, wedge:0, sph:1, obst:0, dims:[1, .8] } },
+  { h:['06 · Accendiamo', 'la luce'],
+    txt:'Se è davvero un foglio, la luce lo schiarisce tutto allo stesso modo: aumenta l\'illuminazione, ma la forma resta piatta.',
+    set:{ dims:0, light:[1, .4, 1.4], paper:[1, 1, 1.6] } },
+  { h:['07 · E se fosse', 'un oggetto in 3D?'],
+    txt:'I raggi partono dalla sorgente (A) e arrivano al pavimento (B). Se fra A e B c\'è un oggetto con tre dimensioni, per forza di cose succede qualcosa.',
+    set:{ paper:0, rays:[1, .4, 2.4], parts:[1, 1.6], ab:[1, 2] } },
+  { h:['08 · Paralleli', 'ed equatore'],
+    txt:'Disegniamo dei paralleli: il primo è il punto più vicino alla luce, poi il secondo, il terzo, il quarto… fino all\'equatore, il più importante.',
+    set:{ ab:0, parts:.25, par:[5, .3, 6] } },
+  { h:['09 · Dal disegno', 'alla luce'],
+    txt:'Ora vediamo una sfera, ma solo grazie a un artificio grafico. Sostituiamolo con la luce: il primo parallelo è il più luminoso, poi la luce si fa più sfumata e meno intensa.',
+    set:{ parts:0, lit:[1, .3, 6] } },
+  { h:['10 · Spegniamo', 'le linee'],
+    txt:'Tolti linee e raggi, il cervello ha già un dato in più: almeno su questo lato comincia a vedere la terza dimensione.',
+    set:{ lines:0, eqLine:0, rays:0 } },
+  { h:['11 · L\'equatore', 'la tangenza'],
+    txt:'I raggi che sfiorano la sfera la toccano per l\'ultima volta sull\'equatore: sono tangenti. Da qui in poi comincia l\'ombra.',
+    set:{ eqLine:1, tan:[1, .3, 1.6] } },
+  { h:['12 · Se la luce', 'fosse un laser'],
+    txt:'Se il raggio fosse un laser sottilissimo, dove tocca illumina e dove non tocca è buio pieno: il passaggio sarebbe netto.',
+    set:{ tan:.35, inset:1, beam:0 } },
+  { h:['13 · Un fascio,', 'non un laser'],
+    txt:'Il raggio è un fascio: al centro è luminoso al 100%, verso i bordi la luce cala. Per questo anche la parte in ombra riceve un po\' di luce, sempre meno.',
+    set:{ beam:[1, .3, 2.5] } },
+  { h:['14 · Il lato', 'oscuro'],
+    txt:'Accendiamo l\'ombra: più scendiamo verso la parte più lontana dalla luce, la più nascosta del solido, più l\'ombra aumenta.',
+    set:{ inset:0, tan:0, eqLine:0, core:[1, .5, 6] } },
+  { h:['15 · Da 2D', 'a 3D'],
+    txt:'Il foglio di carta è diventato un solido. Il cervello decodifica le informazioni: qui c\'è un punto vicino alla luce, là un punto lontano.',
+    set:{ nearFar:1 } },
+  { h:['16 · La controprova', 'i meridiani'],
+    txt:'I meridiani mostrano la tangenza dei raggi da un\'altra prospettiva: si vede l\'angolo con cui la luce si allontana dal solido.',
+    set:{ nearFar:0, mer:[1, .2, 3], eqLine:[1, 1.5] } },
+  { h:['17 · Manca ancora', 'qualcosa'],
+    txt:'Seguiamo i raggi che vanno da A a B sfiorando la sfera: sul pavimento disegnano una forma. È l\'ombra portata.',
+    set:{ mer:0, eqLine:0, castRays:[1, .3, 2], cast:[1, 1.8, 2.4] } },
+  { h:['18 · La formula', 'dell’ombra'],
+    txt:'L\'ombra è il risultato del fascio di luce meno il volume dell\'oggetto.',
+    set:{ eq:1 } },
+  { h:['19 · Il bagliore', 'verde'],
+    txt:'Nella parte bassa della sfera manca ancora un piccolo bagliore verde. Da dove arriva?',
+    set:{ eq:0, castRays:0, hint:1 } },
+  { h:['20 · Perché vediamo', 'i colori'],
+    txt:'Un papavero assorbe tutti i colori tranne il rosso: il rosso rimbalza, arriva al nostro occhio e lo vediamo rosso.',
+    set:{ hint:0, poppy:1, poppyT:[1, .5, 3.5] } },
+  { h:['21 · Il pavimento', 'fa lo stesso'],
+    txt:'La luce bianca tocca il pavimento: il verde assorbe tutto tranne il verde, che rimbalza e colora la parte bassa della sfera, insieme a un po\' di luce.',
+    set:{ poppy:0, poppyT:0, bRays:[1, .4, 2.5], bounce:[1, 2, 2.5] } },
+  { h:['Riepilogo', 'luce e ombra'],
+    txt:'Luce, ombra propria, ombra portata e luce riflessa: sono queste le informazioni che il cervello usa per percepire la terza dimensione.',
+    set:{ bRays:0, labels:[1, .3, 1.5] } },
+];
+
+// stato cumulativo di ogni passaggio
+const TARGET = [];
+STEPS.reduce((acc, st) => {
+  const next = { ...acc };
+  for (const [k, v] of Object.entries(st.set)) next[k] = Array.isArray(v) ? v[0] : v;
+  TARGET.push(next);
+  return next;
+}, { ...DEF });
+
+// ===================== NARRAZIONE: la voce guida l'animazione =====================
+// Ogni riga: [passaggio, frase letta dalla voce, cosa cambia quando inizia la frase].
+// Un valore può essere [valore, durata] oppure [valore, durata, ritardo].
+// Se cambi il testo, rigenera l'audio con: python -I proposta-claude/_strumenti/narrazione.py
+/*NARR*/
+const NARR = [
+  [0, "Perché percepiamo la terza dimensione?", {}],
+  [0, "Per capirlo, facciamo un piccolo passo indietro e torniamo a parlare della luce.", {}],
+  [1, "Un fascio luminoso è fatto di particelle di luce, che viaggiano da un punto A a un punto B.", {"light": [1, 1.5], "intro": [1, 2.5], "ab": [1, 1.2, 3]}],
+  [1, "E viaggiano sempre in linea retta.", {}],
+  [2, "Le sorgenti possono essere tante: il sole, una torcia, un neon, una lampadina.", {"ab": 0}],
+  [2, "Qualunque sia la sorgente, i raggi partono da lì e proseguono dritti, finché non incontrano qualcosa.", {"dir": [1, 1.2, 2]}],
+  [2, "Questa è la luce diretta.", {}],
+  [3, "Se invece sul loro cammino si mette un oggetto, la luce diventa indiretta.", {"dir": 0, "obst": 1}],
+  [3, "Un oggetto che diffonde la luce sparpaglia le particelle: dietro di lui nasce un'ombra morbida.", {"wedge": [1, 2]}],
+  [4, "Un oggetto che la blocca del tutto, invece, crea dietro di sé un cono d'ombra.", {"opaque": [1, 2]}],
+  [4, "Ed è proprio questo cono d'ombra che ci aiuta a percepire la terza dimensione.", {}],
+  [5, "Facciamo un esempio pratico. Che cosa stiamo guardando?", {"light": 0, "intro": 0, "wedge": 0, "sph": 1, "obst": 0}],
+  [5, "Un cerchio arancione, su un fondo verde.", {}],
+  [5, "Potrebbe essere un foglio di carta visto dall'alto, illuminato in modo perpendicolare.", {}],
+  [5, "Il cervello percepisce solo due dimensioni: l'altezza e la larghezza.", {"dims": 1}],
+  [6, "Proviamo ad accendere una fonte di luce.", {"dims": 0, "light": [1, 2]}],
+  [6, "Se il nostro cerchio è davvero un foglio di carta, la luce lo illumina quasi tutto allo stesso modo: aumenta l'illuminazione, ma la forma resta piatta.", {"paper": [1, 3]}],
+  [7, "Ma quando illuminiamo un oggetto tridimensionale, le cose cambiano.", {"paper": 0}],
+  [7, "Accendiamo i raggi: partono dalla sorgente, il punto A, e arrivano al pavimento, il punto B.", {"rays": [1, 3], "parts": [1, 1.5, 1.5], "ab": [1, 1.2, 3]}],
+  [7, "Se fra A e B c'è un oggetto con tre dimensioni, per forza di cose succede qualcosa.", {}],
+  [8, "Aggiungiamo qualche dettaglio sull'oggetto.", {"ab": 0, "parts": 0.25}],
+  [8, "Il primo parallelo segna il punto più vicino alla sorgente di luce.", {"par": [1, 1.5]}],
+  [8, "Poi il secondo, il terzo e il quarto parallelo.", {"par": [4, 3.5]}],
+  [8, "E infine il più importante: l'equatore.", {"par": [5, 2]}],
+  [9, "Adesso il cervello vede una sfera, ma solo grazie a un disegno: è un artificio grafico.", {"parts": 0}],
+  [9, "Sostituiamolo con la luce. Il primo parallelo è il più vicino alla sorgente, quindi il più illuminato.", {"lit": [0.32, 4, 1.5]}],
+  [9, "Il secondo è più lontano: la luce è più sfumata e meno intensa.", {"lit": [0.62, 4]}],
+  [9, "E sull'ultima parte, la luce è ancora più debole.", {"lit": [1, 5]}],
+  [10, "Ora spegniamo le linee e i raggi.", {"lines": 0, "eqLine": 0, "rays": 0}],
+  [10, "Il cervello ha già un'informazione in più: almeno su questo lato, comincia a vedere la terza dimensione.", {}],
+  [11, "Vediamo perché l'equatore è la parte più importante.", {"eqLine": 1}],
+  [11, "I raggi che sfiorano la sfera la toccano per l'ultima volta proprio sull'equatore: lì sono tangenti.", {"tan": [1, 2]}],
+  [11, "Da qui in poi, comincia l'ombra.", {}],
+  [12, "Ma perché l'ombra non comincia di colpo?", {"tan": 0.35, "inset": 1, "beam": 0}],
+  [12, "Se il raggio fosse un laser sottilissimo, dove tocca illuminerebbe, e dove non tocca sarebbe buio pieno.", {}],
+  [13, "Invece il raggio è un fascio: al centro è luminoso al cento per cento, e allontanandosi dal centro la luce cala.", {"beam": [1, 3]}],
+  [13, "Per questo anche la parte in ombra riceve ancora un filo di luce, sempre meno man mano che si allontana.", {}],
+  [14, "Andiamo a vedere cosa succede nella parte in ombra: il lato oscuro dell'oggetto.", {"inset": 0, "tan": 0, "eqLine": 0}],
+  [14, "Accendiamo un'ombra leggera. Poi sempre più scura, mentre scendiamo.", {"core": [0.5, 5]}],
+  [14, "Più ci avviciniamo alla parte più lontana dalla luce, la più nascosta del solido, più l'ombra aumenta.", {"core": [1, 6]}],
+  [15, "Guardate cosa è successo: il foglio di carta è diventato un solido. Da due, a tre dimensioni.", {}],
+  [15, "Il cervello decodifica le informazioni: qui c'è un punto vicino alla luce, e qui un punto lontano.", {"nearFar": 1}],
+  [16, "Come controprova, oltre ai paralleli accendiamo i meridiani.", {"nearFar": 0, "mer": [1, 4]}],
+  [16, "Mostrano la tangenza dei raggi da un'altra prospettiva, e fanno vedere come la luce si allontana dal solido.", {"eqLine": 1}],
+  [17, "Ma a questo solido manca ancora qualcosa.", {"mer": 0, "eqLine": 0}],
+  [17, "Seguiamo i raggi che vanno dal punto A al punto B, sfiorando la sfera: sul pavimento disegnano una forma.", {"castRays": [1, 3]}],
+  [17, "È la sua ombra portata.", {"cast": [1, 3]}],
+  [18, "L'ombra è il risultato fra il fascio di luce e il volume dell'oggetto.", {}],
+  [18, "Luce, meno volume, uguale ombra.", {"eq": 1}],
+  [19, "Resta un ultimo dettaglio: nella parte bassa della sfera c'è un piccolo bagliore verde. Da dove arriva?", {"eq": 0, "castRays": 0, "hint": 1}],
+  [19, "I raggi che toccano il pavimento non si fermano lì: rimbalzano verso un'altra parte.", {"hint": 0, "bRays": [1, 3]}],
+  [20, "Ma perché il bagliore è verde?", {"bRays": 0, "poppy": 1}],
+  [20, "Quando guardiamo un papavero rosso, vediamo l'unico colore che il papavero non assorbe.", {"poppyT": [0.5, 3]}],
+  [20, "Il papavero assorbe tutti i colori tranne il rosso, che rimbalza, arriva al nostro occhio e viene letto come rosso.", {"poppyT": [1, 3]}],
+  [21, "Lo stesso succede con il pavimento: la luce bianca contiene tutti i colori.", {"poppy": 0, "poppyT": 0, "bRays": [1, 3]}],
+  [21, "Il pavimento li assorbe tutti tranne il verde, che rimbalza e colora la parte bassa della sfera.", {"bounce": [1, 6]}],
+  [21, "Insieme al verde torna indietro anche una parte della luce, che schiarisce la zona in ombra.", {}],
+  [22, "Ricapitolando: luce, ombra propria, ombra portata e luce riflessa.", {"bRays": 0, "labels": [1, 1.5]}],
+  [22, "Sono queste le informazioni che il cervello usa per percepire la terza dimensione.", {}]
+];
+/*FINE NARR*/
+/*TEMPI*/
+const TIMES = [0.6, 3.55, 9.78, 16.89, 21.0, 27.47, 34.56, 37.99, 43.66, 50.61, 56.62, 63.11, 67.18, 70.71, 76.32, 82.37, 85.34, 95.67, 100.82, 107.34, 114.29, 117.72, 122.41, 127.02, 131.99, 138.26, 143.95, 148.9, 153.97, 157.4, 164.45, 168.4, 175.03, 179.2, 182.47, 190.34, 198.37, 206.0, 211.51, 216.26, 223.81, 230.7, 237.41, 242.34, 249.81, 253.52, 260.21, 263.38, 268.35, 272.86, 279.73, 287.36, 289.91, 295.2, 304.33, 310.41, 316.56, 322.99, 330.18];
+/*FINE TEMPI*/
+const VOICE = NARR.map((n, i) => [TIMES ? TIMES[i] : i * 6, i === 0 || NARR[i - 1][0] !== n[0] ? n[0] : null, n[2]]);
+const SUBS = NARR.map((n, i) => [VOICE[i][0], n[1]]);
+const KF = Object.fromEntries(Object.keys(DEF).map(k => [k, []]));
+VOICE.forEach(([tm, , set]) => { for (const [k, v] of Object.entries(set)) { const [to, d = 1.2, dl = 0] = Array.isArray(v) ? v : [v]; KF[k].push({ s: tm + dl, d, to }); } });
+for (const k in KF) KF[k].sort((a, b) => a.s - b.s);
+const STEP_AT = VOICE.filter(c => c[1] !== null).map(c => [c[0], c[1]]);
+function voiceValue(k, T) { let v = DEF[k]; for (const f of KF[k]) { if (T < f.s) break; v = mix(v, f.to, ease(clamp((T - f.s) / f.d))); } return v; }
+function voiceStep(T) { let s = 0; for (const [tm, k] of STEP_AT) if (T >= tm - 0.2) s = k; return s; }
+const stepStart = k => (STEP_AT.find(c => c[1] === k) || [0])[0];
+function subAt(T) { let s = ''; for (const [tm, x] of SUBS) { if (tm > T + 0.15) break; s = x; } return s; }
+// l'audio si carica tutto in memoria: così si può saltare in qualunque punto anche senza un server che lo permetta
+const AUDIO_FILE = 'ombre-capitolo-2-voce.mp3';
+const audio = new Audio();
+audio.preload = 'auto';
+let voice = true, pendingT = null;
+fetch(AUDIO_FILE).then(r => { if (!r.ok) throw 0; return r.blob(); })
+  .then(b => { audio.src = URL.createObjectURL(b); })
+  .catch(() => { audio.src = AUDIO_FILE; });
+audio.addEventListener('loadedmetadata', () => { if (pendingT !== null) { audio.currentTime = pendingT; pendingT = null; } });
+function setTime(T) { if (audio.readyState >= 1) audio.currentTime = T; else pendingT = T; }
+
+let cur = { ...DEF }, tweens = [], step = 0, stepT0 = 0, playing = false, headFade = 1, headT0 = -9, prevHead = null;
+const now = () => performance.now() / 1000;
+
+function goTo(k, smoothJump) {
+  k = clamp(k, 0, STEPS.length - 1);
+  const t = now();
+  const fwd = k === step + 1 && !smoothJump;
+  prevHead = STEPS[step].h; headT0 = t;
+  step = k; stepT0 = t; tweens = [];
+  const tgt = TARGET[k];
+  for (const key of Object.keys(DEF)) {
+    if (cur[key] === tgt[key]) continue;
+    let delay = 0, dur = fwd ? 1.4 : 0.9;
+    const spec = STEPS[k].set[key];
+    if (fwd && Array.isArray(spec)) { delay = spec[1] || 0; dur = spec[2] || 1.4; }
+    tweens.push({ key, from: cur[key], to: tgt[key], t0: t + delay, dur });
+  }
+  ui();
+}
+function holdTime(k) {
+  let end = 1.5;
+  for (const v of Object.values(STEPS[k].set)) if (Array.isArray(v)) end = Math.max(end, (v[1] || 0) + (v[2] || 1.4));
+  return Math.max(end + 1.5, 2.8 + STEPS[k].txt.length * 0.058);
+}
+
+// ===================== DISEGNO =====================
+const BG = '#21bd86';
+function glow(x, y, r, a) {
+  const g = ctx.createRadialGradient(x, y, 0, x, y, r);
+  g.addColorStop(0, `rgba(255,255,255,${a})`);
+  g.addColorStop(.28, `rgba(255,255,255,${a})`);
+  g.addColorStop(.55, `rgba(255,255,255,${a*.45})`);
+  g.addColorStop(1, 'rgba(255,255,255,0)');
+  ctx.fillStyle = g; ctx.beginPath(); ctx.arc(x, y, r, 0, Math.PI*2); ctx.fill();
+}
+function line(a, b, f = 1, col = 'rgba(255,255,255,.9)', w = 2.2, dash) {
+  if (f <= 0) return;
+  ctx.save(); ctx.strokeStyle = col; ctx.lineWidth = w; ctx.lineCap = 'round';
+  if (dash) ctx.setLineDash(dash);
+  ctx.beginPath(); ctx.moveTo(a[0], a[1]); ctx.lineTo(mix(a[0], b[0], f), mix(a[1], b[1], f)); ctx.stroke(); ctx.restore();
+}
+function text(s, x, y, size, align = 'left', a = 1, font = 'Bebas Neue', spacing = 0.18, col = '255,255,255') {
+  if (a <= 0) return;
+  ctx.save(); ctx.globalAlpha = a; ctx.fillStyle = `rgb(${col})`; ctx.textAlign = align; ctx.textBaseline = 'middle';
+  ctx.font = `${size}px "${font}"`;
+  if ('letterSpacing' in ctx) ctx.letterSpacing = `${size * spacing}px`;
+  ctx.fillText(s, x, y); ctx.restore();
+}
+function arrow(a, b, f, col, w = 2.4) {
+  if (f <= 0) return;
+  const e = [mix(a[0], b[0], f), mix(a[1], b[1], f)];
+  line(a, e, 1, col, w);
+  const ang = Math.atan2(b[1]-a[1], b[0]-a[0]);
+  ctx.save(); ctx.fillStyle = col; ctx.beginPath();
+  ctx.moveTo(e[0], e[1]);
+  ctx.lineTo(e[0] - 16*Math.cos(ang - .38), e[1] - 16*Math.sin(ang - .38));
+  ctx.lineTo(e[0] - 16*Math.cos(ang + .38), e[1] - 16*Math.sin(ang + .38));
+  ctx.fill(); ctx.restore();
+}
+function polyline3D(pts, f, col, w, dashHidden) {
+  const n = Math.max(0, Math.floor((pts.length - 1) * f));
+  ctx.save(); ctx.lineWidth = w; ctx.lineCap = 'round';
+  for (let i = 0; i < n; i++) {
+    const [a, va] = pts[i], [b, vb] = pts[i + 1];
+    if (!(va && vb) && !dashHidden) continue;
+    ctx.strokeStyle = va && vb ? col : dashHidden;
+    ctx.beginPath(); ctx.moveTo(a[0], a[1]); ctx.lineTo(b[0], b[1]); ctx.stroke();
+  }
+  ctx.restore();
+}
+const ring = (th, n = 120) => Array.from({ length: n + 1 }, (_, i) => { const P = ringPt(th, i / n * Math.PI * 2 - Math.PI/2); return [proj(P), visible(P)]; });
+const meridian = (ph, n = 80) => Array.from({ length: n + 1 }, (_, i) => { const P = ringPt(i / n * Math.PI, ph); return [proj(P), visible(P)]; });
+const RINGS = [0.26, 0.56, 0.84, 1.1].map(th => ring(th)), EQUATOR = ring(TERM, 160);
+const MERIDIANS = Array.from({ length: 12 }, (_, i) => meridian(i / 12 * Math.PI * 2));
+
+// particelle dell'introduzione
+const STREAMS = Array.from({ length: 70 }, (_, i) => {
+  const ang = -0.05 + (i / 69) * 1.25 + Math.sin(i * 12.9898) * 0.01;
+  return { ang, sp: 300 + (i * 97 % 13) * 22, ph: (i * 0.618) % 1 };
+});
+function circleHit(o, d, c, r) {
+  const oc = [o[0]-c[0], o[1]-c[1]], b = oc[0]*d[0] + oc[1]*d[1], cc = oc[0]*oc[0] + oc[1]*oc[1] - r*r, disc = b*b - cc;
+  return disc > 0 ? -b - Math.sqrt(disc) : -1;
+}
+
+function drawIntro(p, t) {
+  // cono d'ombra dietro l'ostacolo
+  if (p.wedge > 0) {
+    const dx = CS[0]-A_PT[0], dy = CS[1]-A_PT[1], d = Math.hypot(dx, dy), th = Math.atan2(dy, dx), al = Math.asin(RP / d);
+    const tl = Math.sqrt(d*d - RP*RP), far = 2600;
+    const pts = [th - al, th + al].map(a => [[A_PT[0] + tl*Math.cos(a), A_PT[1] + tl*Math.sin(a)], [A_PT[0] + far*Math.cos(a), A_PT[1] + far*Math.sin(a)]]);
+    ctx.save();
+    ctx.filter = `blur(${mix(46, 3, p.opaque)}px)`;
+    ctx.globalAlpha = p.wedge * mix(0.34, 0.42, p.opaque);
+    ctx.fillStyle = '#063d29';
+    ctx.beginPath(); ctx.moveTo(...pts[0][0]); ctx.lineTo(...pts[0][1]); ctx.lineTo(...pts[1][1]); ctx.lineTo(...pts[1][0]); ctx.closePath(); ctx.fill();
+    ctx.restore();
+    if (p.opaque > .5) {
+      text('CONO D\'OMBRA', CS[0] + 420, CS[1] + 40, 40, 'center', p.wedge * smooth(.5, 1, p.opaque) * .95);
+    } else {
+      text('OMBRA MORBIDA', CS[0] + 420, CS[1] + 40, 40, 'center', p.wedge * smooth(.5, 0, p.opaque) * .95);
+    }
+  }
+  // particelle
+  if (p.intro > 0) {
+    const reach = p.intro * 2200;
+    for (const s of STREAMS) {
+      const d = [Math.cos(s.ang), Math.sin(s.ang)];
+      const hit = p.obst > 0 ? circleHit(A_PT, d, CS, RP) : -1;
+      for (let k = 0; k < 3; k++) {
+        const u = ((t * s.sp / 2200 + s.ph + k / 3) % 1) * 2200;
+        if (u > reach) continue;
+        let x = A_PT[0] + d[0]*u, y = A_PT[1] + d[1]*u, a = .85;
+        if (hit > 0 && u > hit) {
+          if (p.opaque > .98) continue;
+          const seed = Math.sin((s.ang * 91 + Math.floor(t * s.sp / 2200 + s.ph + k / 3)) * 43758.5) * 0.5 + 0.5;
+          const ang2 = s.ang + (seed - .5) * 2.4 * p.obst;
+          const h = [A_PT[0] + d[0]*hit, A_PT[1] + d[1]*hit], rest = (u - hit) * 0.75;
+          x = mix(x, h[0] + Math.cos(ang2)*rest, p.obst); y = mix(y, h[1] + Math.sin(ang2)*rest, p.obst);
+          a *= (1 - p.opaque) * mix(1, .45, p.obst);
+        }
+        ctx.globalAlpha = a * p.intro;
+        ctx.fillStyle = '#fff';
+        ctx.beginPath(); ctx.arc(x, y, 3.2, 0, Math.PI*2); ctx.fill();
+        ctx.globalAlpha = a * p.intro * .25;
+        ctx.beginPath(); ctx.arc(x, y, 9, 0, Math.PI*2); ctx.fill();
+      }
+    }
+    ctx.globalAlpha = 1;
+  }
+  // l'ostacolo: vetro smerigliato che diventa opaco
+  if (p.obst > 0) {
+    ctx.save();
+    ctx.globalAlpha = p.obst * (1 - p.opaque);
+    ctx.fillStyle = 'rgba(235,255,247,.42)';
+    ctx.beginPath(); ctx.arc(CS[0], CS[1], RP, 0, Math.PI*2); ctx.fill();
+    ctx.strokeStyle = 'rgba(255,255,255,.8)'; ctx.lineWidth = 2; ctx.stroke();
+    ctx.globalAlpha = p.obst * p.opaque;
+    ctx.fillStyle = `rgb(${ORANGE})`;
+    ctx.beginPath(); ctx.arc(CS[0], CS[1], RP, 0, Math.PI*2); ctx.fill();
+    ctx.restore();
+  }
+  if (p.dir > 0) {
+    const m = [mix(A_PT[0], B_PT[0], .55), mix(A_PT[1], B_PT[1], .55)];
+    text('LUCE DIRETTA', m[0] + 30, m[1] - 70, 46, 'left', p.dir);
+    text('IN LINEA RETTA, DALLA SORGENTE IN POI', m[0] + 30, m[1] - 28, 24, 'left', p.dir * .85, 'Barlow', .12);
+  }
+}
+
+function drawAB(p, bPt) {
+  if (p.ab <= 0) return;
+  line(A_PT, bPt, p.ab, 'rgba(255,255,255,.95)', 2.4, [10, 10]);
+  ctx.save(); ctx.globalAlpha = p.ab; ctx.fillStyle = '#fff';
+  ctx.beginPath(); ctx.arc(bPt[0], bPt[1], 9, 0, Math.PI*2); ctx.fill(); ctx.restore();
+  text('A', A_PT[0] - 6, A_PT[1] - 70, 64, 'center', p.ab, 'Bebas Neue', 0, '15,70,48');
+  text('B', bPt[0] + 34, bPt[1] - 8, 64, 'center', p.ab);
+}
+
+function drawCast(p) {
+  if (p.cast <= 0) return;
+  const f = ease(clamp(p.cast));
+  const pts = SHADOW.map(q => [CONTACT[0] + (q[0] - CONTACT[0]) * f, CONTACT[1] + (q[1] - CONTACT[1]) * f]);
+  const path = () => { ctx.beginPath(); pts.forEach((q, i) => i ? ctx.lineTo(...q) : ctx.moveTo(...q)); ctx.closePath(); };
+  ctx.save();
+  ctx.fillStyle = '#073f2b';
+  ctx.filter = 'blur(16px)'; ctx.globalAlpha = .2 * p.cast; path(); ctx.fill();
+  ctx.filter = 'blur(3px)'; ctx.globalAlpha = .36 * p.cast; path(); ctx.fill();
+  ctx.filter = 'blur(10px)'; ctx.globalAlpha = .45 * p.cast;
+  ctx.beginPath(); ctx.ellipse(CONTACT[0] + 10, CONTACT[1] + 2, 125, 18, -0.04, 0, Math.PI*2); ctx.fill();
+  ctx.restore();
+}
+
+function drawInset(p) {
+  if (p.inset <= 0) return;
+  const x = 1190, y = 350, w = 600, h = 450, a = p.inset;
+  ctx.save(); ctx.globalAlpha = a;
+  ctx.fillStyle = 'rgba(6,50,34,.62)';
+  ctx.beginPath(); ctx.roundRect(x, y, w, h, 18); ctx.fill();
+  const b = p.beam, cx = x + 410, cy = y + 300, r = 100;
+  // sezione della sfera: luce da sinistra, passaggio netto (laser) o sfumato (fascio)
+  const soft = mix(0.004, 0.75, b);
+  const g = ctx.createLinearGradient(cx - r, cy, cx + r, cy);
+  for (let i = 0; i <= 20; i++) {
+    const u = i / 20, s = 1 - u * 2;                 // s: coseno verso la luce
+    const v = smooth(-soft, soft, s);
+    const col = [0,1,2].map(k => Math.round(mix(SHAD[k], mix(ORANGE[k], PEACH[k], clamp(s)), v)));
+    g.addColorStop(u, `rgb(${col})`);
+  }
+  ctx.fillStyle = g; ctx.beginPath(); ctx.arc(cx, cy, r, 0, Math.PI*2); ctx.fill();
+  // il raggio tangente in alto
+  const bandH = mix(3, 120, b);
+  const bg = ctx.createLinearGradient(0, cy - r - bandH/2, 0, cy - r + bandH/2);
+  bg.addColorStop(0, 'rgba(255,255,255,0)'); bg.addColorStop(.5, 'rgba(255,255,255,.95)'); bg.addColorStop(1, 'rgba(255,255,255,0)');
+  ctx.save();
+  ctx.beginPath(); ctx.rect(x, y, w, h); ctx.clip();
+  ctx.globalAlpha = a * mix(1, .75, b);
+  ctx.fillStyle = bg; ctx.fillRect(x + 150, cy - r - bandH/2, w - 160, bandH);
+  ctx.restore();
+  ctx.globalAlpha = a;
+  ctx.fillStyle = '#fff'; ctx.beginPath(); ctx.arc(cx, cy - r, 6, 0, Math.PI*2); ctx.fill();
+  // profilo d'intensità del raggio
+  const px = x + 50, py0 = cy - r, ph = 120;
+  ctx.strokeStyle = 'rgba(255,255,255,.5)'; ctx.lineWidth = 1.5;
+  ctx.beginPath(); ctx.moveTo(px, py0 - ph/2 - 10); ctx.lineTo(px, py0 + ph/2 + 10); ctx.stroke();
+  ctx.strokeStyle = '#fff'; ctx.lineWidth = 3; ctx.beginPath();
+  for (let i = 0; i <= 60; i++) {
+    const yy = py0 - ph/2 + i / 60 * ph, z = (yy - py0) / mix(1.5, 30, b);
+    const v = Math.exp(-z*z / 2);
+    i ? ctx.lineTo(px + v * 80, yy) : ctx.moveTo(px + v * 80, yy);
+  }
+  ctx.stroke();
+  ctx.restore();
+  text(b < .5 ? 'LASER' : 'FASCIO', x + 30, y + 42, 44, 'left', a * Math.abs(b - .5) * 2);
+  text(b < .5 ? 'TAGLIO NETTO FRA LUCE E OMBRA' : 'AL CENTRO 100%, AI BORDI CALA', x + 30, y + 82, 22, 'left', a * Math.abs(b - .5) * 2 * .85, 'Barlow', .1);
+  text('INTENSITÀ DEL RAGGIO', px - 4, py0 + ph/2 + 36, 20, 'left', a * .7, 'Barlow', .12);
+}
+
+function drawPoppy(p) {
+  if (p.poppy <= 0) return;
+  const x = 1190, y = 380, w = 600, h = 400, a = p.poppy, t = p.poppyT;
+  ctx.save(); ctx.globalAlpha = a;
+  ctx.fillStyle = 'rgba(6,50,34,.62)';
+  ctx.beginPath(); ctx.roundRect(x, y, w, h, 18); ctx.fill();
+  const src = [x + 60, y + 120], flower = [x + 270, y + 300], eye = [x + 500, y + 140];
+  const cols = ['#ff4d4d', '#ff9f40', '#ffe14d', '#59d96a', '#4da6ff', '#a66bff'];
+  const inF = clamp(t / .5), outF = clamp((t - .5) / .5);
+  cols.forEach((c, i) => {
+    const o = (i - 2.5) * 5;
+    line([src[0], src[1] + o], [flower[0], flower[1] + o * .3], inF, c, 3);
+  });
+  arrow([flower[0] + 10, flower[1] - 10], [eye[0] - 40, eye[1] + 20], outF, '#ff4d4d', 3.5);
+  // papavero
+  for (let i = 0; i < 5; i++) {
+    const ang = i / 5 * Math.PI * 2 - Math.PI / 2;
+    ctx.fillStyle = '#e8283a';
+    ctx.beginPath(); ctx.arc(flower[0] + Math.cos(ang) * 26, flower[1] + Math.sin(ang) * 26, 28, 0, Math.PI*2); ctx.fill();
+  }
+  ctx.fillStyle = '#1b1b1b'; ctx.beginPath(); ctx.arc(flower[0], flower[1], 15, 0, Math.PI*2); ctx.fill();
+  ctx.strokeStyle = '#2f8a3a'; ctx.lineWidth = 6; ctx.beginPath(); ctx.moveTo(flower[0], flower[1] + 50); ctx.lineTo(flower[0] - 6, y + h - 10); ctx.stroke();
+  // occhio
+  ctx.fillStyle = '#fff'; ctx.beginPath();
+  ctx.ellipse(eye[0], eye[1], 46, 26, 0, 0, Math.PI*2); ctx.fill();
+  ctx.fillStyle = '#123'; ctx.beginPath(); ctx.arc(eye[0] - 8, eye[1] + 2, 15, 0, Math.PI*2); ctx.fill();
+  ctx.restore();
+  text('LUCE BIANCA', src[0], src[1] - 50, 30, 'left', a);
+  text('ASSORBE TUTTO', flower[0] + 70, flower[1] + 40, 24, 'left', a * inF, 'Barlow', .1);
+  text('TRANNE IL ROSSO', flower[0] + 70, flower[1] + 70, 24, 'left', a * outF, 'Barlow', .1, '255,150,150');
+}
+
+function label(pt, to, s, a, align = 'left') {
+  if (a <= 0) return;
+  ctx.save(); ctx.globalAlpha = a; ctx.fillStyle = '#fff';
+  ctx.beginPath(); ctx.arc(pt[0], pt[1], 7, 0, Math.PI*2); ctx.fill(); ctx.restore();
+  line(pt, to, a, 'rgba(255,255,255,.9)', 2);
+  text(s, to[0] + (align === 'left' ? 14 : -14), to[1], 34, align, a);
+}
+
+function wrap(s, maxW) {
+  const words = s.split(' '), lines = []; let l = '';
+  for (const w of words) { const tl = l ? l + ' ' + w : w; if (ctx.measureText(tl).width > maxW && l) { lines.push(l); l = w; } else l = tl; }
+  if (l) lines.push(l); return lines;
+}
+
+function frame() {
+  const t = now();
+  // avanzamento dei parametri
+  if (voice) {
+    const T = pendingT ?? audio.currentTime;
+    for (const k of Object.keys(DEF)) cur[k] = voiceValue(k, T);
+    const s = voiceStep(T);
+    if (s !== step) { prevHead = STEPS[step].h; headT0 = t; step = s; ui(); }
+    const lab = `${clock(T)} / ${clock(audio.duration || 660)}`;
+    if ($('contatore').textContent !== lab) $('contatore').textContent = lab;
+  } else {
+    tweens = tweens.filter(tw => {
+      const u = clamp((t - tw.t0) / tw.dur);
+      if (t >= tw.t0) cur[tw.key] = mix(tw.from, tw.to, ease(u));
+      return u < 1;
+    });
+    if (playing && t - stepT0 > holdTime(step)) {
+      if (step < STEPS.length - 1) goTo(step + 1); else { playing = false; ui(); }
+    }
+  }
+  headFade = clamp((t - headT0) / 0.7);
+  const p = cur;
+
+  ctx.fillStyle = BG; ctx.fillRect(0, 0, W, H);
+  // alone generale della luce sul fondo
+  if (p.light > 0) {
+    const g = ctx.createRadialGradient(LS[0], LS[1], 0, LS[0], LS[1], 1500);
+    g.addColorStop(0, `rgba(255,255,255,${.16*p.light})`); g.addColorStop(1, 'rgba(255,255,255,0)');
+    ctx.fillStyle = g; ctx.fillRect(0, 0, W, H);
+  }
+
+  drawCast(p);
+  drawIntro(p, t);
+
+  // raggi a ventaglio
+  if (p.rays > 0) {
+    for (const r of FAN) line(LS, r.end, p.rays, `rgba(255,255,255,${.85*p.raysA})`, 2.2);
+  }
+  // sfera
+  if (p.sph > 0) {
+    renderSphere(p);
+    ctx.globalAlpha = p.sph; ctx.drawImage(sph, CS[0] - sz/2, CS[1] - sz/2); ctx.globalAlpha = 1;
+  }
+  // raggi sopra la sfera, come nella lezione
+  if (p.rays > 0) {
+    for (const r of FAN) if (r.hit) line(LS, r.end, p.rays, `rgba(255,255,255,${.85*p.raysA})`, 2.2);
+  }
+  if (p.parts > 0) {
+    for (const [i, r] of FAN.entries()) for (let k = 0; k < 3; k++) {
+      const u = (t * .32 + k / 3 + i * .137) % 1;
+      const x = mix(LS[0], r.end[0], u), y = mix(LS[1], r.end[1], u);
+      ctx.globalAlpha = p.parts * .95; ctx.fillStyle = '#fff';
+      ctx.beginPath(); ctx.arc(x, y, 3.6, 0, Math.PI*2); ctx.fill();
+      ctx.globalAlpha = p.parts * .25; ctx.beginPath(); ctx.arc(x, y, 10, 0, Math.PI*2); ctx.fill();
+    }
+    ctx.globalAlpha = 1;
+  }
+  // paralleli ed equatore
+  if (p.par > 0 && p.sph > 0) {
+    RINGS.forEach((rg, i) => { const f = clamp(p.par - i); if (f > 0 && p.lines > 0) polyline3D(rg, f, `rgba(40,18,8,${.8*p.lines})`, 2.4); });
+    const fe = clamp(p.par - 4);
+    if (fe > 0 && p.eqLine > 0) {
+      const wc = Math.round(mix(40, 255, p.tan));
+      polyline3D(EQUATOR, fe, `rgba(${wc},${Math.round(mix(18,255,p.tan))},${Math.round(mix(8,255,p.tan))},${.9*p.eqLine})`, mix(3.4, 4.5, p.tan));
+    }
+  }
+  if (p.mer > 0) MERIDIANS.forEach(m => polyline3D(m, p.mer, 'rgba(40,18,8,.65)', 2));
+  // raggi tangenti
+  const tr = Math.max(p.tan, p.castRays);
+  if (tr > 0) {
+    for (const r of TANG) {
+      line(LS, r.t, Math.min(1, tr * 1.6), `rgba(255,255,255,${.95*tr})`, 2.4);
+      if (p.castRays > 0) line(r.t, r.g, clamp(p.castRays * 1.6 - .6), `rgba(255,255,255,${.75*p.castRays})`, 2, [8, 8]);
+    }
+    if (p.tan > 0) for (const r of TANG) if (r.vis) {
+      ctx.globalAlpha = p.tan; ctx.fillStyle = '#fff';
+      ctx.beginPath(); ctx.arc(r.t[0], r.t[1], 6, 0, Math.PI*2); ctx.fill(); ctx.globalAlpha = 1;
+    }
+    text('TANGENTI', PT_TERM[0] + 40, PT_TERM[1] - 44, 38, 'left', p.tan * (1 - p.inset));
+  }
+  // luce rimbalzata
+  if (p.bRays > 0) for (const b of BOUNCE) {
+    line(LS, b.g, clamp(p.bRays * 2), 'rgba(255,255,255,.9)', 2.4);
+    arrow(b.g, b.t, clamp(p.bRays * 2 - 1), '#9dff8a', 3.5);
+  }
+  if (p.hint > 0) {
+    const pulse = 1 + Math.sin(t * 4) * .08;
+    ctx.save(); ctx.globalAlpha = p.hint; ctx.strokeStyle = '#fff'; ctx.lineWidth = 3; ctx.setLineDash([10, 9]);
+    ctx.beginPath(); ctx.arc(PT_BOUNCE[0], PT_BOUNCE[1], 62 * pulse, 0, Math.PI*2); ctx.stroke(); ctx.restore();
+    text('?', PT_BOUNCE[0] + 95, PT_BOUNCE[1] + 10, 70, 'center', p.hint);
+  }
+
+  // luce
+  if (p.light > 0) glow(LS[0], LS[1], 175, p.light);
+  drawAB(p, p.rays > 0 ? FAN[FAN.length - 1].end : B_PT);
+
+  // 2D: altezza e larghezza
+  if (p.dims > 0) {
+    const l = CS[0] - RP - 50, bt = CS[1] + RP + 46;
+    arrow([l, CS[1] + RP], [l, CS[1] - RP], p.dims, '#fff'); arrow([l, CS[1] - RP], [l, CS[1] + RP], p.dims, '#fff');
+    arrow([CS[0] - RP, bt], [CS[0] + RP, bt], p.dims, '#fff'); arrow([CS[0] + RP, bt], [CS[0] - RP, bt], p.dims, '#fff');
+    text('ALTEZZA', l - 26, CS[1], 36, 'right', p.dims);
+    text('LARGHEZZA', CS[0] + RP + 30, bt, 36, 'left', p.dims);
+  }
+  if (p.nearFar > 0) {
+    label(PT_POLE, [PT_POLE[0] - 120, PT_POLE[1] - 120], 'VICINO ALLA LUCE', p.nearFar, 'right');
+    label(FAR_PT, [FAR_PT[0] + 190, FAR_PT[1] - 20], 'LONTANO DALLA LUCE', p.nearFar);
+  }
+  drawInset(p);
+  drawPoppy(p);
+  if (p.eq > 0) {
+    text('LUCE  −  VOLUME', 1700, 470, 76, 'right', p.eq);
+    text('=  OMBRA', 1700, 550, 76, 'right', p.eq, 'Bebas Neue', .18, '10,70,45');
+  }
+  if (p.labels > 0) {
+    label(PT_POLE, [PT_POLE[0] - 150, PT_POLE[1] - 150], 'PUNTO PIÙ LUMINOSO', p.labels, 'right');
+    label(PT_TERM, [PT_TERM[0] + 170, PT_TERM[1] - 110], 'EQUATORE', p.labels);
+    label(PT_CORE, [PT_CORE[0] + 250, PT_CORE[1] - 30], 'OMBRA PROPRIA', p.labels);
+    label(PT_BOUNCE, [PT_BOUNCE[0] - 260, PT_BOUNCE[1] + 40], 'LUCE RIFLESSA', p.labels, 'right');
+    label(PT_CAST, [PT_CAST[0] + 60, PT_CAST[1] - 150], 'OMBRA PORTATA', p.labels);
+  }
+
+  // titoli, come nella lezione
+  text('TRIDIMENSIONALITÀ', W/2, 92, 46, 'center', 1, 'Bebas Neue', .32);
+  const hd = STEPS[step].h;
+  if (prevHead && headFade < 1) {
+    text(prevHead[0].toUpperCase(), 1700, 230 - headFade*14, 58, 'right', 1 - headFade, 'Bebas Neue', .25);
+    text(prevHead[1].toUpperCase(), 1700, 292 - headFade*14, 58, 'right', 1 - headFade, 'Bebas Neue', .25);
+  }
+  text(hd[0].toUpperCase(), 1700, 230 + (1 - headFade)*14, 58, 'right', headFade, 'Bebas Neue', .25);
+  text(hd[1].toUpperCase(), 1700, 292 + (1 - headFade)*14, 58, 'right', headFade, 'Bebas Neue', .25);
+
+  // sottotitolo parlato
+  const g = ctx.createLinearGradient(0, H - 220, 0, H);
+  g.addColorStop(0, 'rgba(4,40,27,0)'); g.addColorStop(1, 'rgba(4,40,27,.6)');
+  ctx.fillStyle = g; ctx.fillRect(0, H - 220, W, 220);
+  ctx.save(); ctx.font = '500 38px Barlow'; ctx.fillStyle = '#fff'; ctx.textAlign = 'center'; ctx.textBaseline = 'alphabetic';
+  ctx.globalAlpha = voice ? 1 : headFade;
+  const ls = wrap(voice ? subAt(pendingT ?? audio.currentTime) : STEPS[step].txt, 1560);
+  ls.forEach((l, i) => ctx.fillText(l, W/2, H - 52 - (ls.length - 1 - i) * 50));
+  ctx.restore();
+
+  requestAnimationFrame(frame);
+}
+
+// ===================== COMANDI =====================
+const $ = id => document.getElementById(id);
+const dots = $('punti');
+STEPS.forEach((_, i) => { const s = document.createElement('span'); s.title = `Passaggio ${i + 1}`; s.onclick = () => seek(i); dots.appendChild(s); });
+const clock = s => `${Math.floor(s / 60)}:${String(Math.floor(s % 60)).padStart(2, '0')}`;
+function ui() {
+  [...dots.children].forEach((d, i) => { d.className = i === step ? 'ora' : i < step ? 'fatto' : ''; });
+  if (!voice) $('contatore').textContent = `${step + 1} / ${STEPS.length}`;
+  const on = voice ? !audio.paused : playing;
+  $('play').textContent = on ? '❚❚ Pausa' : '▶ Avvia';
+  $('voce').textContent = voice ? '🔊 Con la voce' : '🔇 Senza voce';
+}
+function seek(k) {
+  k = clamp(k, 0, STEPS.length - 1);
+  if (voice) { setTime(stepStart(k)); ui(); } else goTo(k, true);
+}
+const next = () => voice ? seek(step + 1) : goTo(step + 1);
+const prev = () => voice && audio.currentTime - stepStart(step) > 2 ? seek(step) : seek(step - 1);
+$('avanti').onclick = next;
+$('indietro').onclick = prev;
+$('ricomincia').onclick = () => {
+  if (voice) { setTime(0); audio.play(); } else { goTo(0, true); playing = true; }
+  ui();
+};
+$('play').onclick = () => {
+  if (voice) { if (audio.paused) audio.play(); else audio.pause(); }
+  else { playing = !playing; if (playing) { if (step === STEPS.length - 1) goTo(0, true); stepT0 = now(); } }
+  ui();
+};
+$('voce').onclick = () => {
+  const wasOn = voice ? !audio.paused : playing;
+  if (voice) { audio.pause(); voice = false; playing = wasOn; goTo(step, true); }
+  else { voice = true; playing = false; tweens = []; setTime(stepStart(step)); if (wasOn) audio.play(); }
+  ui();
+};
+audio.addEventListener('play', ui); audio.addEventListener('pause', ui);
+addEventListener('keydown', e => {
+  if (e.key === 'ArrowRight') next();
+  else if (e.key === 'ArrowLeft') prev();
+  else if (e.key === ' ') { e.preventDefault(); $('play').click(); }
+});
+
+Promise.all([document.fonts.load('58px "Bebas Neue"'), document.fonts.load('500 38px Barlow')]).catch(() => {}).finally(() => {
+  ui(); requestAnimationFrame(frame);
+  // ?passo=N apre direttamente un passaggio (utile per controllare)
+  const q = new URLSearchParams(location.search).get('passo');
+  if (q) seek(parseInt(q, 10) - 1);
+  const tq = new URLSearchParams(location.search).get('t');
+  if (tq) setTime(parseFloat(tq));
+});
+</script>
+</body>
+</html>
