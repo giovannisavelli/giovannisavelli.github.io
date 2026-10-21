@@ -3,7 +3,6 @@ const previewCourses = {
   "photoshop-interior": { name: "Photoshop · Interior", section: "programma", calendar: true },
   "ia-interior": { name: "Intelligenza Artificiale · Interior", section: "programma", calendar: true },
   "modellazione-product": { name: "Modellazione 3D · Product", section: "panoramica", calendar: false },
-  "photoshop-product": { name: "Photoshop · Product", section: "panoramica", calendar: false },
   "ia-product": { name: "Intelligenza Artificiale · Product", section: "panoramica", calendar: true }
 };
 

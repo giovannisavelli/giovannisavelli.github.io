@@ -4,7 +4,6 @@ const courses = {
   "ia-interior": { name: "Intelligenza Artificiale · Interior", path: "/interior/ia/", first: "programma", calendar: true },
   "corona-interior": { name: "Corona · Rendering 3D", path: "/interior/rendering3d/corona.html", first: "dizionario", calendar: false },
   "modellazione-product": { name: "Modellazione 3D · Product", path: "/product/modellazione/", first: "", calendar: false },
-  "photoshop-product": { name: "Photoshop · Product", path: "/product/photoshop/", first: "", calendar: false },
   "ia-product": { name: "Intelligenza Artificiale · Product", path: "/product/ia/", first: "calendario", calendar: true }
 };
 

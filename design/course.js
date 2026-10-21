@@ -25,11 +25,6 @@
       description: "Lo spazio del corso di modellazione tridimensionale per Product Design.",
       tags: ["Product Design", "A.A. 2026/2027"], actions: []
     },
-    "/product/photoshop/": {
-      slug: "photoshop-product", css: "photoshop-product", title: "Photoshop", department: "Product Design", year: "In preparazione", mark: "Ps", label: "IMMAGINE / PRODOTTO",
-      description: "Lo spazio del corso di postproduzione e comunicazione visiva per Product Design.",
-      tags: ["Product Design", "A.A. 2026/2027"], actions: []
-    },
     "/product/ia/": {
       slug: "ia-product", css: "ia-product", title: "Intelligenza Artificiale", department: "Product Design", year: "3° anno", mark: "AI", label: "ESPLORAZIONE / DESIGN",
       description: "Il calendario PD3 è disponibile. Programma e materiali didattici arriveranno in questo spazio.",

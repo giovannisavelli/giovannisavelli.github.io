@@ -34,14 +34,6 @@ const COURSES = {
     meta: ["Product Design", "A.A. 2026/2027"],
     tabs: [["panoramica","Panoramica"],["calendario","Calendario"]], first: "panoramica", kind: "pending"
   },
-  "photoshop-product": {
-    title: "Photoshop", department: "Product Design", year: "Corso in preparazione", mark: "Ps", label: "IMMAGINE / PRODOTTO",
-    accent: "#59b8ff", wash: "rgba(49,168,255,.3)", live: "../product/photoshop/",
-    description: "Postproduzione e immagini per comunicare forme, materiali e dettagli del progetto di prodotto.",
-    statusLabel: "In preparazione", status: "Il corso esiste nell'hub; programma e materiali sono ancora in preparazione.",
-    meta: ["Product Design", "A.A. 2026/2027"],
-    tabs: [["panoramica","Panoramica"],["calendario","Calendario"]], first: "panoramica", kind: "pending"
-  },
   "ia-product": {
     title: "Intelligenza Artificiale", department: "Product Design", year: "3° anno", mark: "AI", label: "ESPLORAZIONE / DESIGN",
     accent: "#77e7b7", wash: "rgba(52,211,153,.28)", live: "../product/ia/",
