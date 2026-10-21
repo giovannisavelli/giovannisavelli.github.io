@@ -95,11 +95,13 @@
         .lesson-end a { color: var(--accent); font-size: 13px; font-weight: 700; text-decoration: none; white-space: nowrap; }
         .lesson-end a:hover, .lesson-end a:focus-visible { text-decoration: underline; }
         .lesson-opening--second { margin-top: 46px; background: radial-gradient(circle at 90% 5%, rgba(49,168,255,.18), transparent 35%), linear-gradient(135deg, #101e2e, #0b1421 72%); }
-        .lesson-opening--third, .lesson-opening--fourth { margin-top: 46px; background: radial-gradient(circle at 90% 5%, rgba(49,168,255,.17), transparent 36%), linear-gradient(135deg, #142335, #0b1421 72%); }
+        .lesson-opening--third, .lesson-opening--fourth, .lesson-opening--fifth, .lesson-opening--sixth { margin-top: 46px; background: radial-gradient(circle at 90% 5%, rgba(49,168,255,.17), transparent 36%), linear-gradient(135deg, #142335, #0b1421 72%); }
         .lesson-opening { scroll-margin-top: 82px; }
         .lesson-opening--second::after { content: "02"; }
         .lesson-opening--third::after { content: "03"; }
         .lesson-opening--fourth::after { content: "04"; }
+        .lesson-opening--fifth::after { content: "05"; }
+        .lesson-opening--sixth::after { content: "06"; }
         .lesson-index { display: grid; gap: 11px; max-width: 830px; margin: 0; padding: 0; list-style: none; }
         .lesson-index a { display: grid; grid-template-columns: 42px minmax(0, 1fr) auto 20px; align-items: center; gap: 13px; min-height: 72px; padding: 12px 17px; border: 1px solid var(--border); border-radius: 13px; background: var(--surface-strong); color: var(--text); text-decoration: none; }
         .lesson-index a:hover, .lesson-index a:focus-visible { border-color: var(--accent); background: #1b2c3c; }
@@ -213,7 +215,7 @@
             .video-course-choice small { font-size: 11px; }
             .lesson-index a { grid-template-columns: 34px minmax(0, 1fr) 18px; gap: 8px; padding: 12px; }
             .lesson-index small { display: none; }
-            .lesson-opening--second, .lesson-opening--third, .lesson-opening--fourth { margin-top: 32px; }
+            .lesson-opening--second, .lesson-opening--third, .lesson-opening--fourth, .lesson-opening--fifth, .lesson-opening--sixth { margin-top: 32px; }
             .video-list { grid-template-columns: repeat(2, minmax(0, 1fr)); }
             .interface-step { min-height: 0; }
             .step-number { margin-bottom: 18px; }
@@ -222,7 +224,7 @@
     </style>
     <link rel="stylesheet" href="../../design/course.css?v=sections-20261014">
     <link rel="stylesheet" href="../../assets/studio.css">
-    <link rel="stylesheet" href="studio-photoshop.css?v=appunti-compatti-20261020">
+    <link rel="stylesheet" href="studio-photoshop.css?v=lezioni-5-6-20261021">
     <script src="../../design/course.js?v=sections-20261014" defer></script>
     <link rel="stylesheet" href="../../assets/course-ui.css?v=sections-20261014">
     <script src="../../assets/fx/effetti.js" defer></script>
@@ -280,8 +282,10 @@
                 <li><a href="#lezione-2"><span class="lesson-index-number">02</span><strong>I primi strumenti per scontornare</strong><small>2 ore</small><span class="lesson-index-arrow" aria-hidden="true">→</span></a></li>
                 <li><a href="#lezione-3"><span class="lesson-index-number">03</span><strong>Istogramma e regolazioni</strong><small>4 ore · 2A e 2B</small><span class="lesson-index-arrow" aria-hidden="true">→</span></a></li>
                 <li><a href="#lezione-4"><span class="lesson-index-number">04</span><strong>Fotoinserimento: le due sedie</strong><small>4 ore · 2A e 2B</small><span class="lesson-index-arrow" aria-hidden="true">→</span></a></li>
+                <li><a href="#lezione-5"><span class="lesson-index-number">05</span><strong>Manifesti e oggetti avanzati</strong><small>4 ore · 2A e 2B</small><span class="lesson-index-arrow" aria-hidden="true">→</span></a></li>
+                <li><a href="#lezione-6"><span class="lesson-index-number">06</span><strong>Esonero</strong><small>4 ore · 2A e 2B</small><span class="lesson-index-arrow" aria-hidden="true">→</span></a></li>
             </ol>
-            <p class="lesson-index-note">Le prime tre lezioni e la traccia del laboratorio della quarta sono disponibili. Le successive verranno definite più avanti.</p>
+            <p class="lesson-index-note">La quinta lezione è una traccia di lavoro da sviluppare insieme. Per l’esonero, modalità e consegna sono ancora da definire.</p>
         </section>
 
         <section class="panel" role="tabpanel" id="tab-archivio" aria-labelledby="btn-archivio" hidden>
@@ -446,6 +450,52 @@
             <div class="lesson-materials"><div><strong>Materiali · La stanza delle due sedie</strong><p>Apri le immagini della cartella, scegli la scena su cui lavorare e scarica il TIFF per esaminarlo in Photoshop: l’anteprima di Drive non riesce a mostrarlo perché è molto grande. Conserva il tuo lavoro in un file modificabile.</p></div><a href="https://drive.google.com/drive/folders/1p9wFOKeZNj1hH_lYF1ByswBp-PjsTHUo?usp=sharing" target="_blank" rel="noopener noreferrer">Apri i file dell’esercizio ↗</a></div>
                 </div>
             </details>
+
+            <details class="lesson-note" id="lezione-5" name="appunti-lezioni">
+                <summary><span class="lesson-note-number">05</span><span class="lesson-note-main"><strong>Manifesti e oggetti avanzati</strong><small>4 ore · 2A e 2B</small></span><span class="lesson-note-toggle" aria-hidden="true"></span></summary>
+                <div class="lesson-note-content">
+                    <article class="lesson-opening lesson-opening--fifth" aria-labelledby="lesson-five-title">
+                        <p class="lesson-label">Quinta lezione · 4 ore · 2A e 2B</p>
+                        <h3 id="lesson-five-title">Sette manifesti. <span>Un metodo.</span></h3>
+                        <p class="lesson-deck">Un rettangolo nasce piatto; nella foto deve seguire la prospettiva di una cornice. Con gli Oggetti avanzati possiamo cambiare la grafica anche dopo averla collocata, senza rifare ogni volta la trasformazione.</p>
+                        <div class="lesson-thought"><p>La domanda della lezione: <strong>che cosa deve restare modificabile?</strong> Il manifesto deve appartenere alla fotografia, ma il suo contenuto deve poter cambiare.</p></div>
+                    </article>
+                    <h4 class="lesson-section-title">Prima, torniamo alle sedie</h4>
+                    <p class="lesson-section-copy">Rivediamo alcuni lavori della quarta lezione: dove la prospettiva convince, dove la sedia non sembra appoggiata e quali correzioni di luce o colore hanno funzionato. Poi passiamo dal singolo oggetto a sette superfici nella stessa immagine.</p>
+
+                    <h4 class="lesson-section-title">Guarda il cambiamento</h4>
+                    <p class="lesson-section-copy">Nel secondo scatto Giovanni ha sostituito soltanto il manifesto in alto a sinistra con «AO». È una grafica volutamente semplice: qui osserviamo il metodo, la prospettiva e il rapporto con la luce della scena.</p>
+                    <div class="poster-comparison" aria-label="Prima e dopo del manifesto AO">
+                        <figure><img src="materiali/manifesti/manifesti-prima.jpg" width="1696" height="2528" loading="lazy" decoding="async" alt="Foto originale del palazzo con sette manifesti pubblicitari; quello in alto a sinistra è verde e mostra LUMA."><figcaption><span>01 / PRIMA</span><strong>La fotografia di partenza</strong></figcaption></figure>
+                        <figure><img src="materiali/manifesti/manifesti-ao.jpg" width="1696" height="2528" loading="lazy" decoding="async" alt="Stessa fotografia: il manifesto in alto a sinistra è diventato rosa con le grandi lettere AO, seguendo la prospettiva della cornice."><figcaption><span>02 / DOPO</span><strong>Il manifesto AO di Giovanni</strong></figcaption></figure>
+                    </div>
+
+                    <h4 class="lesson-section-title">Dalla grafica alla fotografia</h4>
+                    <p class="lesson-section-copy">Il procedimento è sempre lo stesso. La difficoltà cambia con l’inclinazione e le proporzioni di ciascun pannello; non serve progettare sette campagne elaborate.</p>
+                    <div class="lesson-route" aria-label="Tre passaggi dell'esercizio dei manifesti">
+                        <section><span>01 / SUPERFICIE</span><h4>Trova i quattro angoli</h4><p>Osserva il bordo interno della cornice. Prepara un rettangolo su un livello separato: sarà la base del nuovo manifesto.</p></section>
+                        <section><span>02 / OGGETTO AVANZATO</span><h4>Separa contenuto e posizione</h4><p>Converti il rettangolo in Oggetto avanzato e adattalo con <strong>Distorci</strong>. Apri il contenuto, cambia colore o testo e salva: la grafica aggiornata resta nella prospettiva scelta.</p></section>
+                        <section><span>03 / INSERIMENTO</span><h4>Fallo appartenere alla scena</h4><p>Controlla cornici, luminosità e colore. Intervieni sulle ombre solo dove la fotografia ne mostra davvero l’effetto.</p></section>
+                    </div>
+                    <div class="exercise-result"><p><strong>La prova:</strong> sostituisci tutti e sette i manifesti con grafiche essenziali. Conserva la foto originale e tieni modificabile ogni nuovo manifesto. Riaprine uno, cambia la scritta e verifica che la trasformazione resti al suo posto.</p></div>
+                    <div class="adjustment-list" role="group" aria-label="Nota sulle copie degli Oggetti avanzati">
+                        <details class="adjustment-item"><summary><strong>Perché cambiando un manifesto cambiano anche gli altri?</strong><span class="adjustment-icon" aria-hidden="true"></span></summary><div class="adjustment-content"><p>Una normale copia di un Oggetto avanzato può condividere lo stesso contenuto con l’originale. Se vuoi grafiche differenti, crea una copia indipendente con <strong>Livello → Oggetti avanzati → Nuovo oggetto avanzato tramite copia</strong>, oppure crea un nuovo Oggetto avanzato per ciascun manifesto. Fai una prova cambiando solo una scritta.</p></div></details>
+                    </div>
+                    <div class="lesson-materials"><div><strong>Materiali · I sette manifesti</strong><p>Scarica la foto originale per lavorare in Photoshop. Il secondo file mostra il solo cartellone «AO» modificato da Giovanni: usalo come riferimento per il metodo, non come grafica da copiare.</p></div><div class="poster-material-links"><a href="materiali/manifesti/manifesti-prima.jpg" download="Manifesti.jpg">Scarica la foto ↓</a><a href="materiali/manifesti/manifesti-ao.jpg" download="Manifesti-esempio-AO.jpg">Scarica l’esempio ↓</a></div></div>
+                </div>
+            </details>
+
+            <details class="lesson-note" id="lezione-6" name="appunti-lezioni">
+                <summary><span class="lesson-note-number">06</span><span class="lesson-note-main"><strong>Esonero</strong><small>4 ore · 2A e 2B</small></span><span class="lesson-note-toggle" aria-hidden="true"></span></summary>
+                <div class="lesson-note-content">
+                    <article class="lesson-opening lesson-opening--sixth" aria-labelledby="lesson-six-title">
+                        <p class="lesson-label">Sesta lezione · 4 ore · 2A e 2B</p>
+                        <h3 id="lesson-six-title">Esonero<span>.</span></h3>
+                        <p class="lesson-deck">L’ultimo incontro è riservato all’esonero e al confronto sui lavori. La prova potrebbe svolgersi in aula oppure essere preparata a casa: modalità, tempi e consegna verranno definiti più avanti.</p>
+                    </article>
+                    <div class="exercise-result"><p><strong>Da definire con il docente:</strong> svolgimento della prova, materiali, consegna e spazio dedicato alla correzione. Questa scheda sarà aggiornata quando le indicazioni saranno pronte.</p></div>
+                </div>
+            </details>
             </div>
         </section>
 
@@ -462,8 +512,8 @@
                         <li><div class="schedule-lesson"><time datetime="2026-12-01">Mar 1 dic 2026</time><a href="#lezione-2">02 · I primi strumenti per scontornare →</a></div><span>11:00–13:00</span></li>
                         <li><div class="schedule-lesson"><time datetime="2026-12-15">Mar 15 dic 2026</time><a href="#lezione-3">03 · Istogramma e regolazioni →</a></div><span>09:00–13:00</span></li>
                         <li><div class="schedule-lesson"><time datetime="2027-01-12">Mar 12 gen 2027</time><a href="#lezione-4">04 · Fotoinserimento: le due sedie →</a></div><span>09:00–13:00</span></li>
-                        <li><time datetime="2027-01-19">Mar 19 gen 2027</time><span>09:00–13:00</span></li>
-                        <li><time datetime="2027-01-26">Mar 26 gen 2027</time><span>09:00–13:00</span></li>
+                        <li><div class="schedule-lesson"><time datetime="2027-01-19">Mar 19 gen 2027</time><a href="#lezione-5">05 · Manifesti e oggetti avanzati →</a></div><span>09:00–13:00</span></li>
+                        <li><div class="schedule-lesson"><time datetime="2027-01-26">Mar 26 gen 2027</time><a href="#lezione-6">06 · Esonero →</a></div><span>09:00–13:00</span></li>
                     </ul>
                 </section>
                 <section class="class-card" aria-labelledby="classe-2b">
@@ -474,7 +524,7 @@
                         <li><div class="schedule-lesson"><time datetime="2026-12-01">Mar 1 dic 2026</time><a href="#lezione-2">02 · I primi strumenti per scontornare →</a></div><span>14:00–16:00</span></li>
                         <li><div class="schedule-lesson"><time datetime="2026-12-15">Mar 15 dic 2026</time><a href="#lezione-3">03 · Istogramma e regolazioni →</a></div><span>14:00–18:00</span></li>
                         <li><div class="schedule-lesson"><time datetime="2027-01-12">Mar 12 gen 2027</time><a href="#lezione-4">04 · Fotoinserimento: le due sedie →</a></div><span>14:00–18:00</span></li>
-                        <li><time datetime="2027-01-26">Mar 26 gen 2027</time><span>14:00–18:00</span></li>
+                        <li><div class="schedule-lesson"><time datetime="2027-01-26">Mar 26 gen 2027</time><a href="#lezione-5">05 · Manifesti e oggetti avanzati →</a></div><span>14:00–18:00</span></li>
                     </ul>
                 </section>
                 <section class="class-card" aria-labelledby="classe-2c">
@@ -490,7 +540,7 @@
                     </ul>
                 </section>
             </div>
-            <p class="calendar-note">Per 2B e 2C resta in sospeso un incontro di 4 ore per ciascuna classe. Le date qui sopra sono quelle non in discussione.</p>
+            <p class="calendar-note">Per la 2B la data del sesto incontro, dedicato all’esonero, è ancora da confermare. Anche per la 2C resta in sospeso un incontro di 4 ore; la sua sequenza non è stata ancora allineata a quella di 2A e 2B.</p>
         </section>
 
         <section class="panel" role="tabpanel" id="tab-video" aria-labelledby="btn-video" hidden>
