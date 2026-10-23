@@ -214,17 +214,19 @@
   const CALENDARI = [
     ['p', '2A', '11:00', ['2026-11-24', '2026-12-01'], ['Conosciamoci', 'I primi strumenti per scontornare']],
     ['p', '2A', '09:00', ['2026-12-15', '2027-01-12', '2027-01-19', '2027-01-26'], ['Istogramma e regolazioni'], 3],
-    ['p', '2B', '14:00', ['2026-11-24', '2026-12-01', '2026-12-15', '2027-01-12', '2027-01-26'], ['Conosciamoci', 'I primi strumenti per scontornare', 'Istogramma e regolazioni']],
+    ['p', '2B', '14:00', ['2026-11-24', '2026-12-01', '2026-12-15', '2027-01-12', '2027-01-26'], ['Conosciamoci', 'I primi strumenti per scontornare', 'Istogramma e regolazioni', 'Fotoinserimento: le due sedie', 'Manifesti e oggetti avanzati']],
+    ['p', '2B', '14:00', ['2027-01-19'], ['Da confermare'], 0],
     ['p', '2C', '11:00', ['2026-11-20', '2026-11-27', '2026-12-04', '2026-12-11'], ['Conosciamoci', 'I primi strumenti per scontornare']],
     ['p', '2C', '09:00', ['2026-12-18', '2027-01-15'], [], 5],
+    ['p', '2C', '14:00', ['2027-01-19'], ['Da confermare'], 0],
     ['ia', '3A', '14:00', ['2026-12-03', '2026-12-10', '2026-12-17', '2027-01-14', '2027-01-21'], []],
-    ['ia', '3B', '09:00', ['2026-11-26', '2026-12-03', '2026-12-10', '2026-12-17', '2027-01-28'], []],
+    ['ia', '3B', '09:00', ['2026-12-03', '2026-12-10', '2026-12-17', '2027-01-14', '2027-01-21'], []],
     ['ia', '3C', '14:00', ['2026-11-23', '2026-11-30', '2026-12-21', '2027-01-11', '2027-01-25'], []],
     ['iap', 'PD3', '09:00', ['2026-12-21', '2027-01-11', '2027-01-18', '2027-01-25'], []]
   ];
   const CLASSI = ['Tutte', '2A', '2B', '2C', '3A', '3B', '3C', 'PD3'];
   const LEZ = [];
-  CALENDARI.forEach(([corso, classe, ora, date, temi, primo = 1]) => date.forEach((d, i) => LEZ.push({ corso, classe, ora, d, n: primo + i, tema: temi[i] || '' })));
+  CALENDARI.forEach(([corso, classe, ora, date, temi, primo = 1]) => date.forEach((d, i) => LEZ.push({ corso, classe, ora, d, n: primo === 0 ? null : primo + i, tema: temi[i] || '' })));
   LEZ.sort((a, b) => (a.d + a.ora).localeCompare(b.d + b.ora) || a.classe.localeCompare(b.classe));
   const GG = ['dom', 'lun', 'mar', 'mer', 'gio', 'ven', 'sab'];
   const oggi = new Date(); oggi.setHours(0, 0, 0, 0);
@@ -253,9 +255,11 @@
     const pr = LEZ.filter(l => daISO(l.d) >= oggi && (scelta === 'Tutte' || l.classe === scelta));
     elenco.innerHTML = pr.slice(0, 6).map(l => {
       const c = CORSI[l.corso], dt = daISO(l.d);
-      return `<li><a class="lez" href="${c.href + (l.corso === 'p' && l.tema ? '#lezione-' + l.n : '#calendario')}" style="--c:${c.c}">
+      const etichetta = l.n === null ? 'Incontro da confermare' : 'Lezione ' + l.n + (l.tema ? ': ' + l.tema : '');
+      const destinazione = c.href + (l.corso === 'p' && l.n !== null && l.tema ? '#lezione-' + l.n : '#calendario');
+      return `<li><a class="lez" href="${destinazione}" style="--c:${c.c}">
         <span class="giorno"><span class="data" data-data="${dueCifre(dt.getDate())}.${dueCifre(dt.getMonth() + 1)}"></span><small>${GG[dt.getDay()]}, ${l.ora}</small></span>
-        <span class="cosa"><b><i></i>${c.nome}</b><span>Lezione ${l.n}${l.tema ? ': ' + l.tema : ''}</span></span>
+        <span class="cosa"><b><i></i>${c.nome}</b><span>${etichetta}</span></span>
         <span class="classe">${l.classe}</span></a></li>`;
     }).join('') || '<li class="lez"><span class="cosa"><span>Nessuna lezione in calendario per questa classe.</span></span></li>';
     const celle = [...elenco.querySelectorAll('.data')];

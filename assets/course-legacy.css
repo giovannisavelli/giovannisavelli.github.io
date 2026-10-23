@@ -109,5 +109,6 @@ body.course-legacy.dyslexia-mode .grande-firma, body.course-legacy.leggibile .gr
   body.course-legacy .wizard-options { grid-template-columns: minmax(0, 1fr); }
   body.course-legacy .nexus-wizard-container { padding: 24px 18px; }
   body.course-legacy .wizard-result-actions { flex-wrap: wrap; justify-content: center; }
-  body.course-legacy .home-final-project-actions { gap: 8px; }
+  body.course-legacy .home-final-project-card { grid-template-columns: minmax(0, 1fr); }
+  body.course-legacy .home-final-project-actions { gap: 8px; min-width: 0; }
 }
