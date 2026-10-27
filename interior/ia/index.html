@@ -43,9 +43,9 @@
     @media(max-width:600px){.topbar{padding:17px 20px}.brand{font-size:11px}.brand-mark{width:35px;height:35px}.nav{gap:0}.nav a:not(.course-link){display:none}.nav .course-link{font-size:10px;padding:12px}.left{min-height:760px;padding:275px 22px 130px}.eyebrow{font-size:9px;margin-bottom:23px}h1{font-size:clamp(56px,12.2vw,78px)}.intro{font-size:17px;margin-top:28px}.detail{font-size:13px}.cta-row{margin-top:27px}.cta{min-height:46px}.bottom-rule{left:22px;bottom:90px;font-size:9px}.helmet-wrap{inset:3% -48% 43% 3%;opacity:.85}.city{background-position:49% 30%}.mode-panel{left:22px;right:22px;bottom:23px}.mode-panel button{font-size:9px;padding:0 7px;min-height:45px}.core-copy{left:22px;right:22px;top:29%}.core-copy .big{font-size:48px}.core-copy p{font-size:12px}.core-copy .triad em{font-size:9px}.page.is-core .left .eyebrow,.page.is-core .left h1,.page.is-core .left .intro,.page.is-core .left .detail{visibility:hidden}.below{padding:60px 22px 80px}.below h2{font-size:43px}}
     @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*:before,*:after{transition-duration:.01ms!important;animation-duration:.01ms!important}}
   </style>
-  <link rel="stylesheet" href="course-ai.css?v=20261027-schede">
+  <link rel="stylesheet" href="course-ai.css?v=20261027-struttura2">
   <script src="../../assets/studio.js" defer></script>
-  <script src="course-ai.js?v=20261027-schede" defer></script>
+  <script src="course-ai.js?v=20261027-struttura2" defer></script>
   <script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.170.0/examples/jsm/"}}</script>
 </head>
 <body class="ai-page">
@@ -84,27 +84,25 @@
         </nav>
       </div>
       <section class="course-panel" role="tabpanel" id="tab-programma" aria-labelledby="btn-programma">
-      <section class="course-block" id="programma" aria-labelledby="program-title">
-        <div class="section-heading">
-          <span class="section-meta">LEZIONE 01 · PERCORSO INIZIALE</span>
-          <h2 id="program-title">Programma lezioni.</h2>
-          <p>Nella prima lezione partiamo dalle basi: come un modello costruisce una risposta, che cosa cambia quando aggiungi contesto e perché devi saper leggere il risultato.</p>
-        </div>
-        <div class="lesson-track" aria-label="Percorso iniziale della prima lezione">
-          <article class="lesson-step"><span class="step-index">01 / A</span><div><h3>Una frase, un pezzo alla volta</h3><p>Un’analogia umana per introdurre gli LLM: ogni parola proposta cambia il contesto disponibile per la successiva. È una semplificazione; i modelli lavorano con token, che non coincidono sempre con parole intere.</p></div></article>
-          <article class="lesson-step"><span class="step-index">01 / B</span><div><h3>Il prompt dà una direzione</h3><p>La stessa immagine può ricevere descrizioni diverse. Una richiesta più precisa orienta lo sguardo e restringe le continuazioni plausibili, senza garantire da sola una risposta corretta.</p></div></article>
-          <article class="lesson-step"><span class="step-index">01 / C</span><div><h3>La frase a gruppi</h3><p>Più gruppi costruiscono una frase a turni sulla stessa immagine. Ripetono l’esercizio con tre consegne sempre più mirate e confrontano ciò che hanno scritto.</p><a href="#vibe-coding">Vai all’esercizio <span aria-hidden="true">↗</span></a></div></article>
-          <article class="lesson-step"><span class="step-index">01 / D</span><div><h3>Il Laboratorio della Varianza</h3><p>Passiamo dalle frasi alle immagini: osserviamo come informazioni non specificate possano produrre risultati differenti anche quando il punto di partenza sembra lo stesso.</p><a href="#vibe-coding">Vai al laboratorio <span aria-hidden="true">↗</span></a></div></article>
-        </div>
-        <div class="program-next">
-          <div><span class="section-meta">LEZIONI SUCCESSIVE · IN PREPARAZIONE</span><h3>Scrivere, modificare, verificare.</h3></div>
-          <p>Approfondiremo quando usare prompt narrativi o strutturati, come modificare attributi in un prompt JSON e come valutare un’immagine generata. Nano Banana Pro sarà il modello di riferimento per le dimostrazioni; altri modelli entreranno come confronto quando la loro funzione aiuta a capire una scelta progettuale.</p>
-        </div>
-      </section>
-      <section class="below" id="metodo" aria-labelledby="method-title">
-        <div><span class="kicker">Il metodo</span><h2 id="method-title">Ogni strumento ha bisogno di una competenza.</h2><p>Nel corso, l’IA entra nel processo di progettazione insieme alle domande che permettono di valutarla. L’armatura cresce. Il nucleo anche.</p></div>
-        <div class="principles"><article><b>01</b><div><strong>Produrre</strong><small>Usare gli strumenti per esplorare possibilità, senza confondere velocità e qualità.</small></div></article><article><b>02</b><div><strong>Leggere</strong><small>Riconoscere forme, riferimenti, proporzioni, materiali e scelte che l’immagine nasconde.</small></div></article><article><b>03</b><div><strong>Decidere</strong><small>Delegare solo ciò che sai controllare. Correggere e motivare il risultato.</small></div></article></div>
-      </section>
+        <section class="course-block" id="programma" aria-labelledby="program-title">
+          <div class="section-heading">
+            <span class="section-meta">IL PERCORSO IN BREVE</span>
+            <h2 id="program-title">Programma lezioni</h2>
+            <p>Scegli una lezione per leggere la sua traccia negli Appunti. Le date della tua classe sono nel Calendario.</p>
+          </div>
+          <aside class="course-notice" aria-label="Esercizi della prima lezione">
+            <div><strong>Prima lezione · Dalle parole alle immagini</strong><p>Costruiremo una frase a gruppi e confronteremo i risultati. Poi useremo il Laboratorio della Varianza per vedere che cosa accade quando cambiano le informazioni date al modello.</p></div>
+            <a href="#vibe-coding">Apri gli esercizi →</a>
+          </aside>
+          <ol class="lesson-index" aria-label="Incontri del corso">
+            <li><a href="#lezione-1"><span class="lesson-index-number">01</span><strong>LLM, prompt e varianza</strong><small>4 ore · traccia iniziale</small><span class="lesson-index-arrow" aria-hidden="true">→</span></a></li>
+            <li class="pending"><span class="lesson-card"><span class="lesson-index-number">02</span><strong>Lezione in preparazione</strong><small>4 ore</small><span class="lesson-index-status">In arrivo</span></span></li>
+            <li class="pending"><span class="lesson-card"><span class="lesson-index-number">03</span><strong>Lezione in preparazione</strong><small>4 ore</small><span class="lesson-index-status">In arrivo</span></span></li>
+            <li class="pending"><span class="lesson-card"><span class="lesson-index-number">04</span><strong>Lezione in preparazione</strong><small>4 ore</small><span class="lesson-index-status">In arrivo</span></span></li>
+            <li class="pending"><span class="lesson-card"><span class="lesson-index-number">05</span><strong>Lezione in preparazione</strong><small>4 ore</small><span class="lesson-index-status">In arrivo</span></span></li>
+          </ol>
+          <p class="lesson-index-note">Per le lezioni successive stiamo valutando prompt narrativi e strutturati, modifiche tramite JSON, verifica delle immagini generate e confronto fra modelli. Nano Banana Pro sarà il riferimento per le dimostrazioni; il programma verrà precisato insieme.</p>
+        </section>
       </section>
       <section class="course-panel" role="tabpanel" id="tab-archivio" aria-labelledby="btn-archivio" hidden>
       <section class="course-block archive-block" id="archivio" aria-labelledby="archive-title">
@@ -115,8 +113,25 @@
       </section>
       <section class="course-panel" role="tabpanel" id="tab-appunti" aria-labelledby="btn-appunti" hidden>
         <section class="course-block notes-block" id="appunti" aria-labelledby="notes-title">
-          <div class="section-heading"><span class="section-meta">IL PICCOLO MANUALE DEL CORSO</span><h2 id="notes-title">Appunti delle lezioni.</h2><p>Le spiegazioni, i materiali e le prove pratiche saranno organizzati qui per lezione.</p></div>
-          <div class="empty-state"><h3>Appunti in preparazione</h3><p>La prima scheda sarà aggiunta quando avremo svolto la lezione.</p></div>
+          <div class="section-heading"><span class="section-meta">IL PICCOLO MANUALE DEL CORSO</span><h2 id="notes-title">Appunti delle lezioni</h2><p>Apri la traccia di una lezione per ritrovare spiegazioni ed esercizi. La prima scheda verrà aggiornata dopo l'incontro in aula.</p></div>
+          <div class="lesson-notes" role="group" aria-label="Appunti delle lezioni">
+            <details class="lesson-note" id="lezione-1" name="appunti-lezioni">
+              <summary><span class="lesson-note-number">01</span><span class="lesson-note-main"><strong>LLM, prompt e varianza</strong><small>Prima lezione · traccia iniziale</small></span><span class="lesson-note-toggle" aria-hidden="true"></span></summary>
+              <div class="lesson-note-content">
+                <div class="lesson-opening"><span class="section-meta">PRIMA LEZIONE · 4 ORE</span><h3>Una frase alla volta.</h3><p>Partiamo da un'analogia semplice per capire come il contesto orienta una risposta. La useremo come punto di partenza, non come descrizione completa di un LLM.</p></div>
+        <div class="lesson-track" aria-label="Percorso iniziale della prima lezione">
+          <article class="lesson-step"><span class="step-index">01 / A</span><div><h3>Una frase, un pezzo alla volta</h3><p>Un’analogia umana per introdurre gli LLM: ogni parola proposta cambia il contesto disponibile per la successiva. È una semplificazione; i modelli lavorano con token, che non coincidono sempre con parole intere.</p></div></article>
+          <article class="lesson-step"><span class="step-index">01 / B</span><div><h3>Il prompt dà una direzione</h3><p>La stessa immagine può ricevere descrizioni diverse. Una richiesta più precisa orienta lo sguardo e restringe le continuazioni plausibili, senza garantire da sola una risposta corretta.</p></div></article>
+          <article class="lesson-step"><span class="step-index">01 / C</span><div><h3>La frase a gruppi</h3><p>Più gruppi costruiscono una frase a turni sulla stessa immagine. Ripetono l’esercizio con tre consegne sempre più mirate e confrontano ciò che hanno scritto.</p><a href="#vibe-coding">Vai all’esercizio <span aria-hidden="true">↗</span></a></div></article>
+          <article class="lesson-step"><span class="step-index">01 / D</span><div><h3>Il Laboratorio della Varianza</h3><p>Passiamo dalle frasi alle immagini: osserviamo come informazioni non specificate possano produrre risultati differenti anche quando il punto di partenza sembra lo stesso.</p><a href="#vibe-coding">Vai al laboratorio <span aria-hidden="true">↗</span></a></div></article>
+        </div>
+                <section class="below" id="metodo" aria-labelledby="method-title">
+                  <div><span class="kicker">Il metodo</span><h2 id="method-title">Ogni strumento ha bisogno di una competenza.</h2><p>Nel corso, l’IA entra nel processo di progettazione insieme alle domande che permettono di valutarla. L’armatura cresce. Il nucleo anche.</p></div>
+                  <div class="principles"><article><b>01</b><div><strong>Produrre</strong><small>Usare gli strumenti per esplorare possibilità, senza confondere velocità e qualità.</small></div></article><article><b>02</b><div><strong>Leggere</strong><small>Riconoscere forme, riferimenti, proporzioni, materiali e scelte che l’immagine nasconde.</small></div></article><article><b>03</b><div><strong>Decidere</strong><small>Delegare solo ciò che sai controllare. Correggere e motivare il risultato.</small></div></article></div>
+                </section>
+              </div>
+            </details>
+          </div>
         </section>
       </section>
       <section class="course-panel" role="tabpanel" id="tab-calendario" aria-labelledby="btn-calendario" hidden>

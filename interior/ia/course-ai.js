@@ -75,7 +75,8 @@ const schedeIA = {
 };
 const aliasSchedeIA = {
   'vibe-coding': 'tab-strumenti',
-  'metodo': 'tab-programma'
+  'metodo': 'tab-appunti',
+  'lezione-1': 'tab-appunti'
 };
 const pulsantiSchedeIA = [...document.querySelectorAll('.course-tab')];
 const navigazioneIA = document.getElementById('sezioni-corso');
@@ -105,9 +106,12 @@ function schedaDaHashIA() {
   const id = Object.keys(schedeIA).find(scheda => schedeIA[scheda] === nome)
     || aliasSchedeIA[nome] || 'tab-programma';
   apriSchedaIA(id);
+  if (nome === 'lezione-1' || nome === 'metodo') {
+    document.getElementById('lezione-1').open = true;
+  }
   if (nome) {
     requestAnimationFrame(() => {
-      const destinazione = nome === 'vibe-coding' || nome === 'metodo'
+      const destinazione = nome === 'vibe-coding' || nome === 'metodo' || nome === 'lezione-1'
         ? document.getElementById(nome) : navigazioneIA;
       destinazione?.scrollIntoView({ block: 'start', behavior: 'auto' });
     });
