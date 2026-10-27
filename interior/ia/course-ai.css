@@ -1,0 +1,129 @@
+:root { --accent: #77e7b7; }
+html { scroll-padding-top: 96px; }
+body.ai-page::after { display: none; }
+body.ai-page .topbar { position: fixed; background: rgba(7, 11, 12, .82); }
+body.ai-page .brand { flex: none; }
+body.ai-page .nav { gap: clamp(12px, 2vw, 32px); }
+body.ai-page .nav a:not(.course-link):hover,
+body.ai-page .footer-home:hover { color: var(--green); }
+body.ai-page .reading-button {
+  display: inline-flex; align-items: center; justify-content: center;
+  min-width: 44px; min-height: 44px; padding: 0 10px;
+  border: 1px solid rgba(188, 230, 216, .35); border-radius: 3px;
+  background: rgba(5, 16, 14, .68); color: #edf1ed;
+  font: 600 11px/1 'Geist Mono', monospace; cursor: pointer;
+}
+body.ai-page .reading-button:hover { border-color: var(--green); }
+body.ai-page .reading-panel { --ink: #edf1ed; --bg: #090b0c; --line-2: rgba(188, 230, 216, .25); }
+body.ai-page .reading-trigger-label { display: none; }
+body.ai-page :is(#programma, #vibe-coding, #archivio, #calendario, #metodo) { scroll-margin-top: 94px; }
+
+.course-block {
+  padding: clamp(66px, 7.5vw, 116px) clamp(22px, 6vw, 110px);
+  border-top: 1px solid rgba(119, 231, 183, .18);
+  background: #0b100f;
+}
+.course-block:nth-of-type(even) { background: #0d1311; }
+.course-block > :is(.section-heading, .lesson-track, .program-next, .exercise-list, .class-switch, .schedule) {
+  max-width: 1250px; margin-left: auto; margin-right: auto;
+}
+.section-heading { margin-bottom: clamp(40px, 5vw, 70px) !important; }
+.section-meta {
+  display: block; color: var(--green); text-transform: uppercase;
+  font: 600 10px/1.5 'Geist Mono', monospace; letter-spacing: .12em;
+}
+.section-heading h2, .archive-block h2 {
+  max-width: 900px; margin: 14px 0 18px;
+  font-size: clamp(43px, 5.2vw, 76px); font-weight: 600;
+  line-height: 1.02; letter-spacing: -.065em;
+}
+.section-heading p, .archive-block p {
+  max-width: 65ch; margin: 0; color: #b9c9bf;
+  font-size: clamp(15px, 1.3vw, 18px); line-height: 1.62;
+}
+.lesson-track { border-top: 1px solid rgba(119, 231, 183, .33); }
+.lesson-step {
+  display: grid; grid-template-columns: minmax(55px, 12%) minmax(0, 1fr);
+  gap: clamp(20px, 4vw, 65px); padding: 26px 0 31px;
+  border-bottom: 1px solid rgba(119, 231, 183, .23);
+}
+.step-index, .exercise-number {
+  color: var(--green); font: 600 11px/1.5 'Geist Mono', monospace;
+  letter-spacing: .08em; text-transform: uppercase;
+}
+.lesson-step h3, .exercise-list h3, .program-next h3 {
+  margin: 0; font-size: clamp(20px, 2.25vw, 30px);
+  line-height: 1.18; letter-spacing: -.04em; font-weight: 570;
+}
+.lesson-step p, .exercise-list p, .program-next p {
+  max-width: 67ch; margin: 11px 0 0; color: #b7c7bc;
+  font-size: 15px; line-height: 1.6;
+}
+.lesson-step a, .exercise-list a {
+  display: inline-flex; align-items: center; gap: 16px;
+  min-height: 44px; margin-top: 15px; color: var(--green);
+  font-size: 13px; font-weight: 650; text-decoration: underline;
+  text-underline-offset: 5px;
+}
+.lesson-step a:hover, .exercise-list a:hover { color: #b4ffdc; }
+.program-next {
+  display: grid; grid-template-columns: minmax(230px, .7fr) 1fr;
+  gap: clamp(30px, 6vw, 100px); margin-top: 45px;
+  padding: 30px 0 0; border-top: 1px solid rgba(119, 231, 183, .33);
+}
+.program-next h3 { margin-top: 12px; }
+.program-next p { margin: 0; }
+.exercise-list { border-top: 1px solid rgba(119, 231, 183, .33); }
+.exercise-list article {
+  display: grid; grid-template-columns: minmax(100px, 17%) minmax(0, 1fr) auto;
+  gap: clamp(18px, 3vw, 52px); align-items: start;
+  padding: 28px 0 31px; border-bottom: 1px solid rgba(119, 231, 183, .22);
+}
+.exercise-list a { white-space: nowrap; margin: 0; }
+.archive-block { padding-top: 65px; padding-bottom: 65px; }
+.archive-block > :is(.section-meta, h2, p) { max-width: 1250px; margin-left: auto; margin-right: auto; }
+.archive-block h2 { font-size: clamp(36px, 4vw, 58px); }
+.class-switch { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 30px; }
+.class-switch button {
+  min-width: 88px; min-height: 46px; padding: 0 18px;
+  border: 1px solid rgba(188, 230, 216, .3); border-radius: 3px;
+  background: #101a17; color: #e3ede7; cursor: pointer;
+  font: 600 12px/1 'Geist Mono', monospace;
+}
+.class-switch button:hover { border-color: var(--green); }
+.class-switch button[aria-pressed="true"] { background: var(--green); border-color: var(--green); color: #102019; }
+.schedule { list-style: none; padding: 0; border-top: 1px solid rgba(119, 231, 183, .33); }
+.schedule li {
+  display: grid; grid-template-columns: 95px minmax(0, 1fr) 155px;
+  align-items: center; gap: 20px; padding: 22px 0;
+  border-bottom: 1px solid rgba(119, 231, 183, .22);
+}
+.schedule .number { color: var(--green); font: 600 11px 'Geist Mono', monospace; }
+.schedule time { font-size: 18px; font-weight: 560; }
+.schedule .hours { color: #b7c7bc; font: 500 12px 'Geist Mono', monospace; text-align: right; }
+.credits { display: flex; flex-wrap: wrap; gap: 13px 30px; align-items: baseline; }
+.credits .footer-home { color: var(--green); font-size: 12px; text-decoration: none; }
+.credits small { flex-basis: 100%; color: #82998a; font-size: 10px; }
+
+@media (max-width: 850px) {
+  .exercise-list article { grid-template-columns: 100px minmax(0, 1fr); }
+  .exercise-list a { grid-column: 2; }
+}
+@media (max-width: 600px) {
+  body.ai-page .topbar { padding: 14px 16px; }
+  body.ai-page .brand > span:last-child { display: none; }
+  body.ai-page .nav { gap: 6px; }
+  body.ai-page .nav a.mobile-keep { display: inline-flex; font-size: 10px; }
+  body.ai-page .nav .course-link { padding: 12px 10px; }
+  body.ai-page .reading-button { min-width: 42px; min-height: 42px; padding: 0 5px; }
+  .course-block { padding: 65px 22px; }
+  .lesson-step { grid-template-columns: 30px minmax(0, 1fr); gap: 16px; }
+  .lesson-step p, .exercise-list p, .program-next p { font-size: 14px; }
+  .program-next { grid-template-columns: 1fr; gap: 20px; }
+  .exercise-list article { grid-template-columns: 1fr; gap: 10px; }
+  .exercise-list a { grid-column: 1; margin-top: 0; }
+  .schedule li { grid-template-columns: 42px minmax(0, 1fr); gap: 8px 12px; }
+  .schedule time { font-size: 15px; }
+  .schedule .hours { grid-column: 2; text-align: left; }
+  .credits { padding: 26px 22px; }
+}
