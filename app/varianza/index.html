@@ -16,7 +16,7 @@
     *{box-sizing:border-box}html{min-height:100%;background:var(--bg)}body{margin:0;min-height:100vh;color:var(--ink);font:16px/1.5 Geist,Arial,sans-serif;background:radial-gradient(circle at 90% 10%,rgba(35,114,86,.22),transparent 34%),var(--bg)}
     button,a,input{font:inherit}button{cursor:pointer}button:focus-visible,a:focus-visible,input:focus-visible+.switch{outline:3px solid var(--green);outline-offset:4px}::selection{color:var(--dark);background:var(--green)}
     .app{max-width:1600px;min-height:100vh;margin:auto;padding:0 clamp(16px,4vw,64px) 28px}
-    .top{min-height:72px;display:flex;align-items:center;justify-content:space-between;gap:20px;border-bottom:1px solid var(--line)}.brand{display:flex;align-items:center;gap:13px;color:var(--ink);font-weight:650;font-size:14px;text-decoration:none}.mark{display:grid;place-items:center;width:37px;height:37px;color:var(--green);border:1px solid var(--green);font:600 12px var(--mono)}.top-meta{color:var(--muted);font:500 11px var(--mono);letter-spacing:.08em;text-transform:uppercase}
+    .top{min-height:72px;display:flex;align-items:center;justify-content:space-between;gap:20px;border-bottom:1px solid var(--line)}.brand{display:flex;align-items:center;gap:13px;color:var(--ink);font-weight:650;font-size:14px;text-decoration:none}.mark{display:grid;place-items:center;width:37px;height:37px;color:var(--green);border:1px solid var(--green);font:600 12px var(--mono)}.top-link{color:var(--muted);font:500 11px var(--mono);letter-spacing:.06em;text-transform:uppercase;text-decoration:none;text-align:right}.top-link:hover{color:var(--green)}.top-link .short{display:none}@media(max-width:680px){.top-link .long{display:none}.top-link .short{display:inline}}
     .head{display:flex;justify-content:space-between;align-items:end;gap:28px;padding:26px 0 23px}.head h1{margin:0;font-size:clamp(36px,5.4vw,68px);letter-spacing:-.065em;line-height:1.03;font-weight:650}.head h1 span{color:var(--green)}.head p{max-width:520px;margin:0 0 5px;color:var(--muted);font-size:clamp(14px,1.15vw,17px)}
     .bridge{display:flex;gap:14px;align-items:baseline;margin:0 0 22px;padding:12px 16px;border:1px solid var(--line);background:rgba(9,20,16,.55);color:var(--muted);font-size:14px}.bridge b{flex:none;color:var(--green);font:600 11px var(--mono);letter-spacing:.09em;text-transform:uppercase}
     .lab{display:grid;grid-template-columns:380px minmax(0,1fr);gap:22px;align-items:start}
@@ -50,14 +50,14 @@
     .foot{display:flex;justify-content:space-between;gap:20px;padding-top:16px;color:var(--muted);font-size:12px}.foot a{color:var(--green);text-underline-offset:3px}.foot strong{color:var(--green);font-weight:500}
     @media(max-width:1050px){.lab{grid-template-columns:1fr}}
     @media(max-width:680px){.trk b{display:none}}
-    @media(max-width:680px){.head{display:block;padding:24px 0 18px}.head p{margin-top:12px}.bridge{display:block}.bridge b{display:block;margin-bottom:4px}.panel{padding:16px}.top-meta{font-size:9px}.foot{display:block}.foot span{display:block;margin-top:6px}}
+    @media(max-width:680px){.head{display:block;padding:24px 0 18px}.head p{margin-top:12px}.bridge{display:block}.bridge b{display:block;margin-bottom:4px}.panel{padding:16px}.top-link{font-size:10px}.foot{display:block}.foot span{display:block;margin-top:6px}}
     @media(prefers-reduced-motion:reduce){*,*:before,*:after{animation:none!important;transition:none!important}}
   </style>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 </head>
 <body>
   <div class="app">
-    <header class="top"><a class="brand" href="../../"><span class="mark">GS</span><span>Giovanni Savelli · AANT</span></a><span class="top-meta">Laboratorio · IA generativa</span></header>
+    <header class="top"><a class="brand" href="../../"><span class="mark">GS</span><span>Giovanni Savelli · AANT</span></a><a class="top-link" href="../../interior/ia/#vibe-coding">← <span class="long">Corso di Intelligenza Artificiale</span><span class="short">Corso IA</span></a></header>
     <div class="head"><h1>Laboratorio della Varianza<span>.</span></h1><p>Quello che non scrivi nella richiesta, il modello lo inventa. E ogni volta lo inventa in modo diverso.</p></div>
     <p class="bridge"><b>Dopo la frase a gruppi</b>Avete visto come una domanda più precisa restringe le frasi possibili. Con le immagini succede qualcosa di simile: più spazi lasciate vuoti, più il modello li riempie a caso.</p>
     <div class="lab">
@@ -78,7 +78,7 @@
         </div>
       </main>
     </div>
-    <footer class="foot"><span><strong>Simulazione didattica.</strong> Le immagini le disegna questa pagina con forme geometriche: imitano il comportamento di un generatore, non lo usano.</span><a href="../../interior/ia/#vibe-coding">← Torna al corso di Intelligenza Artificiale</a></footer>
+    <footer class="foot"><span><strong>Simulazione didattica.</strong> Le immagini le disegna questa pagina con forme geometriche: imitano il comportamento di un generatore, non lo usano.</span><a href="../../interior/ia/#vibe-coding">← Torna al corso</a></footer>
   </div>
   <script>
     // Le quattro parti della richiesta. Quando una parte è spenta, ogni immagine pesca un valore a caso.
