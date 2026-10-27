@@ -43,16 +43,16 @@
     @media(max-width:600px){.topbar{padding:17px 20px}.brand{font-size:11px}.brand-mark{width:35px;height:35px}.nav{gap:0}.nav a:not(.course-link){display:none}.nav .course-link{font-size:10px;padding:12px}.left{min-height:760px;padding:275px 22px 130px}.eyebrow{font-size:9px;margin-bottom:23px}h1{font-size:clamp(56px,12.2vw,78px)}.intro{font-size:17px;margin-top:28px}.detail{font-size:13px}.cta-row{margin-top:27px}.cta{min-height:46px}.bottom-rule{left:22px;bottom:90px;font-size:9px}.helmet-wrap{inset:3% -48% 43% 3%;opacity:.85}.city{background-position:49% 30%}.mode-panel{left:22px;right:22px;bottom:23px}.mode-panel button{font-size:9px;padding:0 7px;min-height:45px}.core-copy{left:22px;right:22px;top:29%}.core-copy .big{font-size:48px}.core-copy p{font-size:12px}.core-copy .triad em{font-size:9px}.page.is-core .left .eyebrow,.page.is-core .left h1,.page.is-core .left .intro,.page.is-core .left .detail{visibility:hidden}.below{padding:60px 22px 80px}.below h2{font-size:43px}}
     @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*:before,*:after{transition-duration:.01ms!important;animation-duration:.01ms!important}}
   </style>
-  <link rel="stylesheet" href="course-ai.css?v=20261027">
+  <link rel="stylesheet" href="course-ai.css?v=20261027-schede">
   <script src="../../assets/studio.js" defer></script>
-  <script src="course-ai.js?v=20261027" defer></script>
+  <script src="course-ai.js?v=20261027-schede" defer></script>
   <script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.170.0/examples/jsm/"}}</script>
 </head>
 <body class="ai-page">
   <div class="page" id="page">
     <header class="topbar">
       <a class="brand" href="../../" aria-label="Giovanni Savelli · tutti i corsi"><span class="brand-mark">GS</span><span>Giovanni Savelli<small>AANT · Interior Design</small></span></a>
-      <nav class="nav" aria-label="Navigazione del corso"><a href="#archivio">Archivio</a><a class="mobile-keep" href="#calendario">Calendario</a><a class="course-link" href="#programma">Programma ↘</a><button id="btn-leggibile" class="reading-button" type="button" aria-label="Impostazioni di lettura">Aa</button></nav>
+      <div class="header-actions"><span class="academic-year">A.A. 2026/2027</span><a class="all-courses" href="../../">Tutti i corsi ↗</a><button id="btn-leggibile" class="reading-button" type="button" aria-label="Alta leggibilità" aria-pressed="false">Aa</button></div>
     </header>
     <main>
       <section class="hero" aria-labelledby="hero-title">
@@ -61,7 +61,7 @@
           <h1 id="hero-title">Il progetto <span class="h1-last">resta tuo.</span></h1>
           <p class="intro">Gli strumenti possono amplificare quello che fai. Il criterio con cui scegli resta tuo.</p>
           <p class="detail">Impari a costruire la tua armatura digitale e, insieme, le conoscenze necessarie per giudicare ciò che produce.</p>
-          <div class="cta-row"><a class="cta" href="#metodo">Come funziona <span aria-hidden="true">↘</span></a><button class="cta outline" id="toggle-core" type="button">Guarda sotto la superficie <span aria-hidden="true">↗</span></button></div>
+          <nav class="cta-row" aria-label="Accesso rapido al corso"><a class="cta" href="#programma">Programma <span aria-hidden="true">↘</span></a><a class="cta outline" href="#calendario">Calendario <span aria-hidden="true">↘</span></a><button class="cta outline" id="toggle-core" type="button">Guarda sotto la superficie <span aria-hidden="true">↗</span></button></nav>
           <div class="bottom-rule">AANT · 2026/27 · INT 3A / 3B / 3C</div>
         </div>
         <div class="stage" aria-label="Fotografia notturna di Hong Kong e casco fantascientifico tridimensionale">
@@ -74,44 +74,52 @@
           <div class="frame-bottom"><i></i> UN'IMMAGINE NON È ANCORA UN PROGETTO</div>
         </div>
       </section>
-      <section class="below" id="metodo" aria-labelledby="method-title">
-        <div><span class="kicker">Il metodo</span><h2 id="method-title">Ogni strumento ha bisogno di una competenza.</h2><p>Nel corso, l’IA entra nel processo di progettazione insieme alle domande che permettono di valutarla. L’armatura cresce. Il nucleo anche.</p></div>
-        <div class="principles"><article><b>01</b><div><strong>Produrre</strong><small>Usare gli strumenti per esplorare possibilità, senza confondere velocità e qualità.</small></div></article><article><b>02</b><div><strong>Leggere</strong><small>Riconoscere forme, riferimenti, proporzioni, materiali e scelte che l’immagine nasconde.</small></div></article><article><b>03</b><div><strong>Decidere</strong><small>Delegare solo ciò che sai controllare. Correggere e motivare il risultato.</small></div></article></div>
-      </section>
+      <div class="course-navigation" id="sezioni-corso">
+        <nav class="course-tabs" role="tablist" aria-label="Sezioni del corso">
+          <button class="course-tab" type="button" role="tab" id="btn-programma" data-tab="tab-programma" aria-controls="tab-programma" aria-selected="true">Lezioni</button>
+          <button class="course-tab" type="button" role="tab" id="btn-archivio" data-tab="tab-archivio" aria-controls="tab-archivio" aria-selected="false">Archivio</button>
+          <button class="course-tab" type="button" role="tab" id="btn-appunti" data-tab="tab-appunti" aria-controls="tab-appunti" aria-selected="false">Appunti</button>
+          <button class="course-tab" type="button" role="tab" id="btn-calendario" data-tab="tab-calendario" aria-controls="tab-calendario" aria-selected="false">Calendario</button>
+          <button class="course-tab" type="button" role="tab" id="btn-strumenti" data-tab="tab-strumenti" aria-controls="tab-strumenti" aria-selected="false">Strumenti</button>
+        </nav>
+      </div>
+      <section class="course-panel" role="tabpanel" id="tab-programma" aria-labelledby="btn-programma">
       <section class="course-block" id="programma" aria-labelledby="program-title">
         <div class="section-heading">
-          <span class="section-meta">PROGRAMMA · INTERIOR DESIGN · 2026/27</span>
-          <h2 id="program-title">Da dove cominciamo.</h2>
-          <p>La prima lezione parte dalle basi: come un modello costruisce una risposta, che cosa cambia quando aggiungi contesto e perché devi saper leggere il risultato.</p>
+          <span class="section-meta">LEZIONE 01 · PERCORSO INIZIALE</span>
+          <h2 id="program-title">Programma lezioni.</h2>
+          <p>Nella prima lezione partiamo dalle basi: come un modello costruisce una risposta, che cosa cambia quando aggiungi contesto e perché devi saper leggere il risultato.</p>
         </div>
         <div class="lesson-track" aria-label="Percorso iniziale della prima lezione">
-          <article class="lesson-step"><span class="step-index">01</span><div><h3>Una frase, un pezzo alla volta</h3><p>Un’analogia umana per introdurre gli LLM: ogni parola proposta cambia il contesto disponibile per la successiva. È una semplificazione; i modelli lavorano con token, che non coincidono sempre con parole intere.</p></div></article>
-          <article class="lesson-step"><span class="step-index">02</span><div><h3>Il prompt dà una direzione</h3><p>La stessa immagine può ricevere descrizioni diverse. Una richiesta più precisa orienta lo sguardo e restringe le continuazioni plausibili, senza garantire da sola una risposta corretta.</p></div></article>
-          <article class="lesson-step"><span class="step-index">03</span><div><h3>La frase a gruppi</h3><p>Più gruppi costruiscono una frase a turni sulla stessa immagine. Ripetono l’esercizio con tre consegne sempre più mirate e confrontano ciò che hanno scritto.</p><a href="#vibe-coding">Vai all’esercizio <span aria-hidden="true">↗</span></a></div></article>
-          <article class="lesson-step"><span class="step-index">04</span><div><h3>Il Laboratorio della Varianza</h3><p>Passiamo dalle frasi alle immagini: osserviamo come informazioni non specificate possano produrre risultati differenti anche quando il punto di partenza sembra lo stesso.</p><a href="#vibe-coding">Vai al laboratorio <span aria-hidden="true">↗</span></a></div></article>
+          <article class="lesson-step"><span class="step-index">01 / A</span><div><h3>Una frase, un pezzo alla volta</h3><p>Un’analogia umana per introdurre gli LLM: ogni parola proposta cambia il contesto disponibile per la successiva. È una semplificazione; i modelli lavorano con token, che non coincidono sempre con parole intere.</p></div></article>
+          <article class="lesson-step"><span class="step-index">01 / B</span><div><h3>Il prompt dà una direzione</h3><p>La stessa immagine può ricevere descrizioni diverse. Una richiesta più precisa orienta lo sguardo e restringe le continuazioni plausibili, senza garantire da sola una risposta corretta.</p></div></article>
+          <article class="lesson-step"><span class="step-index">01 / C</span><div><h3>La frase a gruppi</h3><p>Più gruppi costruiscono una frase a turni sulla stessa immagine. Ripetono l’esercizio con tre consegne sempre più mirate e confrontano ciò che hanno scritto.</p><a href="#vibe-coding">Vai all’esercizio <span aria-hidden="true">↗</span></a></div></article>
+          <article class="lesson-step"><span class="step-index">01 / D</span><div><h3>Il Laboratorio della Varianza</h3><p>Passiamo dalle frasi alle immagini: osserviamo come informazioni non specificate possano produrre risultati differenti anche quando il punto di partenza sembra lo stesso.</p><a href="#vibe-coding">Vai al laboratorio <span aria-hidden="true">↗</span></a></div></article>
         </div>
         <div class="program-next">
           <div><span class="section-meta">LEZIONI SUCCESSIVE · IN PREPARAZIONE</span><h3>Scrivere, modificare, verificare.</h3></div>
           <p>Approfondiremo quando usare prompt narrativi o strutturati, come modificare attributi in un prompt JSON e come valutare un’immagine generata. Nano Banana Pro sarà il modello di riferimento per le dimostrazioni; altri modelli entreranno come confronto quando la loro funzione aiuta a capire una scelta progettuale.</p>
         </div>
       </section>
-      <section class="course-block exercise-block" id="vibe-coding" aria-labelledby="exercise-title">
-        <div class="section-heading">
-          <span class="section-meta">ESERCIZI E STRUMENTI</span>
-          <h2 id="exercise-title">Prova, poi confronta.</h2>
-          <p>Questi strumenti accompagnano le spiegazioni in aula. Non generano da soli una conclusione: servono a osservare, discutere e correggere.</p>
-        </div>
-        <div class="exercise-list">
-          <article><span class="exercise-number">01 / IN CLASSE</span><div><h3>La frase a gruppi</h3><p>Entra nella sessione della classe con il QR mostrato dal docente. Ogni persona aggiunge un breve pezzo alla frase del proprio gruppo.</p></div><a href="https://aant-frase-a-gruppi.aant-la-prossima-parola.workers.dev/join" target="_blank" rel="noopener noreferrer">Apri l’esercizio <span aria-hidden="true">↗</span></a></article>
-          <article><span class="exercise-number">02 / IMMAGINI</span><div><h3>Laboratorio della Varianza</h3><p>Completa progressivamente la descrizione e confronta le immagini ottenute.</p></div><a href="../../app/varianza/">Apri il laboratorio <span aria-hidden="true">↗</span></a></article>
-          <article><span class="exercise-number">03 / PROMPT</span><div><h3>Micro-espressioni</h3><p>Controlla singoli attributi di un ritratto e osserva come cambia la struttura del prompt.</p></div><a href="../../app/micro-espressioni/">Apri lo strumento <span aria-hidden="true">↗</span></a></article>
-        </div>
+      <section class="below" id="metodo" aria-labelledby="method-title">
+        <div><span class="kicker">Il metodo</span><h2 id="method-title">Ogni strumento ha bisogno di una competenza.</h2><p>Nel corso, l’IA entra nel processo di progettazione insieme alle domande che permettono di valutarla. L’armatura cresce. Il nucleo anche.</p></div>
+        <div class="principles"><article><b>01</b><div><strong>Produrre</strong><small>Usare gli strumenti per esplorare possibilità, senza confondere velocità e qualità.</small></div></article><article><b>02</b><div><strong>Leggere</strong><small>Riconoscere forme, riferimenti, proporzioni, materiali e scelte che l’immagine nasconde.</small></div></article><article><b>03</b><div><strong>Decidere</strong><small>Delegare solo ciò che sai controllare. Correggere e motivare il risultato.</small></div></article></div>
       </section>
+      </section>
+      <section class="course-panel" role="tabpanel" id="tab-archivio" aria-labelledby="btn-archivio" hidden>
       <section class="course-block archive-block" id="archivio" aria-labelledby="archive-title">
         <span class="section-meta">ARCHIVIO LEZIONI · 2026/27</span>
-        <h2 id="archive-title">Le lezioni di quest’anno.</h2>
-        <p>Qui troverai gli appunti delle lezioni svolte nel 2026/27. Le schede compariranno incontro dopo incontro.</p>
+        <h2 id="archive-title">Archivio lezioni.</h2>
+        <p>Qui troverai le lezioni svolte nel 2026/27, in ordine cronologico.</p><div class="empty-state"><h3>Archivio ancora vuoto</h3><p>Le schede compariranno dopo gli incontri.</p></div>
       </section>
+      </section>
+      <section class="course-panel" role="tabpanel" id="tab-appunti" aria-labelledby="btn-appunti" hidden>
+        <section class="course-block notes-block" id="appunti" aria-labelledby="notes-title">
+          <div class="section-heading"><span class="section-meta">IL PICCOLO MANUALE DEL CORSO</span><h2 id="notes-title">Appunti delle lezioni.</h2><p>Le spiegazioni, i materiali e le prove pratiche saranno organizzati qui per lezione.</p></div>
+          <div class="empty-state"><h3>Appunti in preparazione</h3><p>La prima scheda sarà aggiunta quando avremo svolto la lezione.</p></div>
+        </section>
+      </section>
+      <section class="course-panel" role="tabpanel" id="tab-calendario" aria-labelledby="btn-calendario" hidden>
       <section class="course-block calendar-block" id="calendario" aria-labelledby="calendar-title">
         <div class="section-heading">
           <span class="section-meta">PRIMO SEMESTRE · 2026/27</span>
@@ -125,9 +133,29 @@
         </div>
         <ol class="schedule" id="calendar-list" aria-live="polite"></ol>
       </section>
+      </section>
+      <section class="course-panel" role="tabpanel" id="tab-strumenti" aria-labelledby="btn-strumenti" hidden>
+      <section class="course-block exercise-block" id="vibe-coding" aria-labelledby="exercise-title">
+        <div class="section-heading">
+          <span class="section-meta">STRUMENTI DEL CORSO</span>
+          <h2 id="exercise-title">Esercizi e strumenti.</h2>
+          <p>Questi strumenti accompagnano le spiegazioni in aula. Non generano da soli una conclusione: servono a osservare, discutere e correggere.</p>
+        </div>
+        <div class="exercise-list">
+          <article><span class="exercise-number">01 / IN CLASSE</span><div><h3>La frase a gruppi</h3><p>Entra nella sessione della classe con il QR mostrato dal docente. Ogni persona aggiunge un breve pezzo alla frase del proprio gruppo.</p></div><a href="https://aant-frase-a-gruppi.aant-la-prossima-parola.workers.dev/join" target="_blank" rel="noopener noreferrer">Apri l’esercizio <span aria-hidden="true">↗</span></a></article>
+          <article><span class="exercise-number">02 / IMMAGINI</span><div><h3>Laboratorio della Varianza</h3><p>Completa progressivamente la descrizione e confronta le immagini ottenute.</p></div><a href="../../app/varianza/">Apri il laboratorio <span aria-hidden="true">↗</span></a></article>
+          <article><span class="exercise-number">03 / PROMPT</span><div><h3>Micro-espressioni</h3><p>Controlla singoli attributi di un ritratto e osserva come cambia la struttura del prompt.</p></div><a href="../../app/micro-espressioni/">Apri lo strumento <span aria-hidden="true">↗</span></a></article>
+        </div>
+      </section>
+      </section>
       <footer class="credits"><a class="footer-home" href="../../">← Tutti i corsi del docente</a><span>Intelligenza artificiale · Interior Design · Giovanni Savelli · AANT 2026/27</span><small>Immagini: <a href="https://commons.wikimedia.org/wiki/File:Hong_Kong_night_street.jpg" target="_blank" rel="noopener">Wilfredor / CC0</a>, <a href="https://unsplash.com/photos/man-working-on-architectural-model-at-desk-WUY0W2RSiBw" target="_blank" rel="noopener">GN Group / Unsplash</a> · Casco 3D: <a href="https://github.com/KhronosGroup/glTF-Sample-Assets/tree/main/Models/SciFiHelmet" target="_blank" rel="noopener">Michael Pavlovic / CC0</a></small></footer>
     </main>
   </div>
+  <nav class="mobile-actions" aria-label="Accesso rapido alle sezioni">
+    <a href="#programma" data-course-tab="tab-programma">Programma</a>
+    <a href="#calendario" data-course-tab="tab-calendario">Calendario</a>
+    <a href="#strumenti" data-course-tab="tab-strumenti">Strumenti</a>
+  </nav>
   <script type="module">
     import * as THREE from 'three';
     import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';

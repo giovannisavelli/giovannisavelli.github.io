@@ -3,8 +3,19 @@ html { scroll-padding-top: 96px; }
 body.ai-page::after { display: none; }
 body.ai-page .topbar { position: fixed; background: rgba(7, 11, 12, .82); }
 body.ai-page .brand { flex: none; }
-body.ai-page .nav { gap: clamp(12px, 2vw, 32px); }
-body.ai-page .nav a:not(.course-link):hover,
+body.ai-page .header-actions { display: flex; align-items: center; gap: 16px; }
+body.ai-page .academic-year {
+  color: #a7bab0; font: 500 11px/1.4 'Geist Mono', monospace;
+  letter-spacing: .08em; white-space: nowrap;
+}
+body.ai-page .all-courses {
+  display: inline-flex; align-items: center; justify-content: center;
+  min-height: 42px; padding: 8px 14px;
+  border: 1px solid rgba(188, 230, 216, .3); border-radius: 999px;
+  color: #d5e4da; font: 600 12px/1.2 Geist, Arial, sans-serif;
+  white-space: nowrap;
+}
+body.ai-page .all-courses:hover { border-color: var(--green); color: var(--green); }
 body.ai-page .footer-home:hover { color: var(--green); }
 body.ai-page .reading-button {
   display: inline-flex; align-items: center; justify-content: center;
@@ -16,7 +27,49 @@ body.ai-page .reading-button {
 body.ai-page .reading-button:hover { border-color: var(--green); }
 body.ai-page .reading-panel { --ink: #edf1ed; --bg: #090b0c; --line-2: rgba(188, 230, 216, .25); }
 body.ai-page .reading-trigger-label { display: none; }
-body.ai-page :is(#programma, #vibe-coding, #archivio, #calendario, #metodo) { scroll-margin-top: 94px; }
+body.ai-page :is(#sezioni-corso, #programma, #vibe-coding, #archivio, #appunti, #calendario, #metodo) { scroll-margin-top: 94px; }
+
+.course-navigation, .course-panel {
+  width: min(1120px, calc(100% - 32px)); margin-right: auto; margin-left: auto;
+}
+.course-navigation { padding-top: 32px; }
+.course-tabs { display: flex; flex-wrap: wrap; gap: 9px; margin-bottom: 24px; }
+.course-tab {
+  min-height: 44px; padding: 10px 16px;
+  border: 1px solid rgba(188, 230, 216, .28); border-radius: 9px;
+  background: #101a17; color: #b9c9bf;
+  font: 600 13px/1.2 Geist, Arial, sans-serif;
+}
+.course-tab:hover, .course-tab:focus-visible { border-color: var(--green); color: #edf1ed; }
+.course-tab[aria-selected="true"] { border-color: var(--green); background: var(--green); color: #102019; }
+.course-panel {
+  min-height: 300px; margin-bottom: 76px;
+  overflow: hidden; border: 1px solid rgba(188, 230, 216, .2);
+  border-radius: 20px; background: #0b100f;
+}
+.course-panel[hidden] { display: none; }
+.mobile-actions { display: none; }
+.course-panel .course-block {
+  padding: clamp(30px, 4vw, 52px);
+  border-top: 0; background: transparent;
+}
+.course-panel .below {
+  padding: clamp(30px, 4vw, 52px);
+  border-top: 1px solid rgba(119, 231, 183, .2);
+}
+.course-panel .below h2 { font-size: clamp(30px, 4vw, 42px); }
+.course-panel .section-heading { margin-bottom: 36px !important; }
+.course-panel .section-heading h2,
+.course-panel .archive-block h2 {
+  font-size: clamp(29px, 3.8vw, 39px); letter-spacing: -.045em;
+}
+.empty-state {
+  max-width: 760px; margin-top: 28px; padding: 24px;
+  border: 1px dashed rgba(188, 230, 216, .3);
+  border-radius: 14px; background: rgba(119, 231, 183, .035);
+}
+.empty-state h3 { margin: 0 0 8px; font-size: 18px; }
+.empty-state p { margin: 0; color: #b9c9bf; font-size: 14px; line-height: 1.6; }
 
 .course-block {
   padding: clamp(66px, 7.5vw, 116px) clamp(22px, 6vw, 110px);
@@ -105,6 +158,16 @@ body.ai-page :is(#programma, #vibe-coding, #archivio, #calendario, #metodo) { sc
 .credits .footer-home { color: var(--green); font-size: 12px; text-decoration: none; }
 .credits small { flex-basis: 100%; color: #82998a; font-size: 10px; }
 
+@media (min-width: 901px) {
+  body.ai-page .hero { min-height: 640px; }
+  body.ai-page .left { padding-top: 116px; padding-bottom: 72px; }
+  body.ai-page h1 { font-size: clamp(68px, 6vw, 90px); }
+  body.ai-page .eyebrow { margin-bottom: 24px; }
+  body.ai-page .intro { margin-top: 26px; }
+  body.ai-page .cta-row { margin-top: 26px; }
+  body.ai-page .mode-panel { bottom: 70px; }
+}
+
 @media (max-width: 850px) {
   .exercise-list article { grid-template-columns: 100px minmax(0, 1fr); }
   .exercise-list a { grid-column: 2; }
@@ -112,10 +175,17 @@ body.ai-page :is(#programma, #vibe-coding, #archivio, #calendario, #metodo) { sc
 @media (max-width: 600px) {
   body.ai-page .topbar { padding: 14px 16px; }
   body.ai-page .brand > span:last-child { display: none; }
-  body.ai-page .nav { gap: 6px; }
-  body.ai-page .nav a.mobile-keep { display: inline-flex; font-size: 10px; }
-  body.ai-page .nav .course-link { padding: 12px 10px; }
+  body.ai-page .header-actions { gap: 9px; }
+  body.ai-page .academic-year { display: none; }
+  body.ai-page .all-courses { min-height: 42px; padding: 7px 11px; font-size: 11px; }
   body.ai-page .reading-button { min-width: 42px; min-height: 42px; padding: 0 5px; }
+  body.ai-page .left { min-height: 700px; padding: 215px 22px 110px; }
+  .course-navigation { padding-top: 20px; }
+  .course-tabs { gap: 7px; margin-bottom: 18px; }
+  .course-tab { padding: 10px 13px; font-size: 12px; }
+  .course-panel { margin-bottom: 44px; border-radius: 16px; }
+  .course-panel .course-block, .course-panel .below { padding: 26px 20px; }
+  .empty-state { padding: 20px; }
   .course-block { padding: 65px 22px; }
   .lesson-step { grid-template-columns: 30px minmax(0, 1fr); gap: 16px; }
   .lesson-step p, .exercise-list p, .program-next p { font-size: 14px; }
@@ -126,4 +196,26 @@ body.ai-page :is(#programma, #vibe-coding, #archivio, #calendario, #metodo) { sc
   .schedule time { font-size: 15px; }
   .schedule .hours { grid-column: 2; text-align: left; }
   .credits { padding: 26px 22px; }
+}
+
+@media (max-width: 760px) {
+  body.ai-page .page { padding-bottom: 70px; }
+  .course-tabs { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .course-tab { width: 100%; }
+  .mobile-actions {
+    position: fixed; z-index: 50; right: 0; bottom: 0; left: 0;
+    display: flex; gap: 6px;
+    padding: 9px 12px max(9px, env(safe-area-inset-bottom));
+    border-top: 1px solid rgba(188, 230, 216, .25);
+    background: rgba(9, 11, 12, .97); backdrop-filter: blur(16px);
+  }
+  .mobile-actions a {
+    display: grid; place-items: center; flex: 1; min-height: 44px;
+    padding: 8px; border: 1px solid rgba(188, 230, 216, .3);
+    border-radius: 999px; color: #b9c9bf;
+    font: 600 12px/1.2 Geist, Arial, sans-serif; text-align: center;
+  }
+  .mobile-actions a[aria-current="true"] {
+    border-color: var(--green); background: var(--green); color: #102019;
+  }
 }
