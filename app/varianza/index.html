@@ -1,839 +1,480 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="it">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Il Laboratorio della Varianza (Seed)</title>
-  <meta name="theme-color" content="#0f111a">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#090d0d">
+  <title>Laboratorio della Varianza · AANT</title>
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎲</text></svg>">
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=JetBrains+Mono&display=swap" rel="stylesheet">
   <style>
-    :root {
-      --bg: #0f111a;
-      --card: #161925;
-      --blue: #3b82f6;
-      --green: #10b981;
-      --text: #e2e8f0;
-      --text-dim: #94a3b8;
-    }
-
-    * {
-      box-sizing: border-box;
-    }
-
-    body {
-      margin: 0;
-      padding: 0;
-      background-color: var(--bg);
-      color: var(--text);
-      font-family: 'Inter', sans-serif;
-      min-height: 100vh;
-      overflow-x: hidden;
-    }
-
-    .container {
-      display: grid;
-      grid-template-columns: 380px 1fr;
-      min-height: 100vh;
-      width: 100%;
-      margin: 0;
-      padding: 0;
-      gap: 0;
-    }
-
-    .left-col {
-      background: var(--card);
-      padding: 32px 40px;
-      border-right: 1px solid rgba(255, 255, 255, 0.05);
-      display: flex;
-      flex-direction: column;
-      gap: 24px;
-      max-width: none;
-    }
-
-    /* Simulate header from design on the first div in left-col */
-    .left-col > div:first-child {
-      border-bottom: 1px solid rgba(255,255,255,0.05);
-      margin: -32px -40px 0 -40px;
-      padding: 24px 40px;
-      display: flex;
-      flex-direction: column;
-      gap: 4px;
-    }
-
-    h1 {
-      margin: 0;
-      font-size: 20px;
-      font-weight: 800;
-      letter-spacing: -0.02em;
-      text-transform: uppercase;
-      color: var(--blue);
-      background: none;
-      -webkit-text-fill-color: unset;
-      -webkit-background-clip: unset;
-    }
-
-    .subtitle {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 12px;
-      color: var(--text-dim);
-      margin: 0;
-      font-weight: 400;
-    }
-
-    /* We add a fake sidebar title to match the design */
-    .left-col > div:first-child::after {
-      content: 'Costruttore di Prompt';
-      display: block;
-      font-size: 24px;
-      font-weight: 600;
-      margin-top: 24px;
-      color: var(--text);
-      font-family: 'Inter', sans-serif;
-      text-transform: none;
-      letter-spacing: normal;
-    }
-
-    .toggles-list {
-      display: flex;
-      flex-direction: column;
-      gap: 16px;
-      background-color: transparent;
-      padding: 0;
-      border-radius: 0;
-      box-shadow: none;
-    }
-
-    .toggle-item {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 16px;
-      background: rgba(255, 255, 255, 0.03);
-      border-radius: 12px;
-      border: 1px solid rgba(255, 255, 255, 0.05);
-      cursor: pointer;
-      transition: all 0.2s;
-    }
-
-    .toggle-item:has(input:checked) {
-      border-color: var(--blue);
-      background: rgba(59, 130, 246, 0.1);
-    }
-
-    .toggle-info {
-      flex: 1;
-      padding-right: 1rem;
-      display: flex;
-      flex-direction: column;
-    }
-
-    .toggle-label {
-      display: block;
-      font-size: 14px;
-      font-weight: 600;
-      margin-bottom: 0px;
-    }
-
-    .toggle-desc {
-      color: var(--text-dim);
-      font-size: 11px;
-      font-family: 'JetBrains Mono', monospace;
-    }
-
-    .switch {
-      width: 40px;
-      height: 20px;
-      background: #334155;
-      border-radius: 20px;
-      position: relative;
-      transition: background 0.3s;
-      flex-shrink: 0;
-    }
-
-    .switch input { 
-      opacity: 0;
-      width: 0;
-      height: 0;
-    }
-
-    .slider {
-      position: absolute;
-      cursor: pointer;
-      top: 0; left: 0; right: 0; bottom: 0;
-      background-color: transparent;
-      border-radius: 20px;
-    }
-
-    .slider:before {
-      content: "";
-      position: absolute;
-      height: 16px;
-      width: 16px;
-      left: 2px;
-      bottom: 2px;
-      background-color: white;
-      transition: .3s;
-      border-radius: 50%;
-    }
-
-    input:checked + .slider {
-      background-color: transparent;
-    }
-    
-    .switch:has(input:checked) {
-      background: var(--green);
-    }
-
-    input:checked + .slider:before {
-      transform: translateX(20px);
-    }
-
-    .cta-btn {
-      margin-top: auto;
-      background: var(--blue);
-      color: white;
-      border: none;
-      padding: 20px;
-      border-radius: 12px;
-      font-weight: 800;
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-      cursor: pointer;
-      transition: transform 0.1s, filter 0.2s;
-      font-size: 1rem;
-      box-shadow: none;
-    }
-
-    .cta-btn:hover {
-      filter: brightness(1.1);
-      transform: none;
-      box-shadow: none;
-    }
-
-    .cta-btn:active {
-      transform: scale(0.98);
-      box-shadow: none;
-    }
-
-    .right-col {
-      position: relative;
-      background-color: transparent;
-      border-radius: 0;
-      padding: 40px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: flex-start;
-      box-shadow: none;
-      overflow: hidden;
-    }
-
-    .right-header {
-      width: 100%;
-      text-align: center;
-      font-weight: 600;
-      color: var(--text-dim);
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 14px;
-      margin-bottom: 2rem;
-      letter-spacing: 1px;
-      text-transform: uppercase;
-      display: block;
-    }
-
-    .output-grid {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 2rem;
-      width: 100%;
-      max-width: 550px;
-      aspect-ratio: 1;
-      margin-bottom: 2rem;
-    }
-
-    .grid-item {
-      width: 100%;
-      height: 100%;
-      border-radius: 0.75rem;
-      overflow: hidden;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      opacity: 0;
-      transform: scale(0.9);
-      animation: popIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
-    }
-
-    .skeleton {
-      width: 100%;
-      height: 100%;
-      border-radius: 0.75rem;
-      background: rgba(255,255,255,0.03);
-      border: 1px dashed rgba(255,255,255,0.1);
-    }
-
-    @keyframes popIn {
-      to {
-        opacity: 1;
-        transform: scale(1);
-      }
-    }
-
-    .noise-container {
-      width: 100%;
-      height: 100%;
-      background: var(--bg);
-      position: relative;
-      overflow: hidden;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-    
-    .noise-container::after {
-      content: "";
-      position: absolute;
-      top: -50%; left: -50%; right: -50%; bottom: -50%;
-      background: url('data:image/svg+xml,%3Csvg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg"%3E%3Cfilter id="noiseFilter"%3E%3CfeTurbulence type="fractalNoise" baseFrequency="0.8" numOctaves="3" stitchTiles="stitch"/%3E%3C/filter%3E%3Crect width="100%25" height="100%25" filter="url(%23noiseFilter)"/%3E%3C/svg%3E');
-      opacity: 0.6;
-      animation: noiseAnim 0.2s infinite;
-    }
-
-    .noise-text {
-      position: relative;
-      z-index: 10;
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 11px;
-      color: rgba(255,255,255,0.7);
-      background: rgba(0,0,0,0.5);
-      padding: 4px 8px;
-      border-radius: 4px;
-    }
-
-    @keyframes noiseAnim {
-      0% { transform: translate(0,0) }
-      10% { transform: translate(-5%,-5%) }
-      20% { transform: translate(-10%,5%) }
-      30% { transform: translate(5%,-10%) }
-      40% { transform: translate(-5%,15%) }
-      50% { transform: translate(-10%,5%) }
-      60% { transform: translate(15%,0) }
-      70% { transform: translate(0,15%) }
-      80% { transform: translate(3%,35%) }
-      90% { transform: translate(-10%,10%) }
-      100% { transform: translate(0,0) }
-    }
-
-    .svg-container {
-      width: 100%;
-      height: 100%;
-    }
-
-    .prompt-preview {
-      background: rgba(0,0,0,0.25);
-      border: 1px solid rgba(255, 255, 255, 0.05);
-      border-radius: 12px;
-      padding: 16px;
-      font-family: 'JetBrains Mono', monospace;
-      line-height: 1.8;
-      box-shadow: inset 0 2px 10px rgba(0,0,0,0.5);
-    }
-    
-    .prompt-header {
-      font-size: 11px;
-      text-transform: uppercase;
-      color: var(--text-dim);
-      margin-bottom: 12px;
-      letter-spacing: 1px;
-      display: flex;
-      justify-content: space-between;
-    }
-
-    .prompt-code {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 6px;
-      font-size: 13px;
-    }
-
-    .prompt-part {
-      transition: all 0.3s ease;
-      padding: 2px 6px;
-      border-radius: 4px;
-      border: 1px solid transparent;
-    }
-
-    .prompt-part.missing {
-      color: rgba(255, 255, 255, 0.4);
-      border-color: rgba(255, 255, 255, 0.1);
-      border-style: dashed;
-    }
-
-    .prompt-part.present {
-      color: var(--green);
-      background: rgba(16, 185, 129, 0.1);
-      border-color: rgba(16, 185, 129, 0.2);
-    }
-
-    .didactic-panel {
-      width: 100%;
-      background: rgba(0,0,0,0.2);
-      border: 1px solid rgba(255, 255, 255, 0.08);
-      border-radius: 12px;
-      overflow: hidden;
-      margin-top: auto;
-      display: flex;
-      flex-direction: column;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-    }
-
-    .didactic-header {
-      padding: 16px 24px;
-      background: rgba(255, 255, 255, 0.03);
-      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-
-    .didactic-title {
-      font-weight: 700;
-      font-size: 13px;
-      color: var(--blue);
-      text-transform: uppercase;
-      letter-spacing: 1px;
-    }
-
-    .entropy-badge {
-      padding: 6px 12px;
-      border-radius: 20px;
-      font-size: 12px;
-      font-weight: 800;
-      font-family: 'JetBrains Mono', monospace;
-      transition: all 0.3s;
-    }
-
-    .didactic-body {
-      padding: 24px;
-      font-size: 15px;
-      line-height: 1.6;
-      color: var(--text);
-    }
-
-    .didactic-body p {
-      margin-top: 0;
-      margin-bottom: 20px;
-    }
-
-    .theory-box {
-      background: rgba(59, 130, 246, 0.08);
-      border-left: 3px solid var(--blue);
-      padding: 16px;
-      border-radius: 0 8px 8px 0;
-      font-size: 14px;
-      color: var(--text-dim);
-    }
-
-    .theory-box strong {
-      color: var(--text);
-      font-weight: 600;
-      font-size: 11px;
-      text-transform: uppercase;
-      letter-spacing: 1px;
-      display: block;
-      margin-bottom: 6px;
-      font-family: 'JetBrains Mono', monospace;
-    }
-
-    @media (max-width: 900px) {
-      .container {
-        display: flex;
-        flex-direction: column;
-        min-height: auto;
-      }
-      .left-col {
-        padding: 24px 20px;
-        border-right: none;
-        border-bottom: 2px solid rgba(255,255,255,0.05); /* Divider */
-      }
-      .left-col > div:first-child {
-        margin: -24px -20px 0 -20px;
-        padding: 20px;
-      }
-      .right-col {
-        padding: 24px 16px;
-      }
-      .output-grid {
-        gap: 1rem;
-        max-width: 550px;
-        margin-left: auto;
-        margin-right: auto;
-      }
-      .didactic-header {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 12px;
-      }
-      .prompt-code {
-        gap: 6px;
-        font-size: 11px;
-      }
-      h1 {
-        font-size: 18px;
-      }
-      .left-col > div:first-child::after {
-        font-size: 20px;
-        margin-top: 16px;
-      }
-      .right-header {
-        font-size: 12px;
-      }
-    }
-
-    @media (max-width: 480px) {
-      .toggle-item {
-        padding: 12px;
-      }
-      .toggle-label {
-        font-size: 13px;
-      }
-      .toggle-desc {
-        font-size: 11px;
-      }
-      .output-grid {
-        gap: 0.5rem;
-      }
-      .didactic-body {
-        padding: 16px;
-        font-size: 14px;
-      }
-      .prompt-preview {
-        padding: 12px;
-      }
-    }
+    @font-face{font-family:Geist;src:url('fonts/geist-sans-latin-400-normal.woff2') format('woff2');font-weight:400;font-display:swap}
+    @font-face{font-family:Geist;src:url('fonts/geist-sans-latin-600-normal.woff2') format('woff2');font-weight:600;font-display:swap}
+    @font-face{font-family:Geist;src:url('fonts/geist-sans-latin-700-normal.woff2') format('woff2');font-weight:700;font-display:swap}
+    @font-face{font-family:'Geist Mono';src:url('fonts/geist-mono-latin-500-normal.woff2') format('woff2');font-weight:500;font-display:swap}
+    @font-face{font-family:'Geist Mono';src:url('fonts/geist-mono-latin-600-normal.woff2') format('woff2');font-weight:600;font-display:swap}
+    :root{--bg:#090d0d;--panel:#111919;--panel2:#182422;--line:#38544a;--ink:#edf3ef;--muted:#adc1b8;--green:#77e7b7;--dark:#102119;--amber:#f0d79c;--mono:'Geist Mono',ui-monospace,monospace}
+    *{box-sizing:border-box}html{min-height:100%;background:var(--bg)}body{margin:0;min-height:100vh;color:var(--ink);font:16px/1.5 Geist,Arial,sans-serif;background:radial-gradient(circle at 90% 10%,rgba(35,114,86,.22),transparent 34%),var(--bg)}
+    button,a,input{font:inherit}button{cursor:pointer}button:focus-visible,a:focus-visible,input:focus-visible+.switch{outline:3px solid var(--green);outline-offset:4px}::selection{color:var(--dark);background:var(--green)}
+    .app{max-width:1600px;min-height:100vh;margin:auto;padding:0 clamp(16px,4vw,64px) 28px}
+    .top{min-height:72px;display:flex;align-items:center;justify-content:space-between;gap:20px;border-bottom:1px solid var(--line)}.brand{display:flex;align-items:center;gap:13px;color:var(--ink);font-weight:650;font-size:14px;text-decoration:none}.mark{display:grid;place-items:center;width:37px;height:37px;color:var(--green);border:1px solid var(--green);font:600 12px var(--mono)}.top-meta{color:var(--muted);font:500 11px var(--mono);letter-spacing:.08em;text-transform:uppercase}
+    .head{display:flex;justify-content:space-between;align-items:end;gap:28px;padding:26px 0 23px}.head h1{margin:0;font-size:clamp(36px,5.4vw,68px);letter-spacing:-.065em;line-height:1.03;font-weight:650}.head h1 span{color:var(--green)}.head p{max-width:520px;margin:0 0 5px;color:var(--muted);font-size:clamp(14px,1.15vw,17px)}
+    .bridge{display:flex;gap:14px;align-items:baseline;margin:0 0 22px;padding:12px 16px;border:1px solid var(--line);background:rgba(9,20,16,.55);color:var(--muted);font-size:14px}.bridge b{flex:none;color:var(--green);font:600 11px var(--mono);letter-spacing:.09em;text-transform:uppercase}
+    .lab{display:grid;grid-template-columns:380px minmax(0,1fr);gap:22px;align-items:start}
+    .panel,.stage{border:1px solid var(--line);background:linear-gradient(160deg,#13211d,#101717 60%);min-width:0}
+    .panel{padding:22px;display:flex;flex-direction:column;gap:16px}.panel h2{margin:0;font-size:21px;letter-spacing:-.03em;line-height:1.2}.panel>p{margin:-8px 0 0;color:var(--muted);font-size:14px}
+    .rows{display:grid;gap:8px}
+    .row{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:10px 14px;padding:13px 14px;border:1px solid #2c463c;background:rgba(9,20,16,.6);cursor:pointer}.row:hover{border-color:#557968}.row.on{border-color:rgba(119,231,183,.6);background:rgba(31,96,69,.18)}
+    .row-text small{display:block;color:var(--green);font:600 10px var(--mono);letter-spacing:.09em;text-transform:uppercase}.row-text b{display:block;margin-top:2px;font-size:16px;font-weight:600;letter-spacing:-.01em}.row-text span{display:block;margin-top:2px;color:var(--muted);font-size:13px}.row.on .row-text span{color:var(--ink)}
+    .row input{position:absolute;opacity:0;width:1px;height:1px}.switch{position:relative;width:46px;height:26px;border:1px solid #557968;background:#0c1612;flex:none}.switch:after{content:"";position:absolute;top:3px;left:3px;width:18px;height:18px;background:#6f8a7f;transition:transform .2s,background .2s}.row.on .switch{border-color:var(--green)}.row.on .switch:after{transform:translateX(20px);background:var(--green)}
+    .reroll{grid-column:1/-1;justify-self:start;display:none;min-height:32px;padding:0 10px;border:1px solid var(--line);background:transparent;color:var(--muted);font-size:12px}.row.on .reroll{display:inline-block}.reroll:hover{border-color:var(--green);color:var(--ink)}
+    .prompt{padding:14px;border:1px solid var(--line);background:#0c1612}.prompt small{display:block;margin-bottom:8px;color:var(--muted);font:500 10px var(--mono);letter-spacing:.09em;text-transform:uppercase}.prompt p{margin:0;display:flex;flex-wrap:wrap;gap:6px;align-items:center;font-size:14px;line-height:1.35}.chip{padding:3px 8px;border:1px solid rgba(119,231,183,.45);background:rgba(31,96,69,.2);color:var(--ink)}.chip.open{border-style:dashed;border-color:#557968;background:transparent;color:#8aa197;font:500 12px var(--mono)}
+    .primary{border:0;background:var(--green);color:var(--dark);font-weight:700;min-height:54px;padding:0 19px;font-size:17px}.primary:hover{background:#9bf4cf}
+    .stage{padding:clamp(18px,2.6vw,36px);position:relative;overflow:hidden}.stage:before{content:"";position:absolute;inset:0;background-image:linear-gradient(rgba(134,202,168,.055) 1px,transparent 1px),linear-gradient(90deg,rgba(134,202,168,.055) 1px,transparent 1px);background-size:32px 32px;mask-image:linear-gradient(125deg,transparent 30%,black);pointer-events:none}.stage>*{position:relative}
+    .stage-top{display:flex;justify-content:space-between;gap:12px;color:var(--green);font:600 11px var(--mono);letter-spacing:.09em;text-transform:uppercase}.stage-top em{font-style:normal;color:var(--muted)}
+    .grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:clamp(8px,1.4vw,18px);max-width:640px;margin:20px auto 0}
+    .tile{position:relative;margin:0;aspect-ratio:1;border:1px solid var(--line);background:#0c1612;overflow:hidden}.tile svg{display:block;width:100%;height:100%}.tile figcaption{position:absolute;left:8px;bottom:7px;padding:2px 6px;background:rgba(9,13,13,.72);color:var(--muted);font:500 10px var(--mono);letter-spacing:.06em}.tile.empty{display:grid;place-items:center;border-style:dashed;color:#6f8a7f;font:500 11px var(--mono);letter-spacing:.08em;text-transform:uppercase}
+    .fog{transition:opacity 1s ease-out}.subj{transition:opacity .45s ease-out}.tile.clearing .fog{opacity:0}.tile:not(.ready) .subj{opacity:0}
+    .grid{position:relative}.cloud-canvas{position:absolute;left:0;top:0;z-index:2;pointer-events:none}
+    .tile svg{transition:opacity .7s ease-out}.tile:not(.ready) svg{opacity:0}.tile figcaption{z-index:3}
+    .hud{position:absolute;inset:0;z-index:3;pointer-events:none;transition:opacity .6s}.hud.gone{opacity:0}
+    .hud:before,.hud:after{content:"";position:absolute;pointer-events:none;opacity:.5}.hud:before{left:10%;right:10%;top:0;height:5px;background:repeating-linear-gradient(90deg,#fff 0 1px,transparent 1px 10px)}.hud:after{top:10%;bottom:10%;left:0;width:5px;background:repeating-linear-gradient(180deg,#fff 0 1px,transparent 1px 10px)}
+    .hud .steps{position:absolute;right:8px;top:9px;padding:2px 6px;background:rgba(9,13,13,.72);color:var(--green);font:500 10px var(--mono);letter-spacing:.06em}.hud .bar{position:absolute;left:0;right:0;bottom:0;height:2px;background:rgba(119,231,183,.15)}.hud .bar i{display:block;height:100%;width:0;background:var(--green);box-shadow:0 0 8px var(--green)}
+    .links{position:absolute;inset:0;width:100%;height:100%;overflow:visible}.links polyline{fill:none;stroke:rgba(255,255,255,.32);stroke-width:.8}
+    .trk{position:absolute;left:0;top:0;will-change:transform}.trk i{position:absolute;left:-6px;top:-6px;width:12px;height:12px;background:linear-gradient(#fff,#fff) 0 0/4px 1px no-repeat,linear-gradient(#fff,#fff) 0 0/1px 4px no-repeat,linear-gradient(#fff,#fff) 100% 0/4px 1px no-repeat,linear-gradient(#fff,#fff) 100% 0/1px 4px no-repeat,linear-gradient(#fff,#fff) 0 100%/4px 1px no-repeat,linear-gradient(#fff,#fff) 0 100%/1px 4px no-repeat,linear-gradient(#fff,#fff) 100% 100%/4px 1px no-repeat,linear-gradient(#fff,#fff) 100% 100%/1px 4px no-repeat}.trk b{position:absolute;left:9px;top:-12px;white-space:nowrap;color:rgba(255,255,255,.85);font:500 8.5px var(--mono);letter-spacing:.04em}
+    .tile.flash{animation:flash .9s ease-out}@keyframes flash{0%{box-shadow:0 0 0 0 rgba(119,231,183,.0)}25%{box-shadow:0 0 0 2px rgba(119,231,183,.9),0 0 38px rgba(119,231,183,.45)}100%{box-shadow:0 0 0 0 rgba(119,231,183,0)}}
+    .tile.empty{color:#8aa197}
+    .esito{margin-top:24px;padding-top:20px;border-top:1px solid var(--line)}
+    .meter{display:flex;flex-wrap:wrap;align-items:center;gap:6px 14px}.meter-cells{display:flex;gap:4px}.meter-cells i{width:34px;height:12px;border:1px solid #426552;background:#0c1813}.meter-cells i.open{background:var(--amber);border-color:var(--amber)}.meter-cells i.dice{background:repeating-linear-gradient(45deg,var(--amber) 0 3px,transparent 3px 6px);border-color:var(--amber)}.meter span{color:var(--muted);font:500 12px var(--mono)}.meter span strong{color:var(--amber);font-size:18px}
+    .esito-text{max-width:820px;margin:14px 0 0;font-size:clamp(18px,1.6vw,24px);line-height:1.35;letter-spacing:-.02em;font-weight:600}.esito-text em{font-style:normal;color:var(--amber)}
+    .pill{max-width:820px;margin-top:16px;padding:12px 16px;border-left:1px solid var(--green);color:var(--muted);font-size:15px}.pill b{display:block;margin-bottom:4px;color:var(--green);font:600 11px var(--mono);letter-spacing:.09em;text-transform:uppercase}
+    .foot{display:flex;justify-content:space-between;gap:20px;padding-top:16px;color:var(--muted);font-size:12px}.foot a{color:var(--green);text-underline-offset:3px}.foot strong{color:var(--green);font-weight:500}
+    @media(max-width:1050px){.lab{grid-template-columns:1fr}}
+    @media(max-width:680px){.trk b{display:none}}
+    @media(max-width:680px){.head{display:block;padding:24px 0 18px}.head p{margin-top:12px}.bridge{display:block}.bridge b{display:block;margin-bottom:4px}.panel{padding:16px}.top-meta{font-size:9px}.foot{display:block}.foot span{display:block;margin-top:6px}}
+    @media(prefers-reduced-motion:reduce){*,*:before,*:after{animation:none!important;transition:none!important}}
   </style>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 </head>
 <body>
-
-  <div class="container">
-    <div class="col left-col">
-      <div>
-        <h1>Costruttore di Prompt</h1>
-        <p class="subtitle">Aggiungi struttura per ridurre la CASUALITÀ (varianza).</p>
-      </div>
-
-      <div class="toggles-list">
-        <div class="toggle-item">
-          <div class="toggle-info">
-            <span class="toggle-label">1. Soggetto e Contesto</span>
-            <span class="toggle-desc">Es: "Una donna in un caffè parigino"</span>
-          </div>
-          <label class="switch">
-            <input type="checkbox" id="toggle-1">
-            <span class="slider"></span>
-          </label>
+  <div class="app">
+    <header class="top"><a class="brand" href="../../"><span class="mark">GS</span><span>Giovanni Savelli · AANT</span></a><span class="top-meta">Laboratorio · IA generativa</span></header>
+    <div class="head"><h1>Laboratorio della Varianza<span>.</span></h1><p>Quello che non scrivi nella richiesta, il modello lo inventa. E ogni volta lo inventa in modo diverso.</p></div>
+    <p class="bridge"><b>Dopo la frase a gruppi</b>Avete visto come una domanda più precisa restringe le frasi possibili. Con le immagini succede qualcosa di simile: più spazi lasciate vuoti, più il modello li riempie a caso.</p>
+    <div class="lab">
+      <section class="panel" aria-labelledby="req-title">
+        <h2 id="req-title">La tua richiesta</h2>
+        <p>Accendi le parti che vuoi decidere tu. Quelle spente le sceglie il modello, generazione per generazione.</p>
+        <div class="rows" id="rows"></div>
+        <div class="prompt" aria-live="polite"><small>Richiesta al modello</small><p id="prompt"></p></div>
+        <button class="primary" id="generate" type="button">Genera 4 immagini</button>
+      </section>
+      <main class="stage">
+        <div class="stage-top"><b>Generazioni · griglia 2×2</b><em id="launch">Nessun lancio</em></div>
+        <div class="grid" id="grid" aria-live="polite"></div>
+        <div class="esito">
+          <div class="meter" id="meter"></div>
+          <p class="esito-text" id="esito"></p>
+          <div class="pill" id="pill"></div>
         </div>
-        
-        <div class="toggle-item">
-          <div class="toggle-info">
-            <span class="toggle-label">2. Stile Visivo e Medium</span>
-            <span class="toggle-desc">Es: "Fotografia analogica 35mm, lomo"</span>
-          </div>
-          <label class="switch">
-            <input type="checkbox" id="toggle-2">
-            <span class="slider"></span>
-          </label>
-        </div>
-
-        <div class="toggle-item">
-          <div class="toggle-info">
-            <span class="toggle-label">3. Luce e Colori</span>
-            <span class="toggle-desc">Es: "Golden hour, palette calda, ombre morbide"</span>
-          </div>
-          <label class="switch">
-            <input type="checkbox" id="toggle-3">
-            <span class="slider"></span>
-          </label>
-        </div>
-
-        <div class="toggle-item">
-          <div class="toggle-info">
-            <span class="toggle-label">4. Vincoli Specifici e Struttura</span>
-            <span class="toggle-desc">Es: Regola dei terzi, Negative prompt, JSON/Seed</span>
-          </div>
-          <label class="switch">
-            <input type="checkbox" id="toggle-4">
-            <span class="slider"></span>
-          </label>
-        </div>
-      </div>
-
-      <div class="prompt-preview">
-        <div class="prompt-header">
-          <span>Output Prompt al Motore AI</span>
-        </div>
-        <div class="prompt-code" id="prompt-code">
-          <span class="prompt-part missing" id="pp-subj">/* Soggetto_Assente */</span>
-          <span class="prompt-part missing" id="pp-style">/* Stile_Ignoto */</span>
-          <span class="prompt-part missing" id="pp-light">/* Luce_Random */</span>
-          <span class="prompt-part missing" id="pp-struct">/* Seed_Libero */</span>
-        </div>
-      </div>
-
-      <button class="cta-btn" id="generate-btn">
-        Lancia i Dadi (Genera)
-      </button>
+      </main>
     </div>
-
-    <div class="col right-col" id="right-col">
-      <div class="right-header">Risultati Generazione (Griglia 2x2)</div>
-      
-      <div class="output-grid" id="output-grid">
-        <div class="skeleton"></div>
-        <div class="skeleton"></div>
-        <div class="skeleton"></div>
-        <div class="skeleton"></div>
-      </div>
-
-      <div class="didactic-panel" id="didactic-panel">
-        <div class="didactic-header">
-          <span class="didactic-title">Monitoraggio Varianza</span>
-          <span class="entropy-badge" id="entropy-badge" style="color: var(--text-dim); background: rgba(255,255,255,0.05);">Entropia: --</span>
-        </div>
-        <div class="didactic-body">
-          <p id="didactic-text">Attiva i comandi a sinistra e genera per svelare i meccanismi dell'IA.</p>
-          <div class="theory-box" id="theory-box">
-            <strong>Pillola Teorica</strong>
-            L'IA non "pensa", ma calcola probabilità. Omettere parti del prompt costringe il modello a riempire lacune pescando casualmente dallo <em>spazio latente</em>.
-          </div>
-        </div>
-      </div>
-    </div>
+    <footer class="foot"><span><strong>Simulazione didattica.</strong> Le immagini le disegna questa pagina con forme geometriche: imitano il comportamento di un generatore, non lo usano.</span><a href="../../interior/ia/#vibe-coding">← Torna al corso di Intelligenza Artificiale</a></footer>
   </div>
-
   <script>
-    document.addEventListener('DOMContentLoaded', () => {
-      const btn = document.getElementById('generate-btn');
-      const outputGrid = document.getElementById('output-grid');
-      const didacticText = document.getElementById('didactic-text');
-      const theoryBox = document.getElementById('theory-box');
-      const entropyBadge = document.getElementById('entropy-badge');
-      
-      const toggles = [
-        document.getElementById('toggle-1'),
-        document.getElementById('toggle-2'),
-        document.getElementById('toggle-3'),
-        document.getElementById('toggle-4')
-      ];
+    // Le quattro parti della richiesta. Quando una parte è spenta, ogni immagine pesca un valore a caso.
+    const PARTS = [
+      { key: 'forma', title: 'Soggetto', hint: 'Che cosa c’è nell’immagine', values: [
+        { label: 'un grande cerchio', shapes: [{ t: 'circle', cx: 50, cy: 50, r: 25 }] },
+        { label: 'un quadrato ruotato con un punto', shapes: [{ t: 'rect', x: 31, y: 31, w: 38, h: 38, rot: 45 }, { t: 'circle', cx: 50, cy: 50, r: 5 }] },
+        { label: 'tre barre verticali', shapes: [{ t: 'rect', x: 27, y: 30, w: 11, h: 44 }, { t: 'rect', x: 44.5, y: 20, w: 11, h: 60 }, { t: 'rect', x: 62, y: 36, w: 11, h: 34 }] },
+        { label: 'un triangolo sopra un arco', shapes: [{ t: 'poly', p: '50,22 74,62 26,62' }, { t: 'path', d: 'M22,74 Q50,92 78,74', line: true }] },
+        { label: 'due anelli intrecciati', shapes: [{ t: 'circle', cx: 40, cy: 50, r: 17, ring: true }, { t: 'circle', cx: 60, cy: 50, r: 17, ring: true }] },
+        { label: 'una mezzaluna e una linea', shapes: [{ t: 'path', d: 'M58,24 A27,27 0 1,0 76,66 A21,21 0 1,1 58,24 Z' }, { t: 'path', d: 'M20,80 L80,80', line: true }] },
+        { label: 'nove punti in griglia', shapes: [0, 1, 2].flatMap(r => [0, 1, 2].map(c => ({ t: 'circle', cx: 32 + c * 18, cy: 32 + r * 18, r: 5 }))) },
+      ] },
+      { key: 'materia', title: 'Stile e materia', hint: 'Come è fatto, come è disegnato', values: [
+        { label: 'a tinta piena', kind: 'fill' },
+        { label: 'solo contorno', kind: 'outline' },
+        { label: 'tratteggiato', kind: 'dash' },
+        { label: 'vetro sfumato', kind: 'glass' },
+        { label: 'a retino di punti', kind: 'dots' },
+        { label: 'luminoso, al neon', kind: 'neon' },
+      ] },
+      { key: 'luce', title: 'Luce e colore', hint: 'Da dove arriva la luce, che palette', values: [
+        { label: 'luce calda da sinistra', bg: ['#2a140c', '#c46a3a'], fg: '#ffd9a8', angle: 180 },
+        { label: 'notte blu, luce dall’alto', bg: ['#060f24', '#1f4b8f'], fg: '#a8dbff', angle: 270 },
+        { label: 'verde salvia, luce diffusa', bg: ['#14211b', '#5f8a6f'], fg: '#eaf6ee', angle: 235 },
+        { label: 'bianco e nero in controluce', bg: ['#080808', '#5a5a5a'], fg: '#ffffff', angle: 90 },
+        { label: 'viola elettrico da destra', bg: ['#170a2d', '#6d2bd9'], fg: '#f0d8ff', angle: 0 },
+        { label: 'terracotta al tramonto', bg: ['#26100a', '#b5512f'], fg: '#ffe3cc', angle: 150 },
+      ] },
+      { key: 'composizione', title: 'Composizione', hint: 'Dove sta, quanto è grande', values: [
+        { label: 'al centro', tx: 0, ty: 0, s: 1, r: 0 },
+        { label: 'piccolo, in basso a sinistra', tx: -19, ty: 19, s: .55, r: -8 },
+        { label: 'enorme, tagliato dal bordo', tx: 14, ty: -10, s: 1.6, r: 12 },
+        { label: 'inclinato in diagonale', tx: -4, ty: 4, s: .9, r: 35 },
+        { label: 'in alto, leggero', tx: 4, ty: -21, s: .66, r: -4 },
+      ] },
+    ];
 
-      function updatePanelState(stateType) {
-        const activeCount = toggles.filter(t => t.checked).length;
-        const isSubjFixed = toggles[0].checked;
-        const isStyleFixed = toggles[1].checked;
-        const isLightFixed = toggles[2].checked;
-        const isStructFixed = toggles[3].checked;
+    const fixed = PARTS.map(() => null);
+    let launches = 0;
+    const $ = id => document.getElementById(id);
+    const pick = (n, avoid = -1, rand = Math.random) => { let i; do { i = Math.floor(rand() * n); } while (n > 1 && i === avoid); return i; };
 
-        const missing = [];
-        if (!isSubjFixed) missing.push("soggetto");
-        if (!isStyleFixed) missing.push("medium visivo");
-        if (!isLightFixed) missing.push("luce");
-        if (!isStructFixed) missing.push("struttura");
+    // Generatore pseudo-casuale con seme: ogni immagine ha il suo «lancio dei dadi».
+    function mulberry32(a) {
+      return () => { a |= 0; a = a + 0x6D2B79F5 | 0; let t = Math.imul(a ^ a >>> 15, 1 | a); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; };
+    }
 
-        let pText = "";
-        let tText = "";
-        let eColor = "";
-        let eBg = "";
-        let eLabel = "";
+    function renderRows() {
+      $('rows').innerHTML = PARTS.map((part, i) => `
+        <label class="row${fixed[i] != null ? ' on' : ''}">
+          <input type="checkbox" data-part="${i}" ${fixed[i] != null ? 'checked' : ''}>
+          <span class="row-text"><small>${i + 1} · ${part.title}</small><b>${fixed[i] != null ? part.values[fixed[i]].label : 'deciso dal modello'}</b><span>${part.hint}</span></span>
+          <span class="switch" aria-hidden="true"></span>
+          <button class="reroll" type="button" data-reroll="${i}">↻ scegli un altro valore</button>
+        </label>`).join('');
+      $('prompt').innerHTML = '<span>Genera un’immagine astratta:</span>' + PARTS.map((part, i) => fixed[i] != null
+        ? `<span class="chip">${part.values[fixed[i]].label}</span>`
+        : `<span class="chip open">${part.title.toLowerCase()}: ?</span>`).join('');
+    }
 
-        if (stateType === 'initial') {
-            pText = "Inizia accendendo gli interruttori a sinistra per vedere come si abbassa l'entropia prima di lanciare i dadi.";
-            tText = "<strong>Stato Iniziale</strong> L'attesa del seed. Prova a cliccare un comando per vedere la stima della varianza.";
-            eColor = "#94a3b8"; 
-            eBg = "rgba(148, 163, 184, 0.1)";
-            eLabel = "Entropia: --";
-        } else if (activeCount === 0) {
-            if (stateType === 'preview') {
-                pText = "Previsione: Tutti gli interruttori spenti. Entropia al 100%. Se generi ora, i risultati saranno completamente randomici.";
-                tText = "<strong>Analisi in corso...</strong> Nessun vincolo inserito nel prompt.";
-            } else {
-                pText = "Esito: Caos puro. L'IA ha iterato senza riferimenti, producendo generazioni visuali e concettualmente disconnesse l'una dall'altra.";
-                tText = "<strong>Massima Entropia:</strong> Senza alcun vincolo, la funzione matematica esplora lo Spazio Latente attraverso un Random Walk senza meta.";
-            }
-            eColor = "#ef4444"; eBg = "rgba(239, 68, 68, 0.1)"; eLabel = "Entropia: 100%";
-        } else if (activeCount === 1) {
-            if (stateType === 'preview') {
-                pText = "Previsione: Entropia scesa al 75%. Hai riempito 1 vuoto, l'immagine seguirà questo binario ma inventerà di sana pianta: " + missing.join(", ") + ".";
-                tText = "<strong>Analisi in corso...</strong> Un solo parametro offre un'ancora molto debole. L'IA manterrà moltissimo spazio di manovra.";
-            } else {
-                pText = "Esito: Hai limitato una direzione. Si nota un filo logico, ma le differenze (appunto su " + missing.join(", ") + ") sono nettissime.";
-                tText = "<strong>Gestione delle Lacune:</strong> L'IA non va in errore se mancano pezzi del prompt: li inventa pescando casualmente dai valori appresi nel training.";
-            }
-            eColor = "#f97316"; eBg = "rgba(249, 115, 22, 0.1)"; eLabel = "Entropia: 75%";
-        } else if (activeCount === 2) {
-            if (stateType === 'preview') {
-                pText = "Previsione: Entropia al 50%. Bene, hai vincolato metà della richiesta. Le future generazioni condivideranno la natura, ma varieranno totalmente su: " + missing.join(" e ") + ".";
-                tText = "<strong>Analisi in corso...</strong> Prompt intermedio. Inizi a ridurre drasticamente lo spazio delle possibilità esplorabili.";
-            } else {
-                pText = "Esito: C'è coerenza visiva! Le 4 scatole comunicano la stessa idea di fondo e iniziano a somigliarsi (al netto del caso su " + missing.join(" e ") + ").";
-                tText = "<strong>Varianza Moderata:</strong> Due costanti limitano lo Spazio Latente ad una regione più prevedibile. L'algoritmo converge.";
-            }
-            eColor = "#eab308"; eBg = "rgba(234, 179, 8, 0.1)"; eLabel = "Entropia: 50%";
-        } else if (activeCount === 3) {
-            if (stateType === 'preview') {
-                pText = "Previsione: Entropia crollata al 25%. Ottimo lavoro, hai blindato le colonne! L'IA metterà del suo solo per: " + missing[0] + ".";
-                tText = "<strong>Analisi in corso...</strong> Area di ricerca strettissima. L'IA non ha quasi più gradi di libertà per stravolgere l'immagine.";
-            } else {
-                pText = "Esito: Variazioni millimetriche e piacevoli. L'IA ha seguito il pattern ovunque concedendosi la variabilità residua sul " + missing[0] + ".";
-                tText = "<strong>L'Ottimizzazione del Designer:</strong> Molti si fermano qui. Lasciare all'IA un 25% di spazio vitale genera la famosa \"Serendipity\" creativa.";
-            }
-            eColor = "#84cc16"; eBg = "rgba(132, 204, 22, 0.1)"; eLabel = "Entropia: 25%";
-        } else if (activeCount === 4) {
-            if (stateType === 'preview') {
-                pText = "Previsione: L'entropia è al suo limite teorico! Tutto bloccato. La dispersione ora dipende solo ed unicamente dal frammento del Seed Iniziale (Noise).";
-                tText = "<strong>Analisi in corso...</strong> Generazione imminente: ci si aspetta che le immagini siano copie quasi esatte.";
-            } else {
-                pText = "Esito: Missione compiuta. Hai ottenuto un Prompt \"Master\". Ma occhio al dettaglio della texture interna: ogni box ha frammenti o particelle uniche.";
-                tText = "<strong>Rumore Irrisolvibile:</strong> Anche nel prompt perfetto, i modelli base partono da un seme rumoroso (Noise). La varianza tocca un minimo (~1%), ma NON fa mai zero.";
-            }
-            eColor = "#10b981"; eBg = "rgba(16, 185, 129, 0.1)"; eLabel = "Entropia: 1%";
+    function shapeSvg(sh, look, fg, id) {
+      const ring = sh.ring || sh.line;
+      let paint;
+      if (sh.line) paint = `fill="none" stroke="${fg}" stroke-width="2.6" stroke-linecap="round"`;
+      else if (look === 'fill') paint = ring ? `fill="none" stroke="${fg}" stroke-width="6"` : `fill="${fg}"`;
+      else if (look === 'outline') paint = `fill="none" stroke="${fg}" stroke-width="2.4"`;
+      else if (look === 'dash') paint = `fill="none" stroke="${fg}" stroke-width="2.2" stroke-dasharray="4 3"`;
+      else if (look === 'glass') paint = ring ? `fill="none" stroke="url(#${id}-glass)" stroke-width="6"` : `fill="url(#${id}-glass)" stroke="${fg}" stroke-width=".7"`;
+      else if (look === 'dots') paint = ring ? `fill="none" stroke="url(#${id}-dots)" stroke-width="7"` : `fill="url(#${id}-dots)" stroke="${fg}" stroke-width=".6"`;
+      else paint = `fill="none" stroke="${fg}" stroke-width="2" filter="url(#${id}-glow)"`;
+      if (sh.t === 'circle') return `<circle cx="${sh.cx}" cy="${sh.cy}" r="${sh.r}" ${paint}/>`;
+      if (sh.t === 'rect') return `<rect x="${sh.x}" y="${sh.y}" width="${sh.w}" height="${sh.h}" ${sh.rot ? `transform="rotate(${sh.rot} ${sh.x + sh.w / 2} ${sh.y + sh.h / 2})"` : ''} ${paint}/>`;
+      if (sh.t === 'poly') return `<polygon points="${sh.p}" stroke-linejoin="round" ${paint}/>`;
+      return `<path d="${sh.d}" ${paint}/>`;
+    }
+
+    function generation(seed, index) {
+      const rand = mulberry32(seed);
+      const choose = i => fixed[i] != null ? fixed[i] : Math.floor(rand() * PARTS[i].values.length);
+      const [subject, look, light, comp] = PARTS.map((part, i) => part.values[choose(i)]);
+      // Il lancio dei dadi che resta anche con la richiesta completa: piccoli spostamenti, sfumature, grana.
+      const j = { x: (rand() - .5) * 4, y: (rand() - .5) * 4, r: (rand() - .5) * 7, s: 1 + (rand() - .5) * .07, hue: (rand() - .5) * 14, mid: 40 + rand() * 25 };
+      const id = `g${launches}-${index}`;
+      const a = light.angle * Math.PI / 180;
+      const lx = 50 + Math.cos(a) * 50, ly = 50 + Math.sin(a) * 50;
+      const shadow = { x: -Math.cos(a) * 2.6, y: -Math.sin(a) * 2.6 };
+      const dust = Array.from({ length: 12 }, () => `<circle cx="${(rand() * 100).toFixed(1)}" cy="${(rand() * 100).toFixed(1)}" r="${(rand() * 1.1 + .2).toFixed(2)}" fill="${light.fg}" opacity="${(rand() * .35 + .08).toFixed(2)}"/>`).join('');
+      const t = `translate(${50 + comp.tx + j.x} ${50 + comp.ty + j.y}) rotate(${comp.r + j.r}) scale(${comp.s * j.s}) translate(-50 -50)`;
+      const shapes = subject.shapes.map(sh => shapeSvg(sh, look.kind, light.fg, id)).join('');
+      // Solo la figura, senza sfondo: serve a sapere dove devono arrivare le particelle.
+      const target = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="${SAMPLE}" height="${SAMPLE}"><defs>
+          <radialGradient id="${id}-bg" cx="${lx}%" cy="${ly}%" r="115%"><stop offset="0" stop-color="${light.bg[1]}"/><stop offset="${j.mid.toFixed(0)}%" stop-color="${light.bg[0]}"/><stop offset="1" stop-color="${light.bg[0]}"/></radialGradient>
+          <linearGradient id="${id}-glass" x1="${lx > 50 ? 1 : 0}" y1="${ly > 50 ? 1 : 0}" x2="${lx > 50 ? 0 : 1}" y2="${ly > 50 ? 0 : 1}"><stop offset="0" stop-color="${light.fg}" stop-opacity=".95"/><stop offset="1" stop-color="${light.fg}" stop-opacity=".12"/></linearGradient>
+          <pattern id="${id}-dots" width="3.2" height="3.2" patternUnits="userSpaceOnUse"><circle cx="1.6" cy="1.6" r="1" fill="${light.fg}"/></pattern>
+          <filter id="${id}-glow" x="-30%" y="-30%" width="160%" height="160%"><feGaussianBlur stdDeviation="2.2" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+          <filter id="${id}-shadow" x="-30%" y="-30%" width="160%" height="160%"><feDropShadow dx="${shadow.x.toFixed(2)}" dy="${shadow.y.toFixed(2)}" stdDeviation="1.8" flood-color="#000" flood-opacity=".5"/></filter>
+        </defs><rect width="100" height="100" fill="url(#${id}-bg)"/><g filter="url(#${id}-shadow)" transform="${t}">${shapes}</g></svg>`;
+      targets[index] = { svg: target, fg: light.fg };
+      return `<svg viewBox="0 0 100 100" preserveAspectRatio="xMidYMid slice" style="filter:hue-rotate(${j.hue.toFixed(1)}deg)" role="img" aria-label="Generazione ${index + 1}: ${subject.label}, ${look.label}, ${light.label}, ${comp.label}">
+        <defs>
+          <radialGradient id="${id}-bg" cx="${lx}%" cy="${ly}%" r="115%"><stop offset="0" stop-color="${light.bg[1]}"/><stop offset="${j.mid.toFixed(0)}%" stop-color="${light.bg[0]}"/><stop offset="1" stop-color="${light.bg[0]}"/></radialGradient>
+          <linearGradient id="${id}-glass" x1="${lx > 50 ? 1 : 0}" y1="${ly > 50 ? 1 : 0}" x2="${lx > 50 ? 0 : 1}" y2="${ly > 50 ? 0 : 1}"><stop offset="0" stop-color="${light.fg}" stop-opacity=".95"/><stop offset="1" stop-color="${light.fg}" stop-opacity=".12"/></linearGradient>
+          <pattern id="${id}-dots" width="3.2" height="3.2" patternUnits="userSpaceOnUse"><circle cx="1.6" cy="1.6" r="1" fill="${light.fg}"/></pattern>
+          <filter id="${id}-glow" x="-30%" y="-30%" width="160%" height="160%"><feGaussianBlur stdDeviation="2.2" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+          <filter id="${id}-shadow" x="-30%" y="-30%" width="160%" height="160%"><feDropShadow dx="${shadow.x.toFixed(2)}" dy="${shadow.y.toFixed(2)}" stdDeviation="1.8" flood-color="#000" flood-opacity=".5"/></filter>
+          <filter id="${id}-grain"><feTurbulence type="fractalNoise" baseFrequency=".9" numOctaves="2" seed="${seed % 10000}"/><feColorMatrix type="saturate" values="0"/></filter>
+        </defs>
+        <rect width="100" height="100" fill="url(#${id}-bg)"/>
+        <g class="subj"><g filter="url(#${id}-shadow)" transform="${t}">${shapes}</g>${dust}</g>
+        <rect width="100" height="100" filter="url(#${id}-grain)" opacity=".16"/>
+        <rect class="fog" width="100" height="100" filter="url(#${id}-grain)"/>
+      </svg>`;
+    }
+
+    function generate() {
+      launches++;
+      const seeds = Array.from({ length: 4 }, () => Math.floor(Math.random() * 99999) + 1);
+      if (gl) dropClouds();
+      $('grid').innerHTML = seeds.map((seed, i) => `<figure class="tile">${generation(seed, i)}<figcaption>seed ${seed}</figcaption></figure>`).join('');
+      $('launch').textContent = `Lancio n. ${launches}`;
+      [...document.querySelectorAll('.tile')].forEach((tile, i) => bloom(tile, targets[i].svg, i * 160, seeds[i], targets[i].fg));
+      renderEsito(true);
+    }
+
+    // Nuvola di punti in stile Gather: ogni immagine generata diventa ~16 mila punti con i suoi colori.
+    // In attesa i riquadri mostrano una nebulosa; alla generazione la nebulosa gira in 3D, si posa nel rilievo
+    // dell'immagine (le parti chiare sporgono), si appiattisce e lascia il posto all'immagine nitida.
+    const SAMPLE = 176, STEPS = 30, DURATION = 3400;
+    const targets = [];
+    const calm = matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const gl = !calm && window.THREE && (() => { try { return !!document.createElement('canvas').getContext('webgl'); } catch { return false; } })();
+    let renderer, glCanvas, clouds = [];
+
+    const VERTEX = `
+      uniform float uProgress; uniform float uTime; uniform float uSize; uniform float uFlat;
+      attribute vec3 aTarget; attribute vec3 aStart; attribute vec3 aColor; attribute float aDelay; attribute float aStray;
+      varying vec3 vColor; varying float vAlpha;
+      void main() {
+        float k = clamp((uProgress - aDelay) / (1.0 - aDelay), 0.0, 1.0);
+        float e = 1.0 - pow(1.0 - k, 3.0);
+        float a = uTime * 0.55 + length(aStart.xy) * 3.2;
+        vec3 s = vec3(cos(a) * aStart.x - sin(a) * aStart.y, sin(a) * aStart.x + cos(a) * aStart.y, aStart.z);
+        s += 0.05 * vec3(sin(uTime * 1.7 + aStart.y * 9.0), cos(uTime * 1.3 + aStart.x * 7.0), sin(uTime + aStart.x * 5.0));
+        vec3 p = mix(s, vec3(aTarget.xy, aTarget.z * (1.0 - uFlat)), e);
+        float tail = 0.0;
+        if (aStray > 0.5) {
+          tail = fract(uTime * 0.14 + aDelay * 7.0) * e;
+          p.x += tail * 1.7;
+          p.y += sin(tail * 6.0 + aDelay * 40.0) * 0.06;
         }
+        // I punti chiari, cioè la figura, sono più grandi e luminosi di quelli dello sfondo.
+        float lum = clamp((aTarget.z + 0.12) / 0.5, 0.0, 1.0);
+        vec4 mv = modelViewMatrix * vec4(p, 1.0);
+        gl_Position = projectionMatrix * mv;
+        gl_PointSize = uSize * (0.5 + lum * 1.5) * (1.0 + (1.0 - e) * 0.25) * (3.73 / -mv.z);
+        vColor = aColor;
+        vAlpha = mix(0.26, 1.0, e) * (0.22 + lum * 1.25) * (1.0 - tail);
+      }`;
+    const FRAGMENT = `
+      uniform float uAlpha; varying vec3 vColor; varying float vAlpha;
+      void main() {
+        vec2 c = gl_PointCoord - 0.5;
+        float d = dot(c, c);
+        if (d > 0.25) discard;
+        gl_FragColor = vec4(vColor, smoothstep(0.25, 0.02, d) * vAlpha * uAlpha);
+      }`;
 
-        didacticText.innerHTML = pText;
-        theoryBox.innerHTML = tText;
-        entropyBadge.textContent = eLabel;
-        entropyBadge.style.color = eColor;
-        entropyBadge.style.backgroundColor = eBg;
-
-        // Update live prompt UI
-        updateLivePrompt(isSubjFixed, isStyleFixed, isLightFixed, isStructFixed);
-      }
-
-      function updateLivePrompt(subj, style, light, struct) {
-        const pSubj = document.getElementById('pp-subj');
-        const pStyle = document.getElementById('pp-style');
-        const pLight = document.getElementById('pp-light');
-        const pStruct = document.getElementById('pp-struct');
-
-        if (subj) { pSubj.textContent = "«Donna in caffè parigino»"; pSubj.className = "prompt-part present"; }
-        else { pSubj.textContent = "/* Soggetto: [???] */"; pSubj.className = "prompt-part missing"; }
-
-        if (style) { pStyle.textContent = "+ «Fotografia analogica 35mm»"; pStyle.className = "prompt-part present"; }
-        else { pStyle.textContent = "/* Stile: [???] */"; pStyle.className = "prompt-part missing"; }
-
-        if (light) { pLight.textContent = "+ «Golden hour, palette calda»"; pLight.className = "prompt-part present"; }
-        else { pLight.textContent = "/* Illuminazione: [???] */"; pLight.className = "prompt-part missing"; }
-
-        if (struct) { pStruct.textContent = "--seed 4242 --no-blur --json"; pStruct.className = "prompt-part present"; }
-        else { pStruct.textContent = "/* Struttura: [???] */"; pStruct.className = "prompt-part missing"; }
-      }
-
-      toggles.forEach((t) => {
-        t.addEventListener('change', () => {
-             updatePanelState('preview');
-        });
+    function samplePixels(svgText) {
+      return new Promise(resolve => {
+        const img = new Image();
+        img.onload = () => {
+          try {
+            const c = document.createElement('canvas');
+            c.width = c.height = SAMPLE;
+            const x = c.getContext('2d', { willReadFrequently: true });
+            x.drawImage(img, 0, 0, SAMPLE, SAMPLE);
+            resolve(x.getImageData(0, 0, SAMPLE, SAMPLE).data);
+          } catch { resolve(null); }
+        };
+        img.onerror = () => resolve(null);
+        img.src = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svgText);
       });
+    }
 
-      updatePanelState('initial');
-      updateLivePrompt(false, false, false, false);
+    const gauss = rand => Math.sqrt(-2 * Math.log(rand() || 1e-6)) * Math.cos(6.2832 * rand());
 
-      const subjects = [
-        '<circle cx="50" cy="50" r="25" />',
-        '<rect x="25" y="25" width="50" height="50" rx="6" />',
-        '<polygon points="50,20 80,75 20,75" />',
-        '<polygon points="50,20 80,50 50,80 20,50" />',
-        '<path d="M60,20 A30,30 0 1,0 80,70 A35,35 0 1,1 60,20 Z" />',
-        '<path d="M40,20 L60,20 L60,40 L80,40 L80,60 L60,60 L60,80 L40,80 L40,60 L20,60 L20,40 L40,40 Z" />'
-      ];
+    function ensureRenderer() {
+      // La griglia viene riscritta a ogni lancio: la tela 3D va rimessa dentro.
+      if (renderer) { if (!glCanvas.isConnected) $('grid').append(glCanvas); return; }
+      glCanvas = document.createElement('canvas');
+      glCanvas.className = 'cloud-canvas';
+      $('grid').append(glCanvas);
+      renderer = new THREE.WebGLRenderer({ canvas: glCanvas, alpha: true, antialias: false });
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+      renderer.setClearColor(0x000000, 0);
+      renderer.setScissorTest(true);
+      requestAnimationFrame(loop);
+    }
 
-      const styles = [
-        'fill: currentColor;',
-        'fill: none; stroke: currentColor; stroke-width: 4px;',
-        'fill: transparent; stroke: currentColor; stroke-width: 2px; filter: drop-shadow(0px 0px 6px currentColor);',
-        'fill: currentColor; opacity: 0.4; stroke: currentColor; stroke-width: 2px;',
-        'fill: none; stroke: currentColor; stroke-width: 3px; stroke-dasharray: 6 5;'
-      ];
+    function makeCloud(tile, opts) {
+      const n = opts.count;
+      const rand = mulberry32(opts.seed);
+      const pos = new Float32Array(n * 3), start = new Float32Array(n * 3), target = new Float32Array(n * 3);
+      const color = new Float32Array(n * 3), delay = new Float32Array(n), stray = new Float32Array(n);
+      for (let i = 0; i < n; i++) {
+        start.set([gauss(rand) * .42, gauss(rand) * .42, gauss(rand) * .25], i * 3);
+        delay[i] = rand() * .34;
+        stray[i] = rand() < .07 ? 1 : 0;
+        opts.fill(i, target, color, rand);
+      }
+      const geo = new THREE.BufferGeometry();
+      geo.setAttribute('position', new THREE.BufferAttribute(pos, 3));
+      geo.setAttribute('aStart', new THREE.BufferAttribute(start, 3));
+      geo.setAttribute('aTarget', new THREE.BufferAttribute(target, 3));
+      geo.setAttribute('aColor', new THREE.BufferAttribute(color, 3));
+      geo.setAttribute('aDelay', new THREE.BufferAttribute(delay, 1));
+      geo.setAttribute('aStray', new THREE.BufferAttribute(stray, 1));
+      geo.boundingSphere = new THREE.Sphere(new THREE.Vector3(), 4);
+      const mat = new THREE.ShaderMaterial({
+        vertexShader: VERTEX, fragmentShader: FRAGMENT, transparent: true, depthTest: false, depthWrite: false, blending: THREE.AdditiveBlending,
+        uniforms: { uProgress: { value: 0 }, uTime: { value: 0 }, uSize: { value: 2 }, uFlat: { value: 0 }, uAlpha: { value: 1 } },
+      });
+      const points = new THREE.Points(geo, mat);
+      const scene = new THREE.Scene();
+      scene.add(points);
+      const camera = new THREE.PerspectiveCamera(30, 1, .1, 20);
+      camera.position.z = 3.73;
+      return { tile, scene, camera, points, mat, geo, start, target, delay, ...opts };
+    }
 
-      const lights = [
-        { bg: 'linear-gradient(135deg, #0f172a, #1e3a8a)', color: '#38bdf8' },
-        { bg: 'linear-gradient(135deg, #450a0a, #991b1b)', color: '#fca5a5' },
-        { bg: 'linear-gradient(135deg, #022c22, #065f46)', color: '#6ee7b7' },
-        { bg: 'linear-gradient(135deg, #2e1065, #6b21a8)', color: '#d8b4fe' },
-        { bg: 'linear-gradient(135deg, #171717, #404040)', color: '#ffffff' }
-      ];
+    function idleCloud(tile, i) {
+      return makeCloud(tile, { mode: 'idle', count: 7000, seed: 1000 + i, fill: (k, target, color) => { target[k * 3 + 2] = .05; color.set([.5, .8, .68], k * 3); } });
+    }
 
-      const structures = [
-        'scale(1) rotate(0deg)',
-        'scale(0.65) rotate(25deg) translate(-20px, -20px)',
-        'scale(1.2) rotate(-15deg) translate(10px, 10px)',
-        'scale(0.8) rotate(45deg) translate(20px, -20px)',
-        'scale(0.9) rotate(-30deg) translate(-10px, 20px)'
-      ];
+    async function formCloud(tile, target, delay, seed) {
+      const px = await samplePixels(target);
+      if (!tile.isConnected) return null;
+      if (!px) { setTimeout(() => tile.classList.add('clearing', 'ready'), delay + 40); return null; }
+      const cloud = makeCloud(tile, {
+        mode: 'form', count: SAMPLE * SAMPLE, seed: seed + 7, begin: performance.now() + delay,
+        fill: (k, tgt, color) => {
+          const x = k % SAMPLE, y = Math.floor(k / SAMPLE), o = k * 4;
+          const r = px[o] / 255, g = px[o + 1] / 255, b = px[o + 2] / 255;
+          const lum = .2126 * r + .7152 * g + .0722 * b;
+          tgt.set([(x + .5) / SAMPLE * 2 - 1, 1 - (y + .5) / SAMPLE * 2, lum * .5 - .12], k * 3);
+          color.set([Math.min(1, r * 1.15), Math.min(1, g * 1.15), Math.min(1, b * 1.15)], k * 3);
+        },
+      });
+      // Mirini come in Gather: agganciati a punti luminosi della figura, con le loro coordinate.
+      const rand = mulberry32(seed + 99);
+      const bright = [];
+      for (let k = 0; k < SAMPLE * SAMPLE; k += 7) if (cloud.target[k * 3 + 2] > .2) bright.push(k);
+      cloud.trackers = Array.from({ length: Math.min(4, bright.length) }, () => bright[Math.floor(rand() * bright.length)]);
+      cloud.hud = document.createElement('div');
+      cloud.hud.className = 'hud';
+      cloud.hud.innerHTML = `<svg class="links"><polyline/></svg>${cloud.trackers.map(k => {
+        const t = cloud.target;
+        const f = v => (v >= 0 ? '+' : '−') + Math.abs(v).toFixed(2);
+        return `<span class="trk"><i></i><b>${String(1 + Math.floor(rand() * 12)).padStart(2, '0')} ${f(t[k * 3])} ${f(t[k * 3 + 1])} ${f(t[k * 3 + 2])}</b></span>`;
+      }).join('')}<span class="steps">passo 1 / 30</span><span class="bar"><i></i></span>`;
+      tile.append(cloud.hud);
+      return cloud;
+    }
 
-      btn.addEventListener('click', () => {
-        outputGrid.innerHTML = '';
+    const v3 = () => new THREE.Vector3();
+    function trackerPosition(c, k, t, time, out) {
+      const s = c.start, g = c.target;
+      const kk = Math.max(0, Math.min(1, (t - c.delay[k]) / (1 - c.delay[k])));
+      const e = 1 - Math.pow(1 - kk, 3);
+      const sx = s[k * 3], sy = s[k * 3 + 1], a = time * .55 + Math.hypot(sx, sy) * 3.2;
+      const px = Math.cos(a) * sx - Math.sin(a) * sy, py = Math.sin(a) * sx + Math.cos(a) * sy;
+      out.set(px + (g[k * 3] - px) * e, py + (g[k * 3 + 1] - py) * e, s[k * 3 + 2] + (g[k * 3 + 2] * (1 - c.mat.uniforms.uFlat.value) - s[k * 3 + 2]) * e);
+      return out.applyMatrix4(c.points.matrixWorld).project(c.camera);
+    }
 
-        const isSubjFixed = toggles[0].checked;
-        const isStyleFixed = toggles[1].checked;
-        const isLightFixed = toggles[2].checked;
-        const isStructFixed = toggles[3].checked;
-
-        updatePanelState('result');
-
-        // Generate base values that act as "Fixed" 
-        const baseSubj = Math.floor(Math.random()*subjects.length);
-        const baseStyle = Math.floor(Math.random()*styles.length);
-        const baseLight = Math.floor(Math.random()*lights.length);
-        const baseStruct = Math.floor(Math.random()*structures.length);
-
-        for (let i = 0; i < 4; i++) {
-            // First step: inject Noise (Denosing process simulation)
-            const cell = document.createElement('div');
-            cell.className = 'grid-item';
-            cell.style.animation = 'none'; // reset pop in
-            cell.style.opacity = '1';
-            cell.style.transform = 'scale(1)';
-            cell.innerHTML = '<div class="noise-container"><span class="noise-text">Denoising...</span></div>';
-            outputGrid.appendChild(cell);
-
-            // Second step: resolve to SVG
-            setTimeout(() => {
-                const subjIdx = isSubjFixed ? baseSubj : Math.floor(Math.random()*subjects.length);
-                const styleIdx = isStyleFixed ? baseStyle : Math.floor(Math.random()*styles.length);
-                const lightIdx = isLightFixed ? baseLight : Math.floor(Math.random()*lights.length);
-                const structIdx = isStructFixed ? baseStruct : Math.floor(Math.random()*structures.length);
-                
-                const subjHtml = subjects[subjIdx];
-                const styleStr = styles[styleIdx];
-                const lightObj = lights[lightIdx];
-                const structStr = structures[structIdx];
-                
-                // Random irreducible variance (noise / slight position shift)
-                const vRot = (Math.random()-0.5)*10;
-                const vX = (Math.random()-0.5)*8;
-                const vY = (Math.random()-0.5)*8;
-                
-                let dust = '';
-                for(let p=0; p<15; p++) {
-                    dust += `<circle cx="${Math.random()*100}" cy="${Math.random()*100}" r="${Math.random()*1.5 + 0.2}" fill="rgba(255,255,255,${Math.random()*0.4 + 0.1})" />`;
-                }
-                
-                cell.style.background = lightObj.bg;
-                cell.style.color = lightObj.color;
-                
-                cell.innerHTML = `
-                    <svg class="svg-container" viewBox="0 0 100 100" preserveAspectRatio="xMidYMid slice" style="animation: popIn 0.4s ease-out">
-                        <g>${dust}</g>
-                        <g style="transform-origin: 50px 50px; transform: ${structStr} translate(${vX}px, ${vY}px) rotate(${vRot}deg); ${styleStr}">
-                            ${subjHtml}
-                        </g>
-                    </svg>
-                `;
-            }, 600 + (i * 150));
+    function loop(now) {
+      requestAnimationFrame(loop);
+      clouds = clouds.filter(c => c.tile.isConnected && !c.finished);
+      const grid = $('grid');
+      const W = grid.clientWidth, H = grid.clientHeight;
+      if (glCanvas.width !== Math.round(W * renderer.getPixelRatio()) || glCanvas.height !== Math.round(H * renderer.getPixelRatio())) renderer.setSize(W, H, false);
+      glCanvas.style.width = W + 'px';
+      glCanvas.style.height = H + 'px';
+      renderer.setScissor(0, 0, W, H);
+      renderer.clear();
+      const g = grid.getBoundingClientRect();
+      const time = now / 1000;
+      for (const c of clouds) {
+        const r = c.tile.getBoundingClientRect();
+        const x = r.left - g.left, y = r.top - g.top, s = r.width;
+        const u = c.mat.uniforms;
+        u.uTime.value = time;
+        u.uSize.value = Math.max(1, s / SAMPLE * 1.25) * renderer.getPixelRatio();
+        if (c.mode === 'idle') {
+          u.uSize.value = Math.max(1.2, s / 300 * 1.6) * renderer.getPixelRatio();
+          c.points.rotation.set(Math.sin(time * .3) * .25, time * .25, 0);
+        } else {
+          if (now < c.begin) u.uProgress.value = 0;
+          const t = Math.max(0, Math.min(1, (now - c.begin) / DURATION));
+          const e = 1 - Math.pow(1 - t, 3);
+          u.uProgress.value = t;
+          u.uFlat.value = Math.max(0, Math.min(1, (t - .72) / .2));
+          c.points.rotation.set(-.32 * (1 - e), .7 * (1 - e) + Math.sin(time * .8) * .06 * (1 - e), 0);
+          c.points.updateMatrixWorld();
+          const step = Math.max(1, Math.round(t * STEPS));
+          c.hud.querySelector('.steps').textContent = s < 240 ? `passo ${step}/${STEPS}` : `passo ${step} / ${STEPS} · rumore ${Math.round((1 - t) * 100)}%`;
+          c.hud.querySelector('.bar i').style.width = `${t * 100}%`;
+          const pts = c.trackers.map((k, i) => {
+            const p = trackerPosition(c, k, t, time, v3());
+            const el = c.hud.querySelectorAll('.trk')[i];
+            const lx = (p.x + 1) / 2 * s, ly = (1 - p.y) / 2 * s;
+            el.style.transform = `translate(${lx.toFixed(1)}px, ${ly.toFixed(1)}px)`;
+            return `${lx.toFixed(1)},${ly.toFixed(1)}`;
+          });
+          c.hud.querySelector('polyline').setAttribute('points', pts.join(' '));
+          if (t > .3) c.tile.classList.add('clearing');
+          if (t >= .92 && !c.doneAt) { c.doneAt = now; c.tile.classList.add('ready', 'flash'); c.hud.classList.add('gone'); }
+          if (c.doneAt) {
+            u.uAlpha.value = Math.max(0, 1 - (now - c.doneAt) / 900);
+            if (u.uAlpha.value <= 0) { c.finished = true; c.geo.dispose(); c.mat.dispose(); continue; }
+          }
         }
-      });
+        renderer.setViewport(x, H - y - s, s, s);
+        renderer.setScissor(x, H - y - s, s, s);
+        renderer.render(c.scene, c.camera);
+      }
+    }
+
+    function dropClouds() {
+      for (const c of clouds) { c.geo.dispose(); c.mat.dispose(); }
+      clouds = [];
+    }
+
+    async function bloom(tile, target, delay, seed) {
+      if (!gl) { setTimeout(() => tile.classList.add('clearing', 'ready'), 40); return; }
+      ensureRenderer();
+      const c = await formCloud(tile, target, delay, seed);
+      if (c) clouds.push(c);
+    }
+
+    const list = items => items.length < 2 ? items.join('') : `${items.slice(0, -1).join(', ')} e ${items[items.length - 1]}`;
+
+    function renderEsito(afterLaunch) {
+      const SHORT = ['il soggetto', 'lo stile', 'la luce', 'la composizione'];
+      const open = SHORT.filter((_, i) => fixed[i] == null);
+      const done = SHORT.filter((_, i) => fixed[i] != null);
+      $('meter').innerHTML = `<span class="meter-cells">${PARTS.map((_, i) => `<i class="${fixed[i] == null ? 'open' : ''}"></i>`).join('')}<i class="dice" title="Il lancio dei dadi"></i></span>
+        <span><strong>${open.length}</strong> di 4 decisioni lasciate al modello · + il lancio dei dadi, sempre</span>`;
+      let text;
+      if (!afterLaunch) text = open.length === 4 ? 'Prova prima con tutto spento e genera, anche più volte. Poi accendi una parte alla volta e rigenera.' : 'Genera e confronta le quattro immagini fra loro.';
+      else if (open.length === 4) text = 'Nessuna indicazione: soggetto, stile, luce e composizione li ha inventati il modello. <em>Le quattro immagini non si somigliano.</em>';
+      else if (open.length === 0) text = 'Hai deciso tutto. Le immagini si somigliano molto, ma guarda i dettagli: <em>posizione, inclinazione, sfumature e grana cambiano ancora.</em> Non saranno mai identiche.';
+      else text = `Hai deciso tu ${list(done)}: ${done.length === 1 ? 'è uguale' : 'sono uguali'} in tutte e quattro. <em>Per ${list(open)} ha deciso il modello</em>, ogni volta in modo diverso.`;
+      $('esito').innerHTML = text;
+      $('pill').innerHTML = !afterLaunch
+        ? '<b>Pillola teorica</b>L’IA non “pensa”: calcola probabilità. Da milioni di immagini ha imparato una specie di mappa di tutte le immagini possibili, lo <strong>spazio latente</strong>. Ogni parte che scrivi restringe la zona della mappa in cui cercare; il resto il modello lo pesca a caso.'
+        : open.length === 4
+          ? '<b>Lo spazio latente</b>Senza indicazioni il modello può pescare ovunque nella sua mappa delle immagini possibili: per questo ogni immagine finisce lontana dalle altre.'
+        : open.length === 0
+          ? '<b>Il lancio dei dadi</b>Ogni generazione parte da un rumore casuale diverso (il numero in basso, il seed) e lo ripulisce a passi, come vedi nei riquadri. Scrivere di più restringe le possibilità, ma le piccole differenze restano.'
+          : open.length === 1
+            ? '<b>La scelta del designer</b>Molti si fermano qui. Lasciare al modello una parte da decidere crea la famosa serendipità creativa: soluzioni che non avevi previsto e che possono sorprenderti.'
+            : '<b>Il modello non lascia buchi</b>Se una parte manca, non si ferma e non chiede: la riempie con qualcosa di plausibile, pescato nella zona dello spazio latente che la richiesta lascia aperta. Per decidere tu, devi scriverlo.';
+    }
+
+    function emptyGrid() {
+      $('grid').innerHTML = Array.from({ length: 4 }, () => '<div class="tile empty">in attesa</div>').join('');
+      if (gl) { ensureRenderer(); document.querySelectorAll('.tile.empty').forEach((tile, i) => clouds.push(idleCloud(tile, i))); }
+    }
+
+    const changed = () => { if (launches) $('generate').textContent = 'Genera con la nuova richiesta'; };
+    $('rows').addEventListener('change', event => {
+      const i = Number(event.target.dataset.part);
+      fixed[i] = event.target.checked ? pick(PARTS[i].values.length) : null;
+      changed();
+      renderRows();
+      renderEsito(false);
+      document.querySelector(`[data-part="${i}"]`).focus();
     });
+    $('rows').addEventListener('click', event => {
+      const b = event.target.closest('[data-reroll]');
+      if (!b) return;
+      event.preventDefault();
+      const i = Number(b.dataset.reroll);
+      fixed[i] = pick(PARTS[i].values.length, fixed[i]);
+      changed();
+      renderRows();
+      renderEsito(false);
+      document.querySelector(`[data-reroll="${i}"]`).focus();
+    });
+    $('generate').addEventListener('click', () => { generate(); $('generate').textContent = 'Rigenera con la stessa richiesta'; });
+
+    renderRows();
+    emptyGrid();
+    renderEsito(false);
   </script>
 </body>
 </html>
