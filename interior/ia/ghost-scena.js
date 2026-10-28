@@ -492,6 +492,13 @@ function fit() {
 }
 fit(); addEventListener('resize', fit); document.fonts.ready.then(fit);
 
+// la barra delle schede prende lo sfondo scuro solo quando è attaccata in alto (vedi ghost-scena.css)
+const nav = document.querySelector('.course-navigation');
+if (nav) {
+  const stick = () => nav.classList.toggle('is-stuck', scrollY > 0 && nav.getBoundingClientRect().top <= parseFloat(getComputedStyle(nav).top) + 1);
+  addEventListener('scroll', stick, { passive: true }); addEventListener('resize', stick); stick();
+}
+
 // sceglie un nodo libero, lontano dagli altri mirini; se il mouse è sulla scena, spesso uno vicino a dove guardi
 function pickNode(proj) {
   const taken = TRK.filter(t => t.state !== 'idle' && t.node !== null).map(t => proj[t.node]);

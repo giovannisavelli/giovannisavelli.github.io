@@ -2,7 +2,13 @@
 body.ai-page .page { position: relative; }
 /* la scena copre l'header e scende sotto le schede; il contenuto resta sopra */
 body.ai-page .ghost-canvas { position: absolute; left: 0; top: 0; z-index: 0; width: 100%; display: block; pointer-events: none; }
-body.ai-page .course-panel { position: relative; }   /* le schede sono già "sticky": restano come sono */
+body.ai-page .course-panel { position: relative; }
+/* la barra delle schede è trasparente finché sta al suo posto, così i cavi ci passano sotto;
+   lo sfondo scuro torna solo quando la barra si attacca in alto sopra il contenuto */
+@media (min-width: 901px) {
+  body.ai-page .course-navigation { transition: background-color .25s, backdrop-filter .25s; }
+  body.ai-page .course-navigation:not(.is-stuck) { background: transparent; backdrop-filter: none; }
+}   /* le schede sono già "sticky": restano come sono */
 @media (min-width: 901px) { body.ai-page .hero .left { background: none; } }
 body.ai-page .ghost-stage::before { display: none; }
 /* la grana chiara sopra l'header disegnava un rettangolo più chiaro del resto della pagina */
