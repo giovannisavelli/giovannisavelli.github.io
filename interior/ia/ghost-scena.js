@@ -10,8 +10,9 @@ const driftEl = document.getElementById('ghost-drift');
 const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
 const small = matchMedia('(max-width: 900px)').matches;
 
-const renderer = new THREE.WebGLRenderer({ antialias: false, alpha: true, premultipliedAlpha: true });
-renderer.setClearColor(0x000000, 0);
+// canvas opaco con lo stesso colore di fondo della pagina: un canvas trasparente con punti "di luce" sparisce in alcuni browser
+const renderer = new THREE.WebGLRenderer({ antialias: false, alpha: false });
+renderer.setClearColor(0x090b0c, 1);
 renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
 const hero = document.querySelector('.hero');
 // la scena sta dietro tutta la parte alta della pagina: i cavi passano sotto il titolo e sotto le schede, poi sfumano
@@ -239,8 +240,7 @@ const lensGLSL = `
   }`;
 const U = { uTime: { value: 0 }, uBare: { value: 0 }, uLoose: { value: 1 }, uPR: { value: renderer.getPixelRatio() },
             uMouse: { value: new THREE.Vector2(9, 9) }, uHover: { value: 0 }, uAspect: { value: 1 }, uBall: { value: new THREE.Matrix4() } };
-const additive = { transparent: true, depthWrite: false, depthTest: false, blending: THREE.CustomBlending, blendEquation: THREE.AddEquation,
-                   blendSrc: THREE.OneFactor, blendDst: THREE.OneFactor, blendSrcAlpha: THREE.ZeroFactor, blendDstAlpha: THREE.OneFactor };
+const additive = { transparent: true, depthWrite: false, depthTest: false, blending: THREE.AdditiveBlending };
 // Senza Shell la rete diventa frenetica: i nodi vibrano e si spostano trascinando i collegamenti, i segnali corrono
 // più veloci e più numerosi, i collegamenti sfarfallano. uPhase è un orologio che accelera quando la Shell è tolta.
 U.uPhase = { value: 0 }; U.uAmp = { value: .02 };

@@ -165,7 +165,6 @@ body.ai-page :is(#sezioni-corso, #programma, #vibe-coding, #archivio, #appunti, 
   body.ai-page .eyebrow { margin-bottom: 24px; }
   body.ai-page .intro { margin-top: 26px; }
   body.ai-page .cta-row { margin-top: 26px; }
-  body.ai-page .mode-panel { bottom: 70px; }
 }
 
 @media (max-width: 850px) {
