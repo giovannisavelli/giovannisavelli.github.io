@@ -38,8 +38,10 @@ const basis = a => {        // due direzioni perpendicolari ad "a"
 // ---------- la sfera meccanica, costruita punto per punto ----------
 const NS = small ? 130000 : 230000;
 const pos = new Float32Array(NS * 3), nor = new Float32Array(NS * 3), seed = new Float32Array(NS * 4), bright = new Float32Array(NS), kind = new Float32Array(NS);
+const tint = new Float32Array(NS);          // 1 = punto verde (il Ghost che traspare dalla Shell)
 let n = 0;
-function put(q, nq, br, kd = 0) {
+function put(q, nq, br, kd = 0, tn = 0) {
+  tint[n] = tn;
   if (n >= NS) return;
   pos[n * 3] = q.x; pos[n * 3 + 1] = q.y; pos[n * 3 + 2] = q.z;
   nor[n * 3] = nq.x; nor[n * 3 + 1] = nq.y; nor[n * 3 + 2] = nq.z;
@@ -74,7 +76,7 @@ function hubHeight(s, beta) {
     const hp = PROFILE[i - 1][1];
     slope = (h - hp) / RAMP; h = hp + (h - hp) * (s - PROFILE[i][0]) / RAMP; br = 1.2;
   }
-  return { h, br, slope };
+  return { h, br, slope, ring: i === 1 };
 }
 
 // pannelli curvi: celle di Voronoi sulla sfera, ognuna alla sua quota
@@ -118,7 +120,7 @@ const SURF = Math.floor(NS * .86);
 for (let k = 0; n < SURF && k < SURF * 4; k++) {
   x.set(rnd(-1, 1), rnd(-1, 1), rnd(-1, 1));
   const L = x.length(); if (L > 1 || L < .1) continue; x.divideScalar(L);
-  let h = 0, br = rnd(.8, .95), slope = 0, skip = false, inHub = false;
+  let h = 0, br = rnd(.8, .95), slope = 0, skip = false, inHub = false, tn = Math.random() < .035 ? .9 : 0;
   for (const hb of HUBS) {
     const cosA = x.dot(hb.d), s = Math.acos(Math.min(1, cosA)) / hb.A;
     if (s >= 1.03) continue;
@@ -127,6 +129,7 @@ for (let k = 0; n < SURF && k < SURF * 4; k++) {
     const r = hubHeight(s, Math.atan2(x.dot(hb.e2), x.dot(hb.e1)));
     if (!r) { skip = true; break; }
     h = r.h; br = r.br; slope = r.slope / hb.A;
+    if (r.ring) tn = 1;                                            // anello verde attorno alla presa dei cavi
     tg.copy(x).multiplyScalar(cosA).sub(hb.d).normalize();     // direzione che si allontana dal centro del mozzo
     break;
   }
@@ -152,7 +155,7 @@ for (let k = 0; n < SURF && k < SURF * 4; k++) {
   }
   nm.copy(x);
   if (slope) nm.addScaledVector(tg, -slope * .09).normalize();
-  put(p.copy(x).multiplyScalar(1 + h), nm, br);
+  put(p.copy(x).multiplyScalar(1 + h), nm, br, 0, tn);
 }
 
 // bulloni: lungo i bordi dei pannelli, ai lati delle fasce e in cerchio sui mozzi
@@ -183,7 +186,7 @@ for (let k = 0; k < 9000 && n < NS * .97; k++) {
 // un po' di polvere sospesa intorno, come in Gather (kind = 1)
 while (n < NS) {
   p.set(rnd(-1, 1), rnd(-1, 1), rnd(-1, 1)).normalize().multiplyScalar(rnd(1.25, 2.6));
-  put(p, nm.set(0, 0, 1), rnd(.15, .4), 1);
+  put(p, nm.set(0, 0, 1), rnd(.15, .4), 1, Math.random() < .18 ? 1 : 0);
 }
 
 // ---------- i cavi: fasci che escono dai mozzi e vanno oltre i bordi, ricalcolati a ogni fotogramma ----------
@@ -244,26 +247,44 @@ const additive = { transparent: true, depthWrite: false, depthTest: false, blend
 // Senza Shell la rete diventa frenetica: i nodi vibrano e si spostano trascinando i collegamenti, i segnali corrono
 // più veloci e più numerosi, i collegamenti sfarfallano. uPhase è un orologio che accelera quando la Shell è tolta.
 U.uPhase = { value: 0 }; U.uAmp = { value: .02 };
+// Verde del sito = Ghost (scelta di Giovanni: c). Per confronto: ?verde=0 tutto bianco · a solo rete · b anche anelli e scintille
+const VERDE = new URLSearchParams(location.search).get('verde') || 'c';
+U.uGN = { value: VERDE === '0' ? 0 : 1 };
+U.uGS = { value: VERDE === 'b' || VERDE === 'c' ? 1 : 0 };
+U.uGD = { value: VERDE === 'c' ? 1 : 0 };
+U.uGC = { value: VERDE === 'c' ? 1 : 0 };
+const GREEN = 'vec3(.467, .906, .718)';     // il verde del sito, #77e7b7
 const jigGLSL = `
   uniform float uPhase, uAmp;
   vec3 jig(float i){
+    float peak = 1. + 1.4 * pow(.5 + .5 * sin(uPhase * .43 + i * 2.9), 6.);   // ogni tanto uno scarto più ampio
     return (vec3(sin(uPhase * 1.3 + i * 1.7), sin(uPhase * 1.1 + i * 2.3), sin(uPhase * 1.7 + i * .9))
-          + .45 * vec3(sin(uPhase * 4.1 + i * 3.1), sin(uPhase * 3.7 + i * 1.3), sin(uPhase * 4.6 + i * 2.7))) * uAmp;
+          + .45 * vec3(sin(uPhase * 4.1 + i * 3.1), sin(uPhase * 3.7 + i * 1.3), sin(uPhase * 4.6 + i * 2.7))) * uAmp * peak;
+  }
+  // profondità: la parte della rete verso chi guarda è più luminosa, quella dietro si spegne nel buio
+  float depthK(vec4 mv){
+    float d = mv.z - (modelViewMatrix * vec4(0., 0., 0., 1.)).z;
+    return clamp(.62 + d * .55, .12, 1.15);
+  }
+  // profondità di campo: a fuoco al centro della rete, sfocato quando un punto viene verso di te o si allontana
+  float blurK(vec4 mv){
+    float d = mv.z - (modelViewMatrix * vec4(0., 0., 0., 1.)).z;
+    return smoothstep(.12, .75, abs(d));
   }`;
 const jig = (i, ph, amp, out) => out.set(
   Math.sin(ph * 1.3 + i * 1.7) + .45 * Math.sin(ph * 4.1 + i * 3.1),
   Math.sin(ph * 1.1 + i * 2.3) + .45 * Math.sin(ph * 3.7 + i * 1.3),
-  Math.sin(ph * 1.7 + i * .9) + .45 * Math.sin(ph * 4.6 + i * 2.7)).multiplyScalar(amp);
+  Math.sin(ph * 1.7 + i * .9) + .45 * Math.sin(ph * 4.6 + i * 2.7)).multiplyScalar(amp * (1 + 1.4 * Math.pow(.5 + .5 * Math.sin(ph * .43 + i * 2.9), 6)));
 const lineGeo = new THREE.BufferGeometry();
 lineGeo.setAttribute('position', new THREE.Float32BufferAttribute(EDGES.flatMap(([a, b]) => [...NODES[a].p.toArray(), ...NODES[b].p.toArray()]), 3));
 lineGeo.setAttribute('aId', new THREE.Float32BufferAttribute(EDGES.flatMap(([a, b]) => [a, b]), 1));
 // la rete traspare appena dalla Shell, si accende un po' dove passa il mouse, del tutto quando la Shell non c'è
 const netLines = new THREE.LineSegments(lineGeo, new THREE.ShaderMaterial({ uniforms: U, ...additive,
-  vertexShader: `attribute float aId; uniform float uBare; varying float vI; ${lensGLSL} ${jigGLSL}
-    void main(){ vec4 cp = projectionMatrix * modelViewMatrix * vec4(position + jig(aId), 1.);
+  vertexShader: `attribute float aId; uniform float uBare, uGN; varying float vI; ${lensGLSL} ${jigGLSL}
+    void main(){ vec4 mv = modelViewMatrix * vec4(position + jig(aId), 1.); vec4 cp = projectionMatrix * mv;
       float flick = mix(1., .35 + .65 * step(0., sin(uPhase * 4.2 + aId * 3.7)), uBare * .55);
-      vI = (.07 + lensAt(cp, .08, .38) * .3 + uBare * .75) * flick; gl_Position = cp; }`,
-  fragmentShader: `varying float vI; void main(){ gl_FragColor = vec4(vec3(.72, .93, .84) * vI * .5, 1.); }` }));
+      vI = (.07 + .07 * uGN + lensAt(cp, .08, .38) * .3 + uBare * .75) * flick * mix(1., depthK(mv) * (1. - .6 * blurK(mv)), uBare); gl_Position = cp; }`,
+  fragmentShader: `uniform float uGN; varying float vI; void main(){ gl_FragColor = vec4(mix(vec3(.72, .93, .84), ${GREEN} * 1.1, uGN) * vI * .5, 1.); }` }));
 // nodi (aK = -1) e segnali: due per collegamento sempre, altri quattro solo quando la Shell è tolta
 const PA = [], PB = [], PIA = [], PIB = [], PO = [], PK = [];
 NODES.forEach((nd, i) => { PA.push(...nd.p.toArray()); PB.push(...nd.p.toArray()); PIA.push(i); PIB.push(i); PO.push(0); PK.push(-1); });
@@ -280,7 +301,7 @@ pulseGeo.setAttribute('aIB', new THREE.Float32BufferAttribute(PIB, 1));
 pulseGeo.setAttribute('aO', new THREE.Float32BufferAttribute(PO, 1));
 pulseGeo.setAttribute('aK', new THREE.Float32BufferAttribute(PK, 1));
 const netPoints = new THREE.Points(pulseGeo, new THREE.ShaderMaterial({ uniforms: U, ...additive,
-  vertexShader: `attribute vec3 aB; attribute float aIA, aIB, aO, aK; uniform float uTime, uBare, uPR; varying float vI; ${lensGLSL} ${jigGLSL}
+  vertexShader: `attribute vec3 aB; attribute float aIA, aIB, aO, aK; uniform float uTime, uBare, uPR, uGN; varying float vI, vB; ${lensGLSL} ${jigGLSL}
     void main(){
       float node = step(aK, -.5);
       float t = fract(uPhase * (.18 + .07 * aO) + aO);
@@ -289,11 +310,16 @@ const netPoints = new THREE.Points(pulseGeo, new THREE.ShaderMaterial({ uniforms
       vec4 mv = modelViewMatrix * vec4(q, 1.); vec4 cp = projectionMatrix * mv;
       float extra = mix(1., uBare, step(1.5, aK));            // i segnali in più compaiono solo senza Shell
       float blink = mix(1., .6 + .4 * sin(uPhase * 11. + aIA * 5.1), uBare * node);
-      vI = (.1 + lensAt(cp, .08, .38) * .35 + uBare * .85) * mix(sin(t * 3.14159), 1., node) * extra * blink;
-      gl_Position = cp; gl_PointSize = uPR * mix(2.2, 3.4 + uBare * 1.4, node) * (9. / -mv.z);
+      vI = (.1 + .12 * uGN + lensAt(cp, .08, .38) * .35 + uBare * .85) * mix(sin(t * 3.14159), 1., node) * extra * blink;
+      float dk = mix(1., depthK(mv), uBare); vI *= dk;
+      vB = blurK(mv) * uBare;
+      float grow = 1. + 4.5 * vB;                              // il punto sfocato diventa un dischetto più grande e più tenue
+      vI *= min(1., 2.6 / (grow * grow));
+      gl_Position = cp; gl_PointSize = uPR * mix(2.2, 3.4 + uBare * 1.4, node) * (9. / -mv.z) * mix(1., .7 + .35 * dk, uBare) * grow;
     }`,
-  fragmentShader: `varying float vI; void main(){ vec2 d = gl_PointCoord - .5; if (dot(d, d) > .25) discard;
-      gl_FragColor = vec4(vec3(.8, 1., .9) * vI, 1.); }` }));
+  fragmentShader: `uniform float uGN; varying float vI, vB; void main(){ float r = length(gl_PointCoord - .5) * 2.; if (r > 1.) discard;
+      float a = 1. - smoothstep(mix(.92, .25, vB), 1., r);        // a fuoco: bordo netto; sfocato: bordo morbido
+      gl_FragColor = vec4(mix(vec3(.8, 1., .9), ${GREEN} * 1.25, uGN) * vI * a, 1.); }` }));
 
 const commonGLSL = `
   uniform float uTime, uLoose, uPR;
@@ -305,9 +331,9 @@ const commonGLSL = `
   // vicino ai bordi della scena i punti si spengono piano: niente tagli netti
   float edgeFade(vec4 cp){ vec2 q = abs(cp.xy / cp.w); return smoothstep(1.02, .72, q.x) * smoothstep(1.02, .5, q.y); }
   float looseK(float w){ float k = clamp(uLoose * 1.8 - w * .8, 0., 1.); return k * k * (3. - 2. * k); }`;
-const dotFrag = `varying float vA;
+const dotFrag = `varying float vA, vG;
   void main(){ vec2 d = gl_PointCoord - .5; float r2 = dot(d, d); if (r2 > .25) discard;
-    gl_FragColor = vec4(vec3(.93, .9, .84) * vA * .38 * (1. - r2 * 2.), 1.); }`;
+    gl_FragColor = vec4(mix(vec3(.93, .9, .84), ${GREEN} * 1.3, vG) * vA * .38 * (1. - r2 * 2.), 1.); }`;
 
 // ---------- la Shell: i punti della sfera ----------
 const geo = new THREE.BufferGeometry();
@@ -316,10 +342,12 @@ geo.setAttribute('aNormal', new THREE.BufferAttribute(nor, 3));
 geo.setAttribute('aSeed', new THREE.BufferAttribute(seed, 4));
 geo.setAttribute('aBright', new THREE.BufferAttribute(bright, 1));
 geo.setAttribute('aKind', new THREE.BufferAttribute(kind, 1));
+geo.setAttribute('aTint', new THREE.BufferAttribute(tint, 1));
 const shell = new THREE.Points(geo, new THREE.ShaderMaterial({ uniforms: U, ...additive, fragmentShader: dotFrag,
   vertexShader: `
-    attribute vec3 aNormal; attribute vec4 aSeed; attribute float aBright; attribute float aKind;
-    varying float vA;
+    attribute vec3 aNormal; attribute vec4 aSeed; attribute float aBright; attribute float aKind; attribute float aTint;
+    uniform float uGS, uGD;
+    varying float vA, vG;
     ${commonGLSL}
     void main(){
       vec3 p = position;
@@ -333,6 +361,9 @@ const shell = new THREE.Points(geo, new THREE.ShaderMaterial({ uniforms: U, ...a
       gl_Position = projectionMatrix * mv;
       gl_PointSize = uPR * (.9 + aSeed.z * .55) * (9. / -mv.z);
       vA = aBright * mix(.015 + 1.15 * light(aNormal), 1., dust) * (1. - k * .85) * (.6 + .4 * aSeed.x) * edgeFade(gl_Position);
+      // i punti verdi hanno una luce loro: si vedono anche nella parte in ombra
+      vG = aTint * mix(uGS, uGD, dust);
+      vA += vG * (1. - dust) * .6 * (1. - k * .85) * edgeFade(gl_Position);
     }` }));
 
 // ---------- i cavi ----------
@@ -350,8 +381,8 @@ cgeo.setAttribute('aSeed', new THREE.BufferAttribute(cSeed, 4));
 const cables = new THREE.Points(cgeo, new THREE.ShaderMaterial({ uniforms: U, ...additive, fragmentShader: dotFrag,
   vertexShader: `
     attribute float aT, aAng, aR, aRib, aSag; attribute vec3 aSock, aSockN, aAnchor; attribute vec4 aSeed;
-    uniform mat4 uBall;
-    varying float vA;
+    uniform mat4 uBall; uniform float uGC;
+    varying float vA, vG;
     ${commonGLSL}
     vec3 bez(vec3 a, vec3 b, vec3 c, vec3 d, float t){ float u = 1. - t; return u*u*u*a + 3.*u*u*t*b + 3.*u*t*t*c + t*t*t*d; }
     vec3 bezD(vec3 a, vec3 b, vec3 c, vec3 d, float t){ float u = 1. - t; return 3.*u*u*(b - a) + 6.*u*t*(c - b) + 3.*t*t*(d - c); }
@@ -374,6 +405,10 @@ const cables = new THREE.Points(cgeo, new THREE.ShaderMaterial({ uniforms: U, ..
       float along = 1. - smoothstep(.3, 1., aT);
       vA = (corr > .5 ? .74 : .66) * mix(1., .55 + .45 * strand, braid) * (.015 + 1.15 * light(nn)) * (1. - k * .85) * (.6 + .4 * aSeed.x)
            * along * edgeFade(gl_Position);
+      // un segnale verde parte dalla sfera e corre lungo ogni cavo verso l'esterno
+      float ph = fract(uTime * .1 + aSag * 13.7 + aRib * .31);
+      vG = exp(-pow((aT - ph) * 26., 2.)) * uGC;
+      vA += vG * .8 * along * edgeFade(gl_Position);
     }` }));
 cables.frustumCulled = false;
 document.getElementById('ghost-npts').textContent = (NS + NC).toLocaleString('it-IT');
@@ -539,8 +574,8 @@ function frame(now) {
   U.uBall.value.copy(ball.matrix);
 
   U.uTime.value = clock; U.uLoose.value = loose; U.uBare.value = loose;
-  if (!reduced) { U.uPhase.value += dt * (1 + 2.6 * loose); net.rotation.y += dt * loose * .28; net.rotation.x += dt * loose * .09; }
-  U.uAmp.value = .02 + .08 * loose;
+  if (!reduced) { U.uPhase.value += dt * (1 + .8 * loose); net.rotation.y += dt * loose * .11; net.rotation.x += dt * loose * .035; }
+  U.uAmp.value = .02 + .13 * loose;
   U.uMouse.value.copy(mouse.ndc); U.uHover.value = mouse.on;
   driftEl.textContent = 'Drift ' + String(Math.round(loose * 99)).padStart(2, '0');
 
