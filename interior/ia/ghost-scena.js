@@ -474,7 +474,7 @@ function fit() {
   renderer.setSize(r.width, r.height, false);
   camera.aspect = r.width / r.height;
   const T16 = Math.tan(THREE.MathUtils.degToRad(16));
-  // la sfera (diametro 2) occupa poco più di metà dello spazio che ha a disposizione
+  // la sfera (diametro 2) occupa gran parte dello spazio che ha a disposizione (sul computer +30% dal 28/10)
   let top, bottom, cx;
   if (small) {
     top = r.top + 76; bottom = hero.querySelector('.eyebrow').getBoundingClientRect().top - 14; cx = sr.left + sr.width * .5;
@@ -482,7 +482,7 @@ function fit() {
     top = sr.top + 146; bottom = sr.bottom - 76; cx = sr.left + sr.width * .52;
   }
   const space = Math.max(120, bottom - top);
-  camera.position.z = 2 * r.height / (2 * T16 * space * (small ? .62 : .66));
+  camera.position.z = 2 * r.height / (2 * T16 * space * (small ? .62 : .86));
   camera.updateProjectionMatrix();
   linksSvg.setAttribute('viewBox', `0 0 ${sr.width} ${sr.height}`);
   if (!small) drawRuler(sr.width, sr.height);
