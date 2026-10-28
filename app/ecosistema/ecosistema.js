@@ -596,8 +596,8 @@ function stats() {
   S('s-diary').textContent = diary; S('s-ok').textContent = approved;
 }
 
-const claude = addAgent({ key: 'claude', name: 'Claude', color: CSS.claude, hex: COL.claude, angle: -.8, names: { pc: 'Alessandro Magno', mac: 'Carlo Magno' } });
-const codex = addAgent({ key: 'codex', name: 'ChatGPT · Codex', color: CSS.codex, hex: COL.codex, angle: 2.4, delay: .8, names: { pc: 'sul PC', mac: 'sul Mac' } });
+const claude = addAgent({ key: 'claude', name: 'Claude Code', color: CSS.claude, hex: COL.claude, angle: -.8 });
+const codex = addAgent({ key: 'codex', name: 'ChatGPT · Codex', color: CSS.codex, hex: COL.codex, angle: 2.4, delay: .8 });
 
 // ---------- sub-agent: droni che portano i dati da un punto all'altro ----------
 // Claude e Codex affidano i compiti più lunghi ai loro sub-agent: cercano, pianificano, controllano, portano risultati.
@@ -1040,7 +1040,7 @@ const INFO = {
   sofa: ['La pausa', 'Divano, TV, telefono', "Con l'ecosistema Giovanni può staccarsi dalla scrivania: le sessioni continuano a girare sul PC e lui le guida dal telefono, manda reel al bot, segue un'app che cresce mentre guarda la TV.", CSS.gemini],
   pc: ['Postazione', 'PC fisso', 'Tre monitor e i programmi più pesanti: Photoshop, Blender, Cinema 4D, la voce clonata in locale, il bot Telegram. Legge e scrive lo stesso cervello centrale del Mac.', CSS.ink],
   mac: ['Postazione', 'MacBook', "Quasi intercambiabile col PC: stessi file, stessa memoria. Quando Giovanni cambia computer, l'assistente rilegge il Diario e riparte da dove si era fermato.", CSS.ink],
-  claude: ['Assistente', 'Claude', 'Claude Code lavora sui file dei progetti, scrive codice e prompt, comanda Photoshop, Blender e Cinema 4D, chiede a Gemini di guardare i video e, per i lavori grandi, apre più sessioni in parallelo. Sul PC si firma Alessandro Magno, sul Mac Carlo Magno.', CSS.claude],
+  claude: ['Assistente', 'Claude', 'Claude Code lavora sui file dei progetti, scrive codice e prompt, comanda Photoshop, Blender e Cinema 4D, chiede a Gemini di guardare i video e, per i lavori grandi, apre più sessioni in parallelo.', CSS.claude],
   codex: ['Assistente', 'ChatGPT · Codex', "L'assistente di OpenAI. Si usa per confrontare le idee e per scrivere codice sugli stessi progetti. Non vede le chat di Claude: legge gli stessi file e lo stesso Diario. Per questo collaborano «quasi» insieme.", CSS.codex],
   mini: ['Sessioni parallele', 'Sonnet e Haiku', 'Per i lavori con parti indipendenti Claude apre altre sessioni con modelli più economici: Sonnet per costruire, Haiku per leggere e controllare. Fanno prima, ma costano: si usano solo quando conviene.', CSS.mini],
   bot: ['Strumento', 'Gemini e il bot Telegram', 'Giovanni manda i reel al suo bot; Gemini li guarda e risponde in chat con un resoconto. Le novità utili finiscono nel cervello centrale. Anche Claude può chiedere a Gemini di guardare un video, via API.', CSS.gemini],
