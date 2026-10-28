@@ -1,0 +1,73 @@
+/* Header IA · Shell e Ghost a particelle, nello stile di Gather. La scena è disegnata da ghost-scena.js. */
+body.ai-page .page { position: relative; }
+/* la scena copre l'header e scende sotto le schede; il contenuto resta sopra */
+body.ai-page .ghost-canvas { position: absolute; left: 0; top: 0; z-index: 0; width: 100%; display: block; pointer-events: none; }
+body.ai-page .course-panel { position: relative; }   /* le schede sono già "sticky": restano come sono */
+@media (min-width: 901px) { body.ai-page .hero .left { background: none; } }
+body.ai-page .ghost-stage::before { display: none; }
+/* la grana chiara sopra l'header disegnava un rettangolo più chiaro del resto della pagina */
+body.ai-page .hero::after { display: none; }
+body.ai-page .ghost-stage { background: transparent; overflow: visible; touch-action: pan-y; user-select: none; -webkit-user-select: none; cursor: grab; }
+body.ai-page .ghost-stage.grabbing { cursor: grabbing; }
+body.ai-page .ghost-stage .ghost-controls { cursor: auto; }
+body.ai-page .ghost-frame { display: none; }
+
+body.ai-page .ghost-hud, body.ai-page .ghost-state { font: 500 9px/1.7 'Geist Mono', monospace; letter-spacing: .2em; text-transform: uppercase; }
+body.ai-page .ghost-hud { position: absolute; z-index: 3; color: #7d807b; pointer-events: none; }
+body.ai-page .ghost-hud b { display: block; color: #ecebe4; font-weight: 500; }
+body.ai-page .ghost-hud-tl { left: 46px; top: 104px; }
+body.ai-page .ghost-hud-tr { right: 46px; top: 104px; text-align: right; }
+body.ai-page .ghost-hud-bl { left: 46px; bottom: 30px; }
+
+/* righelli: tacche fitte, una più lunga ogni cinque e ogni dieci, croci sottili agli angoli */
+body.ai-page svg.ghost-ruler, body.ai-page svg.ghost-links { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; }
+body.ai-page svg.ghost-ruler { z-index: 1; }
+body.ai-page svg.ghost-links { z-index: 2; }
+
+/* mirino: quattro angoli, un "+" sul punto agganciato, numero e coordinate a destra */
+body.ai-page .gtrk { position: absolute; z-index: 3; left: 0; top: 0; color: rgba(236,235,228,.85); pointer-events: none; opacity: 0; will-change: transform, opacity; }
+body.ai-page .gtrk-box {
+  position: absolute; left: -15px; top: -15px; width: 30px; height: 30px;
+  background:
+    linear-gradient(currentColor, currentColor) left top / 7px 1px no-repeat,
+    linear-gradient(currentColor, currentColor) left top / 1px 7px no-repeat,
+    linear-gradient(currentColor, currentColor) right top / 7px 1px no-repeat,
+    linear-gradient(currentColor, currentColor) right top / 1px 7px no-repeat,
+    linear-gradient(currentColor, currentColor) left bottom / 7px 1px no-repeat,
+    linear-gradient(currentColor, currentColor) left bottom / 1px 7px no-repeat,
+    linear-gradient(currentColor, currentColor) right bottom / 7px 1px no-repeat,
+    linear-gradient(currentColor, currentColor) right bottom / 1px 7px no-repeat;
+}
+body.ai-page .gtrk-plus {
+  position: absolute; left: -4px; top: -4px; width: 9px; height: 9px; color: #fff;
+  background:
+    linear-gradient(currentColor, currentColor) center / 9px 1px no-repeat,
+    linear-gradient(currentColor, currentColor) center / 1px 9px no-repeat;
+}
+body.ai-page .gtrk-label { position: absolute; left: 21px; top: -19px; white-space: nowrap; font: 500 10px/1 'Geist Mono', monospace; letter-spacing: .04em; color: #bdb9b0; }
+body.ai-page .gtrk-label b { margin-right: 9px; color: #f2efe8; font-weight: 500; }
+body.ai-page .gtrk-label em { font-style: normal; }
+
+body.ai-page .ghost-controls { position: absolute; z-index: 7; right: 46px; bottom: 20px; display: flex; align-items: center; gap: 18px; }
+body.ai-page .ghost-state { display: none; }
+body.ai-page .ghost-toggle {
+  display: inline-flex; align-items: center; gap: 10px; min-height: 44px; padding: 0 16px;
+  border: 1px solid rgba(236,235,228,.3); border-radius: 0; background: rgba(9,11,12,.55);
+  color: #ecebe4; font: 500 10px 'Geist Mono', monospace; letter-spacing: .2em; text-transform: uppercase;
+}
+body.ai-page .ghost-toggle:hover { border-color: rgba(236,235,228,.75); }
+body.ai-page .ghost-toggle .dot { width: 6px; height: 6px; border-radius: 50%; background: #ecebe4; }
+body.ai-page .ghost-toggle.off .dot { background: transparent; border: 1px solid #9a9c97; }
+
+@media (max-width: 900px) {
+  /* sul telefono la scena sta dietro al testo: il testo lascia passare il dito, tranne link e pulsanti */
+  body.ai-page .hero .left { pointer-events: none; padding-top: min(108vw, 470px); background: linear-gradient(180deg, transparent 0 50%, rgba(9,11,12,.9) 70%, #090b0c 88%); }
+  body.ai-page .hero .left a, body.ai-page .hero .left button { pointer-events: auto; }
+  body.ai-page svg.ghost-ruler, body.ai-page .ghost-hud-tr, body.ai-page .ghost-hud-bl { display: none; }
+  body.ai-page .ghost-hud-tl { left: 22px; top: 92px; }
+  body.ai-page .ghost-controls { top: 84px; right: 22px; bottom: auto; gap: 10px; }
+}
+@media (max-width: 600px) {
+  body.ai-page .ghost-hud-tl { display: none; }
+  body.ai-page .gtrk-label em { display: none; }
+}
