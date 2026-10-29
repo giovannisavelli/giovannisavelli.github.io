@@ -13,6 +13,9 @@
   <link rel="stylesheet" href="../../assets/studio.css">
   <style>
     :root { --accent: var(--r); }
+    /* lezione del giorno e archivio: il componente comune (assets/agenda.css) col viola e il carattere di Rendering */
+    .agenda { --ag-on-accent: #101016; --ag-text: var(--ink); --ag-muted: var(--ink-3); --ag-mono: var(--mono); }
+    .lesson-index--base small { color: var(--ink-3); }
 
     /* ---------- Apertura: titolo a sinistra, shaderball 3D a destra ---------- */
     .c-hero { position: relative; display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); min-height: min(84svh, 860px); padding-top: 76px; overflow: hidden; }
@@ -251,6 +254,7 @@
     }
   </style>
   <link rel="stylesheet" href="../../assets/course-ui.css?v=unified-20261014">
+  <link rel="stylesheet" href="../../assets/agenda.css?v=20261029d">
 </head>
 <body class="course-page">
 <div class="alone" id="alone" aria-hidden="true"></div>
@@ -323,7 +327,10 @@
     <div class="schede-box" id="schede-box">
       <nav class="schede" role="tablist" aria-label="Sezioni del corso" id="schede">
         <button class="scheda" role="tab" id="t-lezioni" aria-controls="lezioni" data-tab="lezioni">Lezioni</button>
+        <button class="scheda" role="tab" id="t-archivio" aria-controls="archivio" data-tab="archivio">Archivio</button>
         <button class="scheda" role="tab" id="t-appunti" aria-controls="appunti" data-tab="appunti">Appunti</button>
+        <button class="scheda" role="tab" id="t-calendario" aria-controls="calendario" data-tab="calendario">Calendario</button>
+        <button class="scheda" role="tab" id="t-programma" aria-controls="programma" data-tab="programma">Programma</button>
         <button class="scheda" role="tab" id="t-video" aria-controls="video" data-tab="video">Video</button>
         <button class="scheda" role="tab" id="t-brand" aria-controls="brand" data-tab="brand">Brand e modelli</button>
         <button class="scheda" role="tab" id="t-scorciatoie" aria-controls="scorciatoie" data-tab="scorciatoie">Scorciatoie</button>
@@ -332,6 +339,31 @@
     </div>
 
     <section class="pannello" id="lezioni" role="tabpanel" aria-labelledby="t-lezioni">
+      <div class="testa"><h2>La lezione di oggi</h2><p>Gli argomenti di oggi, da spuntare mentre li facciamo. Tutte le lezioni, sul percorso, sono nel Programma; quelle già fatte restano nell’Archivio.</p></div>
+      <ol class="lesson-index lesson-index--base" id="lezione-del-giorno" aria-label="Lezione del giorno"></ol>
+      <div class="course-empty" id="giorno-vuoto">
+        <h2>Il corso non è ancora iniziato</h2>
+        <p>Le lezioni si terranno nel secondo semestre. Da quel momento qui troverai la lezione del giorno, con gli argomenti da spuntare. Intanto puoi guardare il <a href="#programma">Programma</a>.</p>
+      </div>
+    </section>
+
+    <section class="pannello" id="archivio" role="tabpanel" aria-labelledby="t-archivio" hidden>
+      <div class="testa"><h2>Archivio lezioni</h2><p>Le lezioni già fatte, in ordine, con gli argomenti trattati.</p></div>
+      <ol class="lesson-index lesson-index--base" id="archivio-lezioni" aria-label="Lezioni svolte"></ol>
+      <div class="course-empty" id="archivio-vuoto"><p>Le lezioni compariranno qui dopo gli incontri.</p></div>
+    </section>
+
+    <section class="pannello" id="appunti" role="tabpanel" aria-labelledby="t-appunti" hidden>
+      <div class="testa"><h2>Appunti</h2><p>I tutorial passo per passo degli esercizi fatti in classe. Apri un passo alla volta mentre lavori.</p></div>
+      <div id="lista-tutorial"></div>
+    </section>
+
+    <section class="pannello" id="calendario" role="tabpanel" aria-labelledby="t-calendario" hidden>
+      <div class="testa"><h2>Calendario</h2><p>Le date delle classi 2A, 2B e 2C.</p></div>
+      <div class="course-empty"><h2>Date in arrivo</h2><p>Il corso si tiene nel secondo semestre: le date compariranno qui quando esce il calendario.</p></div>
+    </section>
+
+    <section class="pannello" id="programma" role="tabpanel" aria-labelledby="t-programma" hidden>
       <div class="testa">
         <h2>Il percorso</h2>
         <p>Tocca una tappa: la linea viola arriva fin lì e sotto si apre la lezione, con gli argomenti da spuntare. La ✓ indica una lezione spuntata tutta.</p>
@@ -343,11 +375,6 @@
       </div>
       <p class="nota-percorso">Date delle classi 2A, 2B e 2C: secondo semestre, in arrivo.</p>
       <div class="lezione" id="dettaglio" aria-live="polite"></div>
-    </section>
-
-    <section class="pannello" id="appunti" role="tabpanel" aria-labelledby="t-appunti" hidden>
-      <div class="testa"><h2>Appunti</h2><p>I tutorial passo per passo degli esercizi fatti in classe. Apri un passo alla volta mentre lavori.</p></div>
-      <div id="lista-tutorial"></div>
     </section>
 
     <section class="pannello" id="video" role="tabpanel" aria-labelledby="t-video" hidden>
@@ -395,7 +422,11 @@
   /* =====================================================================
      DATI DEL CORSO (copiati dalla pagina ufficiale di Rendering 3D)
      ===================================================================== */
-  const LEZIONE_CORRENTE = 8;   // l'ultima lezione fatta: la linea viola arriva fin qui
+  // Le lezioni dell'anno: «giorno» è la lezione del giorno (scheda Lezioni), «archivio» quelle già fatte.
+  // Quando si passa alla lezione successiva: giorno diventa il numero nuovo e quella fatta si aggiunge ad archivio.
+  const CORSO = { prefisso: 'r3d-2627', giorno: null, archivio: [] };
+  // sul percorso le lezioni prima di questa sono «Fatta», questa è «In corso» (0 = corso non ancora iniziato)
+  const LEZIONE_CORRENTE = CORSO.giorno || Math.max(0, ...CORSO.archivio);
 
 const agenda1 = [
         { title: "Introduzione", items: [{ name: "Presentazione alunni" }, { name: "Presentazione corso" }] },
@@ -625,8 +656,9 @@ const shortcuts = [
   $('#avviso-chiudi').addEventListener('click', () => { $('#avviso').hidden = true; salva(CHIAVE_AVVISO, 'chiuso'); });
 
   /* ---------- Schede con indirizzo proprio (#lezioni, #video...): il tasto Indietro funziona ---------- */
-  const TAB_NAMES = { lezioni: 'lezioni', appunti: 'appunti', video: 'video', brand: 'brand', scorciatoie: 'scorciatoie' };
-  const ALIAS = { programma: 'lezioni', archivio: 'lezioni', calendario: 'lezioni', percorso: 'lezioni' };
+  const TAB_NAMES = { lezioni: 'lezioni', archivio: 'archivio', appunti: 'appunti', calendario: 'calendario', programma: 'programma',
+    video: 'video', brand: 'brand', scorciatoie: 'scorciatoie' };
+  const ALIAS = { percorso: 'programma' };
   const box = $('#schede-box');
 
   function apriScheda(id, daStoria) {
@@ -639,7 +671,9 @@ const shortcuts = [
     });
     document.querySelectorAll('.pannello').forEach(p => p.hidden = p.id !== id);
     if (cambia) { const p = $('#' + id); p.classList.remove('entra'); void p.offsetWidth; p.classList.add('entra'); }
-    if (id === 'lezioni') disegnaPercorso();
+    // la stessa spunta si mette sia nella lezione del giorno sia sul percorso: entrando si rileggono
+    if (id === 'programma') { disegnaPercorso(); rileggiSpunte(); }
+    if (id === 'lezioni' && window.Agenda) Agenda.aggiorna();
     if (!daStoria && location.hash !== '#' + TAB_NAMES[id]) history.pushState(null, '', '#' + TAB_NAMES[id]);
   }
   // se si è già scesi oltre l'inizio della scheda, torna su al suo titolo (sotto la barra che resta in vista)
@@ -652,9 +686,9 @@ const shortcuts = [
   function daIndirizzo(scorri, modo) {
     const h = decodeURIComponent(location.hash.slice(1));
     const lez = h.match(/^lezione-(\d+|E)$/);
-    if (lez) apriScheda('lezioni', true), mostraTappa(lez[1] === 'E' ? 'E' : Number(lez[1]), false);
+    if (lez) apriScheda('programma', true), mostraTappa(lez[1] === 'E' ? 'E' : Number(lez[1]), false);
     else apriScheda(TAB_NAMES[h] ? h : ALIAS[h] || 'lezioni', true);
-    if (scorri === true && h) (lez ? $('#lezioni') : box).scrollIntoView({ behavior: modo || (Studio.fermo ? 'auto' : 'smooth'), block: 'start' });
+    if (scorri === true && h) (lez ? $('#programma') : box).scrollIntoView({ behavior: modo || (Studio.fermo ? 'auto' : 'smooth'), block: 'start' });
   }
   $('#schede').addEventListener('click', e => {
     const t = e.target.closest('.scheda[role=tab]'); if (!t) return;
@@ -688,7 +722,8 @@ const shortcuts = [
 
   /* ---------- Il percorso: una curva di Bézier morbida, con le tappe appoggiate sopra ---------- */
   const percorso = $('#percorso'), cursore = $('#cursore');
-  const idxQui = TAPPE.findIndex(f => f.n === LEZIONE_CORRENTE);
+  const CHIAVE_TAPPA = 'r3d-2627-tappa';
+  const tappaIniziale = TAPPE.find(f => String(f.n) === leggi(CHIAVE_TAPPA)) || TAPPE[0];
   $('#tappe').innerHTML = TAPPE.map(f => {
     const stato = f.esame ? 'esame' : f.n < LEZIONE_CORRENTE ? 'fatto' : f.n === LEZIONE_CORRENTE ? 'ultima' : 'poi';
     return `<li><button class="tappa ${stato}" type="button" data-n="${f.n}" aria-pressed="false">
@@ -728,7 +763,7 @@ const shortcuts = [
     return [b0 + (b1 - b0) * f, l0 + (l1 - l0) * f];
   }
 
-  let lunghezze = [], selezionata = idxQui, cursoreL = null, rafCursore = 0, percorsoVisto = false;
+  let lunghezze = [], selezionata = TAPPE.indexOf(tappaIniziale), cursoreL = null, rafCursore = 0, percorsoVisto = false;
   // anello, punta della linea viola e pallini accesi si muovono insieme
   function posaCursore(L) {
     const base = $('#p-base'), p = base.getPointAtLength(L);
@@ -821,10 +856,9 @@ const shortcuts = [
   }
 
   function mostraTappa(n, aggiornaIndirizzo) {
-    const f = TAPPE.find(x => x.n === n) || TAPPE[idxQui];
+    const f = TAPPE.find(x => x.n === n) || TAPPE[0];
     selezionata = TAPPE.indexOf(f);
-    $('#vai-qui').href = '#lezione-' + f.n;
-    $('#vai-qui').firstChild.textContent = f.esame ? "Vai all'esame " : `Vai alla lezione ${f.n} `;
+    salva(CHIAVE_TAPPA, String(f.n));   // riaprendo la pagina si riparte da qui
     bottoni.forEach(b => b.setAttribute('aria-pressed', String(b.dataset.n === String(f.n))));
     if (lunghezze.length && percorsoVisto) muoviCursore(lunghezze[selezionata]);
     const d = $('#dettaglio');
@@ -867,6 +901,11 @@ const shortcuts = [
     document.querySelectorAll('#dettaglio input[data-k]').forEach(c => { c.checked = false; salva(c.dataset.k, 'false'); });
     contaSpunte();
   });
+  function rileggiSpunte() {
+    const tutte = document.querySelectorAll('#dettaglio input[data-k]'); if (!tutte.length) return;
+    tutte.forEach(c => { c.checked = leggi(c.dataset.k) === 'true'; });
+    contaSpunte();
+  }
   segnaComplete();
 
   /* ---------- Appunti ---------- */
@@ -969,7 +1008,10 @@ const shortcuts = [
   });
 
   /* ---------- Avvio ---------- */
-  mostraTappa(LEZIONE_CORRENTE, false);
+  mostraTappa(tappaIniziale.n, false);
+  window.LEZIONI_CORSO = { prefisso: CORSO.prefisso, giorno: CORSO.giorno, archivio: CORSO.archivio,
+    lezioni: Object.fromEntries(TAPPE.filter(f => !f.esame).map(f => [f.n, { titolo: f.titolo, ore: '',
+      voci: f.agenda.flatMap((sez, s) => sez.items.map((v, i) => ({ testo: v.name, k: chiaveVoce(f.n, s, i) }))) }])) };
   daIndirizzo();
   // arrivo da un link a una lezione (#lezione-4): si scorre quando la pagina e i font sono pronti, altrimenti si sbaglia posto
   if (/^#lezione-/.test(location.hash)) {
@@ -978,6 +1020,7 @@ const shortcuts = [
   }
   requestAnimationFrame(() => $('#hero').classList.add('pronta'));
 </script>
+<script src="../../assets/agenda.js?v=20261029d"></script>
 
 <!-- ---------- La shaderball in tempo reale (Three.js): la sfera di prova dei materiali ---------- -->
 <script type="importmap">{ "imports": { "three": "https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.js", "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.170.0/examples/jsm/" } }</script>

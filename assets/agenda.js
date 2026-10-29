@@ -7,9 +7,12 @@
 // - giorno: la lezione del giorno, mostrata in #lezione-del-giorno con le spunte da mettere e togliere;
 // - archivio: le lezioni già fatte, mostrate in #archivio-lezioni con tutte le spunte già messe.
 // Per passare alla lezione successiva basta cambiare giorno e aggiungere quella fatta ad archivio.
+// Una voce può essere un testo oppure { testo, k }: k è la chiave della spunta, quando la pagina ne usa già una sua
+// (Rendering 3D: così la spunta è la stessa nella lezione del giorno e nel percorso).
 (function () {
-  const leggi = k => { try { return localStorage.getItem(k) === '1'; } catch { return false; } };
-  const salva = (k, v) => { try { localStorage.setItem(k, v ? '1' : '0'); } catch { /* senza archivio le spunte valgono finché la pagina resta aperta */ } };
+  // '1' è il modo vecchio di salvare la spunta, 'true' quello di Studio.salva: valgono tutti e due
+  const leggi = k => { try { const v = localStorage.getItem(k); return v === '1' || v === 'true'; } catch { return false; } };
+  const salva = (k, v) => { try { localStorage.setItem(k, String(!!v)); } catch { /* senza archivio le spunte valgono finché la pagina resta aperta */ } };
   const tre = p => String(p).padStart(3, ' ');
   const due = n => String(n).padStart(2, '0');
   const esc = t => String(t).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
@@ -19,7 +22,7 @@
   function riga(n, L, prefisso, { fatta = false, aperta = false } = {}) {
     const voci = L.voci || [];
     const elenco = voci.length
-      ? `<ol class="agenda-list">${voci.map((v, i) => `<li><label><input type="checkbox" data-k="${prefisso}-L${n}-${i}"${fatta ? ' checked disabled' : ''}>${SPUNTA}<span class="agenda-num">${due(i + 1)}</span><span class="agenda-text">${esc(v)}</span></label></li>`).join('')}</ol>`
+      ? `<ol class="agenda-list">${voci.map((v, i) => `<li><label><input type="checkbox" data-k="${esc(v.k || `${prefisso}-L${n}-${i}`)}"${fatta ? ' checked disabled' : ''}>${SPUNTA}<span class="agenda-num">${due(i + 1)}</span><span class="agenda-text">${esc(v.testo ?? v)}</span></label></li>`).join('')}</ol>`
         + (fatta ? '' : '<button class="agenda-reset" type="button">Togli le spunte</button>')
       : '<p class="agenda-vuota">Gli argomenti di questa lezione sono ancora da definire.</p>';
     return `<li class="has-agenda"><a href="#lezione-${n}"><span class="lesson-index-number">${due(n)}</span><strong>${esc(L.titolo)}</strong><small>${esc(L.ore || '')}</small><span class="lesson-index-arrow" aria-hidden="true">→</span></a>
@@ -44,7 +47,7 @@
     }
   }
 
-  const riquadri = [...document.querySelectorAll('.agenda')];
+  const riquadri = [...document.querySelectorAll('.agenda')], rileggi = [];
   riquadri.forEach(box => {
     const voci = [...box.querySelectorAll('input[data-k]')];
     const cifre = box.querySelector('.agenda-cifre');
@@ -64,9 +67,12 @@
     if (!box.classList.contains('agenda--fatta')) {
       voci.forEach(v => { v.checked = leggi(v.dataset.k); v.addEventListener('change', () => { salva(v.dataset.k, v.checked); conta(); }); });
       box.querySelector('.agenda-reset')?.addEventListener('click', () => { voci.forEach(v => { v.checked = false; salva(v.dataset.k, false); }); conta(); });
+      rileggi.push(() => { voci.forEach(v => { v.checked = leggi(v.dataset.k); }); conta(); });
     }
     conta();
   });
+  // se la stessa spunta si mette anche altrove nella pagina (il percorso di Rendering), la pagina chiede di rileggerle
+  window.Agenda = { aggiorna: () => rileggi.forEach(f => f()) };
   // se nessun riquadro è già aperto, si apre quello della prima lezione non ancora finita
   if (!riquadri.some(b => b.open)) {
     const prossima = riquadri.find(b => !b.classList.contains('completa') && !b.classList.contains('agenda--fatta'));
