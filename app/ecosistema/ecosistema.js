@@ -4,6 +4,7 @@
 // Il pulsante «Guarda un flusso di lavoro» fa partire una storia guidata: idea → confronto → brief → codice → immagine → consegna.
 import * as THREE from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+import * as audio from './suoni.js?v=1';
 
 const box = document.getElementById('sceneBox');
 const canvas = document.getElementById('scene');
@@ -119,19 +120,20 @@ function arc(a, b, h, color = COL.edge, op = .8) {
 const beams = [];
 const dotGeo = new THREE.SphereGeometry(.12, 10, 8);
 function beam(getA, getB, color, life = 1.6, opts = {}) {
+  if (opts.sound !== false) audio.play(opts.once ? 'whoosh' : 'pop', opts.once ? .7 : (Math.random() * 5 | 0), story ? .15 : .4);
   const n = 28, g = new THREE.BufferGeometry();
   g.setAttribute('position', new THREE.BufferAttribute(new Float32Array(n * 3), 3));
   const line = new THREE.Line(g, new THREE.LineBasicMaterial({ color, transparent: true, opacity: 0 }));
   const dot = new THREE.Mesh(opts.big ? new THREE.BoxGeometry(.32, .4, .05) : dotGeo, new THREE.MeshBasicMaterial({ color, transparent: true }));
   line.frustumCulled = false; rig.add(line, dot);
-  const Bm = { line, dot, getA, getB, life, t: 0, n, h: opts.h ?? 1.8, both: opts.both, once: opts.once, onEnd: opts.onEnd, keep: opts.keep, op: opts.op ?? .9 };
+  const Bm = { line, dot, getA, getB, life, t: 0, run: 0, n, h: opts.h ?? 1.8, both: opts.both, once: opts.once, onEnd: opts.onEnd, keep: opts.keep, op: opts.op ?? .9 };
   beams.push(Bm); return Bm;
 }
 const _a = new THREE.Vector3(), _b = new THREE.Vector3(), _m = new THREE.Vector3(), _p = new THREE.Vector3();
 const bez = (s, out) => { const u = 1 - s; return out.set(u * u * _a.x + 2 * u * s * _m.x + s * s * _b.x, u * u * _a.y + 2 * u * s * _m.y + s * s * _b.y, u * u * _a.z + 2 * u * s * _m.z + s * s * _b.z); };
 function stepBeams(dt) {
   for (let i = beams.length - 1; i >= 0; i--) {
-    const Bm = beams[i]; Bm.t += dt;
+    const Bm = beams[i]; Bm.t += dt; Bm.run += dt;           // run non si ferma mai: il punto continua a correre
     if (Bm.keep && Bm.keep()) Bm.t = Math.min(Bm.t, Bm.life * .5);
     const k = Bm.t / Bm.life;
     Bm.getA(_a); Bm.getB(_b);
@@ -141,11 +143,12 @@ function stepBeams(dt) {
     pos.needsUpdate = true;
     const fade = Math.max(0, Math.min(1, k * 6, (1 - k) * 4));
     Bm.line.material.opacity = fade * Bm.op;
-    let s = Bm.once ? Math.min(1, Bm.t / (Bm.life * .8)) : (Bm.t * 1.1) % 1; if (Bm.both && Math.floor(Bm.t * 1.1) % 2) s = 1 - s;
+    // un lampo tenuto acceso (keep) congela il suo tempo per non spegnersi: il punto invece segue run
+    let s = Bm.once ? Math.min(1, Bm.t / (Bm.life * .8)) : (Bm.run * 1.1) % 1; if (Bm.both && Math.floor(Bm.run * 1.1) % 2) s = 1 - s;
     if (Bm.once) s = s * s * (3 - 2 * s);
     bez(s, Bm.dot.position); Bm.dot.lookAt(camera.position);
     Bm.dot.material.opacity = fade;
-    if (k >= 1) { rig.remove(Bm.line, Bm.dot); Bm.line.geometry.dispose(); Bm.line.material.dispose(); Bm.dot.material.dispose(); beams.splice(i, 1); Bm.onEnd && Bm.onEnd(); }
+    if (k >= 1) { rig.remove(Bm.line, Bm.dot); Bm.line.geometry.dispose(); Bm.line.material.dispose(); Bm.dot.material.dispose(); beams.splice(i, 1); if (Bm.once) audio.play('ding', 0, .2); Bm.onEnd && Bm.onEnd(); }
   }
 }
 const _off = new THREE.Vector3();
@@ -387,12 +390,16 @@ const FACE = Math.PI / 4;                                   // rivolto verso la 
 const PROJECTS = [
   { key: 'sito', name: 'Sito dei corsi', tag: 'GitHub Pages', x: 11.05, z: -11.05, out: true, base: [1.45, 4, FACE],
     jobs: ["rifà l'header della pagina IA", 'prova la pagina sul telefono', 'prepara la pubblicazione'] },
-  { key: 'lezioni', name: 'Lezioni e calendari', tag: '5 corsi · 2026/27', x: 14.95, z: 0.65, tool: 'c4d', base: [1.5, 8, 0],
-    jobs: ['prepara la scena di esempio in Cinema 4D', 'confronta i calendari nuovi', 'segna le sovrapposizioni da chiedere'] },
+  { key: 'sleep', name: 'Sleep Physics', tag: 'gioco per TikTok', x: 14.95, z: 0.65, base: [1.5, 8, 0],
+    jobs: ['prepara la regia del nuovo video', 'prova un seed con la sfida Mystery', 'sistema i suoni ASMR delle sfere'] },
   { key: 'esercizi', name: 'Esercizi in aula', tag: 'Cloudflare · QR', x: 13.65, z: 8.45, out: true, base: [1.4, 40, 0],
     jobs: ['prova la frase a gruppi con 8 telefoni', 'aggiorna il Worker', 'scrive il brief del nuovo esercizio'] },
-  { key: 'photoshop', name: 'Photoshop Interior', tag: 'appunti e laboratori', x: 6.5, z: 14.95, tool: 'ps', base: [1.45, 4, 0],
-    jobs: ['prepara i manifesti in Photoshop', 'rivede gli appunti delle due sedie'] },
+  { key: 'eidolon', name: 'Eidolon Noeima', tag: 'ritratti AI', x: 6.5, z: 14.95, tool: 'ps', gen: true, base: [1.45, 40, 0],
+    jobs: ['scrive il prompt del nuovo ritratto', 'confronta il volto con il riferimento', 'rifinisce il ritratto in Photoshop'] },
+  { key: 'makkelijk', name: 'Makkelijk', tag: 'foto di famiglia per un cliente', x: 23.5, z: 3, gen: true, base: [1.4, 6, 0],
+    jobs: ['scrive le schede dei personaggi', 'prepara il prompt della foto di famiglia', 'controlla che la foto sembri spontanea'] },
+  { key: 'italmanager', name: 'Italmanager · CROSSBAR', tag: 'carriera di Football Manager', x: 14.5, z: 18.5, gen: true, base: [1.5, 4, 0],
+    jobs: ['scrive l’articolo della partita per CROSSBAR', 'prepara il prompt della copertina', 'disegna il bannerino della vittoria'] },
   { key: 'voce', name: 'Animazioni con voce', tag: 'voce clonata in locale', x: -1.95, z: 16.25, tool: 'blender', base: [1.35, 40, 0],
     jobs: ['genera la narrazione frase per frase', 'costruisce la scena in Blender'] },
   { key: 'clienti', name: 'Lavori per clienti', tag: 'codice e immagini', x: 1.95, z: -14.95, gen: true, base: [1.4, 6, 0],
@@ -412,19 +419,27 @@ const BUILD = {
     P.anim = (t, busy) => W.forEach((w, i) => { const f = busy ? .55 : .35; w.position.set(i * f * .5, i * .14 + Math.sin(t * 1.2 + i) * .05, -i * f); w.rotation.y = busy ? Math.sin(t * .8 + i) * .12 : 0; });
     P.topY = 3.1;
   },
-  // l'aula: lavagna col calendario, banchi, un cubo-calendario che gira
-  lezioni(P, g) {
-    const a = new THREE.Group(); a.rotation.y = FACE; g.add(a);
-    const board = new THREE.Mesh(new THREE.PlaneGeometry(2.1, 1.25), glowMat(COL.green, .05)); board.position.set(0, 1.75, -.6); a.add(board);
-    const grid = [...R2(-1.05, -.62, 1.05, .62), ...Ln(-1.05, .32, 1.05, .32), ...Ln(-.52, -.62, -.52, .32), ...Ln(0, -.62, 0, .32), ...Ln(.52, -.62, .52, .32),
-                  ...Ln(-1.05, -.15, 1.05, -.15), ...Ln(.1, -.5, .4, -.25), ...Ln(.1, -.25, .4, -.5)];
-    const bl = lines(grid); bl.position.copy(board.position); a.add(bl);
-    mesh(B(.06, 1.2, .06), mat(0x1b2a27), a, -.95, .7, -.6, null); mesh(B(.06, 1.2, .06), mat(0x1b2a27), a, .95, .7, -.6, null);
-    for (let r = 0; r < 2; r++) for (let c = 0; c < 3; c++) mesh(B(.42, .28, .26), mat(0x1d2b28), a, -.58 + c * .58, .43, .2 + r * .5, COL.edge, .7);
-    const cube = mesh(B(.45, .45, .45), mat(0x0f2a22, COL.green, .55), a, 0, 3, -.6, COL.green, .9);
-    P.tint.push(board.material, bl.material);
-    P.anim = (t, busy) => { cube.rotation.y = t * (busy ? 1.8 : .5); cube.rotation.x = t * .3; cube.position.y = 2.95 + Math.sin(t * 1.5) * .1; };
-    P.topY = 3.4;
+  // Sleep Physics: una teca di vetro dove le sfere cadono e rimbalzano, come nel gioco
+  sleep(P, g) {
+    const box = new THREE.Mesh(B(1.7, 2.1, 1.7), glowMat(COL.green, .05)); box.position.y = 1.4; g.add(box);
+    const frame = new THREE.LineSegments(new THREE.EdgesGeometry(B(1.7, 2.1, 1.7)), lineMat(.7)); frame.position.y = 1.4; g.add(frame);
+    P.tint.push(box.material, frame.material);
+    const COLS = [0xff8fa3, 0xffd166, 0x77e7b7, 0x7fb8ff, 0xc49bff, 0xffa36c];
+    const balls = COLS.map((c, i) => {
+      const r = .14 + (i % 3) * .06;
+      const m = mesh(new THREE.SphereGeometry(r, 18, 14), mat(c, c, .35), g, (Math.random() - .5) * 1.1, .4 + Math.random() * 1.8, (Math.random() - .5) * 1.1, null);
+      return { m, r, v: 0 };
+    });
+    let lt = 0;
+    P.anim = (t, busy) => {
+      const dt = Math.min(.05, Math.max(0, t - lt)); lt = t;
+      balls.forEach(b => {
+        b.v -= dt * (busy ? 9 : 4); b.m.position.y += b.v * dt;
+        const floor = .38 + b.r;
+        if (b.m.position.y < floor) { b.m.position.y = floor; b.v = Math.abs(b.v) * .62; if (b.v < .5) { b.m.position.y = 2.2; b.v = 0; b.m.position.x = (Math.random() - .5) * 1.1; b.m.position.z = (Math.random() - .5) * 1.1; } }
+      });
+    };
+    P.topY = 2.9;
   },
   // un grande telefono col QR e i telefoni degli studenti che gli girano attorno
   esercizi(P, g) {
@@ -442,17 +457,58 @@ const BUILD = {
     });
     P.topY = 2.8;
   },
-  // i livelli di Photoshop: fogli sovrapposti che scorrono
-  photoshop(P, g) {
-    const L = [];
-    for (let i = 0; i < 4; i++) {
-      const w = new THREE.Group(); w.position.y = .95 + i * .42; g.add(w);
-      const sh = new THREE.Mesh(new THREE.PlaneGeometry(1.7, 1.2), glowMat(COL.green, .07)); sh.rotation.x = -Math.PI / 2; w.add(sh);
-      const ln = lines(i === 3 ? [...R2(-.85, -.6, .85, .6), ...PICTURE] : R2(-.85, -.6, .85, .6)); ln.rotation.x = -Math.PI / 2; w.add(ln);
-      P.tint.push(sh.material, ln.material); L.push(w);
-    }
-    P.anim = (t, busy) => L.forEach((w, i) => { w.rotation.y = Math.sin(t * .5 + i) * (busy ? .5 : .15) + i * .1; w.position.x = Math.sin(t * .8 + i * 1.3) * (busy ? .28 : .08); });
+  // Eidolon Noeima: un busto olografico che ruota, attraversato da un anello di scansione
+  eidolon(P, g) {
+    const bust = new THREE.Group(); bust.position.y = .3; g.add(bust);
+    const wire = geo => { const l = new THREE.LineSegments(new THREE.WireframeGeometry(geo), lineMat(.55)); bust.add(l); P.tint.push(l.material); return l; };
+    wire(new THREE.SphereGeometry(.48, 12, 9)).position.y = 1.85;
+    wire(new THREE.CylinderGeometry(.16, .2, .4, 8, 1, true)).position.y = 1.3;
+    const sh = wire(new THREE.SphereGeometry(.8, 12, 6, 0, Math.PI * 2, 0, Math.PI / 2.3)); sh.position.y = .55; sh.scale.set(1, .8, .62);
+    const scan = new THREE.Mesh(new THREE.TorusGeometry(.62, .02, 6, 40), glowMat(COL.green, .8)); scan.rotation.x = Math.PI / 2; g.add(scan); P.tint.push(scan.material);
+    P.anim = (t, busy) => { bust.rotation.y = t * (busy ? .9 : .3); scan.position.y = 1.2 + Math.sin(t * (busy ? 2.4 : 1)) * 1; };
+    P.topY = 3;
+  },
+  // Makkelijk: polaroid di famiglia aperte a ventaglio
+  makkelijk(P, g) {
+    const fan = new THREE.Group(); fan.position.y = 1.3; fan.rotation.y = FACE; g.add(fan);
+    const shots = [-2, -1, 0, 1].map((k, i) => {
+      const p = new THREE.Group(); fan.add(p);
+      mesh(B(.8, .95, .02), mat(0xf1efe8, 0xf1efe8, .15), p, 0, 0, 0, null);
+      const ph = new THREE.Mesh(new THREE.PlaneGeometry(.66, .62), glowMat(COL.green, .25)); ph.position.set(0, .1, .02); p.add(ph);
+      const ln = lines(PICTURE.map(([x, y]) => [x * .38, y * .5]), .025); ln.position.y = .1; p.add(ln);
+      P.tint.push(ph.material, ln.material);
+      return { p, a: (k + .5) * .28, i };
+    });
+    P.anim = (t, busy) => shots.forEach(({ p, a, i }) => {
+      const open = busy ? 1.3 : 1;
+      p.rotation.z = -a * open + Math.sin(t * 1.3 + i) * .03; p.position.set(Math.sin(a * open) * .5, Math.cos(a * open) * .15 - .15, i * .03);
+    });
     P.topY = 2.6;
+  },
+  // Italmanager · CROSSBAR: un campetto con la porta, un pallone che prende la traversa e la copertina che gira sopra
+  italmanager(P, g) {
+    const field = new THREE.Group(); field.position.y = .33; field.rotation.y = FACE; g.add(field);
+    const turf = new THREE.Mesh(new THREE.PlaneGeometry(2.2, 1.5), glowMat(COL.green, .08)); turf.rotation.x = -Math.PI / 2; field.add(turf);
+    const pitch = lines([...R2(-1.1, -.75, 1.1, .75), ...Ln(0, -.75, 0, .75), ...circ(0, 0, .25, 18), ...R2(.8, -.35, 1.1, .35), ...R2(-1.1, -.35, -.8, .35)]);
+    pitch.rotation.x = -Math.PI / 2; field.add(pitch); P.tint.push(turf.material, pitch.material);
+    const W = mat(0xf2f2ee, 0xffffff, .25);
+    mesh(new THREE.CylinderGeometry(.025, .025, .55, 8), W, field, 1.1, .27, -.32, null);
+    mesh(new THREE.CylinderGeometry(.025, .025, .55, 8), W, field, 1.1, .27, .32, null);
+    const bar = mesh(new THREE.CylinderGeometry(.025, .025, .66, 8), W, field, 1.1, .55, 0, null); bar.rotation.x = Math.PI / 2;
+    const ball = mesh(new THREE.SphereGeometry(.07, 14, 10), mat(0xffffff, 0xffffff, .3), field, 0, .07, 0, null);
+    const cover = new THREE.Group(); cover.position.y = 2.35; g.add(cover);
+    const page = new THREE.Mesh(new THREE.PlaneGeometry(.9, 1.2), glowMat(COL.green, .1)); cover.add(page);
+    const art = lines([...R2(-.45, -.6, .45, .6), ...R2(-.36, .34, .36, .5), ...Ln(-.3, .42, .3, .42), ...PICTURE.map(([x, y]) => [x * .42, y * .4 - .05]), ...Ln(-.36, -.48, .1, -.48)]);
+    cover.add(art); P.tint.push(page.material, art.material);
+    P.anim = (t, busy) => {
+      // tiro da metà campo: il pallone sale, prende la traversa e torna indietro rimbalzando
+      const k = (t * (busy ? .9 : .45)) % 1;
+      if (k < .55) { const s = k / .55; ball.position.set(-.2 + s * 1.27, .07 + Math.sin(s * Math.PI * .5) * .48, Math.sin(s * 3) * .05); }
+      else { const s = (k - .55) / .45; ball.position.set(1.07 - s * 1.1, .07 + Math.abs(Math.sin(s * Math.PI * 2.2)) * .48 * (1 - s), .15 * s); }
+      bar.material.emissiveIntensity = k > .53 && k < .6 ? 1.2 : .25;          // la traversa si accende quando la colpisce
+      cover.rotation.y = t * (busy ? .8 : .3); cover.position.y = 2.35 + Math.sin(t * 1.2) * .08;
+    };
+    P.topY = 3.1;
   },
   // un microfono dentro un anello di barre che seguono la voce
   voce(P, g) {
@@ -530,7 +586,7 @@ function stepProjects(dt) {
 }
 const byKey = Object.fromEntries(PROJECTS.map(P => [P.key, P]));
 for (const P of PROJECTS) if (P.out) arc(new THREE.Vector3(P.x, 2.8, P.z), new THREE.Vector3(online.position.x, 2, online.position.z), 1.5, COL.green, .3);
-arc(new THREE.Vector3(byKey.voce.x, 1, byKey.voce.z), new THREE.Vector3(byKey.photoshop.x, 1, byKey.photoshop.z), 1.4, COL.green, .3);
+arc(new THREE.Vector3(byKey.eidolon.x, .05, byKey.eidolon.z), new THREE.Vector3(byKey.makkelijk.x, .05, byKey.makkelijk.z), 1.2, COL.green, .3);   // due lavori di ritratti e foto
 arc(new THREE.Vector3(byKey.esercizi.x, 1, byKey.esercizi.z), new THREE.Vector3(byKey.sito.x, 1, byKey.sito.z), 2, COL.green, .3);
 arc(new THREE.Vector3(byKey.clienti.x, .05, byKey.clienti.z), new THREE.Vector3(higgs.position.x, .05, higgs.position.z), .8);
 arc(new THREE.Vector3(byKey.clienti.x, .05, byKey.clienti.z), new THREE.Vector3(client.position.x, .05, client.position.z), .8, COL.client, .5);
@@ -580,6 +636,7 @@ const logEl = document.getElementById('log'), clockEl = document.getElementById(
 let simMin = 9 * 60, diary = 0, approved = 0;
 const hhmm = () => `${String(Math.floor(simMin / 60) % 24).padStart(2, '0')}:${String(Math.floor(simMin % 60)).padStart(2, '0')}`;
 function log(text, color = CSS.green) {
+  if (!story) audio.play('tick', 0, .3);
   const li = document.createElement('li');
   li.style.setProperty('--c', color);
   li.innerHTML = `<time>${hhmm()}</time><span class="d"></span><span>${text}</span>`;
@@ -614,7 +671,7 @@ const ROUTES = [
   () => { const P = rndP(); return [SPOTS.bot, projSpot(P), `porta il resoconto di Gemini a «${P.name}»`]; },
   () => [SPOTS.higgs, SPOTS.ps, 'porta in Photoshop le immagini scelte'],
   () => { const P = Math.random() < .5 ? byKey.sito : byKey.esercizi; return [projSpot(P), SPOTS.online, `controlla la versione online di «${P.name}»`]; },
-  () => [SPOTS.c4d, projSpot(byKey.lezioni), 'porta il render di Cinema 4D alle lezioni'],
+  () => [SPOTS.c4d, projSpot(byKey.sito), 'porta un render di Cinema 4D al sito dei corsi'],
   () => [SPOTS.blender, projSpot(byKey.voce), "porta la scena di Blender all'animazione"],
   () => [SPOTS.pc, SPOTS.mac, 'controlla che il Mac abbia gli stessi file'],
 ];
@@ -660,10 +717,10 @@ function stepDrone(D, dt) {
     D.g.rotation.z = Math.sin(k * Math.PI) * .22;
     if (k >= 1) {
       if (D.state === 'fetch') {
-        D.cargo.visible = true;
+        D.cargo.visible = true; audio.play('pop', 7, story ? .2 : .8);
         if (Math.random() < .3 && !story) log(`Un sub-agent di ${D.owner} <b style="color:${D.color}">(${D.name})</b> ${D.task}.`, D.color);
         fly(D, D.next, 'carry');
-      } else { D.cargo.visible = false; D.state = 'idle'; D.t = 0; }
+      } else { D.cargo.visible = false; D.state = 'idle'; D.t = 0; audio.play('pop', 12, story ? .2 : .8); }
     }
   }
   D.g.rotation.y += dt * .7;
@@ -708,6 +765,7 @@ function stepGio(dt) {
   if (!gioPath) return;
   const P = gioPath, a = P.pts[P.i], b = P.pts[P.i + 1];
   P.k += dt * 5.5 / Math.max(a.distanceTo(b), .01);
+  P.st = (P.st || 0) + dt; if (P.st > .3) { P.st = 0; audio.play('step'); }      // i passi di Giovanni
   gio.position.lerpVectors(a, b, Math.min(1, P.k));
   if (P.k >= 1) { P.i++; P.k = 0; if (P.i >= P.pts.length - 1) { gioPath = null; arrived(P.to); } }
 }
@@ -757,7 +815,7 @@ function stepAgent(A, dt) {
     if (A === claude && !A.askedGemini && A.t > A.dur * .4 && Math.random() < dt * .25) {
       A.askedGemini = true;
       log(`${who(A)} chiede a Gemini, via API, di guardare un video per «${P.name}».`, CSS.gemini);
-      beam(A.head, EYE, COL.gemini, 2.6, { both: true, h: 2.6 }); geminiBusy = 2.6;
+      beam(A.head, EYE, COL.gemini, 2.6, { both: true, h: 2.6 }); geminiBusy = 2.6; audio.play('bloop', 0, 1);
     }
     if (A.t > A.dur) {
       const a = Math.atan2(A.g.position.z, A.g.position.x);
@@ -800,7 +858,7 @@ function imageFlow(A) {
   beam(A.head, GIO, A.hex, 1.6, { h: 2.4, big: true, onEnd: () => {
     log('Giovanni incolla il prompt su Higgsfield e genera: i crediti sono suoi, decide lui quante prove fare.', CSS.amber);
     beam(GIO, at(higgs, 1.1), COL.amber, 1.6, { h: 2.6, onEnd: () => {
-      higgs.userData.flash = 1;
+      higgs.userData.flash = 1; audio.play('ding', 5);
       log("L'immagine scelta passa in Photoshop: si corregge solo dove serve, sul file ad alta risoluzione.", CSS.ps);
       beam(at(higgs, 1.1), at(ps, 1.2), COL.amber, 2, { h: 4, big: true });
     } });
@@ -823,7 +881,7 @@ function stepApprovals(dt) {
   if (!approvals.length) return;
   const a = approvals[0]; a.t += dt;
   if (a.t > 1.4 && !a.done) {
-    a.done = true; approved++; gioChip.textContent = 'ok ✓';
+    a.done = true; approved++; gioChip.textContent = 'ok ✓'; audio.play('fanfare', 0, 1.5);
     a.P.flash = 1;
     if (a.P.out) { log(`Giovanni approva: «${a.P.name}» va online.`); beam(a.P.top, at(cloud, 0), COL.green, 1.8, { h: 2.4 }); }
     else if (a.P.key === 'clienti') { log('Giovanni approva: il lavoro parte per il cliente.', CSS.client); beam(at(ps, 1.2), at(client, 1.3), COL.client, 2.2, { h: 4, big: true }); }
@@ -838,7 +896,7 @@ let reelT = 4, soloT = 9;
 function sendReel() {
   log(where === 'sofa' ? 'Dal divano, Giovanni manda un reel al suo bot Telegram.' : 'Giovanni manda un reel al suo bot Telegram.', CSS.gemini);
   beam(GIO, PHONE, COL.gemini, 1.5, { h: 2, onEnd: () => {
-    geminiBusy = 2.4;
+    geminiBusy = 2.4; audio.play('bloop', 0, 1);
     setTimeout(() => {
       log('Gemini risponde in chat con il resoconto e salva la novità nel cervello centrale.', CSS.gemini);
       beam(EYE, GIO, COL.gemini, 1.6, { h: 2 });
@@ -875,7 +933,7 @@ const STEPS = [
   { t: "Giovanni ha un'idea", p: "È in pausa sul divano, con la TV accesa e il telefono in mano. L'idea arriva lì, non per forza davanti al computer.",
     dur: 7, live: ['gio', 'sofa'],
     go(i) { shot(at(gio, .9), 2.8, TH0 + .55, 1.12, 1.5);
-      later(i, 1600, () => { bulb.visible = true; bulb.scale.setScalar(.01); bulbT = .7; bulb.material.emissive.setHex(COL.amber); });
+      later(i, 1600, () => { bulb.visible = true; bulb.scale.setScalar(.01); bulbT = .7; bulb.material.emissive.setHex(COL.amber); audio.play('sparkle'); });
       log("Giovanni ha un'idea per un cliente."); } },
   { t: 'Subito ne parla con Claude e ChatGPT', p: "Dal telefono scrive a Claude e a ChatGPT, per non perdere l'idea. Due primi pareri, ancora dal divano.",
     dur: 10.5, live: ['gio', 'sofa', 'claude', 'codex'],
@@ -893,12 +951,12 @@ const STEPS = [
       later(i, 5400, () => {
         shot(pc.position.clone().add(V(1.6, 1, 0)), 2.2, TH0 - .3, 1.02, 1.8);
         beam(claude.head, GIO, COL.claude, 1.8, { h: 1.2, onEnd: () => beam(GIO, codex.head, COL.claude, 1.8, { h: 1 }) }); });
-      later(i, 8200, () => { bulbT = 1.25; bulb.material.emissive.setHex(COL.green); });
+      later(i, 8200, () => { bulbT = 1.25; bulb.material.emissive.setHex(COL.green); audio.play('sparkle'); });
       log("Giovanni va al PC: l'idea si valida e si rafforza."); } },
   { t: 'Il brief va nel cervello centrale', p: "Quando l'idea regge, Giovanni la scrive nel cervello centrale: obiettivo, regole, materiali. Da qui partono tutti, su qualunque computer.",
     dur: 8.5, live: ['gio', 'pc', 'brain'],
     go(i) { bulbT = .01;
-      const b = beam(GIO, BRAIN_TOP, COL.green, 3.4, { h: 2.2, big: true, once: true, onEnd: () => { brainFlash = 1; diary++; } });
+      const b = beam(GIO, BRAIN_TOP, COL.green, 3.4, { h: 2.2, big: true, once: true, onEnd: () => { brainFlash = 1; diary++; audio.play('brain'); } });
       shot(at(gio, 1), 2, TH0, 1.02, 2.5);
       later(i, 500, () => follow(b, 1.8, TH0 + .1, 1.05));
       later(i, 3300, () => shot(BRAIN_TOP, 2.3, TH0 + .35, 1.3, 1.5));
@@ -928,7 +986,7 @@ const STEPS = [
       log('Claude scrive il prompt per Nano Banana Pro.', CSS.claude); } },
   { t: 'Giovanni genera su Higgsfield', p: 'Incolla il prompt su Higgsfield e genera. Decide lui quante prove fare, perché i crediti sono suoi, e sceglie la migliore.',
     dur: 8.5, live: ['gio', 'pc', 'higgs'],
-    go(i) { const b = beam(GIO, at(higgs, 1.1), COL.amber, 3.8, { h: 3.4, once: true, onEnd: () => { higgs.userData.flash = 1; } });
+    go(i) { const b = beam(GIO, at(higgs, 1.1), COL.amber, 3.8, { h: 3.4, once: true, onEnd: () => { higgs.userData.flash = 1; audio.play('ding', 5); } });
       later(i, 300, () => follow(b, 1.3, TH0, 1.02));
       later(i, 3900, () => shot(at(higgs, .9), 2.6, TH0 + .35, 1.1, 1.6));
       log('Giovanni genera su Higgsfield.', CSS.amber); } },
@@ -947,20 +1005,21 @@ const STEPS = [
     go(i) { CL.progress = 1;
       shot(at(gio, 1), 2.7, TH0 + .2, 1.05, 2);
       gioChip.hidden = false; gioChip.textContent = 'approva?';
-      later(i, 1700, () => { gioChip.textContent = 'ok ✓'; approved++; CL.flash = 1; log('Giovanni approva: il lavoro parte per il cliente.', CSS.client); });
+      later(i, 1700, () => { gioChip.textContent = 'ok ✓'; approved++; CL.flash = 1; audio.play('fanfare'); log('Giovanni approva: il lavoro parte per il cliente.', CSS.client); });
       later(i, 2800, () => {
-        const b = beam(at(ps, 1.2), at(client, 1.3), COL.client, 4.4, { h: 4.5, big: true, once: true, onEnd: () => { client.userData.flash = 1; } });
+        const b = beam(at(ps, 1.2), at(client, 1.3), COL.client, 4.4, { h: 4.5, big: true, once: true, onEnd: () => { client.userData.flash = 1; audio.play('fanfare'); } });
         follow(b, 1.1, TH0, 1.02); });
       later(i, 7300, () => { gioChip.hidden = true; shot(at(client, .9), 2.6, TH0 + .3, 1.1, 1.6); }); } },
   { t: 'Tutto finisce nel Diario', p: "Claude e Codex scrivono cosa hanno fatto e cosa resta aperto. Domani, dal PC, dal Mac o dal divano, si riparte da qui.",
     dur: 9, live: ['claude', 'codex', 'brain', 'drone'],
     go(i) { CL.busy = null; moveAgent(claude, ringPos(-.8)); moveAgent(codex, ringPos(2.4));
       shot(BRAIN_TOP, 1.3, TH0, 1.05, 1.4);
-      later(i, 2800, () => { beam(claude.head, BRAIN_TOP, COL.claude, 1.6, { h: 1 }); beam(codex.head, BRAIN_TOP, COL.codex, 1.6, { h: 1 }); diary += 2; brainFlash = 1; });
+      later(i, 2800, () => { beam(claude.head, BRAIN_TOP, COL.claude, 1.6, { h: 1 }); beam(codex.head, BRAIN_TOP, COL.codex, 1.6, { h: 1 }); diary += 2; audio.play('brain'); brainFlash = 1; });
       later(i, 5000, () => { const h = HOME(); shot(h.target, h.zoom / ZS, TH0, PH0, 1.2); });
       log('Claude e Codex scrivono nel Diario.'); } },
 ];
 function startStory() {
+  audio.init(); audio.setMode('story');
   story = { i: -1, t: 0 };
   approvals.length = 0; gioChip.hidden = true; bulb.visible = false;
   beams.forEach(b => { b.onEnd = null; b.keep = null; b.t = b.life; });       // spegne i lampi della giornata normale
@@ -983,10 +1042,12 @@ function goStep(i) {
   live.clear(); STEPS[i].live.forEach(k => live.add(k));
   S('story-n').textContent = `${String(i + 1).padStart(2, '0')} / ${String(STEPS.length).padStart(2, '0')}`;
   S('story-t').textContent = STEPS[i].t; S('story-p').textContent = STEPS[i].p;
+  audio.play('babble', STEPS[i].t + ' ' + STEPS[i].p);         // il testo «parla» come nei videogiochi
   claude.actEl.textContent = ''; codex.actEl.textContent = '';
   STEPS[i].go(i);
 }
 function endStory() {
+  audio.setMode('free');
   story = null; live.clear(); storyEl.hidden = true; S('b-story').setAttribute('aria-pressed', 'false'); box.parentElement.classList.remove('in-story');
   bulb.visible = false; gioChip.hidden = true; CL.busy = null; CL.progress = .1;
   AGENTS.forEach(A => { if (!A.mini) { setState(A, 'read', 1 + Math.random()); A.actEl.textContent = 'aspetta la prossima richiesta'; } });
@@ -1051,9 +1112,11 @@ const INFO = {
   online: ['Pubblicazione', 'Online', "Il sito dei corsi sta su GitHub Pages, gli esercizi in aula su Cloudflare. Tutti e due gratuiti. Ci si arriva solo dopo l'ok di Giovanni.", CSS.green],
   client: ['Consegna', 'Cliente', 'Riceve il lavoro finito: codice e immagini controllati da Giovanni. Le prove e le anteprime restano nel cervello centrale.', CSS.client],
   sito: ['Progetto', 'Sito dei corsi', 'Le pagine dei corsi AANT. Gli assistenti preparano e controllano su computer e telefono; la pubblicazione parte solo con il sì di Giovanni.', CSS.green],
-  lezioni: ['Progetto', 'Lezioni e calendari', 'Cinque corsi nel 2026/27. Calendari e date si confrontano file per file; le scene di esempio si preparano in Cinema 4D.', CSS.green],
+  sleep: ['Progetto', 'Sleep Physics', 'Il gioco di fisica di Giovanni per TikTok: sfere che cadono e rimbalzano, combo e sfide «Mystery». Una regia sceglie seed, sfide e musica e prepara i video; il codice lo scrivono Claude e Codex.', CSS.green],
   esercizi: ['Progetto', 'Esercizi in aula', 'Piccole app con QR per gli studenti, come «La frase a gruppi»: girano su Cloudflare e si provano prima con telefoni veri.', CSS.green],
-  photoshop: ['Progetto', 'Photoshop Interior', 'Appunti, laboratori ed esercizi del corso, con le animazioni che spiegano luce e ombre.', CSS.green],
+  eidolon: ['Progetto', 'Eidolon Noeima', 'Il progetto di ritratti di Giovanni. Gli assistenti scrivono i prompt e confrontano i volti con i riferimenti; Giovanni genera e rifinisce in Photoshop.', CSS.green],
+  makkelijk: ['Progetto', 'Makkelijk', 'Foto di famiglia dal taglio documentaristico per un cliente: schede dei personaggi, prompt e tante prove, con più assistenti coordinati. Il lavoro è chiuso, il metodo è rimasto ed è raccolto in un file di lezioni.', CSS.green],
+  italmanager: ['Progetto', 'Italmanager · CROSSBAR', 'La carriera online di Giovanni in Football Manager, raccontata da CROSSBAR: articoli delle partite, copertine e bannerini delle vittorie. Gli assistenti scrivono testi e prompt, Giovanni genera e impagina.', CSS.green],
   voce: ['Progetto', 'Animazioni con voce', 'Spiegazioni animate ricavate dai videocorsi, narrate con la voce di Giovanni clonata sul PC, senza servizi a pagamento.', CSS.green],
   clienti: ['Progetto', 'Lavori per clienti', 'Codice e immagini. Gli assistenti scrivono pagine e prompt; Giovanni genera, rifinisce in Photoshop e consegna.', CSS.green],
 };
@@ -1073,13 +1136,22 @@ S('b-pause').addEventListener('click', e => { paused = !paused; e.currentTarget.
 S('b-fast').addEventListener('click', e => { fast = !fast; e.currentTarget.setAttribute('aria-pressed', fast); });
 S('b-swap').addEventListener('click', () => { if (story || gioPath) return; placeIdx = (placeIdx + 1) % PLACES.length; moveT = 0; goTo(PLACES[placeIdx]); });
 S('b-home').addEventListener('click', home);
+// suono: parte al primo tocco sulla pagina (i browser non lasciano partire l'audio da solo); la scelta resta sul dispositivo
+const audioBtn = S('b-audio');
+let audioOn = true; try { audioOn = localStorage.getItem('eco-audio') !== 'no'; } catch (e) {}
+function showAudio() { audioBtn.setAttribute('aria-pressed', audioOn); audioBtn.textContent = audioOn ? '♪ Suono sì' : '♪ Suono no'; }
+audio.setEnabled(audioOn); showAudio();
+audioBtn.addEventListener('click', () => { audioOn = !audioOn; audio.setEnabled(audioOn); if (audioOn) audio.init(); showAudio(); try { localStorage.setItem('eco-audio', audioOn ? 'si' : 'no'); } catch (e) {} });
+const wake = () => { if (audioOn) audio.init(); };
+addEventListener('pointerdown', wake); addEventListener('keydown', wake);
 
 // ---------- animazione ----------
 let clock = 0, last = performance.now(), brainFlash = 0;
 log('Giovanni apre la giornata al PC fisso.');
 // quando la scena esce dallo schermo non si disegna: meno lavoro per il computer e per la batteria del telefono
 let onScreen = true;
-new IntersectionObserver(([e]) => { onScreen = e.isIntersecting; }).observe(box);
+new IntersectionObserver(([e]) => { onScreen = e.isIntersecting; audio.setAwake(onScreen && !document.hidden); }).observe(box);
+document.addEventListener('visibilitychange', () => audio.setAwake(onScreen && !document.hidden));
 function frame(now) {
   requestAnimationFrame(frame);
   let dt = Math.min(.05, (now - last) / 1000); last = now;
