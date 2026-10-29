@@ -1,0 +1,43 @@
+/* Guida strumenti IA: schede informative espandibili, un solo livello di lettura alla volta. */
+body.ai-page .guide-ai { border-top: 1px solid rgba(119,231,183,.22) !important; }
+body.ai-page .guide-ai-group { margin-top: 34px; }
+body.ai-page .guide-ai-group + .guide-ai-group { margin-top: 38px; }
+body.ai-page .guide-ai-group-heading { display: flex; align-items: end; justify-content: space-between; gap: 24px; margin-bottom: 15px; padding-top: 20px; border-top: 1px solid rgba(188,230,216,.18); }
+body.ai-page .guide-ai-group-heading > div > span { color: var(--green); font: 600 10px/1.4 'Geist Mono',monospace; letter-spacing: .09em; }
+body.ai-page .guide-ai-group-heading h3 { margin: 7px 0 0; font: 600 clamp(23px,2.5vw,31px)/1.14 Geist,Arial,sans-serif; letter-spacing: -.045em; }
+body.ai-page .guide-ai-group-heading p { max-width: 35ch; margin: 0; color: #a9b9af; font-size: 13px; line-height: 1.5; }
+body.ai-page .guide-ai-tool-grid { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 12px; align-items: start; }
+body.ai-page .guide-ai-tool, body.ai-page .guide-ai-extra { min-width: 0; border: 1px solid rgba(188,230,216,.22); border-radius: 15px; background: #111816; overflow: hidden; }
+body.ai-page .guide-ai-tool[open], body.ai-page .guide-ai-extra[open] { border-color: rgba(119,231,183,.55); background: #121c17; }
+body.ai-page .guide-ai-tool summary, body.ai-page .guide-ai-extra summary { position: relative; display: flex; flex-direction: column; align-items: flex-start; gap: 7px; min-height: 146px; padding: 19px 60px 19px 21px; cursor: pointer; list-style: none; }
+body.ai-page .guide-ai-tool summary::-webkit-details-marker, body.ai-page .guide-ai-extra summary::-webkit-details-marker, body.ai-page .guide-ai-sources summary::-webkit-details-marker { display: none; }
+body.ai-page .guide-ai-tool summary:hover, body.ai-page .guide-ai-extra summary:hover { background: rgba(119,231,183,.045); }
+body.ai-page .guide-ai-tool summary:focus-visible, body.ai-page .guide-ai-extra summary:focus-visible, body.ai-page .guide-ai-sources summary:focus-visible { outline: 2px solid var(--green); outline-offset: -4px; }
+body.ai-page .guide-ai-tool-meta, body.ai-page .guide-ai-extra summary > span:first-child { color: var(--green); font: 600 10px/1.35 'Geist Mono',monospace; letter-spacing: .06em; }
+body.ai-page .guide-ai-tool summary > strong, body.ai-page .guide-ai-extra summary > strong { color: #edf1ed; font: 600 clamp(22px,2vw,27px)/1.13 Geist,Arial,sans-serif; letter-spacing: -.04em; }
+body.ai-page .guide-ai-tool-teaser, body.ai-page .guide-ai-extra-teaser { color: #b5c7b9; font-size: 14px; line-height: 1.4; }
+body.ai-page .guide-ai-tool-price { margin-top: auto; padding-top: 8px; color: #9aebbf; font: 600 10px/1.4 'Geist Mono',monospace; letter-spacing: .025em; }
+body.ai-page .guide-ai-tool-toggle { position: absolute; top: 20px; right: 20px; display: grid; place-items: center; width: 31px; height: 31px; border: 1px solid rgba(119,231,183,.35); border-radius: 50%; color: var(--green); font: 400 21px/1 Geist,Arial,sans-serif; }
+body.ai-page .guide-ai-tool-toggle::before { content: '+'; }
+body.ai-page details[open] > summary .guide-ai-tool-toggle::before { content: '−'; }
+body.ai-page .guide-ai-tool-body, body.ai-page .guide-ai-extra-body { margin: 0 21px 21px; padding-top: 17px; border-top: 1px solid rgba(188,230,216,.19); }
+body.ai-page .guide-ai-tool-body > p, body.ai-page .guide-ai-extra-body p { max-width: 66ch; margin: 0 0 15px; color: #c1cfc4; font-size: 14px; line-height: 1.55; }
+body.ai-page .guide-ai-plan { display: grid; grid-template-columns: minmax(80px,.42fr) minmax(105px,.7fr) minmax(0,1.7fr); gap: 10px; padding: 12px 0; border-top: 1px solid rgba(188,230,216,.14); }
+body.ai-page .guide-ai-plan b { color: #e6f1e9; font-size: 14px; }
+body.ai-page .guide-ai-plan strong { color: var(--green); font: 600 13px/1.4 'Geist Mono',monospace; }
+body.ai-page .guide-ai-plan p { margin: 0; color: #aebfb1; font-size: 13px; line-height: 1.45; }
+body.ai-page .guide-ai-tool-body .guide-ai-tool-foot { margin: 10px 0 0; color: #8ea497; font-size: 11px; line-height: 1.5; }
+body.ai-page .guide-ai-extra { margin-top: 34px; }
+body.ai-page .guide-ai-extra summary { min-height: 116px; }
+body.ai-page .guide-ai-extra-body p { margin-bottom: 0; }
+body.ai-page .guide-ai-sources { margin-top: 18px; border-top: 1px solid rgba(188,230,216,.18); color: #96a89c; font-size: 12px; }
+body.ai-page .guide-ai-sources summary { display: flex; align-items: center; justify-content: space-between; gap: 18px; min-height: 48px; cursor: pointer; list-style: none; color: #a6b9aa; }
+body.ai-page .guide-ai-sources summary:hover { color: var(--green); }
+body.ai-page .guide-ai-sources summary > span { color: var(--green); font-size: 18px; }
+body.ai-page .guide-ai-sources[open] summary > span { transform: rotate(45deg); }
+body.ai-page .guide-ai-sources > div { display: flex; flex-wrap: wrap; gap: 9px 18px; padding: 4px 0 18px; }
+body.ai-page .guide-ai-sources p { flex-basis: 100%; margin: 0 0 5px; line-height: 1.5; }
+body.ai-page .guide-ai-sources a { color: var(--green); text-decoration: underline; text-underline-offset: 3px; }
+body.ai-page #guida-strumenti { scroll-margin-top: 140px; }
+@media(max-width:760px){body.ai-page .guide-ai-group-heading{display:block}body.ai-page .guide-ai-group-heading p{margin-top:8px}body.ai-page .guide-ai-tool-grid{grid-template-columns:1fr}body.ai-page .guide-ai-tool summary{min-height:132px}}
+@media(max-width:480px){body.ai-page .guide-ai-tool summary,body.ai-page .guide-ai-extra summary{padding:18px 56px 18px 18px}body.ai-page .guide-ai-tool-body,body.ai-page .guide-ai-extra-body{margin:0 18px 18px}body.ai-page .guide-ai-plan{grid-template-columns:minmax(70px,.45fr) minmax(0,1fr)}body.ai-page .guide-ai-plan p{grid-column:1/-1}body.ai-page .guide-ai-group{margin-top:28px}}
