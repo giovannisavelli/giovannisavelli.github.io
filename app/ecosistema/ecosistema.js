@@ -4,7 +4,7 @@
 // Il pulsante «Guarda un flusso di lavoro» fa partire una storia guidata: idea → confronto → brief → codice → immagine → consegna.
 import * as THREE from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
-import * as audio from './suoni.js?v=1';
+import * as audio from './suoni.js?v=2';
 
 const box = document.getElementById('sceneBox');
 const canvas = document.getElementById('scene');
@@ -56,7 +56,6 @@ function shot(target, zoom, theta = TH0, phi = PH0, speed = 2) {
   zoom *= ZS;
   focus = { get: typeof target === 'function' ? target : out => out.copy(target), zoom, theta, phi, speed };
 }
-function setFocus(x, z, zoom) { shot(new THREE.Vector3(x, 0, z), zoom); }
 // segue il punto di luce di un lampo: un dato che viaggia da un posto all'altro
 const follow = (Bm, zoom, theta, phi) => shot(out => out.copy(Bm.dot.position), zoom, theta, phi, 3.4);
 function stepFocus(dt) {

@@ -190,7 +190,6 @@ export function init() {
   }, 60);
 }
 export function setEnabled(b) { enabled = b; if (ctx) G.master.gain.setTargetAtTime(b ? 1 : 0, ctx.currentTime, .08); }
-export function isEnabled() { return enabled; }
 export function setAwake(v) { if (ctx) (v ? ctx.resume() : ctx.suspend()).catch(() => {}); }
 export function setMode(m) { mode = m; if (ctx) G.music.gain.setTargetAtTime(m === 'story' ? .6 : 1, ctx.currentTime, .5); }
 // play('ding', 2) suona un effetto; gap = tempo minimo (s) fra due effetti uguali, per non fare chiasso
