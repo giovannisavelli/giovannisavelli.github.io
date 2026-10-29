@@ -224,10 +224,86 @@
     </style>
     <link rel="stylesheet" href="../../design/course.css?v=sections-20261014">
     <link rel="stylesheet" href="../../assets/studio.css">
-    <link rel="stylesheet" href="studio-photoshop.css?v=lezioni-5-6-20261021">
+    <link rel="stylesheet" href="../../assets/agenda.css?v=20261029b">
+    <link rel="stylesheet" href="studio-photoshop.css?v=lezioni-giorno-20261029">
     <script src="../../design/course.js?v=sections-20261014" defer></script>
     <link rel="stylesheet" href="../../assets/course-ui.css?v=sections-20261014">
     <script src="../../assets/fx/effetti.js" defer></script>
+    <script>
+    // Le lezioni del corso. «giorno» è la lezione del giorno (scheda Lezioni); «archivio» sono quelle già fatte.
+    // Quando si passa alla lezione successiva: giorno diventa il numero nuovo e quella fatta si aggiunge ad archivio.
+    window.LEZIONI_CORSO = {
+     "prefisso": "ps-int-2627",
+     "giorno": 1,
+     "archivio": [],
+     "lezioni": {
+      "1": {
+       "titolo": "Conosciamoci",
+       "ore": "2 ore",
+       "voci": [
+        "Voi conoscete me",
+        "Io conosco voi",
+        "Voi conoscete Photoshop: documento, strumenti, opzioni e livelli"
+       ]
+      },
+      "2": {
+       "titolo": "I primi strumenti per scontornare",
+       "ore": "2 ore",
+       "voci": [
+        "Sopra e sotto: come funzionano i livelli",
+        "Il pennello: dimensione e durezza",
+        "Costruire la selezione: aggiungi, sottrai, interseca",
+        "La prova: sedia e mela",
+        "Il bordo lineare: lazo poligonale",
+        "Il bordo curvo: pennello e lazo"
+       ]
+      },
+      "3": {
+       "titolo": "Istogramma e regolazioni",
+       "ore": "4 ore · 2A e 2B",
+       "voci": [
+        "Ripartiamo dagli scontorni",
+        "Una modifica correggibile: i livelli di regolazione",
+        "L’istogramma: dove si trovano i toni",
+        "Che cosa fa una Curva",
+        "Le regolazioni, in breve",
+        "Animazione: perché percepiamo la terza dimensione",
+        "Esercizio: la sfera, costruire il volume"
+       ]
+      },
+      "4": {
+       "titolo": "Fotoinserimento: le due sedie",
+       "ore": "4 ore · 2A e 2B",
+       "voci": [
+        "Il laboratorio: la stanza delle due sedie",
+        "Prima di inserire: guardare la stanza",
+        "Isola e appoggia",
+        "Che cos’è un alpha",
+        "Falle appartenere alla stanza"
+       ]
+      },
+      "5": {
+       "titolo": "Manifesti e oggetti avanzati",
+       "ore": "4 ore · 2A e 2B",
+       "voci": [
+        "Prima, torniamo alle sedie",
+        "Guarda il cambiamento: prima e dopo",
+        "Dalla grafica alla fotografia",
+        "Trova i quattro angoli",
+        "Separa contenuto e posizione: gli oggetti avanzati",
+        "Fallo appartenere alla scena",
+        "La prova: i sette manifesti"
+       ]
+      },
+      "6": {
+       "titolo": "Esonero",
+       "ore": "4 ore · 2A e 2B",
+       "voci": []
+      }
+     }
+    };
+    </script>
+    <script src="../../assets/agenda.js?v=20261029b" defer></script>
     <script src="../../assets/studio.js" defer></script>
 </head>
 <body class="course-page gs-course gs-course--photoshop">
@@ -264,19 +340,27 @@
             <button class="tab-btn" type="button" role="tab" id="btn-archivio" data-tab="tab-archivio" aria-controls="tab-archivio" aria-selected="false">Archivio</button>
             <button class="tab-btn" type="button" role="tab" id="btn-appunti" data-tab="tab-appunti" aria-controls="tab-appunti" aria-selected="false">Appunti</button>
             <button class="tab-btn" type="button" role="tab" id="btn-calendario" data-tab="tab-calendario" aria-controls="tab-calendario" aria-selected="false">Calendario</button>
+            <button class="tab-btn" type="button" role="tab" id="btn-elenco" data-tab="tab-elenco" aria-controls="tab-elenco" aria-selected="false" tabindex="-1">Programma</button>
             <button class="tab-btn" type="button" role="tab" id="btn-video" data-tab="tab-video" aria-controls="tab-video" aria-selected="false">Video</button>
             <button class="tab-btn" type="button" role="tab" id="btn-risorse" data-tab="tab-risorse" aria-controls="tab-risorse" aria-selected="false">Risorse</button>
             <button class="tab-btn" type="button" role="tab" id="btn-scorciatoie" data-tab="tab-scorciatoie" aria-controls="tab-scorciatoie" aria-selected="false">Scorciatoie</button>
         </nav>
 
         <section class="panel" role="tabpanel" id="tab-programma" aria-labelledby="btn-programma">
-            <p class="kicker">Il percorso in breve</p>
-            <h2>Programma lezioni</h2>
-            <p class="panel-intro">Scegli una lezione per leggere gli appunti. Le date della tua classe sono nel calendario.</p>
+            <p class="kicker">Lezione del giorno</p>
+            <h2>La lezione di oggi</h2>
+            <p class="panel-intro">Gli argomenti di oggi, da spuntare mentre li facciamo. Le spiegazioni complete sono negli appunti; le lezioni già fatte restano nell’archivio.</p>
             <aside class="notice" aria-label="Preparazione obbligatoria con i video">
                 <div><strong>Preparazione obbligatoria · Due corsi video</strong><p>Segui i corsi completi in quest’ordine: prima <em>Photoshop base</em>, poi <em>Ombre</em>, che approfondisce gli argomenti più avanzati. Le registrazioni sono parte del programma; in aula useremo il tempo per esercizi, correzioni e approfondimenti.</p></div>
                 <a href="#video">Apri i corsi →</a>
             </aside>
+            <ol class="lesson-index" id="lezione-del-giorno" aria-label="Lezione del giorno"></ol>
+        </section>
+
+        <section class="panel" role="tabpanel" id="tab-elenco" aria-labelledby="btn-elenco" hidden>
+            <p class="kicker">Il percorso in breve</p>
+            <h2>Programma lezioni</h2>
+            <p class="panel-intro">Tutte le lezioni del corso. Scegline una per leggere gli appunti; le date della tua classe sono nel calendario.</p>
             <ol class="lesson-index" aria-label="Lezioni con programma pubblicato">
                 <li><a href="#lezione-1"><span class="lesson-index-number">01</span><strong>Conosciamoci</strong><small>2 ore</small><span class="lesson-index-arrow" aria-hidden="true">→</span></a></li>
                 <li><a href="#lezione-2"><span class="lesson-index-number">02</span><strong>I primi strumenti per scontornare</strong><small>2 ore</small><span class="lesson-index-arrow" aria-hidden="true">→</span></a></li>
@@ -291,8 +375,9 @@
         <section class="panel" role="tabpanel" id="tab-archivio" aria-labelledby="btn-archivio" hidden>
             <p class="kicker">Lezioni svolte</p>
             <h2>Archivio lezioni</h2>
-            <p class="panel-intro">Le schede delle lezioni passate saranno raccolte qui, in ordine cronologico.</p>
-            <div class="empty"><h3>Archivio ancora vuoto</h3><p>Il corso inizia a novembre 2026. Le lezioni verranno aggiunte dopo il loro svolgimento.</p></div>
+            <p class="panel-intro">Le lezioni già fatte, in ordine, con gli argomenti trattati.</p>
+            <ol class="lesson-index" id="archivio-lezioni" aria-label="Lezioni svolte"></ol>
+            <div class="empty" id="archivio-vuoto"><h3>Archivio ancora vuoto</h3><p>Il corso inizia a novembre 2026. Le lezioni verranno aggiunte dopo il loro svolgimento.</p></div>
         </section>
 
         <section class="panel" role="tabpanel" id="tab-appunti" aria-labelledby="btn-appunti" hidden>
@@ -692,7 +777,8 @@
 <script>
     // Ogni scheda ha un indirizzo condivisibile. Il programma apre la pagina ora che la prima lezione è disponibile.
     const TAB_NAMES = {
-        "tab-programma": "programma",
+        "tab-programma": "lezioni",
+        "tab-elenco": "programma",
         "tab-archivio": "archivio",
         "tab-appunti": "appunti",
         "tab-calendario": "calendario",

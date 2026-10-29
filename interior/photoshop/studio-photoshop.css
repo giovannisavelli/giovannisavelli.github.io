@@ -222,3 +222,6 @@ body.gs-course--photoshop .poster-material-links a { white-space:normal; text-al
   body.gs-course--photoshop :is(.lesson-index a,.video-course-choice,.video-choice):hover,
   body.gs-course--photoshop .hero-actions a:hover { transform:none; }
 }
+
+/* Argomenti della giornata: il componente è comune (assets/agenda.css); qui solo i colori e il carattere di Photoshop */
+body.gs-course--photoshop .agenda { --ag-accent: var(--accent); --ag-on-accent: #06111d; --ag-text: var(--ink, var(--text)); --ag-muted: var(--ink-2, var(--muted)); --ag-surface: var(--surface); --ag-border: var(--border); --ag-mono: var(--mono); }
