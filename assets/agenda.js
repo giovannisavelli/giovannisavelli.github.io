@@ -33,6 +33,9 @@
   if (C) {
     const oggi = document.getElementById('lezione-del-giorno');
     if (oggi && C.lezioni[C.giorno]) oggi.innerHTML = riga(C.giorno, C.lezioni[C.giorno], C.prefisso, { aperta: true });
+    // finché non c'è una lezione del giorno (corso non ancora iniziato) resta il messaggio scritto nella pagina
+    const nessuna = document.getElementById('giorno-vuoto');
+    if (nessuna) nessuna.hidden = !!C.lezioni[C.giorno];
     const arch = document.getElementById('archivio-lezioni');
     if (arch) {
       arch.innerHTML = (C.archivio || []).filter(n => C.lezioni[n]).map(n => riga(n, C.lezioni[n], C.prefisso, { fatta: true })).join('');

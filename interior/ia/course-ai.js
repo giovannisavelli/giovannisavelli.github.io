@@ -67,7 +67,8 @@ mostraCalendarioIA('3A');
 // Stessa struttura delle schede di Photoshop: un indirizzo per sezione,
 // ritorno del browser funzionante e pulsanti utilizzabili da tastiera.
 const schedeIA = {
-  'tab-programma': 'programma',
+  'tab-programma': 'lezioni',
+  'tab-elenco': 'programma',
   'tab-archivio': 'archivio',
   'tab-appunti': 'appunti',
   'tab-calendario': 'calendario',
@@ -152,27 +153,3 @@ document.addEventListener('click', evento => {
 window.addEventListener('popstate', schedaDaHashIA);
 window.addEventListener('hashchange', schedaDaHashIA);
 schedaDaHashIA();
-
-// Argomenti della giornata: si spuntano mentre si fa lezione, come nel vecchio sito.
-// Le spunte restano su questo dispositivo (nel browser), non si vedono sugli altri.
-document.querySelectorAll('.agenda').forEach(box => {
-  const voci = [...box.querySelectorAll('input[data-k]')];
-  const leggi = k => { try { return localStorage.getItem(k) === '1'; } catch { return false; } };
-  const salva = (k, v) => { try { localStorage.setItem(k, v ? '1' : '0'); } catch { /* senza archivio le spunte valgono finché la pagina resta aperta */ } };
-  // la percentuale gira come le date dell'hub: lo stesso tabellone a palette (assets/fx/effetti.js), così il sito resta uno solo
-  const cifre = box.querySelector('.agenda-cifre'), tre = p => String(p).padStart(3, ' ');
-  const tabellone = window.Effetti ? Effetti.tabellone(cifre, tre(0)) : null;
-  let vista = false, ultima = 0;
-  const mostra = p => { ultima = p; if (!tabellone) cifre.textContent = p; else if (vista) tabellone.vai(tre(p)); };
-  new IntersectionObserver(([e], oss) => { if (!e.isIntersecting) return; vista = true; oss.disconnect(); mostra(ultima); }, { threshold: .4 }).observe(cifre);
-  const conta = () => {
-    const fatte = voci.filter(v => v.checked).length;
-    box.querySelector('.agenda-count').textContent = `${fatte} di ${voci.length} fatti`;
-    mostra(Math.round(fatte / voci.length * 100));
-    box.style.setProperty('--fatto', `${fatte / voci.length * 100}%`);
-    box.classList.toggle('completa', fatte === voci.length);
-  };
-  voci.forEach(v => { v.checked = leggi(v.dataset.k); v.addEventListener('change', () => { salva(v.dataset.k, v.checked); conta(); }); });
-  box.querySelector('.agenda-reset')?.addEventListener('click', () => { voci.forEach(v => { v.checked = false; salva(v.dataset.k, false); }); conta(); });
-  conta();
-});

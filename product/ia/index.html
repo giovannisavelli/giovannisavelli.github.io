@@ -14,6 +14,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Geist:wght@100..900&family=Geist+Mono:wght@400;500;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="../../assets/studio.css">
   <link rel="stylesheet" href="../../assets/course-ui.css?v=unified-20261014">
+<link rel="stylesheet" href="../../assets/agenda.css?v=20261029c">
 </head>
 <body class="course-page" style="--accent: #34d399">
 <header class="top" id="top">
@@ -51,19 +52,47 @@
     </dl>
   </div>
   <div class="course-content">
-    <nav class="course-tabs" role="tablist" aria-label="Sezioni del corso" data-initial-tab="calendario">
+    <nav class="course-tabs" role="tablist" aria-label="Sezioni del corso" data-initial-tab="lezioni">
+      <button class="course-tab" id="tab-lezioni" type="button" role="tab" aria-controls="lezioni" aria-selected="true" tabindex="0" data-panel="lezioni">Lezioni</button>
+      <button class="course-tab" id="tab-archivio" type="button" role="tab" aria-controls="archivio" aria-selected="false" tabindex="-1" data-panel="archivio">Archivio</button>
+      <button class="course-tab" id="tab-appunti" type="button" role="tab" aria-controls="appunti" aria-selected="false" tabindex="-1" data-panel="appunti">Appunti</button>
+      <button class="course-tab" id="tab-calendario" type="button" role="tab" aria-controls="calendario" aria-selected="false" tabindex="-1" data-panel="calendario">Calendario</button>
       <button class="course-tab" id="tab-programma" type="button" role="tab" aria-controls="programma" aria-selected="false" tabindex="-1" data-panel="programma">Programma</button>
-      <button class="course-tab" id="tab-calendario" type="button" role="tab" aria-controls="calendario" aria-selected="true" tabindex="0" data-panel="calendario">Calendario</button>
     </nav>
-    <section class="course-panel" id="programma" role="tabpanel" aria-labelledby="tab-programma" hidden>
-      <div class="course-empty">
-        <p class="etichetta">Programma · Product Design</p>
-        <h2>Il corso prende forma</h2>
-        <p>Il programma è in preparazione. Le lezioni, gli appunti, i video e le risorse del corso saranno raccolti in questo spazio.</p>
-        <p>Le date delle lezioni sono già disponibili nella sezione Calendario.</p>
+
+    <section class="course-panel" id="lezioni" role="tabpanel" aria-labelledby="tab-lezioni">
+      <div class="course-section-head">
+        <p class="etichetta">Lezione del giorno</p>
+        <h2>La lezione di oggi</h2>
+        <p class="course-panel-intro">Gli argomenti di oggi, da spuntare mentre li facciamo. Le spiegazioni complete sono negli Appunti; le lezioni già fatte restano nell’Archivio.</p>
+      </div>
+      <ol class="lesson-index lesson-index--base" id="lezione-del-giorno" aria-label="Lezione del giorno"></ol>
+      <div class="course-empty" id="giorno-vuoto">
+        <p class="etichetta">Lezioni · 2026/27</p>
+        <h2>Il corso non è ancora iniziato</h2>
+        <p>La prima lezione è lunedì 21 dicembre 2026. Da quel giorno qui troverai la lezione del giorno, con gli argomenti da spuntare. Le date sono nel Calendario.</p>
       </div>
     </section>
-    <section class="course-panel" id="calendario" role="tabpanel" aria-labelledby="tab-calendario">
+    <section class="course-panel" id="archivio" role="tabpanel" aria-labelledby="tab-archivio" hidden>
+      <div class="course-section-head">
+        <p class="etichetta">Archivio lezioni · 2026/27</p>
+        <h2>Archivio lezioni</h2>
+        <p class="course-panel-intro">Le lezioni già fatte, in ordine, con gli argomenti trattati.</p>
+      </div>
+      <ol class="lesson-index lesson-index--base" id="archivio-lezioni" aria-label="Lezioni svolte"></ol>
+      <div class="course-empty" id="archivio-vuoto">
+        <h2>Archivio ancora vuoto</h2>
+        <p>Le lezioni compariranno qui dopo gli incontri.</p>
+      </div>
+    </section>
+    <section class="course-panel" id="appunti" role="tabpanel" aria-labelledby="tab-appunti" hidden>
+      <div class="course-empty">
+        <p class="etichetta">Appunti · 2026/27</p>
+        <h2>Appunti in arrivo</h2>
+        <p>Le spiegazioni e i materiali di ogni lezione saranno raccolti qui.</p>
+      </div>
+    </section>
+    <section class="course-panel" id="calendario" role="tabpanel" aria-labelledby="tab-calendario" hidden>
       <div class="course-section-head">
         <p class="etichetta">PD3 · Primo semestre</p>
         <h2>Calendario lezioni</h2>
@@ -76,6 +105,14 @@
         <li><span class="etichetta">Lezione 4</span><time datetime="2027-01-25">Lunedì 25 gennaio 2027</time><span>09:00–13:00</span></li>
       </ol>
     </section>
+    <section class="course-panel" id="programma" role="tabpanel" aria-labelledby="tab-programma" hidden>
+      <div class="course-empty">
+        <p class="etichetta">Programma · Product Design</p>
+        <h2>Il corso prende forma</h2>
+        <p>Il programma è in preparazione. Le lezioni, gli appunti, i video e le risorse del corso saranno raccolti in questo spazio.</p>
+        <p>Le date delle lezioni sono già disponibili nella sezione Calendario.</p>
+      </div>
+    </section>
   </div>
 </main>
 <footer class="wrap course-footer">
@@ -87,6 +124,12 @@
   </div>
 </footer>
 <script src="../../assets/fx/effetti.js"></script>
+<script>
+// Le lezioni del corso. «giorno» è la lezione del giorno (scheda Lezioni); «archivio» sono quelle già fatte.
+// Ogni lezione: { titolo, ore, voci: [argomenti da spuntare] }. Esempio in interior/photoshop/index.html.
+window.LEZIONI_CORSO = {"prefisso": "pd-ia-2627", "giorno": null, "archivio": [], "lezioni": {}};
+</script>
+<script src="../../assets/agenda.js?v=20261029c"></script>
 <script src="../../assets/studio.js"></script>
 <script src="../../assets/course-tabs.js?v=unified-20261014"></script>
 </body>

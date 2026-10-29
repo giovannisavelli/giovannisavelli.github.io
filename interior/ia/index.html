@@ -30,12 +30,41 @@
     @media(max-width:600px){.topbar{padding:17px 20px}.brand{font-size:11px}.brand-mark{width:35px;height:35px}.nav{gap:0}.nav a:not(.course-link){display:none}.nav .course-link{font-size:10px;padding:12px}.left{min-height:760px;padding:275px 22px 130px}.eyebrow{font-size:9px;margin-bottom:23px}h1{font-size:clamp(56px,12.2vw,78px)}.intro{font-size:17px;margin-top:28px}.detail{font-size:13px}.cta-row{margin-top:27px}.cta{min-height:46px}.bottom-rule{left:22px;bottom:90px;font-size:9px}.below{padding:60px 22px 80px}.below h2{font-size:43px}}
     @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*:before,*:after{transition-duration:.01ms!important;animation-duration:.01ms!important}}
   </style>
-  <link rel="stylesheet" href="course-ai.css?v=20261029-tabellone">
+  <link rel="stylesheet" href="../../assets/agenda.css?v=20261029c">
+  <link rel="stylesheet" href="course-ai.css?v=20261029-giorno">
   <link rel="stylesheet" href="guida-strumenti.css?v=20261028-compact01">
   <link rel="stylesheet" href="ghost-scena.css?v=20261028-verde06">
   <script src="../../assets/studio.js" defer></script>
   <script src="../../assets/fx/effetti.js" defer></script>
-  <script src="course-ai.js?v=20261029-tabellone" defer></script>
+  <script>
+  // Le lezioni del corso. «giorno» è la lezione del giorno (scheda Lezioni); «archivio» sono quelle già fatte.
+  // Quando si passa alla lezione successiva: giorno diventa il numero nuovo e quella fatta si aggiunge ad archivio.
+  window.LEZIONI_CORSO = {
+   "prefisso": "ia-int-2627",
+   "giorno": 1,
+   "archivio": [],
+   "lezioni": {
+    "1": {
+     "titolo": "LLM, prompt e varianza",
+     "ore": "4 ore · traccia iniziale",
+     "voci": [
+      "Saluti e due chiacchiere con la classe",
+      "Presentazione del corso: «questo corso è inutile»",
+      "Come lavoreremo: concetti e ispirazione, non tecniche precise",
+      "Che cosa ne pensate dell’IA? Etica e mondo del lavoro",
+      "Il sito del corso e come è stato fatto",
+      "ChatGPT, Claude e gli LLM: che cosa sono",
+      "Come funziona un LLM",
+      "Esperimento: la frase a gruppi",
+      "Esperimento: il Laboratorio della Varianza",
+      "I diversi modi di scrivere un prompt"
+     ]
+    }
+   }
+  };
+  </script>
+  <script src="../../assets/agenda.js?v=20261029c" defer></script>
+  <script src="course-ai.js?v=20261029-giorno" defer></script>
   <script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.170.0/examples/jsm/"}}</script>
 </head>
 <body class="ai-page">
@@ -72,39 +101,33 @@
           <button class="course-tab" type="button" role="tab" id="btn-archivio" data-tab="tab-archivio" aria-controls="tab-archivio" aria-selected="false">Archivio</button>
           <button class="course-tab" type="button" role="tab" id="btn-appunti" data-tab="tab-appunti" aria-controls="tab-appunti" aria-selected="false">Appunti</button>
           <button class="course-tab" type="button" role="tab" id="btn-calendario" data-tab="tab-calendario" aria-controls="tab-calendario" aria-selected="false">Calendario</button>
+          <button class="course-tab" type="button" role="tab" id="btn-elenco" data-tab="tab-elenco" aria-controls="tab-elenco" aria-selected="false">Programma</button>
           <button class="course-tab" type="button" role="tab" id="btn-strumenti" data-tab="tab-strumenti" aria-controls="tab-strumenti" aria-selected="false">Strumenti</button>
         </nav>
       </div>
       <section class="course-panel" role="tabpanel" id="tab-programma" aria-labelledby="btn-programma">
-        <section class="course-block" id="programma" aria-labelledby="program-title">
+        <section class="course-block" id="lezioni" aria-labelledby="today-title">
           <div class="section-heading">
-            <span class="section-meta">IL PERCORSO IN BREVE</span>
-            <h2 id="program-title">Programma lezioni</h2>
-            <p>Scegli una lezione per leggere la sua traccia negli Appunti. Le date della tua classe sono nel Calendario.</p>
+            <span class="section-meta">LEZIONE DEL GIORNO</span>
+            <h2 id="today-title">La lezione di oggi</h2>
+            <p>Gli argomenti di oggi, da spuntare mentre li facciamo. Le spiegazioni complete sono negli Appunti; le lezioni già fatte restano nell’Archivio.</p>
           </div>
           <aside class="course-notice" aria-label="Esercizi della prima lezione">
             <div><strong>Prima lezione · Dalle parole alle immagini</strong><p>Costruiremo una frase a gruppi e confronteremo i risultati. Poi useremo il Laboratorio della Varianza per vedere che cosa accade quando cambiano le informazioni date al modello.</p></div>
             <a href="#vibe-coding">Apri gli esercizi →</a>
           </aside>
+          <ol class="lesson-index" id="lezione-del-giorno" aria-label="Lezione del giorno"></ol>
+        </section>
+      </section>
+      <section class="course-panel" role="tabpanel" id="tab-elenco" aria-labelledby="btn-elenco" hidden>
+        <section class="course-block" id="programma" aria-labelledby="program-title">
+          <div class="section-heading">
+            <span class="section-meta">IL PERCORSO IN BREVE</span>
+            <h2 id="program-title">Programma lezioni</h2>
+            <p>Tutte le lezioni del corso. Scegline una per leggere la sua traccia negli Appunti; le date della tua classe sono nel Calendario.</p>
+          </div>
           <ol class="lesson-index" aria-label="Incontri del corso">
-            <li class="has-agenda"><a href="#lezione-1"><span class="lesson-index-number">01</span><strong>LLM, prompt e varianza</strong><small>4 ore · traccia iniziale</small><span class="lesson-index-arrow" aria-hidden="true">→</span></a>
-              <details class="agenda" open>
-                <summary><span class="agenda-title">Argomenti della giornata<small class="agenda-count">0 di 10 fatti</small></span><span class="agenda-pct"><span class="agenda-cifre" aria-live="polite">0</span><span class="agenda-perc">%</span></span><span class="agenda-bar" aria-hidden="true"><i></i></span></summary>
-                <ol class="agenda-list">
-                <li><label><input type="checkbox" data-k="ia-int-2627-L1-0"><span class="agenda-box" aria-hidden="true"><svg viewBox="0 0 24 24"><path pathLength="1" d="M5 12.5l4.5 4.5L19 7.5"/></svg></span><span class="agenda-num">01</span><span class="agenda-text">Saluti e due chiacchiere con la classe</span></label></li>
-                <li><label><input type="checkbox" data-k="ia-int-2627-L1-1"><span class="agenda-box" aria-hidden="true"><svg viewBox="0 0 24 24"><path pathLength="1" d="M5 12.5l4.5 4.5L19 7.5"/></svg></span><span class="agenda-num">02</span><span class="agenda-text">Presentazione del corso: «questo corso è inutile»</span></label></li>
-                <li><label><input type="checkbox" data-k="ia-int-2627-L1-2"><span class="agenda-box" aria-hidden="true"><svg viewBox="0 0 24 24"><path pathLength="1" d="M5 12.5l4.5 4.5L19 7.5"/></svg></span><span class="agenda-num">03</span><span class="agenda-text">Come lavoreremo: concetti e ispirazione, non tecniche precise</span></label></li>
-                <li><label><input type="checkbox" data-k="ia-int-2627-L1-3"><span class="agenda-box" aria-hidden="true"><svg viewBox="0 0 24 24"><path pathLength="1" d="M5 12.5l4.5 4.5L19 7.5"/></svg></span><span class="agenda-num">04</span><span class="agenda-text">Che cosa ne pensate dell’IA? Etica e mondo del lavoro</span></label></li>
-                <li><label><input type="checkbox" data-k="ia-int-2627-L1-4"><span class="agenda-box" aria-hidden="true"><svg viewBox="0 0 24 24"><path pathLength="1" d="M5 12.5l4.5 4.5L19 7.5"/></svg></span><span class="agenda-num">05</span><span class="agenda-text">Il sito del corso e come è stato fatto</span></label></li>
-                <li><label><input type="checkbox" data-k="ia-int-2627-L1-5"><span class="agenda-box" aria-hidden="true"><svg viewBox="0 0 24 24"><path pathLength="1" d="M5 12.5l4.5 4.5L19 7.5"/></svg></span><span class="agenda-num">06</span><span class="agenda-text">ChatGPT, Claude e gli LLM: che cosa sono</span></label></li>
-                <li><label><input type="checkbox" data-k="ia-int-2627-L1-6"><span class="agenda-box" aria-hidden="true"><svg viewBox="0 0 24 24"><path pathLength="1" d="M5 12.5l4.5 4.5L19 7.5"/></svg></span><span class="agenda-num">07</span><span class="agenda-text">Come funziona un LLM</span></label></li>
-                <li><label><input type="checkbox" data-k="ia-int-2627-L1-7"><span class="agenda-box" aria-hidden="true"><svg viewBox="0 0 24 24"><path pathLength="1" d="M5 12.5l4.5 4.5L19 7.5"/></svg></span><span class="agenda-num">08</span><span class="agenda-text">Esperimento: la frase a gruppi</span></label></li>
-                <li><label><input type="checkbox" data-k="ia-int-2627-L1-8"><span class="agenda-box" aria-hidden="true"><svg viewBox="0 0 24 24"><path pathLength="1" d="M5 12.5l4.5 4.5L19 7.5"/></svg></span><span class="agenda-num">09</span><span class="agenda-text">Esperimento: il Laboratorio della Varianza</span></label></li>
-                <li><label><input type="checkbox" data-k="ia-int-2627-L1-9"><span class="agenda-box" aria-hidden="true"><svg viewBox="0 0 24 24"><path pathLength="1" d="M5 12.5l4.5 4.5L19 7.5"/></svg></span><span class="agenda-num">10</span><span class="agenda-text">I diversi modi di scrivere un prompt</span></label></li>
-                </ol>
-                <button class="agenda-reset" type="button">Togli le spunte</button>
-              </details>
-            </li>
+            <li><a href="#lezione-1"><span class="lesson-index-number">01</span><strong>LLM, prompt e varianza</strong><small>4 ore · traccia iniziale</small><span class="lesson-index-arrow" aria-hidden="true">→</span></a></li>
             <li class="pending"><span class="lesson-card"><span class="lesson-index-number">02</span><strong>Lezione in preparazione</strong><small>4 ore</small><span class="lesson-index-status">In arrivo</span></span></li>
             <li class="pending"><span class="lesson-card"><span class="lesson-index-number">03</span><strong>Lezione in preparazione</strong><small>4 ore</small><span class="lesson-index-status">In arrivo</span></span></li>
             <li class="pending"><span class="lesson-card"><span class="lesson-index-number">04</span><strong>Lezione in preparazione</strong><small>4 ore</small><span class="lesson-index-status">In arrivo</span></span></li>
@@ -117,7 +140,9 @@
       <section class="course-block archive-block" id="archivio" aria-labelledby="archive-title">
         <span class="section-meta">ARCHIVIO LEZIONI · 2026/27</span>
         <h2 id="archive-title">Archivio lezioni.</h2>
-        <p>Qui troverai le lezioni svolte nel 2026/27, in ordine cronologico.</p><div class="empty-state"><h3>Archivio ancora vuoto</h3><p>Le schede compariranno dopo gli incontri.</p></div>
+        <p>Le lezioni già fatte, in ordine, con gli argomenti trattati.</p>
+        <ol class="lesson-index" id="archivio-lezioni" aria-label="Lezioni svolte"></ol>
+        <div class="empty-state" id="archivio-vuoto"><h3>Archivio ancora vuoto</h3><p>Le schede compariranno dopo gli incontri.</p></div>
       </section>
       </section>
       <section class="course-panel" role="tabpanel" id="tab-appunti" aria-labelledby="btn-appunti" hidden>

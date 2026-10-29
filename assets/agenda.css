@@ -48,3 +48,11 @@
 .agenda--fatta .agenda-list label { cursor: default; }
 .agenda--fatta .agenda-list label:hover { background: none; }
 .agenda-vuota { margin: 0 0 18px; color: var(--ag-muted); font-size: 14px; }
+/* la riga della lezione per i corsi che non la disegnano già (Photoshop e IA hanno la loro): <ol class="lesson-index lesson-index--base"> */
+.lesson-index--base { display: grid; gap: 12px; max-width: 830px; margin: 0; padding: 0; list-style: none; }
+.lesson-index--base > li > a { display: grid; grid-template-columns: 42px minmax(0, 1fr) auto 18px; align-items: center; gap: 14px; min-height: 64px; padding: 14px 20px; border: 1px solid rgba(255, 255, 255, .13); border-radius: 16px; background: rgba(255, 255, 255, .03); color: inherit; text-align: left; text-decoration: none; transition: border-color .25s; }
+.lesson-index--base > li > a:hover { border-color: var(--accent, #77e7b7); }
+.lesson-index--base .lesson-index-number, .lesson-index--base .lesson-index-arrow { color: var(--accent, #77e7b7); font: 600 13px ui-monospace, monospace; }
+.lesson-index--base strong { font-size: 17px; }
+.lesson-index--base small { color: #9aa8a2; font-size: 12px; }
+@media (max-width: 760px) { .lesson-index--base > li > a { grid-template-columns: 34px minmax(0, 1fr) 18px; } .lesson-index--base small { display: none; } }
