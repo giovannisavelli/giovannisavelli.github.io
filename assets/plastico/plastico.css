@@ -1,0 +1,49 @@
+/* Apertura della home: il plastico dei corsi (Three.js, in plastico.js).
+   La pianta delle aule è un plastico in gesso; i muri vicini al mouse si abbattono, i nomi dei corsi stanno sospesi sopra le aule. */
+.hero { position: relative; min-height: 100svh; display: flex; align-items: flex-end; overflow: hidden; }
+.hero::before { content: ""; position: absolute; inset: 0; z-index: 1; pointer-events: none;
+  background: linear-gradient(90deg, rgba(10, 10, 13, .9) 0%, rgba(10, 10, 13, .5) 34%, transparent 58%), linear-gradient(0deg, var(--bg) 0%, transparent 26%); }
+.hero .wrap { position: relative; z-index: 2; padding: 0 0 72px; pointer-events: none; }
+.hero .wrap a, .hero .wrap button { pointer-events: auto; }
+.hero h1 { margin: 0; max-width: 9.5em; font: 600 clamp(56px, 8.6vw, 148px)/.88 var(--sans); letter-spacing: -.055em; }
+.hero h1 .r { display: block; overflow: hidden; padding-bottom: .06em; }
+.hero h1 .r > span { display: inline-block; transform: translateY(105%); filter: blur(8px); opacity: 0; transition: transform 1.3s var(--ease), filter 1.3s var(--ease), opacity 1.3s var(--ease); }
+.hero.pronta h1 .r > span { transform: none; filter: none; opacity: 1; }
+.hero h1 .r:nth-child(2) > span { transition-delay: .09s; }
+.hero h1 em { font-style: normal; color: transparent; -webkit-text-stroke: 1.5px var(--ink); }
+.hero-basso { display: flex; flex-direction: column; align-items: flex-start; gap: 26px; margin-top: 30px; }
+.hero p { max-width: 34ch; margin: 0; color: var(--ink-2); font-size: 19px; line-height: 1.5; opacity: 0; transform: translateY(14px); transition: opacity 1s var(--ease) .5s, transform 1s var(--ease) .5s; }
+.azioni { display: flex; flex-wrap: wrap; gap: 10px; opacity: 0; transform: translateY(14px); transition: opacity 1s var(--ease) .65s, transform 1s var(--ease) .65s; }
+.hero.pronta p, .hero.pronta .azioni { opacity: 1; transform: none; }
+.didascalia { position: absolute; z-index: 2; right: 32px; bottom: 30px; color: var(--ink-3); font: 400 12px/1.4 var(--mono); text-align: right; pointer-events: none; }
+
+/* la scena dietro il testo */
+.scena { position: absolute; inset: 0; z-index: 0; }
+.muri { position: absolute; inset: 0; }
+.muri canvas { width: 100%; height: 100%; display: block; }
+
+/* i nomi dei corsi, sospesi sopra le aule: dritti e leggibili, col colore del corso */
+.etichette { position: absolute; inset: 0; pointer-events: none; }
+.etichetta { position: absolute; left: 0; top: 0; display: flex; flex-direction: column; align-items: center; gap: 4px; transform: translate(-50%, -100%); pointer-events: auto; opacity: 0; transition: opacity .9s ease, color .3s; white-space: nowrap; will-change: transform; }
+.etichetta.su { opacity: 1; }
+.etichetta b { display: flex; align-items: center; gap: 9px; padding: 7px 13px 7px 11px; border: 1px solid rgba(255,255,255,.14); border-radius: 999px; background: rgba(10,10,13,.84); font: 600 15px/1 var(--sans); letter-spacing: -.01em; text-transform: none; color: var(--ink); transition: border-color .3s, background-color .3s, color .3s; }
+.etichetta b i { width: 8px; height: 8px; border-radius: 50%; background: var(--c); box-shadow: 0 0 12px var(--c); }
+.etichetta small { font: 500 10px/1 var(--mono); letter-spacing: .08em; color: var(--ink-3); text-transform: uppercase; }
+.etichetta::after { content: ""; width: 1px; height: 26px; margin-top: 2px; background: linear-gradient(var(--c), transparent); opacity: .7; }
+.etichetta.accesa b, .etichetta:hover b { border-color: var(--c); background: color-mix(in srgb, var(--c) 18%, rgba(10,10,13,.8)); color: #fff; }
+.etichetta .corto { display: none; }
+
+@media (max-width: 700px) {
+  .hero { min-height: 0; flex-direction: column; align-items: stretch; padding-top: 66px; }
+  .scena { position: relative; inset: auto; height: 50svh; min-height: 320px; }
+  .hero::before { background: linear-gradient(0deg, var(--bg) 0%, transparent 18%); top: 66px; height: 50svh; min-height: 320px; bottom: auto; }
+  .hero .wrap { padding: 8px 0 20px; }
+  .hero h1 { font-size: clamp(52px, 15vw, 76px); }
+  .hero p { font-size: 17px; }
+  .didascalia { display: none; }
+  .etichetta .lungo { display: none; } .etichetta .corto { display: inline; }
+  .etichetta b { font-size: 11px; padding: 5px 9px; gap: 6px; } .etichetta small { display: none; } .etichetta::after { height: 14px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .hero h1 .r > span, .hero p, .azioni { opacity: 1 !important; transform: none !important; filter: none !important; }
+}
