@@ -1,0 +1,697 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Sigla · Intelligenza Artificiale · AANT</title>
+  <meta name="theme-color" content="#090b0c">
+  <style>
+    @font-face{font-family:Geist;src:url('fonts/geist-sans-latin-400-normal.woff2') format('woff2');font-weight:400;font-display:swap}
+    @font-face{font-family:Geist;src:url('fonts/geist-sans-latin-600-normal.woff2') format('woff2');font-weight:600;font-display:swap}
+    @font-face{font-family:Geist;src:url('fonts/geist-sans-latin-700-normal.woff2') format('woff2');font-weight:700;font-display:swap}
+    @font-face{font-family:'Geist Mono';src:url('fonts/geist-mono-latin-500-normal.woff2') format('woff2');font-weight:500;font-display:swap}
+    @font-face{font-family:'Geist Mono';src:url('fonts/geist-mono-latin-600-normal.woff2') format('woff2');font-weight:600;font-display:swap}
+    :root { --bg: #090b0c; --ink: #ecebe4; --ink-2: #b9c3bd; --ink-3: #7d807b; --green: #77e7b7; --mono: 'Geist Mono', monospace; }
+    * { box-sizing: border-box; }
+    html, body { height: 100%; }
+    body { margin: 0; overflow: hidden; background: var(--bg); color: var(--ink); font-family: Geist, Arial, sans-serif; -webkit-font-smoothing: antialiased; }
+    a { color: inherit; text-decoration: none; }
+    button { font: inherit; cursor: pointer; }
+
+    /* la scena: la sfera dell'header IA a tutto schermo (sigla-scena.js) */
+    #sg-stage { position: fixed; inset: 0; opacity: 0; transition: opacity 2.4s ease; }
+    #sg-stage.on { opacity: 1; }
+    #sg-stage.fioca { opacity: .32; }
+    .sg-canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+    svg.ghost-ruler, svg.ghost-links { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; }
+    svg.ghost-ruler { z-index: 1; opacity: .7; }
+    svg.ghost-links { z-index: 2; }
+    .gtrk { position: absolute; z-index: 3; left: 0; top: 0; color: rgba(236,235,228,.85); pointer-events: none; opacity: 0; will-change: transform, opacity; }
+    .gtrk-box { position: absolute; left: -15px; top: -15px; width: 30px; height: 30px;
+      background:
+        linear-gradient(currentColor, currentColor) left top / 7px 1px no-repeat, linear-gradient(currentColor, currentColor) left top / 1px 7px no-repeat,
+        linear-gradient(currentColor, currentColor) right top / 7px 1px no-repeat, linear-gradient(currentColor, currentColor) right top / 1px 7px no-repeat,
+        linear-gradient(currentColor, currentColor) left bottom / 7px 1px no-repeat, linear-gradient(currentColor, currentColor) left bottom / 1px 7px no-repeat,
+        linear-gradient(currentColor, currentColor) right bottom / 7px 1px no-repeat, linear-gradient(currentColor, currentColor) right bottom / 1px 7px no-repeat; }
+    .gtrk-plus { position: absolute; left: -4px; top: -4px; width: 9px; height: 9px; color: #fff;
+      background: linear-gradient(currentColor, currentColor) center / 9px 1px no-repeat, linear-gradient(currentColor, currentColor) center / 1px 9px no-repeat; }
+    .gtrk-label { position: absolute; left: 21px; top: -19px; white-space: nowrap; font: 500 10px/1 var(--mono); letter-spacing: .04em; color: #bdb9b0; }
+    .gtrk-label b { margin-right: 9px; color: #f2efe8; font-weight: 500; }
+    .gtrk-label em { font-style: normal; }
+
+    /* gli spezzoni del film: il trailer ufficiale incorporato da YouTube, in una cornice HUD */
+    .clip { position: fixed; inset: 0; z-index: 5; display: grid; place-items: center; opacity: 0; pointer-events: none; transition: opacity .6s ease; }
+    .clip.on { opacity: 1; }
+    .clip-schermo { position: relative; width: min(84vw, calc(70vh * 16 / 9)); aspect-ratio: 16 / 9; margin-top: 6vh; }
+    .clip-video { position: absolute; inset: 0; overflow: hidden; background: #000; }
+    /* un velo sopra il video: se il mouse ci passa sopra, YouTube non mostra i suoi comandi */
+    .clip-video::after { content: ""; position: absolute; inset: 0; pointer-events: auto; }
+    body.in-corsa, body.in-corsa * { cursor: none; }
+    body.in-corsa .salta { cursor: pointer; }
+    /* il riquadro di YouTube è più grande della cornice: così titolo e comandi restano fuori */
+    #lettori.taglio iframe { opacity: 0; }
+    .clip-video iframe { transition: opacity .18s; position: absolute; left: -6%; top: -9%; width: 112%; height: 118%; border: 0; pointer-events: none; }
+    .clip-cornice { position: absolute; inset: -14px; pointer-events: none;
+      background:
+        linear-gradient(var(--ink), var(--ink)) left top / 22px 1px no-repeat, linear-gradient(var(--ink), var(--ink)) left top / 1px 22px no-repeat,
+        linear-gradient(var(--ink), var(--ink)) right top / 22px 1px no-repeat, linear-gradient(var(--ink), var(--ink)) right top / 1px 22px no-repeat,
+        linear-gradient(var(--ink), var(--ink)) left bottom / 22px 1px no-repeat, linear-gradient(var(--ink), var(--ink)) left bottom / 1px 22px no-repeat,
+        linear-gradient(var(--ink), var(--ink)) right bottom / 22px 1px no-repeat, linear-gradient(var(--ink), var(--ink)) right bottom / 1px 22px no-repeat; }
+    /* fasce nere come al cinema: coprono i sottotitoli inglesi stampati nei trailer e i loghi negli angoli */
+    .fascia { position: absolute; left: 0; right: 0; z-index: 2; background: #000; pointer-events: none; }
+    .fascia.su { top: 0; height: 13%; transition: height .25s; }
+    .fascia.giu { bottom: 0; height: 20%; }
+    .clip-dida { position: absolute; left: -14px; right: -14px; bottom: -44px; display: flex; justify-content: space-between; gap: 20px; color: var(--ink-3); font: 500 10px/1.4 var(--mono); letter-spacing: .18em; text-transform: uppercase; }
+    .clip-dida b { color: var(--ink); font-weight: 500; }
+    .clip-it { position: absolute; left: 6%; right: 6%; bottom: 0; z-index: 3; height: 20%; margin: 0; display: grid; place-items: center; color: var(--ink); font-size: clamp(15px, 1.45vw, 23px); line-height: 1.35; text-align: center; text-wrap: balance; }
+    /* sopra lo spezzone: perché lo stiamo guardando */
+    .clip-perche { position: absolute; left: -14px; right: -14px; bottom: calc(100% + 26px); display: flex; align-items: baseline; gap: 18px; opacity: 0; transform: translateY(6px); transition: opacity .6s ease, transform .6s ease; }
+    .clip-perche.on { opacity: 1; transform: none; }
+    .clip-perche small { flex: none; color: var(--green); font: 500 10px var(--mono); letter-spacing: .22em; text-transform: uppercase; }
+    .clip-perche span { color: var(--ink); font-size: clamp(17px, 1.7vw, 28px); line-height: 1.25; font-weight: 600; letter-spacing: -.02em; }
+    .clip-rec { position: absolute; right: -14px; top: -38px; color: var(--green); font: 500 10px var(--mono); letter-spacing: .2em; text-transform: uppercase; }
+    .clip-rec::before { content: ""; display: inline-block; width: 6px; height: 6px; margin-right: 9px; border-radius: 50%; background: var(--green); box-shadow: 0 0 10px var(--green); animation: battito 1.2s ease-in-out infinite; vertical-align: 1px; }
+    @keyframes battito { 50% { opacity: .25; } }
+
+    /* le scritte della regia */
+    .terminale { position: fixed; left: 7vw; top: 14vh; z-index: 6; margin: 0; padding: 0; list-style: none; font: 500 clamp(11px, 1.05vw, 15px)/2 var(--mono); letter-spacing: .12em; text-transform: uppercase; color: var(--ink-2); }
+    .terminale li { white-space: pre; }
+    .terminale .ok { color: var(--green); }
+    .cursore-t { display: inline-block; width: .6em; height: 1.1em; margin-left: 2px; background: var(--green); vertical-align: -3px; animation: battito .8s steps(1) infinite; }
+    .cartello { position: fixed; left: 7vw; bottom: 12vh; z-index: 6; max-width: 46vw; opacity: 0; transform: translateY(18px); transition: opacity 1.2s ease, transform 1.2s cubic-bezier(.2,.8,.2,1); }
+    .cartello.on { opacity: 1; transform: none; }
+    .cartello small { display: flex; align-items: center; gap: 12px; color: var(--green); font: 500 11px/1.4 var(--mono); letter-spacing: .22em; text-transform: uppercase; }
+    .cartello small::before { content: ""; width: 26px; height: 1px; background: var(--green); }
+    .cartello h2 { margin: 16px 0 10px; font-size: clamp(64px, 10vw, 168px); line-height: .86; font-weight: 600; letter-spacing: -.06em; }
+    .cartello p { margin: 0; color: var(--ink-2); font: 500 clamp(12px, 1.1vw, 16px)/1.6 var(--mono); letter-spacing: .14em; text-transform: uppercase; }
+    .citazione { position: fixed; inset: 0; z-index: 6; display: grid; place-content: center; padding: 0 9vw; text-align: center; opacity: 0; transition: opacity 1.4s ease; pointer-events: none; }
+    .citazione.on { opacity: 1; }
+    .citazione blockquote { margin: 0; max-width: 18ch; font-size: clamp(40px, 5.4vw, 92px); line-height: 1.04; font-weight: 600; letter-spacing: -.045em; }
+    .citazione blockquote .p { opacity: 0; filter: blur(10px); transition: opacity .9s ease, filter .9s ease; }
+    .citazione blockquote .p.on { opacity: 1; filter: none; }
+    .citazione cite { display: block; margin-top: 34px; color: var(--ink-3); font: 500 12px/1.6 var(--mono); font-style: normal; letter-spacing: .2em; text-transform: uppercase; }
+    .citazione cite b { color: var(--green); font-weight: 500; }
+    .titolo { position: fixed; inset: 0; z-index: 6; display: grid; align-content: center; padding: 0 7vw; opacity: 0; transition: opacity 1.4s ease; pointer-events: none; }
+    .titolo.on { opacity: 1; pointer-events: auto; }
+    .titolo small { color: var(--green); font: 500 12px var(--mono); letter-spacing: .24em; text-transform: uppercase; }
+    .titolo h1 { margin: 22px 0 0; font-size: clamp(56px, 9vw, 156px); line-height: .88; font-weight: 600; letter-spacing: -.06em; }
+    .titolo h1 span { display: block; color: transparent; -webkit-text-stroke: 1.5px var(--green); }
+    .titolo p { margin: 28px 0 0; color: var(--ink-2); font: 500 13px/1.6 var(--mono); letter-spacing: .18em; text-transform: uppercase; }
+    .titolo .azioni { display: flex; flex-wrap: wrap; gap: 14px; margin-top: 44px; }
+    .btn { display: inline-flex; align-items: center; gap: 10px; min-height: 48px; padding: 0 20px; border: 1px solid rgba(236,235,228,.3); background: rgba(9,11,12,.6); color: var(--ink); font: 500 11px var(--mono); letter-spacing: .2em; text-transform: uppercase; }
+    .btn:hover { border-color: var(--green); color: var(--green); }
+    .btn.pieno { border-color: var(--green); background: var(--green); color: #07130e; }
+    .btn.pieno:hover { color: #07130e; filter: brightness(1.08); }
+
+    /* schermata iniziale e marchio, come nelle altre app del corso */
+    .barra { position: fixed; left: 0; right: 0; top: 0; z-index: 9; display: flex; justify-content: space-between; align-items: center; padding: 22px 28px; transition: opacity .8s ease; }
+    .barra.via { opacity: 0; pointer-events: none; }
+    .marchio { display: flex; align-items: center; gap: 14px; font-size: 13px; font-weight: 600; }
+    .marchio i { display: grid; place-items: center; width: 38px; height: 38px; border: 1px solid var(--green); color: var(--green); font: 600 12px var(--mono); font-style: normal; }
+    .marchio small { display: block; margin-top: 3px; color: #9daaa5; font-size: 10px; font-weight: 500; letter-spacing: .1em; text-transform: uppercase; }
+    .torna { color: var(--ink-2); font: 500 11px var(--mono); letter-spacing: .14em; text-transform: uppercase; }
+    .torna:hover { color: var(--green); }
+    .avvio { position: fixed; inset: 0; z-index: 8; display: grid; place-content: center; justify-items: center; gap: 26px; text-align: center; background: var(--bg); transition: opacity .8s ease; }
+    .avvio.via { opacity: 0; pointer-events: none; }
+    .avvio small { color: var(--ink-3); font: 500 11px var(--mono); letter-spacing: .24em; text-transform: uppercase; }
+    .avvio h1 { margin: 0; font-size: clamp(40px, 6vw, 96px); font-weight: 600; letter-spacing: -.055em; line-height: .95; }
+    .avvio p { max-width: 520px; margin: 0; color: var(--ink-3); font-size: 14px; line-height: 1.6; }
+    .salta { position: fixed; right: 28px; bottom: 22px; z-index: 9; padding: 10px 0; border: 0; background: none; color: var(--ink-3); font: 500 10px var(--mono); letter-spacing: .2em; text-transform: uppercase; opacity: 0; transition: opacity .6s ease, color .2s; }
+    .salta.on { opacity: 1; }
+    .salta:hover { color: var(--ink); }
+    .pausa { position: fixed; left: 50%; top: 18px; z-index: 9; transform: translate(-50%, -8px); padding: 12px 20px; border: 1px solid rgba(119,231,183,.5); background: rgba(9,11,12,.85); color: var(--ink); font: 500 11px var(--mono); letter-spacing: .16em; text-transform: uppercase; opacity: 0; pointer-events: none; transition: opacity .3s, transform .3s; }
+    /* in pausa il video si abbassa e sopra c'è la nostra icona: il pulsante play di YouTube quasi non si vede */
+    body.fermo .clip-video iframe { opacity: .12; }
+    .clip-video .icona-pausa { position: absolute; inset: 0; z-index: 2; display: grid; place-items: center; color: var(--green); font: 600 clamp(40px, 5vw, 80px) var(--mono); opacity: 0; transition: opacity .2s; pointer-events: none; }
+    body.fermo .clip-video .icona-pausa { opacity: 1; }
+    /* mentre c'è uno spezzone la linea del tempo si toglie di mezzo */
+    .clip.on ~ .linea { opacity: 0; }
+    .pausa b { margin-right: 10px; color: var(--green); font-weight: 600; }
+    .pausa.on { opacity: 1; transform: translate(-50%, 0); pointer-events: auto; cursor: pointer; }
+    body.in-corsa .pausa.on { cursor: pointer; }
+    .tempo { position: fixed; left: 28px; bottom: 26px; z-index: 9; color: var(--ink-3); font: 500 10px var(--mono); letter-spacing: .2em; opacity: 0; transition: opacity .6s; }
+    .tempo.on { opacity: 1; }
+    /* i capitoli di Edgerunners e le frasi chiave: testo grande, con il tempo di leggerlo */
+    .racconto { position: fixed; left: 9vw; right: 9vw; top: 50%; z-index: 6; transform: translateY(-50%); opacity: 0; transition: opacity 1s ease; pointer-events: none; }
+    .racconto.on { opacity: 1; }
+    .racconto small { display: flex; align-items: center; gap: 12px; color: var(--green); font: 500 11px/1.4 var(--mono); letter-spacing: .22em; text-transform: uppercase; }
+    .racconto small::before { content: ""; width: 26px; height: 1px; background: var(--green); }
+    .racconto p { max-width: 24ch; margin: 22px 0 0; font-size: clamp(34px, 4.4vw, 76px); line-height: 1.06; font-weight: 600; letter-spacing: -.04em; text-wrap: balance; }
+    .racconto p .p { opacity: 0; filter: blur(8px); transition: opacity .8s ease, filter .8s ease; }
+    .racconto p .p.on { opacity: 1; filter: none; }
+    .racconto p em { font-style: normal; color: var(--green); }
+    .racconto.chiave p { max-width: 22ch; }
+    .racconto.rosso small { color: #ff4f86; } .racconto.rosso small::before { background: #ff4f86; } .racconto.rosso p em { color: #ff4f86; }
+
+    /* la storia del cyberpunk: l'anno gira col tabellone a palette delle date dell'hub (assets/fx/effetti.js) */
+    .epoca { position: fixed; left: 7vw; right: 7vw; top: 50%; z-index: 6; transform: translateY(-50%); opacity: 0; transition: opacity .9s ease; pointer-events: none; }
+    .epoca.on { opacity: 1; }
+    .epoca .anno { font: 600 clamp(64px, 11vw, 184px)/1 var(--mono); color: var(--ink); }
+    .epoca small { display: flex; align-items: center; gap: 12px; margin-top: 30px; color: var(--green); font: 500 11px/1.4 var(--mono); letter-spacing: .22em; text-transform: uppercase; }
+    .epoca small::before { content: ""; width: 26px; height: 1px; background: var(--green); }
+    .epoca h2 { margin: 14px 0 12px; font-size: clamp(40px, 5.6vw, 96px); line-height: .92; font-weight: 600; letter-spacing: -.05em; }
+    .epoca p { max-width: 40ch; margin: 0; color: var(--ink-2); font-size: clamp(16px, 1.5vw, 24px); line-height: 1.45; }
+    .linea { position: fixed; left: 7vw; right: 7vw; bottom: 8vh; z-index: 6; height: 40px; opacity: 0; transition: opacity .9s ease; pointer-events: none; }
+    .linea.on { opacity: 1; }
+    .linea::before { content: ""; position: absolute; left: 0; right: 0; top: 0; height: 1px; background: rgba(236,235,228,.22); }
+    .linea .fatta { position: absolute; left: 0; top: 0; height: 1px; width: 0; background: var(--green); box-shadow: 0 0 10px var(--green); transition: width 1.4s cubic-bezier(.6,0,.2,1); }
+    .linea span { position: absolute; top: -4.5px; display: flex; flex-direction: column; align-items: center; gap: 10px; transform: translateX(-50%); color: var(--ink-3); font: 500 10px var(--mono); letter-spacing: .14em; transition: color .6s; }
+    .linea span.su { top: auto; bottom: calc(100% - 4.5px); flex-direction: column-reverse; }   /* anni vicini: uno sopra e uno sotto */
+    .linea span::before { content: ""; display: block; width: 9px; height: 9px; border: 1px solid currentColor; border-radius: 50%; background: var(--bg); transition: background .6s, box-shadow .6s; }
+    .linea span.ok { color: var(--ink-2); }
+    .linea span.qui { color: var(--green); }
+    .linea span.qui::before { background: var(--green); box-shadow: 0 0 12px var(--green); }
+    .flap { display: inline-flex; align-items: center; gap: .07em; font-variant-numeric: tabular-nums; line-height: 1; }
+    .flap__tile { position: relative; width: .7em; height: 1.12em; border-radius: .12em; overflow: hidden; perspective: 400px; isolation: isolate;
+      background: linear-gradient(180deg, #23232c, #15151b); box-shadow: inset 0 1px 0 rgba(255, 255, 255, .07), 0 .12em .3em rgba(0, 0, 0, .35); }
+    .flap__tile::before { content: ""; position: absolute; z-index: 8; top: calc(50% - .5px); left: 0; width: 100%; height: 1px; background: rgba(0, 0, 0, .7); box-shadow: 0 1px 0 rgba(255, 255, 255, .05); }
+    .flap__meta, .flap__anta { position: absolute; left: 0; width: 100%; height: 50%; overflow: hidden; background: #1c1c23; backface-visibility: hidden; }
+    .flap__meta--su, .flap__anta--su { top: 0; background: linear-gradient(180deg, #24242d, #1c1c23); }
+    .flap__meta--giu, .flap__anta--giu { bottom: 0; background: linear-gradient(0deg, #15151b, #191920); }
+    .flap__car { position: absolute; left: 0; width: 100%; height: 200%; display: flex; align-items: center; justify-content: center; }
+    .flap__meta--su .flap__car, .flap__anta--su .flap__car { top: 0; }
+    .flap__meta--giu .flap__car, .flap__anta--giu .flap__car { bottom: 0; }
+    .flap__anta { z-index: 6; }
+    .flap__anta--su { transform-origin: center bottom; animation: flap-su var(--flap-durata, 90ms) cubic-bezier(.23, 1, .32, 1) both; }
+    .flap__anta--giu { transform-origin: center top; transform: rotateX(90deg); animation: flap-giu var(--flap-durata, 90ms) cubic-bezier(.23, 1, .32, 1) both; }
+    @keyframes flap-su { from { transform: rotateX(0); filter: brightness(1.1); } to { transform: rotateX(-90deg); filter: brightness(.5); } }
+    @keyframes flap-giu { 0%, 45% { transform: rotateX(90deg); filter: brightness(.55); } to { transform: rotateX(0); filter: brightness(1); } }
+    .vh { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+    /* durante la cyberpsicosi il cartello trema e diventa magenta */
+    .cartello.psy small { color: #ff4f86; }
+    .cartello.psy small::before { background: #ff4f86; }
+    .cartello.psy h2 { color: #ff4f86; animation: trema .12s steps(2) infinite; text-shadow: 3px 0 rgba(119,231,183,.55), -3px 0 rgba(255,79,134,.6); }
+    @keyframes trema { 50% { transform: translate(2px, -1px); } }
+
+    /* crediti: tutte le opere citate, con autori, proprietari e collegamenti */
+    .crediti { position: fixed; inset: 0; z-index: 10; overflow-y: auto; padding: 90px 7vw 60px; background: rgba(9,11,12,.97); opacity: 0; pointer-events: none; transition: opacity .5s ease; }
+    .crediti.on { opacity: 1; pointer-events: auto; }
+    .crediti h2 { margin: 0 0 8px; font-size: clamp(34px, 4vw, 60px); font-weight: 600; letter-spacing: -.045em; }
+    .crediti > p { max-width: 70ch; margin: 0 0 36px; color: var(--ink-3); font-size: 14px; line-height: 1.6; }
+    .crediti ol { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 340px), 1fr)); gap: 26px 40px; margin: 0; padding: 0; list-style: none; }
+    .crediti li { padding-top: 14px; border-top: 1px solid rgba(236,235,228,.14); color: var(--ink-2); font-size: 13px; line-height: 1.55; }
+    .crediti li b { display: block; margin-bottom: 4px; color: var(--ink); font-size: 16px; font-weight: 600; }
+    .crediti li small { display: block; margin-bottom: 6px; color: var(--green); font: 500 10px var(--mono); letter-spacing: .18em; text-transform: uppercase; }
+    .crediti a { color: var(--green); text-decoration: underline; text-underline-offset: 3px; }
+    .crediti .chiudi { position: fixed; right: 28px; top: 22px; }
+    @media (max-width: 700px) { .cartello { max-width: none; right: 7vw; } .clip-dida { flex-direction: column; gap: 2px; bottom: -58px; } .linea span { font-size: 8px; } }
+  </style>
+</head>
+<body>
+  <div id="sg-stage"><svg class="ghost-links" id="sg-links" aria-hidden="true"></svg></div>
+
+  <header class="barra" id="barra">
+    <a class="marchio" href="../../../"><i>GS</i><span>Giovanni Savelli<small>AANT · 2026/27</small></span></a>
+    <a class="torna" href="../#lezioni">← Corso di Intelligenza Artificiale</a>
+  </header>
+
+  <section class="avvio" id="avvio">
+    <small>Intelligenza Artificiale · Interior Design · Lezione 01</small>
+    <h1>High tech, low life</h1>
+    <p>La sigla del corso: una breve storia del cyberpunk, da Blade Runner a Edgerunners. Si guarda a schermo intero, con l’audio acceso: circa sette minuti. Con la barra spaziatrice la metti in pausa, per parlarne in classe.</p>
+    <div class="azioni" style="display:flex;gap:14px;flex-wrap:wrap;justify-content:center">
+      <button class="btn pieno" type="button" id="via">▶ Avvia la sigla</button>
+      <button class="btn" type="button" data-crediti>Crediti</button>
+    </div>
+  </section>
+
+  <ol class="terminale" id="terminale" aria-live="polite"></ol>
+
+  <div class="clip" id="clip">
+    <div class="clip-schermo"><div class="clip-video" id="lettori"><span class="icona-pausa" aria-hidden="true">❚❚</span></div><i class="fascia su"></i><i class="fascia giu"></i><div class="clip-cornice"></div>
+      <div class="clip-perche" id="clip-perche"><small>Perché lo guardiamo</small><span id="perche"></span></div>
+      <span class="clip-rec" id="clip-rec">Archivio</span>
+      <div class="clip-dida"><span id="clip-opera"></span><span id="clip-fonte"></span></div>
+      <p class="clip-it" id="clip-it"></p>
+    </div>
+  </div>
+
+  <div class="racconto" id="racconto"><small id="r-eti"></small><p id="r-testo"></p></div>
+  <div class="epoca" id="epoca"><div class="anno" id="anno">1980</div><small id="e-eti"></small><h2 id="e-tit"></h2><p id="e-sotto"></p></div>
+  <div class="linea" id="linea"><i class="fatta" id="fatta"></i></div>
+
+  <div class="cartello" id="cartello"><small id="c-eti"></small><h2 id="c-tit"></h2><p id="c-sotto"></p></div>
+
+  <div class="citazione" id="citazione">
+    <blockquote id="cit-testo"></blockquote>
+    <cite id="cit-fonte"></cite>
+  </div>
+
+  <section class="titolo" id="titolo">
+    <small>AANT · Interior Design · 3° anno · 2026/27</small>
+    <h1>Intelligenza<span>Artificiale</span></h1>
+    <p>Lezione 01 · Iniziamo.</p>
+    <div class="azioni">
+      <a class="btn pieno" href="../#lezioni">Vai alla lezione →</a>
+      <button class="btn" type="button" id="rivedi">↺ Rivedi la sigla</button>
+      <button class="btn" type="button" data-crediti>Crediti</button>
+    </div>
+  </section>
+
+  <section class="crediti" id="crediti" aria-label="Crediti">
+    <button class="btn chiudi" type="button" id="chiudi-crediti">Chiudi ✕</button>
+    <h2>Crediti</h2>
+    <p>Sigla didattica, senza scopo di lucro, per il corso di Intelligenza Artificiale dell’AANT. Gli spezzoni non sono copiati: sono i trailer ufficiali e i video originali, trasmessi da YouTube dai canali dei loro autori. Tutti i diritti appartengono ai rispettivi proprietari. Le traduzioni italiane delle battute sono nostre. Musica, suoni e animazioni sono originali.</p>
+    <ol id="lista-crediti"></ol>
+  </section>
+
+  <button class="pausa" type="button" id="pausa"><b>❚❚</b> In pausa · premi la barra spaziatrice per continuare</button>
+  <button class="salta" type="button" id="salta">Salta la sigla →</button>
+  <div class="tempo" id="tempo">00:00</div>
+
+  <script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.js"}}</script>
+  <script type="module" src="sigla-scena.js?v=4"></script>
+  <script src="suono.js?v=5"></script>
+  <script src="../../../assets/fx/effetti.js"></script>
+  <script>
+  /* =====================================================================
+     SPEZZONI: secondi di inizio e fine nel video («da», «a»), più tratti di fila se serve.
+     I tratti sono scelti guardando i fotogrammi veri (fogli di provini), non solo le descrizioni di Gemini:
+     niente cartelli del trailer, loghi delle case di produzione, sangue o nudi.
+     «voce»: si sente l'audio del video (qualcuno parla); senza, il video è muto e si sente la nostra musica.
+     «perche»: la riga sopra lo spezzone; «it»: il nostro sottotitolo; «sub»: sottotitoli che cambiano ai secondi del video.
+     ===================================================================== */
+  const CLIP_BLADE = [
+    { da: 13.0, a: 21.6, perche: 'La città del futuro: pioggia, neon, pubblicità grandi come palazzi. Il cyberpunk nasce da questa immagine.' },
+    { da: 58.6, a: 65.0, voce: true, perche: 'Un’azienda che fabbrica esseri umani artificiali, e li vende.',
+      sub: [[58, '«Non capisco, Tyrell.»'], [60.6, '«Il commercio è il nostro scopo, qui alla Tyrell. “Più umano dell’umano” è il nostro motto.»']] },
+  ];
+  const CLIP_GIBSON = { da: 1335.3, a: 1358.5, voce: true, perche: 'Dami Lee legge Gibson. Pensa ai social: e anche all’IA, che a volte «allucina».', sub: [
+    [1335, '«Mi viene in mente una frase di William Gibson, che qualcuno chiama il padre del cyberpunk.»'],
+    [1342.4, '«Il cyberspazio è un’allucinazione consensuale: milioni di persone d’accordo su qualcosa che non c’è.»'],
+    [1352, '«E quando viviamo il mondo attraverso i social, come facciamo a sapere che cosa è reale?»']] };
+  const CLIP_AKIRA = [
+    { da: 0.9, a: 3.4, perche: 'Neo-Tokyo, la città del futuro, ricostruita dopo una guerra.' },
+    { da: 13.3, a: 15.55, perche: 'Tetsuo, in un letto d’ospedale militare. Fuori, le bande di ragazzi in moto.' },
+    { da: 16.95, a: 19.85, perche: 'La città esplode: rivolte, folle, insegne al neon. Il «punk» di cyberpunk.' },
+  ];
+  const CLIP_MATRIX = [
+    { da: 2.9, a: 5.7, perche: 'Un messaggio sullo schermo di Neo, un programmatore qualunque.', it: '«Svegliati, Neo…»' },
+    { da: 37.1, a: 39.25, perche: 'La scelta: la pillola rossa per vedere la verità, la blu per tornare a dormire.' },
+    { da: 66.1, a: 67.55, perche: 'Chi capisce le regole della simulazione le può piegare.' },
+  ];
+  const CLIP_TESEO = [
+    { da: 0.3, a: 10.1, voce: true, perche: 'La domanda da cui è nato questo corso.',
+      sub: [[0, '«Se sostituisci il tuo corpo e la tua memoria, pezzo per pezzo…'], [5.2, '…a che punto smetti di essere te?'], [7.5, 'E che cosa ti rende te?»']] },
+    { da: 18.8, a: 28.9, voce: true, perche: 'Shell è il corpo artificiale. Ghost è quello che resta di umano.',
+      sub: [[18, '«La protagonista, Motoko, è quasi del tutto artificiale…'], [23.8, '…e l’unica cosa umana che le resta è il ghost, la sua coscienza.»']] },
+  ];
+  const CLIP_GITS = [
+    { da: 2.7, a: 8.6, voce: true, perche: 'Il corpo di Motoko viene costruito in laboratorio, pezzo per pezzo.', it: '«Se un’impresa tecnologica è possibile, l’uomo la realizzerà.»' },
+    { da: 31.2, a: 35.1, voce: true, perche: 'Detto nel 1995. Vale per il computer, e vale per l’IA.', it: '«L’umanità ha sottovalutato le conseguenze dell’informatizzazione.»' },
+    { da: 40.8, a: 42.8, perche: 'La città è Hong Kong, trasformata in futuro.' },
+  ];
+  const CLIP_2077 = [
+    { da: 9.0, a: 13.4, perche: 'Night City: tutto è in vendita, anche il corpo.' },
+    { da: 153.5, a: 156.3, perche: 'Lame dentro le braccia: il corpo diventa un’arma.' },
+    { da: 201.0, a: 204.4, perche: 'Ma un impianto che non controlli tu lo controlla qualcun altro.', it: 'Un’hacker entra negli impianti di V e manda in corto le sue lame.' },
+  ];
+  // Edgerunners, raccontato in cinque tappe: ogni tappa ha il suo testo e il suo spezzone
+  const TAPPE_EDGE = [
+    { testo: 'David ha diciassette anni. Sua madre lavora giorno e notte per pagargli la scuola migliore. Il suo sogno per lui: <em>arrivare in cima.</em>',
+      clip: [
+        { da: 34.8, a: 37.7, voce: true, perche: 'L’Accademia Arasaka: la scuola dei figli dei ricchi.', it: '«Devi diventare uno dell’élite…»' },
+        { da: 38.8, a: 43.1, voce: true, su: 24, perche: 'Il sogno della madre: la cima della torre. Poi la perde.', sub: [[38, '«…e arrivare all’ultimo piano della Torre Arasaka.»'], [41.7, '«Mamma…»']] },
+      ] },
+    { testo: 'Tra le cose di sua madre c’è un impianto militare: il <em>Sandevistan</em>. Rallenta il mondo intorno a chi lo porta. David se lo fa installare.',
+      clip: [
+        { da: 51.2, a: 55.6, voce: true, perche: 'L’impianto va dentro la colonna vertebrale.', it: '«Installamelo.»' },
+        { da: 60.2, a: 62.1, perche: 'E funziona: David diventa più veloce di tutti.' },
+      ] },
+    { testo: 'Il suo corpo regge il cromo meglio degli altri. Così ne aggiunge ancora. <em>E ancora.</em>',
+      clip: [
+        { da: 80.8, a: 83.7, voce: true, perche: 'Entra in una banda di mercenari: gli edgerunner.', it: '«Fammi vedere che cosa sai fare.»' },
+        { da: 87.6, a: 90.2, voce: true, perche: 'Ogni lavoro chiede più potenza. Ogni impianto ne porta un altro.', it: '«Questo è cromo di tutt’altro livello.»' },
+      ] },
+    { testo: 'Ma la mente non è fatta di cromo. Quando gli impianti superano chi li porta, arriva la <em>cyberpsicosi</em>: non controlli più niente.', rosso: true,
+      clip: [
+        { da: 15.0, a: 17.05, perche: 'Un cyberpsicopatico: più cromo che persona.' },
+        { da: 96.2, a: 98.2, perche: 'Anche i più forti della banda cominciano a tremare.' },
+        { da: 99.8, a: 102.8, voce: true, perche: 'E David?', it: '«Mi stupisce che tu non sia ancora impazzito.»' },
+      ] },
+    { testo: 'Alla fine indossa l’armatura più potente di tutte. È enorme, è velocissima. <em>Ma chi la sta guidando?</em>', rosso: true,
+      clip: [{ da: 103.8, a: 105.2, perche: 'L’armatura più potente di tutte.' }] },
+  ];
+  const CLIP_MOTOKO = [
+    { da: 1462.3, a: 1477.1, voce: true, perche: 'Torniamo a Dami Lee e a Ghost in the Shell.',
+      sub: [[1462, '«In Ghost in the Shell, Motoko sostituisce le braccia, gli occhi e perfino la memoria.'], [1470.3, 'Tutto per potenziarsi: più veloce, più forte, più efficiente.»']] },
+    { da: 1490.0, a: 1497.9, voce: true, perche: 'Ecco il punto.', it: '«In un sistema costruito per ottimizzare, il ghost è la prima cosa che se ne va.»' },
+  ];
+
+  /* =====================================================================
+     LE OPERE: una breve storia del cyberpunk. Gli spezzoni non sono copiati: sono i trailer ufficiali
+     e i video originali, incorporati da YouTube.
+     «chiave»: la frase che resta dopo lo spezzone.
+     ===================================================================== */
+  const OPERE = {
+    blade:  { anno: 1982, tit: 'Blade Runner', chi: 'Ridley Scott · dal romanzo di Philip K. Dick',
+              riga: 'Los Angeles, 2019. Le aziende costruiscono esseri umani artificiali, i replicanti. Chi li distingue da noi?',
+              chiave: 'Il corpo diventa un <em>prodotto</em>.',
+              video: 'eogpIG53Cis', canale: 'Rotten Tomatoes Classic Trailers', fonte: 'trailer originale', clip: CLIP_BLADE },
+    neuro:  { anno: 1984, tit: 'Neuromante', chi: 'William Gibson · romanzo',
+              riga: 'Il libro che dà le regole al genere. Inventa una parola che oggi usiamo tutti: cyberspazio.',
+              chiave: 'Possiamo credere tutti insieme a qualcosa <em>che non c’è</em>.',
+              video: 'TPTtcV3qJ4U', canale: 'Dami Lee', fonte: 'Is Chongqing REALLY a Cyberpunk City?', clip: CLIP_GIBSON },
+    akira:  { anno: 1988, tit: 'Akira', chi: 'Katsuhiro Otomo',
+              riga: 'Il film d’animazione che porta il cyberpunk in tutto il mondo. Ragazzi di strada, una città enorme, un potere fuori controllo.',
+              chiave: 'Un potere più grande di chi lo riceve <em>lo distrugge</em>. Tenetelo a mente.',
+              video: 'mIuBGdeNxvQ', canale: 'IMAX', fonte: 'trailer ufficiale 4K', clip: CLIP_AKIRA },
+    gits:   { anno: 1995, tit: 'Ghost in the Shell', chi: 'Mamoru Oshii · dal manga di Masamune Shirow',
+              riga: 'Il film da cui è nato questo corso. Motoko ha un corpo quasi tutto artificiale. Che cosa resta di lei?',
+              video: 'R1K__7QhLaA', canale: 'Lionsgate Movies', fonte: 'trailer ufficiale della riedizione 4K', clip: CLIP_GITS },
+    matrix: { anno: 1999, tit: 'Matrix', chi: 'Lana e Lilly Wachowski',
+              riga: 'Il cyberpunk arriva al grande pubblico. Il mondo che vediamo è una simulazione, e quasi nessuno se ne accorge.',
+              video: 'L0fw0WzFaBM', canale: 'Warner Bros. UK & Ireland', fonte: 'trailer ufficiale del 20° anniversario', clip: CLIP_MATRIX },
+    cp2077: { anno: 2020, tit: 'Cyberpunk 2077', chi: 'CD PROJEKT RED · videogioco',
+              riga: 'Un videogioco. Night City, 2077: il corpo si compra a pezzi dal ripperdoc, il medico di strada. Occhi, braccia, riflessi.',
+              chiave: 'L’armatura è in vendita, per tutti. Ma <em>chi la controlla?</em>',
+              video: 'qIcTM8WXFjk', canale: 'Cyberpunk 2077', fonte: 'trailer cinematico ufficiale', clip: CLIP_2077 },
+    edge:   { anno: 2022, tit: 'Cyberpunk: Edgerunners', chi: 'Studio Trigger · Netflix',
+              riga: 'Una serie in dieci episodi, nel mondo di Cyberpunk 2077. È la storia che spiega meglio di tutte perché siamo qui.',
+              chiave: 'Non è il cromo a distruggerti. È averne <em>più di quanto riesci a reggere</em>.',
+              video: 'ax5YUmkWf_Y', canale: 'Netflix', fonte: 'trailer ufficiale (versione Studio Trigger)' },
+  };
+  // le parole di Dami Lee, dai due video da cui è nata l'idea del corso
+  const DAMI = {
+    teseo:  { video: 'FnPo0eTIRJQ', canale: 'Dami Lee', fonte: 'Why This Cyberpunk City is Dying', clip: CLIP_TESEO },
+    motoko: { video: 'FnPo0eTIRJQ', canale: 'Dami Lee', fonte: 'Why This Cyberpunk City is Dying', clip: CLIP_MOTOKO },
+  };
+  const ANNI = [1982, 1984, 1988, 1995, 1999, 2020, 2022, 2026];
+
+  /* =====================================================================
+     REGIA
+     ===================================================================== */
+  const $ = s => document.querySelector(s);
+  // la pausa (barra spaziatrice): un orologio che si ferma quando la sigla è in pausa; tutte le attese della regia lo usano
+  let inPausa = false, pausaDa = 0, pausaTot = 0, attivo = null;
+  const orologio = () => performance.now() - pausaTot - (inPausa ? performance.now() - pausaDa : 0);
+  const aspetta = ms => new Promise(r => { const fine = orologio() + ms; const tic = () => orologio() >= fine ? r() : setTimeout(tic, 30); tic(); });
+  let corsa = 0;                          // ogni avvio ha il suo numero: «Salta» e «Rivedi» fermano quello vecchio
+
+  async function scrivi(el, testo, ms = 28, id = corsa) {
+    for (let i = 0; i <= testo.length && id === corsa; i++) { el.textContent = testo.slice(0, i); await aspetta(ms); }
+  }
+  async function terminale(id, righe) {
+    const ol = $('#terminale'); ol.innerHTML = '';
+    for (const [t, esito] of righe) {
+      if (id !== corsa) return;
+      const li = document.createElement('li'); ol.appendChild(li);
+      const span = document.createElement('span'); li.appendChild(span);
+      Suono.tic();
+      await scrivi(span, t, 30, id);
+      if (esito) { await aspetta(260); const b = document.createElement('b'); b.className = 'ok'; b.textContent = esito; li.appendChild(b); Suono.tic(1.6); }
+      await aspetta(420);
+    }
+    const c = document.createElement('i'); c.className = 'cursore-t'; ol.lastChild.appendChild(c);
+  }
+  function cartello(eti, tit, sotto) {
+    $('#c-eti').textContent = eti; $('#c-tit').textContent = tit; $('#c-sotto').textContent = sotto;
+    $('#cartello').classList.add('on');
+  }
+  async function citazione(id, testo, fonte) {
+    $('#cit-testo').innerHTML = testo.split(' ').map(p => `<span class="p">${p}</span>`).join(' ');
+    $('#cit-fonte').innerHTML = fonte;
+    $('#citazione').classList.add('on');
+    for (const sp of $('#cit-testo').children) { if (id !== corsa) return; sp.classList.add('on'); Suono.campana(); await aspetta(380); }
+  }
+  // un testo grande che compare parola per parola; resta a schermo il tempo di leggerlo (circa 4 parole al secondo, più una pausa)
+  async function racconta(id, eti, html, { rosso = false, chiave = false, extra = 1800 } = {}) {
+    const box = $('#racconto');
+    box.className = 'racconto' + (rosso ? ' rosso' : '') + (chiave ? ' chiave' : '');
+    $('#r-eti').textContent = eti;
+    // ogni parola in uno span, con la sua punteggiatura; un <em> che abbraccia più parole si chiude e si riapre in ogni span
+    const parti = []; let dentro = false;
+    for (const w of html.split(/\s+/).filter(Boolean)) {
+      const pezzo = (dentro ? '<em>' : '') + w;
+      if (w.lastIndexOf('<em>') > w.lastIndexOf('</em>')) dentro = true; else if (w.includes('</em>')) dentro = false;
+      parti.push(pezzo + (dentro ? '</em>' : ''));
+    }
+    $('#r-testo').innerHTML = parti.map(w => `<span class="p">${w}</span>`).join(' ');
+    box.classList.add('on');
+    for (const sp of $('#r-testo').children) { if (id !== corsa) return; sp.classList.add('on'); await aspetta(120); }
+    await aspetta(parti.length * 230 + extra); if (id !== corsa) return;
+    box.classList.remove('on'); await aspetta(900);
+  }
+
+  /* ---------- crediti: si costruiscono dalle stesse opere ---------- */
+  const yt = id => `https://www.youtube.com/watch?v=${id}`;
+  const CREDITI = [
+    ...Object.values(OPERE).filter(o => o.video && o.canale !== 'Dami Lee').map(o => ({ eti: `${o.anno} · ${o.fonte}`, tit: o.tit, chi: o.chi, link: yt(o.video), canale: o.canale })),
+    { eti: '1984 · romanzo', tit: 'Neuromante (Neuromancer)', chi: 'William Gibson · Ace Books. Citata la definizione di cyberspazio.' },
+    { eti: '2026 · serie', tit: 'Cyberpunk: Edgerunners 2', chi: 'Studio Trigger · CD PROJEKT RED · Netflix. Solo citata.' },
+    { eti: 'Video saggio', tit: 'Why This Cyberpunk City is Dying', chi: 'Dami Lee · su Hong Kong e Ghost in the Shell. Da qui è nata l’idea del corso.', link: yt('FnPo0eTIRJQ'), canale: 'Dami Lee' },
+    { eti: 'Video saggio', tit: 'Is Chongqing REALLY a Cyberpunk City?', chi: 'Dami Lee · su Chongqing, Gibson e il cyberspazio.', link: yt('TPTtcV3qJ4U'), canale: 'Dami Lee' },
+    { eti: 'Sigla', tit: 'Animazione, musica e testi', chi: 'Giovanni Savelli con Claude Code. La sfera è la stessa dell’header del corso; musica e suoni sono sintetizzati, originali.' },
+  ];
+  document.getElementById('lista-crediti').innerHTML = CREDITI.map(c => `<li><small>${c.eti}</small><b>${c.tit}</b>${c.chi}${c.link ? `<br><a href="${c.link}" target="_blank" rel="noopener">Guarda su YouTube</a> · canale ${c.canale}` : ''}</li>`).join('');
+  document.querySelectorAll('[data-crediti]').forEach(b => b.addEventListener('click', () => $('#crediti').classList.add('on')));
+  document.getElementById('chiudi-crediti').addEventListener('click', () => $('#crediti').classList.remove('on'));
+
+  /* ---------- la linea del tempo e l'anno a palette ---------- */
+  const PRIMO = 1980, ULTIMO = 2028;
+  const posAnno = a => ((a - PRIMO) / (ULTIMO - PRIMO) * 100).toFixed(2) + '%';
+  $('#linea').insertAdjacentHTML('beforeend', ANNI.map((a, i) => `<span data-a="${a}" class="${i % 2 ? 'su' : ''}" style="left:${posAnno(a)}">${a}</span>`).join(''));
+  const tab = window.Effetti ? Effetti.tabellone($('#anno'), '1980', { giri: 7, durata: 80, sfasa: 90 }) : null;
+  function segnaAnno(a) {
+    $('#fatta').style.width = posAnno(a);
+    document.querySelectorAll('#linea span').forEach(s => { const x = +s.dataset.a; s.classList.toggle('ok', x < a); s.classList.toggle('qui', x === a); });
+  }
+  // la scheda dell'anno: resta il tempo di leggere la riga
+  async function epoca(id, o) {
+    $('#e-eti').textContent = o.chi; $('#e-tit').textContent = o.tit; $('#e-sotto').textContent = o.riga;
+    $('#epoca').classList.add('on'); $('#linea').classList.add('on');
+    tab ? tab.vai(String(o.anno)) : ($('#anno').textContent = o.anno);
+    Suono.anno(); segnaAnno(o.anno);
+    await aspetta(3800 + o.riga.split(' ').length * 260); if (id !== corsa) return;
+    $('#epoca').classList.remove('on');
+    await aspetta(800);
+  }
+
+  /* ---------- YouTube: un lettore per ogni video, caricati in silenzio all'avvio ---------- */
+  const lettori = {}, pronti = {};
+  const tuttiGliSpezzoni = () => [...Object.values(OPERE), ...Object.values(DAMI), ...TAPPE_EDGE.map(t => ({ video: OPERE.edge.video, clip: t.clip }))].filter(o => o.clip);
+  const VIDEO = [...new Set(tuttiGliSpezzoni().map(o => o.video))];
+  window.onYouTubeIframeAPIReady = () => {
+    VIDEO.forEach(v => {
+      const d = document.createElement('div'); d.id = 'yt-' + v; $('#lettori').appendChild(d);
+      lettori[v] = new YT.Player(d.id, { videoId: v, playerVars: { controls: 0, disablekb: 1, fs: 0, iv_load_policy: 3, rel: 0, playsinline: 1, modestbranding: 1, cc_load_policy: 0, hl: 'en' },
+        // niente sottotitoli di YouTube: sotto il video ci sono i nostri, in italiano
+        events: { onReady: () => { pronti[v] = true; lettori[v].mute(); spegniSottotitoli(lettori[v]); },
+                  onApiChange: () => spegniSottotitoli(lettori[v]) } });
+    });
+  };
+  function spegniSottotitoli(p) { try { p.unloadModule('captions'); p.unloadModule('cc'); } catch (e) {} }
+  const tag = document.createElement('script'); tag.src = 'https://www.youtube.com/iframe_api'; document.head.appendChild(tag);
+  // il primo avvio fa partire ogni video in silenzio per un attimo, così ogni spezzone poi parte subito
+  function preparaVideo() {
+    tuttiGliSpezzoni().forEach(o => {
+      if (!pronti[o.video]) return;
+      const p = lettori[o.video]; p.mute(); p.seekTo([].concat(o.clip)[0].da, true); p.playVideo(); setTimeout(() => p.pauseVideo(), 1200);
+    });
+  }
+  function mostraLettore(v) { document.querySelectorAll('#lettori iframe').forEach(f => { f.style.visibility = f.id === 'yt-' + v ? 'visible' : 'hidden'; }); }
+  // audio di un tratto: se qualcuno parla si sente il video e la musica si abbassa; se no, video muto e musica piena
+  function audio(p, t) {
+    if (t.voce) { p.unMute(); p.setVolume(t.vol || 90); Suono.abbassa(true); }
+    else { p.mute(); Suono.abbassa(false); }
+  }
+  // «su»: in alcuni tratti i sottotitoli inglesi stanno in alto, e la fascia di sopra si allarga
+  function fasce(t) { $('.fascia.su').style.height = (t.su || 13) + '%'; }
+  function perche(t) {
+    fasce(t);
+    if (!t.perche) return $('#clip-perche').classList.remove('on');
+    $('#perche').textContent = t.perche; $('#clip-perche').classList.add('on');
+  }
+  // aspetta che il video stia davvero andando e sia arrivato al secondo «sec» (o che passi «max»)
+  async function arriva(p, sec, id, max = 5000) {
+    const t0 = orologio();
+    while (orologio() - t0 < max && id === corsa) {
+      if (p.getPlayerState() === 1 && p.getCurrentTime() >= sec) return true;
+      await aspetta(40);
+    }
+    return false;
+  }
+  // uno spezzone può avere più tratti dello stesso video. Ogni tratto parte un secondo prima, nascosto e muto:
+  // così l'icona del play di YouTube non si vede mai; il tratto si chiude quando il video arriva davvero alla fine
+  async function spezzone(o, id, rec) {
+    const tratti = [].concat(o.clip || []);
+    if (!tratti.length || !pronti[o.video] || id !== corsa) return;
+    const p = lettori[o.video];
+    attivo = p;
+    mostraLettore(o.video);
+    $('#clip-rec').textContent = rec;
+    $('#clip-opera').innerHTML = o.tit ? `<b>${o.tit}</b> · ${o.chi.split(' · ')[0]} · ${o.anno}` : `<b>${o.canale}</b> · ${o.fonte}`;
+    $('#clip-fonte').textContent = o.tit ? `${o.fonte} · YouTube, ${o.canale}` : 'video saggio · YouTube';
+    // i sottotitoli: «it» per tutto il tratto, oppure «sub» con i secondi del video in cui cambiano
+    const sottotitolo = () => {
+      const t = tratti.find(x => x.sub && p.getCurrentTime() >= x.da - .5 && p.getCurrentTime() <= x.a + .5);
+      if (t) { const r = t.sub.filter(([sec]) => sec <= p.getCurrentTime()).pop(); $('#clip-it').textContent = r ? r[1] : ''; }
+    };
+    let sotto = 0;
+    for (let i = 0; i < tratti.length; i++) {
+      const t = tratti[i];
+      if (i > 0) { $('#lettori').classList.add('taglio'); await aspetta(180); }
+      // il primo tratto parte 1,2 s prima (il riquadro è ancora nascosto); gli altri 0,35 s prima, dietro un breve nero
+      p.mute(); p.seekTo(Math.max(0, t.da - (i ? .35 : 1.2)), true); p.playVideo();
+      await arriva(p, t.da, id); if (id !== corsa) return;
+      audio(p, t); $('#clip-it').textContent = t.it || ''; perche(t);
+      if (i === 0) { $('#clip').classList.add('on'); sotto = setInterval(sottotitolo, 120); }
+      else $('#lettori').classList.remove('taglio');
+      await arriva(p, t.a - .25, id, (t.a - t.da + 4) * 1000);
+      if (id !== corsa) return clearInterval(sotto);
+    }
+    clearInterval(sotto);
+    // il video sparisce subito (mentre il riquadro sfuma andrebbe avanti e mostrerebbe il cartello successivo del trailer)
+    $('#lettori').classList.add('taglio');
+    $('#clip').classList.remove('on'); $('#clip-perche').classList.remove('on');
+    p.mute(); Suono.abbassa(false);
+    await aspetta(250); p.pauseVideo(); attivo = null;
+    await aspetta(350); $('#lettori').classList.remove('taglio');
+    await aspetta(400);
+  }
+
+  function pulisci() {
+    ['#cartello', '#citazione', '#titolo', '#clip', '#epoca', '#linea', '#racconto', '#clip-perche'].forEach(s => $(s).classList.remove('on'));
+    $('#cartello').classList.remove('psy');
+    $('#terminale').innerHTML = '';
+    Object.keys(lettori).forEach(v => { if (pronti[v]) { lettori[v].pauseVideo(); lettori[v].mute(); } });
+  }
+
+  // un'opera della linea del tempo: la scheda dell'anno, lo spezzone, poi la frase che resta
+  async function opera(id, k, rec) {
+    const o = OPERE[k];
+    await epoca(id, o); if (id !== corsa) return;
+    if (o.clip) { await spezzone(o, id, rec || 'Archivio · ' + o.anno); if (id !== corsa) return; }
+    if (o.chiave) await racconta(id, `${o.anno} · ${o.tit}`, o.chiave, { chiave: true, extra: 1400 });
+  }
+
+  async function sigla() {
+    const id = ++corsa, t0 = orologio();
+    const conta = setInterval(() => {
+      if (id !== corsa) return clearInterval(conta);
+      const s = Math.floor((orologio() - t0) / 1000);
+      $('#tempo').textContent = String(Math.floor(s / 60)).padStart(2, '0') + ':' + String(s % 60).padStart(2, '0');
+    }, 250);
+    const ok = () => id === corsa;
+    pulisci(); Scena.shell(false); Scena.mirini(false); Scena.zoom(.8); Scena.instabile(0); Scena.ghost(1);
+    $('#sg-stage').className = '';
+    $('#salta').classList.add('on'); $('#tempo').classList.add('on'); $('#barra').classList.add('via');
+    document.body.classList.add('in-corsa');
+    Suono.avvia();
+
+    // 1. la domanda: che cos'è il cyberpunk?
+    await terminale(id, [
+      ['AANT · Intelligenza Artificiale · 2026/27', ''],
+      ['> Prima di cominciare, una domanda.', ''],
+      ['> Che cos’è il cyberpunk? ', '?'],
+    ]); await aspetta(1200); if (!ok()) return;
+    $('#terminale').innerHTML = '';
+    Suono.colpo();
+    cartello('cyberpunk · dal 1983', 'High tech, low life.', 'Tecnologia altissima, vita di strada.');
+    await aspetta(5000); if (!ok()) return;
+    $('#cartello').classList.remove('on'); await aspetta(900); if (!ok()) return;
+    await racconta(id, 'Un genere, nato quarant’anni fa',
+      'Un futuro pieno di tecnologia, che però non ha migliorato la vita delle persone. Corpi potenziati, città enormi, aziende più forti degli Stati. <em>Vediamo come è nato.</em>', { extra: 1200 });
+    if (!ok()) return;
+
+    // 2. la storia, un'opera alla volta; dietro, la polvere della sfera che galleggia
+    $('#sg-stage').className = 'fioca';
+    for (const k of ['blade', 'neuro', 'akira']) { await opera(id, k); if (!ok()) return; }
+
+    // 3. Ghost in the Shell: da qui è nata l'idea. La domanda di Dami Lee, il film, poi la Shell e il Ghost
+    await epoca(id, OPERE.gits); if (!ok()) return;
+    await spezzone(DAMI.teseo, id, 'Dami Lee · da qui è nata l’idea'); if (!ok()) return;
+    await spezzone(OPERE.gits, id, 'Archivio · 1995'); if (!ok()) return;
+    $('#linea').classList.remove('on');
+    $('#sg-stage').className = 'on'; Scena.shell(true); Scena.zoom(1.05); Suono.monta();
+    await aspetta(2200); if (!ok()) return;
+    cartello('01 / Shell', 'Shell', 'Il corpo · gli strumenti · i programmi');
+    await aspetta(5200); if (!ok()) return;
+    $('#cartello').classList.remove('on'); await aspetta(600);
+    Scena.shell(false); Scena.mirini(true); Scena.zoom(1.15); Suono.sfalda();
+    await aspetta(2400); if (!ok()) return;
+    cartello('02 / Ghost', 'Ghost', 'Il giudizio · la memoria · le scelte');
+    await aspetta(5200); if (!ok()) return;
+    $('#cartello').classList.remove('on');
+    $('#sg-stage').className = 'fioca'; Scena.mirini(false); Scena.zoom(.8);
+    await aspetta(1000); if (!ok()) return;
+
+    // 4. Matrix (solo la sua frase), poi il corpo in vendita di 2077
+    await epoca(id, OPERE.matrix); if (!ok()) return;
+    await spezzone(OPERE.matrix, id, 'Archivio · 1999'); if (!ok()) return;
+    await citazione(id, 'Come faresti a distinguere il mondo dei sogni dal mondo reale?', '<b>Morpheus</b> · Matrix, 1999');
+    await aspetta(3600); if (!ok()) return;
+    $('#citazione').classList.remove('on'); await aspetta(1000); if (!ok()) return;
+    await opera(id, 'cp2077'); if (!ok()) return;
+
+    // 5. Edgerunners: la storia di David, una tappa alla volta
+    await epoca(id, OPERE.edge); if (!ok()) return;
+    $('#linea').classList.remove('on');
+    for (const [n, t] of TAPPE_EDGE.entries()) {
+      await racconta(id, `Edgerunners · ${n + 1} / ${TAPPE_EDGE.length}`, t.testo, { rosso: t.rosso, extra: 1600 }); if (!ok()) return;
+      await spezzone({ ...OPERE.edge, clip: t.clip }, id, `Edgerunners · ${n + 1} / ${TAPPE_EDGE.length}`); if (!ok()) return;
+    }
+    await racconta(id, '2022 · Cyberpunk: Edgerunners', OPERE.edge.chiave, { chiave: true, rosso: true, extra: 2200 }); if (!ok()) return;
+    $('#linea').classList.add('on');
+    await epoca(id, { anno: 2026, tit: 'Edgerunners 2', chi: 'Studio Trigger · Netflix · 20 ottobre 2026', riga: 'La storia continua. E non è più solo fantascienza: un’armatura, oggi, ce l’abbiamo anche noi.' }); if (!ok()) return;
+    $('#linea').classList.remove('on');
+
+    // 6. la tesi: l'armatura senza un corpo allenato sotto ti consuma
+    await spezzone(DAMI.motoko, id, 'Dami Lee · Hong Kong'); if (!ok()) return;
+    await racconta(id, 'Oggi', 'La nostra armatura si chiama <em>intelligenza artificiale</em>. Scrive, disegna, progetta, risponde. Ci rende più veloci e più forti.', { extra: 1400 }); if (!ok()) return;
+    $('#sg-stage').className = 'on'; Scena.ghost(.12); Scena.shell(true); Scena.zoom(1.05); Suono.monta();
+    await aspetta(3000); if (!ok()) return;
+    cartello('Cyberpsicosi', 'Armatura senza corpo.', 'Più potenza, più pezzi, più deleghe. Ma sotto non c’è niente di allenato.');
+    Scena.instabile(1); Suono.glitch(8); $('#cartello').classList.add('psy');
+    await aspetta(4600); if (!ok()) return;
+    $('#c-sotto').textContent = 'E l’armatura ti consuma prima.';
+    await aspetta(4000); if (!ok()) return;
+    $('#cartello').classList.remove('on', 'psy');
+    Scena.instabile(0); Scena.ghost(2.6); Scena.mirini(true); Suono.calma();
+    await aspetta(2400); if (!ok()) return;
+    cartello('Il Ghost allenato', 'Più sei forte sotto, più la controlli.', 'Deleghi solo quello che sai giudicare.');
+    await aspetta(7500); if (!ok()) return;
+    $('#cartello').classList.remove('on'); await aspetta(700);
+    Scena.shell(false); Scena.zoom(1.2); Suono.sfalda();
+    await aspetta(2600); if (!ok()) return;
+    cartello('02 / Ghost', 'Tu sei il Ghost.', 'L’IA è la Shell. Questo corso allena il Ghost.');
+    await aspetta(7000); if (!ok()) return;
+    $('#cartello').classList.remove('on');
+    await aspetta(900);
+    fine(id);
+  }
+  function fine(id = corsa) {
+    if (id !== corsa) return;
+    pulisci(); attivo = null;
+    $('#sg-stage').className = 'fioca'; Scena.shell(false); Scena.mirini(true); Scena.instabile(0); Scena.ghost(1.6);
+    $('#titolo').classList.add('on'); $('#salta').classList.remove('on'); $('#barra').classList.remove('via');
+    document.body.classList.remove('in-corsa');
+    Suono.finale();
+  }
+
+  $('#via').addEventListener('click', () => {
+    if (document.documentElement.requestFullscreen) document.documentElement.requestFullscreen().catch(() => {});
+    $('#avvio').classList.add('via');
+    preparaVideo();
+    setTimeout(sigla, 1400);
+  });
+  function pausa(on) {
+    if (on === inPausa || !document.body.classList.contains('in-corsa')) return;
+    inPausa = on;
+    if (on) { pausaDa = performance.now(); attivo && attivo.pauseVideo(); }
+    else { pausaTot += performance.now() - pausaDa; attivo && attivo.playVideo(); }
+    Suono.pausa(on);
+    $('#pausa').classList.toggle('on', on);
+    document.body.classList.toggle('fermo', on);
+  }
+  addEventListener('keydown', e => {
+    if (e.code !== 'Space' || !document.body.classList.contains('in-corsa')) return;
+    e.preventDefault(); document.activeElement && document.activeElement.blur();
+    pausa(!inPausa);
+  });
+  $('#pausa').addEventListener('click', () => pausa(false));
+  $('#salta').addEventListener('click', () => { pausa(false); corsa++; fine(); });
+  $('#rivedi').addEventListener('click', () => { $('#titolo').classList.remove('on'); setTimeout(sigla, 600); });
+  </script>
+</body>
+</html>
