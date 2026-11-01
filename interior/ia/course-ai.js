@@ -72,7 +72,8 @@ const schedeIA = {
   'tab-archivio': 'archivio',
   'tab-appunti': 'appunti',
   'tab-calendario': 'calendario',
-  'tab-strumenti': 'strumenti'
+  'tab-strumenti': 'strumenti',
+  'tab-glossario': 'glossario'
 };
 const aliasSchedeIA = {
   'vibe-coding': 'tab-strumenti',

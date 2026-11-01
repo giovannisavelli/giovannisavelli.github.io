@@ -33,6 +33,8 @@
   <link rel="stylesheet" href="../../assets/agenda.css?v=20261029d">
   <link rel="stylesheet" href="course-ai.css?v=20261029-giorno">
   <link rel="stylesheet" href="guida-strumenti.css?v=20261028-compact01">
+  <link rel="stylesheet" href="glossario.css?v=20261101c">
+  <script src="glossario.js?v=20261101e" defer></script>
   <link rel="stylesheet" href="ghost-scena.css?v=20261028-verde06">
   <script src="../../assets/studio.js" defer></script>
   <script src="../../assets/fx/effetti.js" defer></script>
@@ -64,7 +66,7 @@
   };
   </script>
   <script src="../../assets/agenda.js?v=20261029d" defer></script>
-  <script src="course-ai.js?v=20261029-giorno" defer></script>
+  <script src="course-ai.js?v=20261101-glossario" defer></script>
   <script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.170.0/examples/jsm/"}}</script>
 </head>
 <body class="ai-page">
@@ -103,6 +105,7 @@
           <button class="course-tab" type="button" role="tab" id="btn-calendario" data-tab="tab-calendario" aria-controls="tab-calendario" aria-selected="false">Calendario</button>
           <button class="course-tab" type="button" role="tab" id="btn-elenco" data-tab="tab-elenco" aria-controls="tab-elenco" aria-selected="false">Programma</button>
           <button class="course-tab" type="button" role="tab" id="btn-strumenti" data-tab="tab-strumenti" aria-controls="tab-strumenti" aria-selected="false">Strumenti</button>
+          <button class="course-tab" type="button" role="tab" id="btn-glossario" data-tab="tab-glossario" aria-controls="tab-glossario" aria-selected="false">Glossario</button>
         </nav>
       </div>
       <section class="course-panel" role="tabpanel" id="tab-programma" aria-labelledby="btn-programma">
@@ -283,6 +286,113 @@
           <div class="guide-ai-extra-body"><p>ChatGPT e Claude includono una capacità d’uso che si rinnova: non è un numero fisso di domande o euro da spendere. Higgsfield e Weave usano crediti per generazione; il consumo dipende dal modello e dalle impostazioni. I crediti API, quando previsti, sono separati dall’uso delle chat.</p></div>
         </details>
         <details class="guide-ai-sources"><summary>Fonti dei prezzi e delle funzioni <span aria-hidden="true">+</span></summary><div><p>Prezzi rilevati il 28 ottobre 2026. Possono cambiare e dipendono dal canale di acquisto.</p><a href="https://apps.apple.com/it/app/chatgpt/id6448311069" target="_blank" rel="noopener noreferrer">ChatGPT · App Store Italia ↗</a><a href="https://chatgpt.com/it-IT/pricing/" target="_blank" rel="noopener noreferrer">ChatGPT · funzioni ↗</a><a href="https://claude.com/it/pricing" target="_blank" rel="noopener noreferrer">Claude ↗</a><a href="https://gemini.google/it/subscriptions/" target="_blank" rel="noopener noreferrer">Gemini Italia ↗</a><a href="https://weave.figma.com/pricing" target="_blank" rel="noopener noreferrer">Weave ↗</a><a href="https://higgsfield.ai/pricing" target="_blank" rel="noopener noreferrer">Higgsfield ↗</a><a href="https://helpx.adobe.com/it/photoshop/desktop/create-open-import-images/create-images/edit-images-with-generative-fill.html" target="_blank" rel="noopener noreferrer">Riempimento generativo ↗</a></div></details>
+      </section>
+      </section>
+      <section class="course-panel" role="tabpanel" id="tab-glossario" aria-labelledby="btn-glossario" hidden>
+      <section class="course-block guide-ai glossario" id="glossario" aria-labelledby="glossary-title">
+        <div class="section-heading">
+          <span class="section-meta">GLOSSARIO · LE PAROLE DEL CORSO</span>
+          <h2 id="glossary-title">Le parole del corso.</h2>
+          <p>Termini che sentirai spesso in aula. Apri una voce per leggere la spiegazione e alcuni esempi presi dal lavoro di tutti i giorni.</p>
+        </div>
+        <aside class="course-notice glo-avviso" aria-label="Avviso sugli esempi">
+          <div><strong>Esempi semplificati</strong><p>Spiegazioni ed esempi di questa pagina servono a farti capire l’idea. Nella realtà i modelli funzionano in modo più complesso, e ognuno a modo suo. Per vedere come un testo viene diviso davvero in token, prova il Tokenizer di OpenAI.</p></div>
+          <a href="https://platform.openai.com/tokenizer" target="_blank" rel="noopener noreferrer">Apri il Tokenizer ↗</a>
+        </aside>
+
+        <div class="guide-ai-group" aria-labelledby="glo-modello">
+          <div class="guide-ai-group-heading"><div><span>01 / COME FUNZIONA</span><h3 id="glo-modello">Il modello e le sue parole</h3></div><p>Che cosa succede quando scrivi una richiesta.</p></div>
+          <div class="guide-ai-tool-grid">
+            <details class="guide-ai-tool">
+              <summary><span class="guide-ai-tool-meta">LLM · LARGE LANGUAGE MODEL</span><strong>LLM</strong><span class="guide-ai-tool-teaser">Il motore che scrive le risposte</span><span class="guide-ai-tool-toggle" aria-hidden="true"></span></summary>
+              <div class="guide-ai-tool-body"><p>È un modello linguistico di grandi dimensioni: il motore dentro ChatGPT, Claude e Gemini. È stato addestrato su enormi quantità di testo e ha imparato quali parole tendono a seguirne altre. Quando gli scrivi, non cerca la risposta in un archivio: la costruisce un pezzo alla volta, scegliendo ogni volta una continuazione probabile.</p><p class="glo-esempi-titolo">ESEMPI</p><ul class="glo-esempi"><li>La <b>frase a gruppi</b> della prima lezione è un’analogia: ognuno aggiunge un pezzo guardando quelli già scritti.</li><li>ChatGPT, Claude e Gemini sono le <b>app</b>; dentro ciascuna lavorano uno o più <b>modelli</b>, che cambiano nel tempo.</li></ul></div>
+            </details>
+            <details class="guide-ai-tool">
+              <summary><span class="guide-ai-tool-meta">TOKEN · UNITÀ DI TESTO</span><strong>Token</strong><span class="guide-ai-tool-teaser">I pezzi in cui il modello taglia le parole</span><span class="guide-ai-tool-toggle" aria-hidden="true"></span></summary>
+              <div class="guide-ai-tool-body"><p>È il pezzo di testo con cui lavora un LLM: una parola intera, una parte di parola o un segno di punteggiatura. Con i token si misura quasi tutto: quanto testo il modello riesce a leggere in una volta e quanto si paga quando lo si usa con le API.</p><p class="glo-esempi-titolo">ESEMPI</p><ul class="glo-esempi"><li>Una parola breve e comune come «casa» di solito è un solo token; una parola lunga come «illuminotecnica» viene divisa in più pezzi.</li><li>Anche le immagini e i file che alleghi diventano token, e occupano spazio nella finestra di contesto.</li></ul></div>
+            </details>
+            <details class="guide-ai-tool">
+              <summary><span class="guide-ai-tool-meta">PROMPT · LA RICHIESTA</span><strong>Prompt</strong><span class="guide-ai-tool-teaser">Quello che scrivi al modello</span><span class="guide-ai-tool-toggle" aria-hidden="true"></span></summary>
+              <div class="guide-ai-tool-body"><p>È la richiesta che dai al modello: un testo, a volte con immagini o file allegati. Quello che non scrivi, il modello lo decide da solo, e ogni volta in modo diverso. Più il prompt dice che cosa vuoi, per chi e in che forma, meno il modello deve inventare.</p><p class="glo-esempi-titolo">ESEMPI</p><ul class="glo-esempi"><li>«Una cucina moderna» lascia quasi tutto al modello. «Cucina lineare di 3,60 m in rovere chiaro, piano in pietra grigia, luce da una finestra a sinistra, vista ad altezza d’occhi» lascia molto meno.</li><li>Il <a href="../../app/varianza/">Laboratorio della Varianza</a> mostra proprio questo: accendi una parte della descrizione alla volta e guardi come cambiano le immagini.</li></ul></div>
+            </details>
+            <details class="guide-ai-tool">
+              <summary><span class="guide-ai-tool-meta">CONTESTO · LA MEMORIA DI LAVORO</span><strong>Finestra di contesto</strong><span class="guide-ai-tool-teaser">Quanto il modello tiene sotto gli occhi</span><span class="guide-ai-tool-toggle" aria-hidden="true"></span></summary>
+              <div class="guide-ai-tool-body"><p>È la quantità di testo che il modello può considerare in una volta: la conversazione, i file allegati e le istruzioni. Si misura in token. Quando una chat diventa troppo lunga, le parti più vecchie vengono riassunte o tagliate, e il modello può perdere dettagli detti all’inizio.</p><p class="glo-esempi-titolo">ESEMPI</p><ul class="glo-esempi"><li>Per questo le informazioni importanti dei miei progetti stanno in <b>file su Drive</b>: ogni nuova sessione li rilegge, invece di affidarsi alla chat.</li><li>Se in una chat lunga il modello comincia a confondersi, conviene aprirne una nuova partendo da un breve riassunto.</li></ul></div>
+            </details>
+            <details class="guide-ai-tool">
+              <summary><span class="guide-ai-tool-meta">ERRORE · DETTO CON SICUREZZA</span><strong>Allucinazione</strong><span class="guide-ai-tool-teaser">Una cosa falsa scritta come se fosse vera</span><span class="guide-ai-tool-toggle" aria-hidden="true"></span></summary>
+              <div class="guide-ai-tool-body"><p>Succede quando il modello scrive un’informazione sbagliata con lo stesso tono sicuro di una giusta: un dato inventato, una fonte che non esiste, una misura che non torna. Il modello produce ciò che è plausibile, non ciò che ha verificato. Per questo vale la regola del corso: deleghi solo quello che sai controllare.</p><p class="glo-esempi-titolo">ESEMPI</p><ul class="glo-esempi"><li>Chiedi le misure di una sedia famosa: la risposta può essere credibile e sbagliata. Va confrontata con la scheda del produttore.</li><li>Nelle immagini: una scala con un gradino in più, una finestra che in pianta non avrebbe senso, una scritta con lettere inventate.</li></ul></div>
+            </details>
+            <details class="guide-ai-tool">
+              <summary><span class="guide-ai-tool-meta">SEED · IL NUMERO DEL CASO</span><strong>Seed</strong><span class="guide-ai-tool-teaser">Il punto di partenza di ogni generazione</span><span class="guide-ai-tool-toggle" aria-hidden="true"></span></summary>
+              <div class="guide-ai-tool-body"><p>Nella generazione di immagini e video, il seed è il numero da cui parte il caso. Con lo stesso modello, lo stesso prompt, le stesse impostazioni e lo stesso seed, il risultato di solito è molto simile, a volte identico. Cambiando seed si ottiene una variante. Non tutte le piattaforme lo mostrano.</p><p class="glo-esempi-titolo">ESEMPI</p><ul class="glo-esempi"><li>Nel <a href="../../app/varianza/">Laboratorio della Varianza</a> ogni riquadro ha il suo seed: per questo quattro immagini dallo stesso prompt sono diverse.</li><li>Il seed si imposta nelle opzioni dello strumento: scritto dentro il prompt, il modello non lo usa.</li></ul></div>
+            </details>
+          </div>
+        </div>
+
+        <div class="guide-ai-group" aria-labelledby="glo-collegamenti">
+          <div class="guide-ai-group-heading"><div><span>02 / COME SI COLLEGA</span><h3 id="glo-collegamenti">Collegamenti e assistenti</h3></div><p>Come l’IA parla con gli altri programmi.</p></div>
+          <figure class="glo-anim" id="glo-anim" aria-label="Animazione: come funzionano API e MCP">
+            <figcaption><span>GUARDA COME FUNZIONA</span><strong>Con l’<em>API</em> due programmi si parlano da soli. Con <em>MCP</em> un assistente usa un programma al posto tuo.</strong></figcaption>
+            <div class="class-switch" role="group" aria-label="Scegli che cosa vedere">
+              <button type="button" data-scena="api" aria-pressed="true">API</button>
+              <button type="button" data-scena="mcp" aria-pressed="false">MCP</button>
+            </div>
+            <p class="glo-didascalia" aria-live="polite"><span class="glo-passo"></span><span class="glo-frase">Premi ▶ per cominciare.</span></p>
+            <div class="glo-comandi">
+              <button type="button" data-glo="play">▶ Play</button>
+              <button type="button" data-glo="indietro">← Indietro</button>
+              <button type="button" data-glo="avanti">Avanti →</button>
+              <button type="button" data-glo="dacapo">↺ Da capo</button>
+            </div>
+            <div class="glo-tela"><svg role="img" aria-label="Schema animato: i riquadri si accendono e un messaggio viaggia fra loro. Ogni passaggio è descritto nel testo qui sotto."></svg></div>
+          </figure>
+          <div class="glo-confronto">
+            <article><h4>API</h4><dl><dt>CHI LA USA</dt><dd>Un programma.</dd><dt>CHI DECIDE I PASSAGGI</dt><dd>Chi ha scritto il programma, una volta per tutte. Poi si ripetono sempre uguali.</dd><dt>ESEMPIO</dt><dd>Il bot che fa guardare i reel a Gemini.</dd></dl></article>
+            <article><h4>MCP</h4><dl><dt>CHI LO USA</dt><dd>Un assistente IA, come Claude o Gemini.</dd><dt>CHI DECIDE I PASSAGGI</dt><dd>L’assistente, mentre parli con lui, in base a quello che chiedi.</dd><dt>ESEMPIO</dt><dd>Claude che mette una luce in Cinema 4D.</dd></dl></article>
+          </div>
+          <p class="glo-nota-api">Spesso dietro ai pulsanti di un pannello MCP ci sono proprio delle API: MCP le rende facili da usare per un assistente.</p>
+          <div class="guide-ai-tool-grid">
+            <details class="guide-ai-tool">
+              <summary><span class="guide-ai-tool-meta">API · APPLICATION PROGRAMMING INTERFACE</span><strong>API</strong><span class="guide-ai-tool-teaser">Lo sportello dove i programmi si parlano</span><span class="guide-ai-tool-toggle" aria-hidden="true"></span></summary>
+              <div class="guide-ai-tool-body"><p>Pensa a uno sportello. Le persone usano un servizio dalla sua schermata, con pulsanti e menu. Un programma invece va allo sportello di servizio: lascia una richiesta scritta in un modo preciso e riceve una risposta. Quello sportello è l’API. Chi scrive il programma decide una volta per tutte che cosa chiedere e quando; poi il programma lo ripete da solo, sempre uguale. Di solito le API si pagano a consumo, richiesta per richiesta, spesso con una piccola quota gratuita.</p><p class="glo-esempi-titolo">ESEMPI</p><ul class="glo-esempi"><li><b>L’app del meteo</b> sul telefono non ha meteorologi: chiede le previsioni a un servizio meteo attraverso la sua API, e te le mostra.</li><li><b>Il mio bot dei reel:</b> gli mando su Telegram il link di un reel. Il bot non sa guardare i video, così lo scarica e lo consegna a Gemini attraverso la sua API. Poi mi scrive la risposta e ne salva una copia su Drive, nel cervello centrale, dove Claude e ChatGPT Codex la ritrovano quando serve.</li><li><b>Lo strumento per i video di YouTube</b> funziona allo stesso modo: un piccolo programma manda il video a Gemini e riceve il riassunto con i minutaggi.</li></ul></div>
+            </details>
+            <details class="guide-ai-tool">
+              <summary><span class="guide-ai-tool-meta">MCP · MODEL CONTEXT PROTOCOL</span><strong>MCP</strong><span class="guide-ai-tool-teaser">Il pannello di comandi per l’assistente</span><span class="guide-ai-tool-toggle" aria-hidden="true"></span></summary>
+              <div class="guide-ai-tool-body"><p>Da solo, un assistente come Claude o ChatGPT non può usare i programmi del tuo computer: non può premere i loro pulsanti. MCP serve a dargli un pannello di comandi. Il programma prepara una lista di azioni, ognuna con un nome chiaro: «crea luce», «sposta», «fai il render». L’assistente legge la lista e, mentre parli con lui, sceglie da solo quali azioni usare. MCP è il modo comune, uguale per tutti, di preparare questi pannelli.</p><p><b>Chi li fa?</b> MCP è uno standard aperto, quindi un pannello lo può scrivere chiunque. Ci sono quelli <b>ufficiali</b>, fatti dall’azienda del programma (Figma, GitHub, Notion; Maxon dentro Cinema 4D dalla versione 2026.4), e quelli <b>della comunità</b>, fatti da singoli sviluppatori e messi su GitHub. Un MCP lavora con gli stessi permessi del tuo computer: prima di installarne uno della comunità controlla chi l’ha fatto, e se esiste quello ufficiale scegli quello.</p><p class="glo-esempi-titolo">ESEMPI</p><ul class="glo-esempi"><li><b>Higgsfield collegato a Claude:</b> scrivo in chat «fammi un’immagine di una cucina in rovere». Claude preme il pulsante «genera immagine» di Higgsfield, e l’immagine arriva in chat senza aprire il sito.</li><li><b>Blender collegato attraverso Higgsfield:</b> l’estensione di Higgsfield per Blender apre un pannello MCP, così l’assistente può lavorare nella scena aperta sul computer.</li><li><b>Cinema 4D collegato a Claude o a ChatGPT:</b> chiedo «metti una luce calda a sinistra del divano», e l’assistente usa i comandi del programma per crearla e spostarla. Dalla versione 2026.4 c’è il pannello ufficiale di Maxon; prima esistevano solo quelli della comunità, come «cinema4d-mcp» su GitHub.</li><li><b>Google Calendar collegato a Claude:</b> chiedo «segna le lezioni di dicembre», e Claude crea gli eventi uno per uno.</li></ul></div>
+            </details>
+            <details class="guide-ai-tool">
+              <summary><span class="guide-ai-tool-meta">AGENTE · ASSISTENTE CHE AGISCE</span><strong>Agente</strong><span class="guide-ai-tool-teaser">Riceve un obiettivo e fa i passaggi da solo</span><span class="guide-ai-tool-toggle" aria-hidden="true"></span></summary>
+              <div class="guide-ai-tool-body"><p>È un assistente che non si limita a rispondere. Riceve un obiettivo, decide i passaggi, usa gli strumenti che ha a disposizione (file, browser, programmi), controlla il risultato e, se serve, corregge. Può anche dividere il lavoro con agenti più piccoli, i sub-agent.</p><p class="glo-esempi-titolo">ESEMPI</p><ul class="glo-esempi"><li>Claude Code e Codex lavorano su questo sito: aprono i file, cambiano il codice, provano la pagina nel browser e mi dicono che cosa hanno fatto. La pubblicazione la approvo io.</li><li>Nella simulazione <a href="../../app/ecosistema/">Il mio ecosistema</a> i sub-agent sono i droni che portano i dati fra un progetto e l’altro.</li></ul></div>
+            </details>
+            <details class="guide-ai-tool">
+              <summary><span class="guide-ai-tool-meta">AGENTE · ANTHROPIC</span><strong>Claude Code</strong><span class="guide-ai-tool-teaser">Claude che lavora sui tuoi file</span><span class="guide-ai-tool-toggle" aria-hidden="true"></span></summary>
+              <div class="guide-ai-tool-body"><p>È la versione di Claude che lavora come agente sui progetti: legge e modifica i file, esegue comandi e controlla il risultato. Si usa dal terminale, dall’app di Claude sul computer (scheda Code), dal web e dentro i programmi per scrivere codice. A ogni sessione legge le istruzioni del progetto da un file che si chiama CLAUDE.md, e può usare MCP, skill e sub-agent. Non è nel piano gratuito: serve almeno Claude Pro.</p><p class="glo-esempi-titolo">ESEMPI</p><ul class="glo-esempi"><li><b>Questo sito</b> lo costruisco con Claude Code: le regole del progetto e il diario del lavoro stanno nel suo CLAUDE.md.</li><li><b>Più lavori insieme:</b> per questo glossario tre sub-agent hanno lavorato in parallelo. Uno ha controllato il collegamento con Blender, uno ha installato un MCP per Cinema 4D, uno ha verificato le fonti. Poi Claude Code ha ricontrollato i loro risultati.</li></ul></div>
+            </details>
+            <details class="guide-ai-tool">
+              <summary><span class="guide-ai-tool-meta">AGENTE · OPENAI</span><strong>ChatGPT Codex</strong><span class="guide-ai-tool-teaser">L’agente di ChatGPT per i progetti</span><span class="guide-ai-tool-toggle" aria-hidden="true"></span></summary>
+              <div class="guide-ai-tool-body"><p>È l’agente di ChatGPT che lavora sui progetti: esplora i file, li modifica, esegue comandi e rivede il lavoro. Si usa dall’app di ChatGPT sul computer, dal web, dal terminale e dai programmi per scrivere codice. Le istruzioni del progetto le legge da un file che si chiama AGENTS.md, e anche lui può usare MCP. È incluso nei piani di ChatGPT; in quelli gratuiti solo dall’app per computer e con limiti più stretti.</p><p class="glo-esempi-titolo">ESEMPI</p><ul class="glo-esempi"><li><b>Sullo stesso sito</b> lavorano sia Claude Code sia ChatGPT Codex. Il file AGENTS.md di Codex lo rimanda alle stesse regole di Claude, così i due seguono le stesse istruzioni.</li><li><b>La guida agli strumenti</b> della scheda Strumenti l’ha preparata ChatGPT Codex.</li></ul></div>
+            </details>
+            <details class="guide-ai-tool">
+              <summary><span class="guide-ai-tool-meta">SKILL · ISTRUZIONI PRONTE</span><strong>Skill</strong><span class="guide-ai-tool-teaser">Un lavoro insegnato una volta per tutte</span><span class="guide-ai-tool-toggle" aria-hidden="true"></span></summary>
+              <div class="guide-ai-tool-body"><p>È un pacchetto di istruzioni, a volte con piccoli programmi, che insegna a un assistente un lavoro preciso. L’assistente la carica solo quando serve, così non deve rileggere tutto ogni volta. Si scrive una volta e si riusa in tutti i progetti.</p><p class="glo-esempi-titolo">ESEMPI</p><ul class="glo-esempi"><li><b>«endgame»:</b> a fine giornata l’assistente rilegge la chat e salva ogni informazione al suo posto, nei file dei progetti.</li><li><b>«radar»:</b> controlla la lista delle novità mandate al bot e propone solo quelle utili al lavoro in corso.</li></ul></div>
+            </details>
+          </div>
+        </div>
+
+        <div class="guide-ai-group" aria-labelledby="glo-costi">
+          <div class="guide-ai-group-heading"><div><span>03 / COSTI E PERSONALIZZAZIONE</span><h3 id="glo-costi">Crediti e memoria</h3></div><p>Quanto costa e come si adatta al tuo lavoro.</p></div>
+          <div class="guide-ai-tool-grid">
+            <details class="guide-ai-tool">
+              <summary><span class="guide-ai-tool-meta">CREDITI · LA MONETA DELLE PIATTAFORME</span><strong>Crediti</strong><span class="guide-ai-tool-teaser">Si spendono a ogni immagine o video</span><span class="guide-ai-tool-toggle" aria-hidden="true"></span></summary>
+              <div class="guide-ai-tool-body"><p>Sono la moneta interna delle piattaforme di generazione, come Higgsfield, Weave o Flow. Ogni immagine o video ne consuma un numero che dipende dal modello, dalla risoluzione e dalla durata. Non sono euro: si ricevono con l’abbonamento o si comprano a pacchetti.</p><p class="glo-esempi-titolo">ESEMPI</p><ul class="glo-esempi"><li>Su Higgsfield, a ottobre 2026, un’immagine con Nano Banana Pro costava 2 crediti sia a 1K sia a 2K, e 4 crediti a 4K.</li><li>Rigenerare «finché viene bene» consuma crediti: conviene capire che cosa non va e correggere il prompt prima di riprovare.</li></ul></div>
+            </details>
+            <details class="guide-ai-tool">
+              <summary><span class="guide-ai-tool-meta">PERSONALIZZARE · DUE STRADE</span><strong>Fine-tuning e memoria</strong><span class="guide-ai-tool-teaser">Cambiare il modello o dargli degli appunti</span><span class="guide-ai-tool-toggle" aria-hidden="true"></span></summary>
+              <div class="guide-ai-tool-body"><p>Con il fine-tuning si riaddestra il modello su esempi propri: cambiano i suoi pesi, cioè le connessioni interne, e nasce un modello nuovo. Servono dati, tempo e competenze. Con la memoria il modello resta lo stesso: gli si danno da leggere preferenze, istruzioni e file ogni volta che lavora. È la differenza fra cambiare il cervello a una persona e darle un quaderno di appunti.</p><p class="glo-esempi-titolo">ESEMPI</p><ul class="glo-esempi"><li>Nel mio lavoro uso solo la <b>memoria</b>: le regole e il diario dei progetti sono file su Drive, che gli assistenti leggono a ogni sessione su tutti e due i computer.</li><li>Nelle immagini si usa spesso un <b>fine-tuning leggero</b>, la LoRA, per insegnare a un modello un volto, un oggetto o uno stile.</li></ul></div>
+            </details>
+          </div>
+        </div>
       </section>
       </section>
       <footer class="credits"><a class="footer-home" href="../../">← Tutti i corsi del docente</a><span>Intelligenza artificiale · Interior Design · Giovanni Savelli · AANT 2026/27</span></footer>
