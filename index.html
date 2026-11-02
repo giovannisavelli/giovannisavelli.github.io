@@ -145,7 +145,7 @@
         <span class="stato">in arrivo</span>
         <span class="freccia"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
       </a></li>
-      <li data-svela><a class="corso" href="product/ia/#calendario" style="--c: var(--ia)" data-luce="#34d399">
+      <li data-svela><a class="corso" href="interior/ia/?classe=PD3#calendario" style="--c: var(--ia)" data-luce="#34d399">
         <span class="nome"><i></i>Intelligenza Artificiale</span>
         <span class="info"><b>3° anno, classe PD3</b>Calendario disponibile</span>
         <span class="stato">dal 21 dic</span>
@@ -192,7 +192,7 @@
   const CORSI = {
     p:   { nome: 'Photoshop', c: 'var(--p)', href: BASE + '/interior/photoshop/' },
     ia:  { nome: 'Intelligenza Artificiale', c: 'var(--ia)', href: BASE + '/interior/ia/' },
-    iap: { nome: 'IA, Product Design', c: 'var(--ia)', href: BASE + '/product/ia/' }
+    iap: { nome: 'IA, Product Design', c: 'var(--ia)', href: BASE + '/interior/ia/?classe=PD3' }
   };
   const CALENDARI = [
     ['p', '2A', '11:00', ['2026-11-24', '2026-12-01'], ['Conosciamoci', 'I primi strumenti per scontornare']],
@@ -266,6 +266,6 @@
 
 <!-- ---------- Il plastico dei corsi (Three.js) ---------- -->
 <script type="importmap">{ "imports": { "three": "https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.js", "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.170.0/examples/jsm/" } }</script>
-<script type="module" src="assets/plastico/plastico.js?v=1"></script>
+<script type="module" src="assets/plastico/plastico.js?v=2"></script>
 </body>
 </html>

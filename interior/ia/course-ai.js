@@ -28,6 +28,16 @@ const calendariIA = {
       ['2027-01-11', 'Lunedì 11 gennaio 2027'],
       ['2027-01-25', 'Lunedì 25 gennaio 2027']
     ]
+  },
+  // Product Design: stesso corso, quattro incontri
+  'PD3': {
+    orario: '09:00–13:00',
+    date: [
+      ['2026-12-21', 'Lunedì 21 dicembre 2026'],
+      ['2027-01-11', 'Lunedì 11 gennaio 2027'],
+      ['2027-01-18', 'Lunedì 18 gennaio 2027'],
+      ['2027-01-25', 'Lunedì 25 gennaio 2027']
+    ]
   }
 };
 
@@ -56,13 +66,15 @@ function mostraCalendarioIA(nomeClasse) {
     riga.append(numero, data, orario);
     return riga;
   }));
-  elencoIA.setAttribute('aria-label', `Date delle lezioni della classe INT ${nomeClasse}`);
+  elencoIA.setAttribute('aria-label', `Date delle lezioni della classe ${nomeClasse.startsWith('PD') ? '' : 'INT '}${nomeClasse}`);
 }
 
 pulsantiClassiIA.forEach(pulsante => {
   pulsante.addEventListener('click', () => mostraCalendarioIA(pulsante.dataset.class));
 });
-mostraCalendarioIA('3A');
+// ?classe=PD3 nell'indirizzo apre subito il calendario di quella classe (link da Product Design).
+const classeIndirizzo = new URLSearchParams(location.search).get('classe');
+mostraCalendarioIA(calendariIA[classeIndirizzo] ? classeIndirizzo : '3A');
 
 // Stessa struttura delle schede di Photoshop: un indirizzo per sezione,
 // ritorno del browser funzionante e pulsanti utilizzabili da tastiera.

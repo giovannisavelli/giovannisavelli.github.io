@@ -225,7 +225,7 @@
     <link rel="stylesheet" href="../../design/course.css?v=sections-20261014">
     <link rel="stylesheet" href="../../assets/studio.css">
     <link rel="stylesheet" href="../../assets/agenda.css?v=20261029d">
-    <link rel="stylesheet" href="studio-photoshop.css?v=lezioni-giorno-20261029">
+    <link rel="stylesheet" href="studio-photoshop.css?v=schede-20261102">
     <script src="../../design/course.js?v=sections-20261014" defer></script>
     <link rel="stylesheet" href="../../assets/course-ui.css?v=sections-20261014">
     <script src="../../assets/fx/effetti.js" defer></script>
@@ -807,10 +807,17 @@
 
     function scrollToCourseContent(target) {
         requestAnimationFrame(function () {
-            target.scrollIntoView({
-                block: "start",
-                behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth"
-            });
+            const behavior = window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth";
+            const tabs = document.querySelector(".tabs");
+            // Con la barra attaccata in alto, scrollIntoView non si muove: si porta in vista l'inizio della scheda aperta.
+            if (target === tabs && getComputedStyle(tabs).position === "sticky") {
+                const panel = document.querySelector(".panel:not([hidden])");
+                const top = panel.getBoundingClientRect().top + window.scrollY
+                    - tabs.getBoundingClientRect().height - (parseFloat(getComputedStyle(tabs).top) || 0);
+                window.scrollTo({ top: Math.max(0, top), behavior: behavior });
+                return;
+            }
+            target.scrollIntoView({ block: "start", behavior: behavior });
         });
     }
 
