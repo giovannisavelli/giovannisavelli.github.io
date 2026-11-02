@@ -156,3 +156,4 @@ body.leggibile, body.leggibile * { font-family: 'Lexend', var(--sans) !important
   *, *::before, *::after { animation: none !important; transition: none !important; }
   [data-svela] { opacity: 1 !important; transform: none !important; }
 }
+#btn-leggibile[hidden] { display: none !important; }

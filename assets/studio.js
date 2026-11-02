@@ -10,8 +10,12 @@
   const mouse = matchMedia('(pointer: fine)').matches;
   window.Studio = { leggi, salva, esc, fermo, mouse };
 
-  /* ---------- Alta leggibilità (stessa chiave del sito ufficiale) ---------- */
+  /* ---------- Alta leggibilità (stessa chiave del sito ufficiale) ----------
+   * Spenta per decisione di Giovanni (02/11/2026): si riprende quando il sito è pronto.
+   * Per riaccenderla basta mettere LETTURA_ATTIVA = true. */
+  const LETTURA_ATTIVA = false;
   const btnLeggi = document.getElementById('btn-leggibile');
+  if (btnLeggi && !LETTURA_ATTIVA) btnLeggi.hidden = true;
   function leggibilita(on) {
     document.body.classList.toggle('leggibile', on);
     if (btnLeggi) btnLeggi.setAttribute('aria-pressed', String(on));
@@ -20,8 +24,8 @@
         { id: 'lexend', rel: 'stylesheet', href: 'https://fonts.googleapis.com/css2?family=Lexend:wght@400;600&display=swap' }));
     }
   }
-  leggibilita(leggi('dyslexia-pref') === 'true');
-  if (btnLeggi) btnLeggi.addEventListener('click', () => {
+  leggibilita(LETTURA_ATTIVA && leggi('dyslexia-pref') === 'true');
+  if (btnLeggi && LETTURA_ATTIVA) btnLeggi.addEventListener('click', () => {
     const on = !document.body.classList.contains('leggibile'); leggibilita(on); salva('dyslexia-pref', String(on));
   });
 
