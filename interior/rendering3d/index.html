@@ -279,11 +279,25 @@
     #cor-risorse .b-lista a span { overflow: visible; }
     .cor-video-titolo { margin: 0 0 14px; color: var(--ink-3); font: 500 12px/1.3 var(--mono); letter-spacing: .08em; text-transform: uppercase; }
     .cor-video-titolo ~ .cor-video-titolo { margin-top: 30px; }
+    /* Finché il corso non è pronto si vede solo l'omino: per mostrare tutto, togliere «solo-lavori» dal <body>. */
+    .lavori-hero { display: none; }
+    .solo-lavori main > :not(.lavori-hero) { display: none !important; }
+    .solo-lavori .lavori-hero { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr); align-items: center; gap: 48px; min-height: calc(100svh - 120px); padding-top: 120px; padding-bottom: 60px; }
+    .lavori-stato { margin: 0 0 14px; color: var(--accent); font: 500 12px/1.3 var(--mono); letter-spacing: .1em; text-transform: uppercase; }
+    .lavori-hero h1 { margin: 0; font: 600 clamp(56px, 7.6vw, 124px)/.9 var(--sans); letter-spacing: -.055em; }
+    .lavori-lead { max-width: 46ch; margin: 22px 0 0; color: var(--ink-2); font-size: clamp(17px, 1.4vw, 20px); line-height: 1.5; }
+    .lavori-lead--piano { font-size: 17px; }
+    .lavori-btn { display: inline-flex; align-items: center; min-height: 50px; margin-top: 30px; padding: 0 24px; border: 1px solid var(--line-2); border-radius: 999px; font-weight: 600; }
+    .lavori-btn:hover { border-color: var(--accent); color: var(--accent); }
+    .lavori-omino { display: grid; justify-items: center; gap: 4px; }
+    .lavori-omino .wip-anim { margin: 0; }
+    .lavori-omino p { margin: 0; color: var(--accent); font: 500 12px/1.3 var(--mono); letter-spacing: .1em; text-transform: uppercase; }
+    @media (max-width: 760px) { .solo-lavori .lavori-hero { grid-template-columns: 1fr; gap: 26px; padding-top: 96px; } .lavori-omino { order: -1; } }
   </style>
   <link rel="stylesheet" href="../../assets/course-ui.css?v=unified-20261014">
   <link rel="stylesheet" href="../../assets/agenda.css?v=20261029d">
 </head>
-<body class="course-page">
+<body class="course-page solo-lavori">
 <div class="alone" id="alone" aria-hidden="true"></div>
 
 <header class="top" id="top">
@@ -297,6 +311,16 @@
 </header>
 
 <main>
+  <section class="lavori-hero wrap" aria-labelledby="lavori-titolo">
+    <div class="lavori-testo">
+      <p class="lavori-stato">Corso in preparazione</p>
+      <h1 id="lavori-titolo">Rendering 3D</h1>
+      <p class="lavori-lead">Cinema 4D e Corona, 2° anno Interior Design.</p>
+      <p class="lavori-lead lavori-lead--piano">Il corso è in preparazione: le lezioni partono nel secondo semestre. Torna a trovarci più avanti.</p>
+      <a class="lavori-btn" href="../../index.html">Tutti i corsi</a>
+    </div>
+    <div class="lavori-omino"><div class="wip-anim" aria-hidden="true"></div><p>Lavori in corso</p></div>
+  </section>
   <section class="c-hero" id="hero">
     <div class="c-scena"><canvas id="scena" aria-hidden="true"></canvas></div>
     <div class="c-testo">
@@ -369,8 +393,6 @@
       <div class="testa"><h2>La lezione di oggi</h2><p>Gli argomenti di oggi, da spuntare mentre li facciamo. Tutte le lezioni, sul percorso, sono nel Programma; quelle già fatte restano nell’Archivio.</p></div>
       <ol class="lesson-index lesson-index--base" id="lezione-del-giorno" aria-label="Lezione del giorno"></ol>
       <div class="course-empty" id="giorno-vuoto">
-        <div class="wip-anim" aria-hidden="true"></div>
-        <p class="etichetta">Lavori in corso</p>
         <h2>Il corso non è ancora iniziato</h2>
         <p>Le lezioni si terranno nel secondo semestre. Da quel momento qui troverai la lezione del giorno, con gli argomenti da spuntare. Intanto puoi guardare il <a href="#programma">Programma</a>.</p>
       </div>
