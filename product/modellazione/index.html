@@ -16,18 +16,31 @@
   <link rel="stylesheet" href="../../assets/course-ui.css?v=unified-20261014">
 <link rel="stylesheet" href="../../assets/agenda.css?v=20261029d">
 <style>
-  /* L'omino «Lavori in corso» è la prima cosa che si vede: a destra del titolo, sul telefono sopra. */
-  .course-hero:has(.course-hero-wip) { grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr); }
+  /* La stanzetta occupa la scena principale; sul telefono precede il testo. */
+  .solo-lavori .course-hero:has(.course-hero-wip) { display: flex; align-items: center; padding-top: 96px; padding-bottom: 60px; }
+  .solo-lavori .course-hero > div:first-child { position: relative; z-index: 1; width: min(30%, 340px); }
+  .solo-lavori .course-heading { font-size: clamp(48px, 4vw, 64px); }
   .course-hero-wip { display: grid; justify-items: center; gap: 4px; }
+  .solo-lavori .course-hero-wip { position: absolute; top: 50%; right: -65px; width: min(960px, 76vw); transform: translateY(-50%); }
   .course-hero-wip .wip-anim { margin: 0; }
   .course-hero-wip .etichetta { color: var(--accent); }
-  @media (max-width: 760px) { .course-hero-wip { order: -1; } .course-hero:has(.course-hero-wip) { grid-template-columns: 1fr; } }
+  @media (max-width: 1000px) {
+    .solo-lavori .course-hero:has(.course-hero-wip) { display: grid; grid-template-columns: minmax(0, 1fr); gap: 18px; padding-top: 82px; padding-bottom: 56px; }
+    .solo-lavori .course-hero > div:first-child { width: 100%; min-width: 0; }
+    .solo-lavori .course-hero-wip { position: static; order: -1; width: min(900px, 100%); margin-inline: auto; transform: none; }
+  }
+  @media (max-width: 760px) {
+    .solo-lavori .course-hero:has(.course-hero-wip) { padding-top: 86px; }
+    .solo-lavori .course-hero-wip { width: calc(100% + 36px); margin-inline: -18px; }
+    .solo-lavori .course-heading { font-size: clamp(42px, 13.4vw, 76px); }
+  }
   /* Finché il corso non è pronto si vede solo l'omino: per mostrare tutto, togliere «solo-lavori» dal <body>. */
   .course-lead--lavori { display: none; }
   .solo-lavori .course-lead--lavori { display: block; color: var(--ink-2); font-size: 17px; }
   .solo-lavori .course-facts, .solo-lavori .course-content, .solo-lavori .course-actions .btn.pieno,
   .solo-lavori .course-mobile-nav, .solo-lavori .course-bottom-nav, .solo-lavori .mobile-actions { display: none !important; }
-  .solo-lavori .course-hero { min-height: calc(100vh - 120px); }
+  .solo-lavori .course-hero { min-height: clamp(760px, calc(100svh - 110px), 900px); }
+  @media (max-width: 1000px) { .solo-lavori .course-hero { min-height: 0; } }
 </style>
 </head>
 <body class="course-page solo-lavori" style="--accent: #9d7bff">
@@ -140,6 +153,6 @@ window.LEZIONI_CORSO = {"prefisso": "pd-mod-2627", "giorno": null, "archivio": [
 <script src="../../assets/agenda.js?v=20261029d"></script>
 <script src="../../assets/studio.js"></script>
 <script src="../../assets/course-tabs.js?v=unified-20261014"></script>
-<script src="../../assets/wip.js?v=17" defer></script>
+<script src="../../assets/wip.js?v=18" defer></script>
 </body>
 </html>

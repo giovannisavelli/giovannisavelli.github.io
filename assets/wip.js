@@ -4,7 +4,7 @@
 (function () {
   const stile = document.createElement('style');
   stile.textContent = `
-    .wip-anim { width: min(420px, 100%); margin: 0 0 18px; color: var(--accent, #a78bfa); }
+    .wip-anim { width: min(900px, 100%); margin: 0 0 18px; color: var(--accent, #a78bfa); }
     .wip-anim svg { display: block; width: 100%; height: auto; overflow: visible; }
     .wip-anim * { transform-box: view-box; }
     .wip-braccio-a { transform-origin: 112px 118px; animation: wip-braccio .17s ease-in-out infinite alternate; }
@@ -110,9 +110,9 @@
   const THREE_URL = 'https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.js';
   const stile3d = document.createElement('style');
   stile3d.textContent = `
-    .wip-anim.wip-3d { position: relative; width: min(560px, 100%); aspect-ratio: 16 / 11; }
+    .wip-anim.wip-3d { position: relative; width: 100%; aspect-ratio: 16 / 11; }
     .wip-anim.wip-3d canvas { display: block; width: 100%; height: 100%; }
-    .wip-bolla { position: absolute; pointer-events: none; color: #f3f5f3; font: 800 16px/1 'Geist Mono', ui-monospace, monospace;
+    .wip-bolla { position: absolute; pointer-events: none; color: #f3f5f3; font: 800 clamp(16px, 1.6vw, 22px)/1 'Geist Mono', ui-monospace, monospace;
       text-shadow: -1px 0 #15101b, 1px 0 #15101b, 0 -1px #15101b, 0 2px #15101b, 0 0 10px rgba(0,0,0,.7);
       animation: wip-bolla .46s ease-out forwards; }
     @keyframes wip-bolla { 0% { opacity: 0; transform: translate(-50%, 0) scale(.6) rotate(var(--r)); } 20% { opacity: 1; transform: translate(-50%, -6px) scale(1.05) rotate(var(--r)); }
@@ -120,6 +120,7 @@
       100% { opacity: 0; transform: translate(-50%, -22px) scale(.9) rotate(var(--r)); } }
     .wip-zeta { color: #f1e7da; font-size: 13px; animation: wip-zeta 1.9s ease-out forwards; }
     @keyframes wip-zeta { 0% { opacity: 0; transform: translate(-50%, 0) scale(.5); } 20% { opacity: .9; } 100% { opacity: 0; transform: translate(-10%, -40px) scale(1.2); } }
+    @media (max-width: 760px) { .wip-anim.wip-3d { aspect-ratio: 6 / 5; } }
   `;
   document.head.appendChild(stile3d);
 
@@ -176,7 +177,9 @@
       const v = new THREE.Vector3(), c = new THREE.Vector3(), n = new THREE.Vector3();
       for (let i = 0; i < pos.count; i++) {
         v.fromBufferAttribute(pos, i); c.copy(v).clamp(fuori, dentro);
-        n.copy(v).sub(c).normalize();
+        n.copy(v).sub(c);
+        if (n.lengthSq() < 1e-8) n.fromBufferAttribute(norm, i);
+        else n.normalize();
         v.copy(c).addScaledVector(n, r);
         pos.setXYZ(i, v.x, v.y, v.z);
         norm.setXYZ(i, n.x, n.y, n.z);

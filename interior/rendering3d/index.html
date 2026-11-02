@@ -282,17 +282,27 @@
     /* Finché il corso non è pronto si vede solo l'omino: per mostrare tutto, togliere «solo-lavori» dal <body>. */
     .lavori-hero { display: none; }
     .solo-lavori main > :not(.lavori-hero) { display: none !important; }
-    .solo-lavori .lavori-hero { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr); align-items: center; gap: 48px; min-height: calc(100svh - 120px); padding-top: 120px; padding-bottom: 60px; }
+    .solo-lavori .lavori-hero { position: relative; display: flex; align-items: center; min-height: clamp(760px, calc(100svh - 110px), 900px); padding-top: 96px; padding-bottom: 60px; }
+    .lavori-testo { position: relative; z-index: 1; width: min(30%, 340px); }
     .lavori-stato { margin: 0 0 14px; color: var(--accent); font: 500 12px/1.3 var(--mono); letter-spacing: .1em; text-transform: uppercase; }
-    .lavori-hero h1 { margin: 0; font: 600 clamp(56px, 7.6vw, 124px)/.9 var(--sans); letter-spacing: -.055em; }
+    .lavori-hero h1 { margin: 0; font: 600 clamp(56px, 5.2vw, 84px)/.9 var(--sans); letter-spacing: -.055em; }
     .lavori-lead { max-width: 46ch; margin: 22px 0 0; color: var(--ink-2); font-size: clamp(17px, 1.4vw, 20px); line-height: 1.5; }
     .lavori-lead--piano { font-size: 17px; }
     .lavori-btn { display: inline-flex; align-items: center; min-height: 50px; margin-top: 30px; padding: 0 24px; border: 1px solid var(--line-2); border-radius: 999px; font-weight: 600; }
     .lavori-btn:hover { border-color: var(--accent); color: var(--accent); }
-    .lavori-omino { display: grid; justify-items: center; gap: 4px; }
+    .lavori-omino { position: absolute; top: 50%; right: -65px; display: grid; justify-items: center; gap: 4px; width: min(960px, 76vw); transform: translateY(-50%); }
     .lavori-omino .wip-anim { margin: 0; }
     .lavori-omino p { margin: 0; color: var(--accent); font: 500 12px/1.3 var(--mono); letter-spacing: .1em; text-transform: uppercase; }
-    @media (max-width: 760px) { .solo-lavori .lavori-hero { grid-template-columns: 1fr; gap: 26px; padding-top: 96px; } .lavori-omino { order: -1; } }
+    @media (max-width: 1000px) {
+      .solo-lavori .lavori-hero { display: grid; grid-template-columns: minmax(0, 1fr); gap: 18px; min-height: 0; padding-top: 82px; padding-bottom: 56px; }
+      .lavori-testo { width: 100%; }
+      .lavori-omino { position: static; order: -1; width: min(900px, 100%); margin-inline: auto; transform: none; }
+    }
+    @media (max-width: 760px) {
+      .solo-lavori .lavori-hero { padding-top: 86px; }
+      .lavori-omino { width: calc(100% + 36px); margin-inline: -18px; }
+      .lavori-hero h1 { font-size: clamp(54px, 13vw, 76px); }
+    }
   </style>
   <link rel="stylesheet" href="../../assets/course-ui.css?v=unified-20261014">
   <link rel="stylesheet" href="../../assets/agenda.css?v=20261029d">
@@ -1329,6 +1339,6 @@ const shortcuts = [
     disegna();
   });
 </script>
-<script src="../../assets/wip.js?v=17" defer></script>
+<script src="../../assets/wip.js?v=18" defer></script>
 </body>
 </html>
