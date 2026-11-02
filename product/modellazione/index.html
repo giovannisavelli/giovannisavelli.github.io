@@ -18,13 +18,13 @@
 <style>
   /* La stanzetta occupa la scena principale; sul telefono precede il testo. */
   .solo-lavori .course-hero:has(.course-hero-wip) { display: flex; align-items: center; padding-top: 96px; padding-bottom: 60px; }
-  .solo-lavori .course-hero > div:first-child { position: relative; z-index: 1; width: min(30%, 340px); }
+  .solo-lavori .course-hero > div:first-child { position: relative; z-index: 1; width: min(29%, 320px); }
   .solo-lavori .course-heading { font-size: clamp(48px, 4vw, 64px); }
   .course-hero-wip { display: grid; justify-items: center; gap: 4px; }
-  .solo-lavori .course-hero-wip { position: absolute; top: 50%; right: -65px; width: min(960px, 76vw); transform: translateY(-50%); }
+  .solo-lavori .course-hero-wip { position: absolute; top: 50%; right: -24px; width: min(960px, 76vw); transform: translateY(-50%); }
   .course-hero-wip .wip-anim { margin: 0; }
   .course-hero-wip .etichetta { color: var(--accent); }
-  @media (max-width: 1000px) {
+  @media (max-width: 1100px) {
     .solo-lavori .course-hero:has(.course-hero-wip) { display: grid; grid-template-columns: minmax(0, 1fr); gap: 18px; padding-top: 82px; padding-bottom: 56px; }
     .solo-lavori .course-hero > div:first-child { width: 100%; min-width: 0; }
     .solo-lavori .course-hero-wip { position: static; order: -1; width: min(900px, 100%); margin-inline: auto; transform: none; }
@@ -40,7 +40,7 @@
   .solo-lavori .course-facts, .solo-lavori .course-content, .solo-lavori .course-actions .btn.pieno,
   .solo-lavori .course-mobile-nav, .solo-lavori .course-bottom-nav, .solo-lavori .mobile-actions { display: none !important; }
   .solo-lavori .course-hero { min-height: clamp(760px, calc(100svh - 110px), 900px); }
-  @media (max-width: 1000px) { .solo-lavori .course-hero { min-height: 0; } }
+  @media (max-width: 1100px) { .solo-lavori .course-hero { min-height: 0; } }
 </style>
 </head>
 <body class="course-page solo-lavori" style="--accent: #9d7bff">
