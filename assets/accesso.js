@@ -46,7 +46,9 @@
     .accesso .marchio { display: inline-grid; place-items: center; width: 40px; height: 40px; border: 1px solid ${corso.colore};
       color: ${corso.colore}; font: 700 13px/1 'Geist Mono', ui-monospace, monospace; letter-spacing: .04em; }
     .accesso .etichetta { margin: 22px 0 6px; color: ${corso.colore}; font: 600 10px/1.4 'Geist Mono', ui-monospace, monospace; letter-spacing: .1em; text-transform: uppercase; }
-    .accesso h1 { margin: 0; font-size: 28px; line-height: 1.1; letter-spacing: -.03em; font-weight: 650; }
+    .accesso h1 { margin: 0; font-size: 28px !important; line-height: 1.15 !important; letter-spacing: -.02em !important; font-weight: 650; overflow-wrap: anywhere; max-width: 100%; }
+    .accesso form, .accesso form * { box-sizing: border-box; }
+    .accesso p, .accesso label, .accesso .etichetta { overflow-wrap: anywhere; }
     .accesso p { margin: 10px 0 20px; color: #b8c4bd; font-size: 15px; line-height: 1.5; }
     .accesso label.campo { display: block; margin-bottom: 7px; font-size: 13px; color: #d5ded8; }
     .accesso input[type=password], .accesso input[type=text] { width: 100%; box-sizing: border-box; min-height: 50px; padding: 0 14px;

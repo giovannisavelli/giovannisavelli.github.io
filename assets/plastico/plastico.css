@@ -10,7 +10,9 @@
 .hero h1 .r > span { display: inline-block; transform: translateY(105%); filter: blur(8px); opacity: 0; transition: transform 1.3s var(--ease), filter 1.3s var(--ease), opacity 1.3s var(--ease); }
 .hero.pronta h1 .r > span { transform: none; filter: none; opacity: 1; }
 .hero h1 .r:nth-child(2) > span { transition-delay: .09s; }
-.hero h1 em { font-style: normal; color: transparent; -webkit-text-stroke: 1.5px var(--ink); }
+.hero h1 em { font-style: normal; color: #9b98a6; }
+/* Con l'alta leggibilità (carattere più largo) il titolo si rimpicciolisce, così non finisce sopra il plastico. */
+body.leggibile .hero h1 { font-size: clamp(46px, 6.2vw, 108px); letter-spacing: -.02em !important; }
 .hero-basso { display: flex; flex-direction: column; align-items: flex-start; gap: 26px; margin-top: 30px; }
 .hero p { max-width: 34ch; margin: 0; color: var(--ink-2); font-size: 19px; line-height: 1.5; opacity: 0; transform: translateY(14px); transition: opacity 1s var(--ease) .5s, transform 1s var(--ease) .5s; }
 .azioni { display: flex; flex-wrap: wrap; gap: 10px; opacity: 0; transform: translateY(14px); transition: opacity 1s var(--ease) .65s, transform 1s var(--ease) .65s; }
