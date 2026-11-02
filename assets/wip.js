@@ -149,23 +149,15 @@
     scala.minFilter = scala.magFilter = THREE.NearestFilter; scala.needsUpdate = true;
     const tinta = (c, extra) => new THREE.MeshToonMaterial(Object.assign({ color: c, gradientMap: scala }, extra || {}));
     const luce = c => new THREE.MeshBasicMaterial({ color: c });
-    const CONTORNO = new THREE.MeshBasicMaterial({ color: 0x1a1420, side: THREE.BackSide });
     const mondo = new THREE.Group();
     scena.add(mondo);
 
-    // ogni pezzo ha il suo contorno scuro: una copia un filo più grande, vista da dentro
-    function pezzo(geo, mat, x, y, z, padre, bordo) {
+    // I contorni scuri non sono più copie ingrandite dei pezzi (davano spigoli doppi e linee spezzate):
+    // li disegna alla fine un passaggio unico, dove cambiano profondità o orientamento delle superfici.
+    function pezzo(geo, mat, x, y, z, padre) {
       const m = new THREE.Mesh(geo, mat);
       m.position.set(x, y, z); m.castShadow = true; m.receiveShadow = true;
       (padre || mondo).add(m);
-      const b = bordo === undefined ? 0.02 : bordo;
-      if (b) {
-        geo.computeBoundingBox();
-        const s = geo.boundingBox.getSize(new THREE.Vector3());
-        const o = new THREE.Mesh(geo, CONTORNO);
-        o.scale.set(1 + 2 * b / Math.max(s.x, .01), 1 + 2 * b / Math.max(s.y, .01), 1 + 2 * b / Math.max(s.z, .01));
-        m.add(o);
-      }
       return m;
     }
     const box3 = (x, y, z) => new THREE.BoxGeometry(x, y, z);
@@ -188,131 +180,163 @@
       return g;
     }
     const palla = (r, sy) => { const g = new THREE.SphereGeometry(r, 20, 14); if (sy) g.scale(1, sy, 1); return g; };
+    const senzaContorno = []; // pezzi trasparenti o luminosi: il contorno li sporcherebbe
 
-    /* ---------- la stanzetta: pavimento in legno, due pareti, battiscopa ---------- */
-    const X0 = -2.3, X1 = 3.3, Z0 = -1.8, Z1 = 2.2, H = 3.1;
-    pezzo(box3(X1 - X0, 0.3, Z1 - Z0), tinta(0xd9b58d), (X0 + X1) / 2, -0.15, (Z0 + Z1) / 2);
-    const asse = tinta(0xc9a27a);
-    for (let i = 1; i < 9; i++) pezzo(box3(0.015, 0.005, Z1 - Z0 - 0.02), asse, X0 + i * (X1 - X0) / 9, 0.003, (Z0 + Z1) / 2, mondo, 0);
+    /* ---------- la stanzetta: basamento, assi con le fughe, due pareti che si chiudono nell'angolo ---------- */
+    const X0 = -2.3, X1 = 3.3, Z0 = -1.8, Z1 = 2.2, H = 3.1, SP = 0.16;
+    // basamento: sotto le assi e sotto le pareti, così il taglio della stanza è un blocco unico
+    pezzo(box3(X1 - X0 + SP, 0.24, Z1 - Z0 + SP), tinta(0xa97c55), (X0 - SP + X1) / 2, -0.18, (Z0 + Z1 + SP) / 2);
+    // pavimento: un piano unico in legno, con le fughe fra le assi disegnate sottili (senza contorno)
+    pezzo(box3(X1 - X0, 0.06, Z1 - Z0), tinta(0xd9b58d), (X0 + X1) / 2, -0.03, (Z0 + Z1) / 2);
+    const fuga = tinta(0xbf9670), NA = 9, LA = (X1 - X0) / NA;
+    for (let i = 1; i < NA; i++) { const fu = pezzo(box3(0.014, 0.002, Z1 - Z0), fuga, X0 + i * LA, 0.001, (Z0 + Z1) / 2); fu.castShadow = false; senzaContorno.push(fu); }
     const muro = tinta(0xf1e7da), muro2 = tinta(0xe6d9c8);
-    pezzo(box3(X1 - X0, H, 0.16), muro, (X0 + X1) / 2, H / 2, Z1 + 0.08);
-    pezzo(box3(0.16, H, Z1 - Z0 + 0.16), muro2, X0 - 0.08, H / 2, (Z0 + Z1) / 2 + 0.08);
+    // la parete di fondo copre anche lo spigolo; quella di sinistra si ferma dove comincia l'altra
+    pezzo(box3(X1 - X0 + SP, H + 0.06, SP), muro, (X0 - SP + X1) / 2, (H - 0.06) / 2, Z1 + SP / 2);
+    pezzo(box3(SP, H + 0.06, Z1 - Z0), muro2, X0 - SP / 2, (H - 0.06) / 2, (Z0 + Z1) / 2);
     const battiscopa = tinta(0xb48a64);
-    pezzo(box3(X1 - X0, 0.14, 0.04), battiscopa, (X0 + X1) / 2, 0.07, Z1 - 0.02, mondo, 0.01);
-    pezzo(box3(0.04, 0.14, Z1 - Z0), battiscopa, X0 + 0.02, 0.07, (Z0 + Z1) / 2, mondo, 0.01);
-    // tappeto tondo nel colore del corso
-    const tappeto = new THREE.Mesh(new THREE.CylinderGeometry(1.25, 1.25, 0.03, 40), tinta(accento.clone().lerp(new THREE.Color(0xffffff), 0.15)));
-    tappeto.position.set(0.55, 0.02, 1.0); tappeto.receiveShadow = true; mondo.add(tappeto);
+    pezzo(box3(X1 - X0, 0.14, 0.04), battiscopa, (X0 + X1) / 2, 0.07, Z1 - 0.02);
+    pezzo(box3(0.04, 0.14, Z1 - Z0 - 0.04), battiscopa, X0 + 0.02, 0.07, (Z0 + Z1 - 0.04) / 2);
+    // tappeto tondo nel colore del corso, appoggiato sulle assi
+    const tappeto = pezzo(new THREE.CylinderGeometry(1.25, 1.25, 0.025, 48), tinta(accento.clone().lerp(new THREE.Color(0xffffff), 0.15)), 0.55, 0.013, 1.0);
+    tappeto.castShadow = false;
 
     // finestra sul muro di sinistra: notte, luna, stelle
-    const fin = new THREE.Group(); fin.position.set(X0 + 0.01, 1.95, 0.35); fin.rotation.y = Math.PI / 2; mondo.add(fin);
-    pezzo(box3(1.3, 1.05, 0.06), tinta(0xffffff), 0, 0, 0.02, fin);
-    pezzo(box3(1.14, 0.9, 0.02), luce(0x1d2350), 0, 0, 0.06, fin, 0);
-    pezzo(box3(0.04, 0.9, 0.03), tinta(0xffffff), 0, 0, 0.08, fin, 0);
-    pezzo(box3(1.14, 0.04, 0.03), tinta(0xffffff), 0, 0, 0.08, fin, 0);
-    const lunaM = new THREE.Mesh(palla(0.13), luce(0xfff2c4)); lunaM.position.set(0.3, 0.22, 0.08); fin.add(lunaM);
+    const fin = new THREE.Group(); fin.position.set(X0, 1.95, 0.35); fin.rotation.y = Math.PI / 2; mondo.add(fin);
+    pezzo(box3(1.3, 1.05, 0.06), tinta(0xffffff), 0, 0, 0.03, fin);
+    pezzo(box3(1.14, 0.9, 0.02), luce(0x1d2350), 0, 0, 0.065, fin);
+    pezzo(box3(0.04, 0.9, 0.03), tinta(0xffffff), 0, 0, 0.085, fin);
+    pezzo(box3(1.14, 0.04, 0.03), tinta(0xffffff), 0, 0, 0.085, fin);
+    const lunaM = new THREE.Mesh(palla(0.13), luce(0xfff2c4)); lunaM.position.set(0.3, 0.22, 0.076); lunaM.scale.z = 0.08; fin.add(lunaM);
     const stelle = [[-0.4, 0.3], [-0.2, 0.12], [-0.35, -0.2], [0.2, -0.25], [0.42, -0.05], [-0.12, -0.35], [0.05, 0.32]].map(([x, y]) => {
-      const st = new THREE.Mesh(box3(0.035, 0.035, 0.01), luce(0xffffff)); st.position.set(x, y, 0.075); fin.add(st); return st;
+      const st = new THREE.Mesh(box3(0.035, 0.035, 0.004), luce(0xffffff)); st.position.set(x, y, 0.077); fin.add(st); senzaContorno.push(st); return st;
     });
-    pezzo(box3(1.4, 0.06, 0.18), tinta(0xffffff), 0, -0.55, 0.08, fin); // davanzale
+    pezzo(box3(1.4, 0.06, 0.18), tinta(0xffffff), 0, -0.555, 0.09, fin); // davanzale
 
-    // mensola con libri e una piantina appesa, poster, orologio
-    const mens = tinta(0xb48a64);
-    pezzo(box3(1.5, 0.06, 0.3), mens, 1.9, 2.15, Z1 - 0.15);
+    // mensola con libri e una piantina che ricade davanti, poster, orologio
+    const mens = tinta(0xb48a64), ZM = Z1 - 0.15;
+    pezzo(box3(1.5, 0.06, 0.3), mens, 1.9, 2.15, ZM);
+    for (const x of [1.35, 2.45]) pezzo(box3(0.05, 0.16, 0.22), mens, x, 2.04, Z1 - 0.12); // reggimensola
     const coloriLibri = [0xe2725b, 0x5b8be2, 0xf2c14e, 0x6bbf8a, accento.getHex(), 0xe2725b];
-    let lx = 1.3;
+    const SM = 2.18; // piano della mensola
+    let lx = 1.3, bordoPrima = 0;
     coloriLibri.forEach((c, i) => {
       const h = 0.3 + (i * 37 % 5) * 0.03, w = 0.09 + (i % 2) * 0.03;
-      const l = pezzo(tondo(w, h, 0.22, 0.015), tinta(c), lx, 2.18 + h / 2, Z1 - 0.15, mondo, 0.012);
-      if (i === 5) { l.rotation.z = 0.35; l.position.x += 0.06; }
+      const l = pezzo(tondo(w, h, 0.22, 0.015), tinta(c), lx + w / 2, SM + h / 2, ZM);
+      if (i === 5) {
+        // l'ultimo libro è inclinato e si appoggia al precedente, con lo spigolo basso sul ripiano
+        const a = 0.32, ca = Math.cos(a), sa = Math.sin(a);
+        l.rotation.z = a;
+        l.position.set(bordoPrima + 0.004 + w / 2 * ca + h / 2 * sa, SM + w / 2 * sa + h / 2 * ca, ZM);
+      }
+      bordoPrima = lx + w;
       lx += w + 0.02;
     });
-    pezzo(new THREE.CylinderGeometry(0.1, 0.08, 0.16, 12), tinta(0xc9714a), 2.45, 2.26, Z1 - 0.15);
+    const vasoM = new THREE.Group(); vasoM.position.set(2.5, SM, ZM - 0.02); mondo.add(vasoM);
+    pezzo(new THREE.CylinderGeometry(0.1, 0.08, 0.16, 16), tinta(0xc9714a), 0, 0.08, 0, vasoM);
+    pezzo(new THREE.TorusGeometry(0.1, 0.016, 8, 20).rotateX(Math.PI / 2), tinta(0xb8623e), 0, 0.16, 0, vasoM);
     const cascata = tinta(0x5fae6e);
-    for (let i = 0; i < 4; i++) pezzo(tondo(0.07, 0.22 + i * 0.05, 0.05, 0.02), cascata, 2.38 + i * 0.05, 2.12 - i * 0.04, Z1 - 0.06 - i * 0.02, mondo, 0.01);
+    // tralci che escono dal vaso e ricadono davanti alla mensola, senza attraversarla
+    [[-0.05, 0.42, 0.1], [0.04, 0.55, -0.05], [0.1, 0.34, 0.2]].forEach(([dx, l, rz]) => {
+      const g = new THREE.Group(); g.position.set(dx, 0.15, -0.09); g.rotation.set(-0.5, 0, rz); vasoM.add(g);
+      const geo = new THREE.CapsuleGeometry(0.028, l, 4, 8); geo.translate(0, -l / 2, 0);
+      const tr = pezzo(geo, cascata, 0, 0, 0, g); tr.rotation.x = 0.5;
+      for (let k = 1; k <= 3; k++) {
+        const fo = pezzo(palla(0.05, 0.55), cascata, 0.03 * (k % 2 ? 1 : -1), -l * k / 3.4, -0.02, tr);
+        fo.rotation.z = k % 2 ? 0.6 : -0.6;
+      }
+    });
     // poster: un cubo in prospettiva, perché è il corso di 3D
-    const poster = new THREE.Group(); poster.position.set(1.9, 2.85, Z1 - 0.01); poster.rotation.y = Math.PI; mondo.add(poster);
-    pezzo(box3(0.62, 0.44, 0.03), tinta(0x23232d), 0, 0, 0, poster);
+    const poster = new THREE.Group(); poster.position.set(1.9, 2.85, Z1); poster.rotation.y = Math.PI; mondo.add(poster);
+    pezzo(box3(0.62, 0.44, 0.03), tinta(0x23232d), 0, 0, 0.015, poster);
     const cuboPoster = new THREE.Mesh(box3(0.17, 0.17, 0.17), new THREE.MeshBasicMaterial({ color: accento, wireframe: true }));
-    cuboPoster.position.set(0, 0.02, 0.12); poster.add(cuboPoster);
+    cuboPoster.position.set(0, 0.02, 0.14); poster.add(cuboPoster); senzaContorno.push(cuboPoster);
     // orologio con le lancette che corrono
-    const orol = new THREE.Group(); orol.position.set(X0 + 0.01, 2.55, -1.05); orol.rotation.y = Math.PI / 2; mondo.add(orol);
-    pezzo(new THREE.CylinderGeometry(0.26, 0.26, 0.05, 28).rotateX(Math.PI / 2), tinta(0xffffff), 0, 0, 0.03, orol, 0.02);
-    const lancetta = (l, w) => { const g = new THREE.Group(); g.position.z = 0.07; orol.add(g); const m = new THREE.Mesh(box3(w, l, 0.01), luce(0x23232d)); m.position.y = l / 2; g.add(m); return g; };
+    const orol = new THREE.Group(); orol.position.set(X0, 2.55, -1.05); orol.rotation.y = Math.PI / 2; mondo.add(orol);
+    pezzo(new THREE.CylinderGeometry(0.26, 0.26, 0.05, 32).rotateX(Math.PI / 2), tinta(0xffffff), 0, 0, 0.025, orol);
+    const lancetta = (l, w) => { const g = new THREE.Group(); g.position.z = 0.055; orol.add(g); const m = new THREE.Mesh(box3(w, l, 0.008), luce(0x23232d)); m.position.y = l / 2; g.add(m); senzaContorno.push(m); return g; };
     const minuti = lancetta(0.2, 0.025), ore = lancetta(0.13, 0.035);
 
     // lampada da terra calda
     const lamp = new THREE.Group(); lamp.position.set(-1.75, 0, 1.7); mondo.add(lamp);
-    pezzo(new THREE.CylinderGeometry(0.2, 0.22, 0.05, 20), tinta(0x2b2b36), 0, 0.03, 0, lamp);
-    pezzo(new THREE.CylinderGeometry(0.03, 0.03, 1.9, 10), tinta(0x2b2b36), 0, 0.98, 0, lamp, 0.012);
-    pezzo(new THREE.CylinderGeometry(0.18, 0.32, 0.36, 20, 1, true), tinta(0xffd79a, { side: THREE.DoubleSide, emissive: 0xffb45e, emissiveIntensity: 0.35 }), 0, 2.0, 0, lamp, 0);
+    pezzo(new THREE.CylinderGeometry(0.2, 0.22, 0.05, 24), tinta(0x2b2b36), 0, 0.025, 0, lamp);
+    pezzo(new THREE.CylinderGeometry(0.03, 0.03, 1.84, 10), tinta(0x2b2b36), 0, 0.97, 0, lamp);
+    pezzo(new THREE.CylinderGeometry(0.18, 0.32, 0.36, 24, 1, true), tinta(0xffd79a, { side: THREE.DoubleSide, emissive: 0xffb45e, emissiveIntensity: 0.35 }), 0, 2.0, 0, lamp);
     const luceCalda = new THREE.PointLight(0xffb66b, 3.2, 5.5, 1.4); luceCalda.position.set(0, 1.9, 0); lamp.add(luceCalda);
 
     /* ---------- scrivania ---------- */
     const legno = tinta(0xa8784e);
-    pezzo(tondo(3.0, 0.12, 1.35, 0.04), legno, 0.6, 1.5, -0.25);
-    for (const [x, z] of [[-0.8, -0.82], [2.0, -0.82], [-0.8, 0.32], [2.0, 0.32]]) pezzo(tondo(0.1, 1.44, 0.1, 0.03), legno, x, 0.72, z);
+    const PIANO = 1.56; // superficie della scrivania
+    pezzo(tondo(3.0, 0.12, 1.35, 0.04), legno, 0.6, PIANO - 0.06, -0.25);
+    for (const [x, z] of [[-0.8, -0.82], [2.0, -0.82], [-0.8, 0.32], [2.0, 0.32]]) pezzo(tondo(0.1, PIANO - 0.12, 0.1, 0.03), legno, x, (PIANO - 0.12) / 2, z);
 
     // monitor girato verso di lui, con la luce dello schermo sul viso
     const monitor = new THREE.Group();
-    monitor.position.set(0.55, 1.56, -0.5); monitor.rotation.y = 0.35;
+    monitor.position.set(0.55, PIANO, -0.5); monitor.rotation.y = 0.35;
     mondo.add(monitor);
     const scuro = tinta(0x2a2a35);
     pezzo(tondo(0.5, 0.04, 0.32, 0.015), scuro, 0, 0.02, 0, monitor);
-    pezzo(tondo(0.1, 0.42, 0.1, 0.03), scuro, 0, 0.23, -0.05, monitor);
+    pezzo(tondo(0.1, 0.42, 0.1, 0.03), scuro, 0, 0.25, -0.05, monitor);
     pezzo(tondo(1.55, 0.98, 0.09, 0.03), scuro, 0, 0.92, 0, monitor);
-    pezzo(box3(0.22, 0.2, 0.01), tinta(0xffe27a), 0.66, 1.3, 0.05, monitor, 0.012); // post-it
-    pezzo(tondo(0.2, 0.2, 0.015, 0.05), luce(accento), 0, 0.98, -0.048, monitor, 0); // logo sul retro
+    pezzo(box3(0.22, 0.2, 0.008), tinta(0xffe27a), 0.66, 1.3, 0.049, monitor); // post-it
+    const logo = pezzo(tondo(0.2, 0.2, 0.012, 0.05), luce(accento), 0, 0.98, -0.05, monitor); senzaContorno.push(logo);
     const luceSchermo = new THREE.PointLight(accento, 2.4, 3.2, 1.6);
     luceSchermo.position.set(0, 0.9, 0.5); monitor.add(luceSchermo);
 
     // tastiera coi tasti che si accendono
-    pezzo(tondo(1.05, 0.05, 0.36, 0.02), tinta(0x1f1f28), 0.5, 1.585, 0.02);
+    pezzo(tondo(1.05, 0.05, 0.36, 0.02), tinta(0x1f1f28), 0.5, PIANO + 0.025, 0.02);
     const tasti = [];
     for (let r = 0; r < 3; r++) for (let c = 0; c < 12; c++) {
       const m = tinta(0x44445a, { emissive: accento, emissiveIntensity: 0 });
-      tasti.push(pezzo(tondo(0.062, 0.03, 0.075, 0.01), m, 0.5 - 0.44 + c * 0.08, 1.62, -0.09 + r * 0.095, mondo, 0));
+      tasti.push(pezzo(tondo(0.062, 0.03, 0.075, 0.01), m, 0.5 - 0.44 + c * 0.08, PIANO + 0.062, -0.09 + r * 0.095));
     }
 
-    // tazza fumante e le tazze già finite, piantina, fogli
+    // la tazza col caffè ancora caldo, lontana dalle braccia; le tazze già finite in fondo
     const bianco = tinta(0xf6f2ec);
-    const tazza = new THREE.Group(); tazza.position.set(1.65, 1.56, 0.05); mondo.add(tazza);
-    pezzo(new THREE.CylinderGeometry(0.11, 0.1, 0.22, 18), bianco, 0, 0.11, 0, tazza);
-    pezzo(new THREE.TorusGeometry(0.06, 0.018, 8, 16), bianco, 0.12, 0.12, 0, tazza, 0.01);
-    // Il caffè sta appena sopra il tappo del cilindro: superfici coincidenti causavano sfarfallio.
-    pezzo(new THREE.CylinderGeometry(0.095, 0.095, 0.006, 18), tinta(0x4a2c1c), 0, 0.228, 0, tazza, 0);
-    const fumi = [0, 1, 2].map(() => { const f = new THREE.Mesh(palla(0.05), new THREE.MeshBasicMaterial({ color: 0xffffff, transparent: true, opacity: 0 })); tazza.add(f); return f; });
-    [[1.9, 1.67, -0.15, 0, 0xe2725b], [1.75, 1.67, -0.42, 0, 0x5b8be2], [1.95, 1.66, -0.62, Math.PI / 2, 0xf2c14e]].forEach(([x, y, z, r, c]) => {
-      const t = pezzo(new THREE.CylinderGeometry(0.11, 0.1, 0.22, 18), tinta(c), x, y, z); t.rotation.z = r;
-    });
-    pezzo(new THREE.CylinderGeometry(0.15, 0.12, 0.24, 16), tinta(0xc9714a), -0.5, 1.68, -0.6);
-    const foglia = tinta(0x5fae6e);
-    const foglie = [[0, 0.25, 0, 0.25], [0.6, 0.22, 0.9, -0.35], [-0.5, 0.2, -0.8, 0.3], [0.15, 0.3, 2.5, 0.05]].map(([ry, h, rz, rx]) => {
-      const f = pezzo(tondo(0.1, 0.4, 0.04, 0.02), foglia, -0.5, 1.88 + h * 0.4, -0.6, mondo, 0.012);
-      f.rotation.set(rx, ry, rz * 0.5); f.userData.rz = rz * 0.5; return f;
-    });
-    const foglio = pezzo(box3(0.42, 0.01, 0.56), tinta(0xfbf8f2), 1.15, 1.565, -0.62, mondo, 0.01); foglio.rotation.y = 0.3;
-    const foglio2 = pezzo(box3(0.42, 0.01, 0.56), tinta(0xefe9dd), 1.2, 1.575, -0.57, mondo, 0.01); foglio2.rotation.y = -0.15;
+    const tazza = new THREE.Group(); tazza.position.set(1.85, PIANO, -0.05); mondo.add(tazza);
+    pezzo(new THREE.CylinderGeometry(0.11, 0.1, 0.22, 20), bianco, 0, 0.11, 0, tazza);
+    pezzo(new THREE.TorusGeometry(0.06, 0.018, 8, 16), bianco, 0.12, 0.12, 0, tazza);
+    // il caffè sta appena sotto il bordo: superfici coincidenti causavano sfarfallio
+    pezzo(new THREE.CylinderGeometry(0.096, 0.096, 0.006, 20), tinta(0x4a2c1c), 0, 0.2, 0, tazza);
+    const fumi = [0, 1, 2].map(() => { const f = new THREE.Mesh(palla(0.035), new THREE.MeshBasicMaterial({ color: 0xffffff, transparent: true, opacity: 0, depthWrite: false })); tazza.add(f); senzaContorno.push(f); return f; });
+    [[1.55, -0.42, 0, 0xe2725b], [1.85, -0.5, 0, 0x5b8be2]].forEach(([x, z, r, c]) => pezzo(new THREE.CylinderGeometry(0.11, 0.1, 0.22, 20), tinta(c), x, PIANO + 0.11, z));
+    const sdraiata = pezzo(new THREE.CylinderGeometry(0.11, 0.1, 0.22, 20), tinta(0xf2c14e), 1.8, PIANO + 0.11, -0.68); sdraiata.rotation.z = Math.PI / 2;
+    // piantina in vaso: orlo, terra e foglie a punta che escono dal centro
+    const vaso = new THREE.Group(); vaso.position.set(-0.5, PIANO, -0.6); mondo.add(vaso);
+    pezzo(new THREE.CylinderGeometry(0.15, 0.115, 0.24, 24), tinta(0xc9714a), 0, 0.12, 0, vaso);
+    pezzo(new THREE.TorusGeometry(0.15, 0.022, 8, 28).rotateX(Math.PI / 2), tinta(0xb8623e), 0, 0.24, 0, vaso);
+    pezzo(new THREE.CylinderGeometry(0.135, 0.135, 0.02, 24), tinta(0x5a3a26), 0, 0.22, 0, vaso);
+    const foglia = tinta(0x5fae6e), foglia2 = tinta(0x4f9c60);
+    const foglie = [];
+    for (let i = 0; i < 7; i++) {
+      const g = new THREE.Group(); g.position.y = 0.22; g.rotation.y = i * 2 * Math.PI / 7 + 0.3; vaso.add(g);
+      const l = 0.32 + (i * 53 % 4) * 0.05;
+      const geo = new THREE.SphereGeometry(1, 14, 10); geo.scale(0.065, l / 2, 0.022); geo.translate(0, l / 2, 0);
+      const f = pezzo(geo, i % 2 ? foglia : foglia2, 0, 0, 0.03, g);
+      f.userData.rz = -(0.3 + (i % 3) * 0.17); f.rotation.x = f.userData.rz; foglie.push(f);
+    }
+    const foglio = pezzo(box3(0.42, 0.006, 0.56), tinta(0xfbf8f2), 1.15, PIANO + 0.003, -0.62); foglio.rotation.y = 0.3;
+    const foglio2 = pezzo(box3(0.42, 0.006, 0.56), tinta(0xefe9dd), 1.22, PIANO + 0.009, -0.55); foglio2.rotation.y = -0.15;
 
     // sedia
     const nera = tinta(0x34344a);
     pezzo(tondo(0.9, 0.14, 0.8, 0.06), nera, 0.5, 1.1, 1.2);
     pezzo(tondo(0.9, 1.0, 0.14, 0.06), nera, 0.5, 1.65, 1.6);
-    pezzo(new THREE.CylinderGeometry(0.05, 0.05, 0.98, 10), nera, 0.5, 0.57, 1.2);
-    pezzo(tondo(0.8, 0.07, 0.1, 0.03), nera, 0.5, 0.08, 1.2); pezzo(tondo(0.1, 0.07, 0.8, 0.03), nera, 0.5, 0.08, 1.2);
+    pezzo(new THREE.CylinderGeometry(0.05, 0.05, 0.94, 10), nera, 0.5, 0.56, 1.2);
+    pezzo(tondo(0.8, 0.07, 0.1, 0.03), nera, 0.5, 0.075, 1.2); pezzo(tondo(0.1, 0.07, 0.8, 0.03), nera, 0.5, 0.075, 1.2);
 
     /* ---------- il gatto che dorme sul suo cuscino ---------- */
-    const gatto = new THREE.Group(); gatto.position.set(2.45, 0.02, 1.35); gatto.rotation.y = 0.6; mondo.add(gatto);
-    pezzo(new THREE.CylinderGeometry(0.55, 0.6, 0.14, 28), tinta(accento.clone().lerp(new THREE.Color(0x1d1d27), 0.25)), 0, 0.07, 0, gatto);
+    const gatto = new THREE.Group(); gatto.position.set(2.45, 0, 1.35); gatto.rotation.y = 0.6; mondo.add(gatto);
+    pezzo(new THREE.CylinderGeometry(0.55, 0.6, 0.14, 40), tinta(accento.clone().lerp(new THREE.Color(0x1d1d27), 0.25)), 0, 0.07, 0, gatto);
     const pelo = tinta(0xf0a35e), pelo2 = tinta(0xfff3e4);
-    const pancia = pezzo(palla(0.36, 0.62), pelo, 0, 0.33, 0, gatto, 0.015);
+    const pancia = pezzo(palla(0.36, 0.62), pelo, 0, 0.33, 0, gatto);
     const testaG = new THREE.Group(); testaG.position.set(0.3, 0.32, -0.12); gatto.add(testaG);
-    pezzo(palla(0.2, 0.85), pelo, 0, 0, 0, testaG, 0.015);
-    for (const z of [-0.1, 0.1]) { const o = pezzo(new THREE.ConeGeometry(0.07, 0.13, 4), pelo, 0.02, 0.18, z, testaG, 0.012); o.rotation.x = z > 0 ? 0.3 : -0.3; }
-    pezzo(palla(0.09, 0.7), pelo2, 0.15, -0.05, 0, testaG, 0);
-    for (const z of [-0.07, 0.07]) pezzo(box3(0.02, 0.015, 0.06), luce(0x2a1a14), 0.17, 0.03, z, testaG, 0);
+    pezzo(palla(0.2, 0.85), pelo, 0, 0, 0, testaG);
+    for (const z of [-0.1, 0.1]) { const o = pezzo(new THREE.ConeGeometry(0.07, 0.13, 4), pelo, 0.02, 0.18, z, testaG); o.rotation.x = z > 0 ? 0.3 : -0.3; }
+    pezzo(palla(0.09, 0.7), pelo2, 0.15, -0.05, 0, testaG);
+    for (const z of [-0.07, 0.07]) { const oc = pezzo(box3(0.02, 0.015, 0.06), luce(0x2a1a14), 0.17, 0.03, z, testaG); senzaContorno.push(oc); }
     const coda = new THREE.Group(); coda.position.set(-0.3, 0.2, 0.15); gatto.add(coda);
-    const codaM = pezzo(new THREE.CapsuleGeometry(0.06, 0.45, 4, 10), pelo, 0, 0, 0.26, coda, 0.012); codaM.rotation.x = Math.PI / 2;
+    const codaM = pezzo(new THREE.CapsuleGeometry(0.06, 0.45, 4, 10), pelo, 0, 0, 0.26, coda); codaM.rotation.x = Math.PI / 2;
 
     /* ---------- il docente «giocattolo»: rasato, barba lunga, occhi che sbattono ---------- */
     const felpa = tinta(accento.clone().lerp(new THREE.Color(0x1d1d27), 0.4));
@@ -320,34 +344,37 @@
     const jeans = tinta(0x3a4766);
     const corpo = new THREE.Group(); corpo.position.set(0.5, 1.15, 1.05); mondo.add(corpo);
     pezzo(tondo(0.8, 0.88, 0.52, 0.16), felpa, 0, 0.47, 0, corpo);
-    pezzo(tondo(0.5, 0.26, 0.12, 0.05), felpa, 0, 0.62, 0.3, corpo, 0.015); // cappuccio
+    pezzo(tondo(0.5, 0.26, 0.12, 0.05), felpa, 0, 0.62, 0.3, corpo); // cappuccio
     for (const x of [-0.18, 0.18]) {
-      pezzo(tondo(0.3, 0.26, 0.64, 0.1), jeans, x, 0.1, -0.28, corpo);
+      pezzo(tondo(0.3, 0.26, 0.64, 0.1), jeans, x, 0.15, -0.28, corpo); // cosce appoggiate sul cuscino della sedia
       pezzo(tondo(0.27, 1.02, 0.27, 0.1), jeans, x, -0.43, -0.55, corpo);
       pezzo(tondo(0.3, 0.14, 0.4, 0.06), tinta(0xf2f2f2), x, -0.98, -0.64, corpo);
     }
     const testa = new THREE.Group(); testa.position.set(0, 0.95, 0); corpo.add(testa);
     pezzo(tondo(0.9, 0.84, 0.8, 0.24), pelle, 0, 0.4, -0.02, testa);
-    for (const x of [-0.46, 0.46]) pezzo(palla(0.1, 1.2), pelle, x, 0.38, 0.04, testa, 0.015); // orecchie
-    pezzo(tondo(0.16, 0.06, 0.1, 0.03), tinta(0xfff3e6), -0.16, 0.8, 0.0, testa, 0); // riflesso sulla testa rasata
+    for (const x of [-0.46, 0.46]) pezzo(palla(0.1, 1.2), pelle, x, 0.38, 0.04, testa); // orecchie
+    const riflesso = pezzo(tondo(0.16, 0.06, 0.1, 0.03), tinta(0xfff3e6), -0.16, 0.8, 0.0, testa); senzaContorno.push(riflesso);
     const occhi = [-0.19, 0.19].map(x => {
-      const o = pezzo(tondo(0.1, 0.13, 0.04, 0.03), luce(0x1a1420), x, 0.46, -0.42, testa, 0);
+      const o = pezzo(tondo(0.1, 0.13, 0.04, 0.03), luce(0x1a1420), x, 0.46, -0.42, testa);
       const b = new THREE.Mesh(box3(0.035, 0.035, 0.01), luce(0xffffff)); b.position.set(0.02, 0.03, -0.022); o.add(b);
+      senzaContorno.push(o, b);
       return o;
     });
     for (const x of [-0.19, 0.19]) {
-      pezzo(tondo(0.18, 0.04, 0.03, 0.015), tinta(0x4a3527), x, 0.59, -0.42, testa, 0); // sopracciglia
-      pezzo(tondo(0.13, 0.07, 0.02, 0.03), tinta(0xff9a8a, { transparent: true, opacity: 0.75 }), x * 1.45, 0.32, -0.42, testa, 0); // guance
+      const s = pezzo(tondo(0.18, 0.04, 0.03, 0.015), tinta(0x4a3527), x, 0.59, -0.42, testa); // sopracciglia
+      const g = pezzo(tondo(0.13, 0.07, 0.02, 0.03), tinta(0xff9a8a, { transparent: true, opacity: 0.75 }), x * 1.45, 0.32, -0.42, testa); // guance
+      senzaContorno.push(s, g);
     }
-    pezzo(tondo(0.13, 0.13, 0.12, 0.05), pelle, 0, 0.34, -0.45, testa, 0.012); // naso
+    pezzo(tondo(0.13, 0.13, 0.12, 0.05), pelle, 0, 0.34, -0.45, testa); // naso
+    // barba: larga sulle guance, poi si stringe verso la punta, così non entra nelle braccia
     const barba = tinta(0x4a3527);
-    pezzo(tondo(0.92, 0.3, 0.5, 0.12), barba, 0, 0.12, -0.19, testa);
-    pezzo(tondo(0.7, 0.34, 0.38, 0.13), barba, 0, -0.14, -0.26, testa);
-    const punta = pezzo(tondo(0.44, 0.3, 0.28, 0.12), barba, 0, -0.4, -0.3, testa); punta.rotation.x = 0.18;
-    pezzo(tondo(0.22, 0.18, 0.18, 0.08), barba, 0, -0.6, -0.34, testa, 0.015);
-    pezzo(tondo(0.46, 0.08, 0.08, 0.04), tinta(0x5a4130), 0, 0.27, -0.45, testa, 0.012); // baffi
-    pezzo(tondo(0.14, 0.04, 0.02, 0.015), tinta(0x8a3d38), 0, 0.2, -0.425, testa, 0); // bocca
-    const goccia = pezzo(palla(0.05, 1.4), tinta(0x8fd3ff), 0.44, 0.6, -0.12, testa, 0);
+    pezzo(tondo(0.86, 0.3, 0.5, 0.12), barba, 0, 0.12, -0.19, testa);
+    pezzo(tondo(0.5, 0.32, 0.36, 0.13), barba, 0, -0.14, -0.27, testa);
+    const punta = pezzo(tondo(0.34, 0.28, 0.26, 0.11), barba, 0, -0.38, -0.31, testa); punta.rotation.x = 0.18;
+    pezzo(tondo(0.18, 0.16, 0.16, 0.07), barba, 0, -0.57, -0.35, testa);
+    pezzo(tondo(0.46, 0.08, 0.08, 0.04), tinta(0x5a4130), 0, 0.27, -0.45, testa); // baffi
+    const bocca = pezzo(tondo(0.14, 0.04, 0.02, 0.015), tinta(0x8a3d38), 0, 0.2, -0.43, testa); senzaContorno.push(bocca);
+    const goccia = pezzo(palla(0.05, 1.4), tinta(0x8fd3ff), 0.44, 0.6, -0.12, testa); senzaContorno.push(goccia);
 
     // braccia articolate: spalla e gomito; le mani sfiorano i tasti dall'alto
     function braccio(x) {
@@ -355,27 +382,90 @@
       pezzo(tondo(0.22, 0.22, 0.52, 0.09), felpa, 0, 0, -0.22, spalla);
       const gomito = new THREE.Group(); gomito.position.set(0, 0, -0.46); spalla.add(gomito);
       pezzo(tondo(0.2, 0.2, 0.52, 0.08), felpa, 0, 0, -0.22, gomito);
-      pezzo(tondo(0.19, 0.12, 0.19, 0.05), pelle, 0, -0.02, -0.52, gomito, 0.015);
+      pezzo(tondo(0.19, 0.12, 0.19, 0.05), pelle, 0, -0.02, -0.52, gomito);
       return { spalla, gomito };
     }
-    const bracci = [braccio(-0.37), braccio(0.37)];
+    const bracci = [braccio(-0.4), braccio(0.4)];
 
     // luci: cielo, sole di scena e la lampada calda
     scena.add(new THREE.HemisphereLight(0xfff4e8, 0x4a4058, 1.25));
     const sole = new THREE.DirectionalLight(0xffffff, 1.9);
     sole.position.set(4.5, 8, -2.5); sole.castShadow = true;
-    sole.shadow.mapSize.set(1024, 1024);
+    sole.shadow.mapSize.set(2048, 2048);
     Object.assign(sole.shadow.camera, { left: -4.5, right: 4.5, top: 4.5, bottom: -4.5, near: 1, far: 22 });
-    sole.shadow.bias = -0.0008; sole.shadow.radius = 3;
+    sole.shadow.bias = -0.0006; sole.shadow.normalBias = 0.02; sole.shadow.radius = 3;
     scena.add(sole);
 
+    /* ---------- il contorno: un passaggio unico sopra l'immagine ----------
+     * Si disegnano normali e profondità della scena in un'immagine nascosta; dove cambiano di colpo
+     * (un bordo, una giuntura, un pezzo davanti all'altro) si traccia una linea scura sempre dello stesso spessore. */
+    const normali = new THREE.MeshNormalMaterial();
+    const rt = new THREE.WebGLRenderTarget(1, 1, { depthBuffer: true });
+    rt.depthTexture = new THREE.DepthTexture(1, 1);
+    const tratto = new THREE.ShaderMaterial({
+      transparent: true, depthTest: false, depthWrite: false,
+      uniforms: { tN: { value: rt.texture }, tD: { value: rt.depthTexture }, passo: { value: new THREE.Vector2() } },
+      vertexShader: 'varying vec2 vUv; void main(){ vUv = uv; gl_Position = vec4(position.xy, 0.0, 1.0); }',
+      fragmentShader: `
+        uniform sampler2D tN; uniform sampler2D tD; uniform vec2 passo; varying vec2 vUv;
+        float D(vec2 o){ return texture2D(tD, vUv + o * passo).x; }
+        vec3 N(vec2 o){ return texture2D(tN, vUv + o * passo).xyz * 2.0 - 1.0; }
+        void main(){
+          float d0 = D(vec2(0.0)); vec3 n0 = N(vec2(0.0));
+          float e = 0.0;
+          vec2 dir[4]; dir[0] = vec2(1.0, 0.0); dir[1] = vec2(0.0, 1.0); dir[2] = vec2(0.7, 0.7); dir[3] = vec2(0.7, -0.7);
+          for (int i = 0; i < 4; i++) {
+            float a = D(dir[i]), b = D(-dir[i]);
+            // seconda derivata: i piani inclinati non fanno linea, i salti di profondità sì
+            e = max(e, smoothstep(0.0010, 0.0022, abs(a + b - 2.0 * d0)));
+            float pieg = max(1.0 - dot(n0, N(dir[i])), 1.0 - dot(n0, N(-dir[i])));
+            e = max(e, smoothstep(0.22, 0.45, pieg));
+          }
+          gl_FragColor = vec4(0.102, 0.078, 0.125, e);
+        }`
+    });
+    const quadro = new THREE.Mesh(new THREE.PlaneGeometry(2, 2), tratto);
+    const scenaTratto = new THREE.Scene(); scenaTratto.add(quadro);
+    const camTratto = new THREE.Camera();
+
     function misura() {
-      const w = box.clientWidth, h = box.clientHeight; if (!w || !h) return;
+      const w = box.clientWidth, h = box.clientHeight; if (!w || !h) return false;
       renderer.setSize(w, h, false);
-      const metaH = 2.95, metaW = metaH * w / h;
-      Object.assign(cam, { left: -metaW, right: metaW, top: metaH, bottom: -metaH }); cam.updateProjectionMatrix();
+      // la camera inquadra tutta la stanza, dal colmo delle pareti al basamento, con un po' d'aria intorno
+      cam.updateMatrixWorld();
+      const inv = cam.matrixWorldInverse, p = new THREE.Vector3();
+      let x0 = Infinity, x1 = -Infinity, y0 = Infinity, y1 = -Infinity;
+      for (const x of [X0 - SP, X1]) for (const y of [-0.3, H]) for (const z of [Z0, Z1 + SP]) {
+        p.set(x, y, z).applyMatrix4(inv);
+        x0 = Math.min(x0, p.x); x1 = Math.max(x1, p.x); y0 = Math.min(y0, p.y); y1 = Math.max(y1, p.y);
+      }
+      let mw = (x1 - x0) / 2 * 1.06, mh = (y1 - y0) / 2 * 1.06;
+      const cx = (x0 + x1) / 2, cy = (y0 + y1) / 2;
+      if (mw / mh < w / h) mw = mh * w / h; else mh = mw * h / w;
+      Object.assign(cam, { left: cx - mw, right: cx + mw, top: cy + mh, bottom: cy - mh }); cam.updateProjectionMatrix();
+      const pw = Math.round(w * renderer.getPixelRatio()), ph = Math.round(h * renderer.getPixelRatio());
+      rt.setSize(pw, ph);
+      // il tratto è largo circa 1,2 pixel per lato su un disegno grande, e più sottile sul telefono
+      const k = 1.2 * Math.min(1, Math.max(0.55, w / 900)) * renderer.getPixelRatio();
+      tratto.uniforms.passo.value.set(k / pw, k / ph);
+      return true;
     }
-    new ResizeObserver(misura).observe(box); misura();
+    let pronta = false;
+    new ResizeObserver(() => { pronta = misura(); }).observe(box); pronta = misura();
+
+    function disegnaTutto() {
+      // 1. normali e profondità, senza i pezzi che non vogliono contorno
+      senzaContorno.forEach(o => { o.userData.v = o.visible; o.visible = false; });
+      scena.overrideMaterial = normali;
+      renderer.setRenderTarget(rt); renderer.setClearColor(0x8080ff, 1); renderer.clear();
+      renderer.render(scena, cam);
+      scena.overrideMaterial = null;
+      senzaContorno.forEach(o => { o.visible = o.userData.v; });
+      // 2. la scena vera, poi il tratto sopra
+      renderer.setRenderTarget(null); renderer.setClearColor(0x000000, 0);
+      renderer.render(scena, cam);
+      renderer.autoClear = false; renderer.render(scenaTratto, camTratto); renderer.autoClear = true;
+    }
 
     // «tik» e «tak» si alternano vicino ai due lati della tastiera; «z» sopra il gatto.
     const parole = ['tik', 'tak'];
@@ -397,6 +487,7 @@
       const ora = performance.now();
       const dt = Math.max(0, Math.min((ora - istante) / 1000, 0.05));
       istante = ora;
+      if (!pronta) { pronta = misura(); if (!pronta) return; }
       if ((!visibile || document.hidden) && window.wipTempo === undefined) return;
       // wipTempo serve solo per registrare il video fotogramma per fotogramma
       const t = window.wipTempo !== undefined ? window.wipTempo : (tempo += dt);
@@ -426,8 +517,8 @@
       }
       const g = (t * 0.6) % 1;
       goccia.position.set(0.44, 0.75 - g * 0.55, -0.12); goccia.visible = g < 0.85;
-      fumi.forEach((s, i) => { const u = (t * 0.45 + i / 3) % 1; s.position.set(Math.sin(u * 6 + i) * 0.04, 0.28 + u * 0.45, 0); s.material.opacity = 0.5 * Math.sin(u * Math.PI); s.scale.setScalar(0.7 + u); });
-      foglie.forEach((fo, i) => { fo.rotation.z = fo.userData.rz + 0.06 * Math.sin(t * 1.4 + i); });
+      fumi.forEach((s, i) => { const u = (t * 0.4 + i / 3) % 1; s.position.set(Math.sin(u * 6 + i) * 0.03, 0.24 + u * 0.32, 0); s.material.opacity = 0.35 * Math.sin(u * Math.PI); s.scale.setScalar(0.6 + 0.8 * u); });
+      foglie.forEach((fo, i) => { fo.rotation.x = fo.userData.rz + 0.05 * Math.sin(t * 1.4 + i); });
       // gatto: respira e muove la coda
       pancia.scale.set(1, 1 + 0.04 * Math.sin(t * 2.2), 1 + 0.03 * Math.sin(t * 2.2));
       coda.rotation.y = 0.5 * Math.sin(t * 1.1) + 0.2;
@@ -449,7 +540,7 @@
         p3.set(0, 0.85, 0).applyMatrix4(gatto.matrixWorld).project(cam);
         bolla('z', (p3.x + 1) / 2 * 100, (1 - p3.y) / 2 * 100, true);
       }
-      renderer.render(scena, cam);
+      disegnaTutto();
     });
   }
 
