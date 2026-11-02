@@ -112,10 +112,12 @@
   stile3d.textContent = `
     .wip-anim.wip-3d { position: relative; width: min(560px, 100%); aspect-ratio: 16 / 11; }
     .wip-anim.wip-3d canvas { display: block; width: 100%; height: 100%; }
-    .wip-bolla { position: absolute; pointer-events: none; color: var(--accent, #a78bfa); font: 700 15px/1 'Geist Mono', ui-monospace, monospace;
-      text-shadow: 0 2px 0 #101016, 0 0 12px rgba(0,0,0,.6); animation: wip-bolla .9s ease-out forwards; }
-    @keyframes wip-bolla { 0% { opacity: 0; transform: translate(-50%, 0) scale(.4) rotate(var(--r)); } 18% { opacity: 1; transform: translate(-50%, -10px) scale(1.15) rotate(var(--r)); }
-      100% { opacity: 0; transform: translate(-50%, -42px) scale(.95) rotate(var(--r)); } }
+    .wip-bolla { position: absolute; pointer-events: none; color: #f3f5f3; font: 800 16px/1 'Geist Mono', ui-monospace, monospace;
+      text-shadow: -1px 0 #15101b, 1px 0 #15101b, 0 -1px #15101b, 0 2px #15101b, 0 0 10px rgba(0,0,0,.7);
+      animation: wip-bolla .46s ease-out forwards; }
+    @keyframes wip-bolla { 0% { opacity: 0; transform: translate(-50%, 0) scale(.6) rotate(var(--r)); } 20% { opacity: 1; transform: translate(-50%, -6px) scale(1.05) rotate(var(--r)); }
+      72% { opacity: 1; transform: translate(-50%, -14px) scale(1) rotate(var(--r)); }
+      100% { opacity: 0; transform: translate(-50%, -22px) scale(.9) rotate(var(--r)); } }
     .wip-zeta { color: #f1e7da; font-size: 13px; animation: wip-zeta 1.9s ease-out forwards; }
     @keyframes wip-zeta { 0% { opacity: 0; transform: translate(-50%, 0) scale(.5); } 20% { opacity: .9; } 100% { opacity: 0; transform: translate(-10%, -40px) scale(1.2); } }
   `;
@@ -166,17 +168,20 @@
       return m;
     }
     const box3 = (x, y, z) => new THREE.BoxGeometry(x, y, z);
-    // scatola con gli spigoli arrotondati: ogni punto della superficie viene spinto sulla «pelle» di un raggio r
+    // La normale viene dalla curva, non dalla faccia del cubo: niente cuciture di luce sugli spigoli.
     function tondo(x, y, z, r) {
       r = Math.min(r === undefined ? Math.min(x, y, z) * 0.28 : r, x / 2, y / 2, z / 2);
-      const g = new THREE.BoxGeometry(x, y, z, 4, 4, 4), pos = g.attributes.position;
-      const dentro = new THREE.Vector3(x / 2 - r, y / 2 - r, z / 2 - r), fuori = dentro.clone().negate(), v = new THREE.Vector3(), c = new THREE.Vector3();
+      const g = new THREE.BoxGeometry(x, y, z, 4, 4, 4), pos = g.attributes.position, norm = g.attributes.normal;
+      const dentro = new THREE.Vector3(x / 2 - r, y / 2 - r, z / 2 - r), fuori = dentro.clone().negate();
+      const v = new THREE.Vector3(), c = new THREE.Vector3(), n = new THREE.Vector3();
       for (let i = 0; i < pos.count; i++) {
         v.fromBufferAttribute(pos, i); c.copy(v).clamp(fuori, dentro);
-        v.sub(c); if (v.lengthSq() > 1e-12) v.setLength(r); v.add(c);
+        n.copy(v).sub(c).normalize();
+        v.copy(c).addScaledVector(n, r);
         pos.setXYZ(i, v.x, v.y, v.z);
+        norm.setXYZ(i, n.x, n.y, n.z);
       }
-      g.computeVertexNormals();
+      pos.needsUpdate = true; norm.needsUpdate = true;
       return g;
     }
     const palla = (r, sy) => { const g = new THREE.SphereGeometry(r, 20, 14); if (sy) g.scale(1, sy, 1); return g; };
@@ -271,7 +276,8 @@
     const tazza = new THREE.Group(); tazza.position.set(1.65, 1.56, 0.05); mondo.add(tazza);
     pezzo(new THREE.CylinderGeometry(0.11, 0.1, 0.22, 18), bianco, 0, 0.11, 0, tazza);
     pezzo(new THREE.TorusGeometry(0.06, 0.018, 8, 16), bianco, 0.12, 0.12, 0, tazza, 0.01);
-    pezzo(new THREE.CylinderGeometry(0.095, 0.095, 0.01, 18), tinta(0x4a2c1c), 0, 0.215, 0, tazza, 0);
+    // Il caffè sta appena sopra il tappo del cilindro: superfici coincidenti causavano sfarfallio.
+    pezzo(new THREE.CylinderGeometry(0.095, 0.095, 0.006, 18), tinta(0x4a2c1c), 0, 0.228, 0, tazza, 0);
     const fumi = [0, 1, 2].map(() => { const f = new THREE.Mesh(palla(0.05), new THREE.MeshBasicMaterial({ color: 0xffffff, transparent: true, opacity: 0 })); tazza.add(f); return f; });
     [[1.9, 1.67, -0.15, 0, 0xe2725b], [1.75, 1.67, -0.42, 0, 0x5b8be2], [1.95, 1.66, -0.62, Math.PI / 2, 0xf2c14e]].forEach(([x, y, z, r, c]) => {
       const t = pezzo(new THREE.CylinderGeometry(0.11, 0.1, 0.22, 18), tinta(c), x, y, z); t.rotation.z = r;
@@ -368,26 +374,29 @@
     }
     new ResizeObserver(misura).observe(box); misura();
 
-    // «tac» in alto a destra, «z» sopra il gatto
-    const parole = ['tac', 'TAC!', 'clac', 'tic', 'TAC', 'tak'];
+    // «tik» e «tak» si alternano vicino ai due lati della tastiera; «z» sopra il gatto.
+    const parole = ['tik', 'tak'];
     const p3 = new THREE.Vector3();
     function bolla(testo, sx, sy, piccola) {
       const s = document.createElement('span');
       s.className = 'wip-bolla' + (piccola ? ' wip-zeta' : '');
       s.textContent = testo;
       s.style.left = sx + '%'; s.style.top = sy + '%';
-      s.style.setProperty('--r', (Math.random() * 24 - 12).toFixed(0) + 'deg');
+      s.style.setProperty('--r', (Math.random() * 10 - 5).toFixed(0) + 'deg');
       box.appendChild(s);
-      setTimeout(() => s.remove(), piccola ? 1900 : 950);
+      setTimeout(() => s.remove(), piccola ? 1900 : 460);
     }
 
-    let visibile = false, ultimaBolla = 0, ultimaZ = 0, prossimoBlink = 2;
+    let visibile = false, ultimaBolla = 0, ultimaZ = 0, prossimaParola = 0;
     new IntersectionObserver(v => { visibile = v[0].isIntersecting; }).observe(box);
-    const orologio = new THREE.Clock();
+    let tempo = 0, istante = performance.now();
     renderer.setAnimationLoop(() => {
-      if ((!visibile || document.hidden) && window.wipTempo === undefined) { orologio.getDelta(); return; }
+      const ora = performance.now();
+      const dt = Math.max(0, Math.min((ora - istante) / 1000, 0.05));
+      istante = ora;
+      if ((!visibile || document.hidden) && window.wipTempo === undefined) return;
       // wipTempo serve solo per registrare il video fotogramma per fotogramma
-      const t = window.wipTempo !== undefined ? window.wipTempo : orologio.getElapsedTime();
+      const t = window.wipTempo !== undefined ? window.wipTempo : (tempo += dt);
       const raffica = 1 + 0.7 * Math.max(0, Math.sin(t * 1.3)) ** 2;
       const f = 7.5 * raffica;
       bracci.forEach((b, i) => {
@@ -405,12 +414,16 @@
       const fase = (t % 3.4);
       const chiuso = fase > 3.25 || (fase > 1.6 && fase < 1.68);
       occhi.forEach(o => { o.scale.y = chiuso ? 0.12 : 1; });
-      tasti.forEach(k => { k.material.emissiveIntensity *= 0.82; });
-      for (let n = 0; n < 2 + Math.round(raffica * 2); n++) if (Math.random() < 0.35) tasti[Math.floor(Math.random() * tasti.length)].material.emissiveIntensity = 1.4;
+      const attenuazione = Math.exp(-12 * dt);
+      tasti.forEach(k => { k.material.emissiveIntensity *= attenuazione; });
+      const colpi = (30 + 45 * raffica) * dt;
+      const accensioni = Math.floor(colpi) + (Math.random() < colpi % 1 ? 1 : 0);
+      for (let n = 0; n < accensioni; n++) {
+        tasti[Math.floor(Math.random() * tasti.length)].material.emissiveIntensity = 1.4;
+      }
       const g = (t * 0.6) % 1;
       goccia.position.set(0.44, 0.75 - g * 0.55, -0.12); goccia.visible = g < 0.85;
       fumi.forEach((s, i) => { const u = (t * 0.45 + i / 3) % 1; s.position.set(Math.sin(u * 6 + i) * 0.04, 0.28 + u * 0.45, 0); s.material.opacity = 0.5 * Math.sin(u * Math.PI); s.scale.setScalar(0.7 + u); });
-      tazza.rotation.z = 0.04 * Math.sin(t * 40) * raffica;
       foglie.forEach((fo, i) => { fo.rotation.z = fo.userData.rz + 0.06 * Math.sin(t * 1.4 + i); });
       // gatto: respira e muove la coda
       pancia.scale.set(1, 1 + 0.04 * Math.sin(t * 2.2), 1 + 0.03 * Math.sin(t * 2.2));
@@ -420,12 +433,18 @@
       minuti.rotation.z = -t * 3.0; ore.rotation.z = -t * 0.25;
       stelle.forEach((st, i) => { st.scale.setScalar(0.6 + 0.5 * Math.abs(Math.sin(t * 1.5 + i * 1.7))); });
       cuboPoster.rotation.y = t * 0.6; cuboPoster.rotation.x = 0.4;
-      mondo.position.y = 0.04 * Math.sin(t * 1.1);
-      if (t - ultimaBolla > 0.34 / raffica || t < ultimaBolla) { ultimaBolla = t; bolla(parole[Math.floor(Math.random() * parole.length)], 58 + Math.random() * 30, 34 + Math.random() * 18); }
+      if (t - ultimaBolla >= 0.52 || t < ultimaBolla) {
+        ultimaBolla = t;
+        mondo.updateWorldMatrix(true, false); cam.updateWorldMatrix(true);
+        p3.set(prossimaParola ? 0.75 : 0.3, 1.77, 0.16).applyMatrix4(mondo.matrixWorld).project(cam);
+        bolla(parole[prossimaParola], (p3.x + 1) / 2 * 100 - 2.5, (1 - p3.y) / 2 * 100 + 8);
+        prossimaParola = (prossimaParola + 1) % parole.length;
+      }
       if (t - ultimaZ > 1.3 || t < ultimaZ) {
         ultimaZ = t;
+        gatto.updateWorldMatrix(true, false); cam.updateWorldMatrix(true);
         p3.set(0, 0.85, 0).applyMatrix4(gatto.matrixWorld).project(cam);
-        bolla('z', (p3.x + 1) / 2 * 100 + 2, (1 - p3.y) / 2 * 100, true);
+        bolla('z', (p3.x + 1) / 2 * 100, (1 - p3.y) / 2 * 100, true);
       }
       renderer.render(scena, cam);
     });
