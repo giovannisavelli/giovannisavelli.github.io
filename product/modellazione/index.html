@@ -15,8 +15,22 @@
   <link rel="stylesheet" href="../../assets/studio.css">
   <link rel="stylesheet" href="../../assets/course-ui.css?v=unified-20261014">
 <link rel="stylesheet" href="../../assets/agenda.css?v=20261029d">
+<style>
+  /* L'omino «Lavori in corso» è la prima cosa che si vede: a destra del titolo, sul telefono sopra. */
+  .course-hero:has(.course-hero-wip) { grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr); }
+  .course-hero-wip { display: grid; justify-items: center; gap: 4px; }
+  .course-hero-wip .wip-anim { margin: 0; }
+  .course-hero-wip .etichetta { color: var(--accent); }
+  @media (max-width: 760px) { .course-hero-wip { order: -1; } .course-hero:has(.course-hero-wip) { grid-template-columns: 1fr; } }
+  /* Finché il corso non è pronto si vede solo l'omino: per mostrare tutto, togliere «solo-lavori» dal <body>. */
+  .course-lead--lavori { display: none; }
+  .solo-lavori .course-lead--lavori { display: block; color: var(--ink-2); font-size: 17px; }
+  .solo-lavori .course-facts, .solo-lavori .course-content, .solo-lavori .course-actions .btn.pieno,
+  .solo-lavori .course-mobile-nav, .solo-lavori .course-bottom-nav, .solo-lavori .mobile-actions { display: none !important; }
+  .solo-lavori .course-hero { min-height: calc(100vh - 120px); }
+</style>
 </head>
-<body class="course-page" style="--accent: #9d7bff">
+<body class="course-page solo-lavori" style="--accent: #9d7bff">
 <header class="top" id="top">
   <div class="wrap">
     <a class="marchio" href="../../"><i>GS</i><span>Giovanni Savelli<small>Corsi AANT 2026/27</small></span></a>
@@ -35,12 +49,13 @@
       <p class="course-status etichetta">Corso in preparazione</p>
       <h1 class="course-heading" id="course-title">Modellazione 3D</h1>
       <p class="course-lead">Modellazione tridimensionale per Product Design.</p>
+      <p class="course-lead course-lead--lavori">Il corso è in preparazione: le lezioni partono nel secondo semestre. Torna a trovarci più avanti.</p>
       <div class="course-actions">
         <a class="btn pieno" href="#programma">Programma del corso<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
         <a class="btn vuoto" href="../../#corsi">Tutti i corsi</a>
       </div>
     </div>
-    <div class="course-hero-mark" aria-hidden="true"><span>3D</span><small>Volume / Forma</small></div>
+    <div class="course-hero-wip"><div class="wip-anim" aria-hidden="true"></div><p class="etichetta">Lavori in corso</p></div>
   </section>
   <div class="course-facts">
     <dl>
@@ -68,8 +83,7 @@
       </div>
       <ol class="lesson-index lesson-index--base" id="lezione-del-giorno" aria-label="Lezione del giorno"></ol>
       <div class="course-empty" id="giorno-vuoto">
-        <div class="wip-anim" aria-hidden="true"></div>
-        <p class="etichetta">Lavori in corso · 2026/27</p>
+        <p class="etichetta">Lezioni · 2026/27</p>
         <h2>Il corso non è ancora iniziato</h2>
         <p>Le lezioni si terranno nel secondo semestre. Da quel momento qui troverai la lezione del giorno, con gli argomenti da spuntare.</p>
       </div>
