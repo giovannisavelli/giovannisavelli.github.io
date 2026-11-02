@@ -2,6 +2,7 @@
 <html lang="it">
 <head>
   <meta charset="UTF-8">
+  <script src="../../assets/accesso.js?v=1" data-corso="rendering"></script>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Rendering 3D · Cinema 4D e Corona | Corsi Savelli AANT</title>
   <meta name="description" content="Rendering 3D, Interior Design 2° anno: lezioni, appunti, video e materiali del corso del prof. Giovanni Savelli.">
@@ -252,6 +253,33 @@
     @media (prefers-reduced-motion: reduce) {
       .c-hero h1 .r > span { opacity: 1 !important; transform: none !important; filter: none !important; }
     }
+
+    /* ---------- Corona: dizionario PBR, proiezioni, videoteca, risorse ---------- */
+    .cor-gruppo + .cor-gruppo { margin-top: 52px; }
+    .cor-gruppo > h3 { margin: 0 0 6px; padding-top: 18px; border-top: 1px solid var(--line); font: 600 26px/1.15 var(--sans); letter-spacing: -.025em; }
+    .cor-gruppo > p { margin: 0 0 18px; color: var(--ink-3); font-size: 14.5px; max-width: 62ch; }
+    .cor-voci { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 16px; }
+    .cor-voci .chip { cursor: pointer; background: transparent; transition: border-color .25s ease, color .25s ease, background .25s ease; }
+    .cor-voci .chip:hover { border-color: var(--accent); color: var(--ink); }
+    .cor-voci .chip[aria-pressed="true"] { border-color: var(--accent); background: var(--accent); color: #101016; }
+    .cor-voci--sotto { margin: 18px 0 0; }
+    .cor-voci--sotto .chip { font-size: 11px; padding: 6px 10px; }
+    .cor-spiega { max-width: 78ch; padding: 22px 24px; border: 1px solid var(--line-2); border-left: 3px solid var(--accent); border-radius: 0 14px 14px 0; background: rgba(255, 255, 255, .025); }
+    .cor-spiega h4 { margin: 0 0 10px; font: 600 21px/1.2 var(--sans); letter-spacing: -.015em; }
+    .cor-spiega .cor-testo { color: var(--ink-2); font-size: 15.5px; line-height: 1.65; }
+    .cor-spiega .cor-testo strong { color: var(--ink); }
+    .cor-sotto-testo { margin-top: 14px; padding-top: 14px; border-top: 1px solid var(--line); color: var(--ink-2); font-size: 15px; line-height: 1.6; }
+    .cor-ior { margin-top: 16px; }
+    .cor-ior input { width: 100%; min-height: 44px; margin-bottom: 10px; padding: 0 16px; border: 1px solid var(--line-2); border-radius: 999px; background: transparent; color: var(--ink); font: 400 14px var(--sans); }
+    .cor-ior input:focus { outline: 2px solid var(--accent); outline-offset: 1px; }
+    .cor-ior table { width: 100%; border-collapse: collapse; font-size: 14px; }
+    .cor-ior th { padding: 8px 12px; border-bottom: 1px solid var(--line-2); color: var(--accent); font: 500 11px/1.3 var(--mono); letter-spacing: .08em; text-align: left; text-transform: uppercase; }
+    .cor-ior td { padding: 10px 12px; border-bottom: 1px solid var(--line); }
+    .cor-ior td:last-child { font-family: var(--mono); color: var(--accent); white-space: nowrap; }
+    #cor-risorse .b-lista { grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); }
+    #cor-risorse .b-lista a span { overflow: visible; }
+    .cor-video-titolo { margin: 0 0 14px; color: var(--ink-3); font: 500 12px/1.3 var(--mono); letter-spacing: .08em; text-transform: uppercase; }
+    .cor-video-titolo ~ .cor-video-titolo { margin-top: 30px; }
   </style>
   <link rel="stylesheet" href="../../assets/course-ui.css?v=unified-20261014">
   <link rel="stylesheet" href="../../assets/agenda.css?v=20261029d">
@@ -334,7 +362,7 @@
         <button class="scheda" role="tab" id="t-video" aria-controls="video" data-tab="video">Video</button>
         <button class="scheda" role="tab" id="t-brand" aria-controls="brand" data-tab="brand">Brand e modelli</button>
         <button class="scheda" role="tab" id="t-scorciatoie" aria-controls="scorciatoie" data-tab="scorciatoie">Scorciatoie</button>
-        <a class="scheda fuori" href="corona.html">Corona <svg class="icona" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 17L17 7M8 7h9v9"/></svg></a>
+        <button class="scheda" role="tab" id="t-corona" aria-controls="corona" data-tab="corona">Corona</button>
       </nav>
     </div>
 
@@ -342,6 +370,8 @@
       <div class="testa"><h2>La lezione di oggi</h2><p>Gli argomenti di oggi, da spuntare mentre li facciamo. Tutte le lezioni, sul percorso, sono nel Programma; quelle già fatte restano nell’Archivio.</p></div>
       <ol class="lesson-index lesson-index--base" id="lezione-del-giorno" aria-label="Lezione del giorno"></ol>
       <div class="course-empty" id="giorno-vuoto">
+        <div class="wip-anim" aria-hidden="true"></div>
+        <p class="etichetta">Lavori in corso</p>
         <h2>Il corso non è ancora iniziato</h2>
         <p>Le lezioni si terranno nel secondo semestre. Da quel momento qui troverai la lezione del giorno, con gli argomenti da spuntare. Intanto puoi guardare il <a href="#programma">Programma</a>.</p>
       </div>
@@ -391,6 +421,34 @@
       <div class="testa"><h2>Scorciatoie di Cinema 4D</h2><p>Quelle che usiamo di più. Le lettere vanno premute una dopo l'altra.</p></div>
       <p class="prova" id="prova">Da computer prova a premerle: il tasto giusto si accende.</p>
       <ul class="tasti" id="lista-tasti"></ul>
+    </section>
+
+    <section class="pannello" id="corona" role="tabpanel" aria-labelledby="t-corona" hidden>
+      <div class="testa"><h2>Corona</h2><p>Il motore di render del corso: materiali, proiezioni delle texture e video. Tocca una voce per leggerne la spiegazione.</p></div>
+      <section class="cor-gruppo" id="cor-dizionario">
+        <h3>Dizionario PBR</h3>
+        <p>Le proprietà del Physical Material di Corona.</p>
+        <div class="cor-voci" id="cor-voci-pbr"></div>
+        <div class="cor-spiega" id="cor-spiega-pbr" aria-live="polite"></div>
+      </section>
+      <section class="cor-gruppo" id="cor-proiezioni">
+        <h3>Proiezioni delle texture</h3>
+        <p>Il metodo geometrico con cui un'immagine 2D avvolge un volume 3D.</p>
+        <div class="cor-voci" id="cor-voci-proj"></div>
+        <div class="cor-spiega" id="cor-spiega-proj" aria-live="polite"></div>
+      </section>
+      <section class="cor-gruppo" id="cor-videoteca">
+        <h3>Videoteca Corona</h3>
+        <p>Il video parte solo quando lo tocchi.</p>
+        <div id="lista-video-corona"></div>
+      </section>
+      <section class="cor-gruppo" id="cor-risorse">
+        <h3>Bibliografia e risorse</h3>
+        <ul class="b-lista">
+          <li><a href="https://drive.google.com/file/d/1A6X18M3br9C1z2chNDBGvao3028NE4zT/view?usp=sharing" target="_blank" rel="noopener"><b>Slide del corso Corona</b><span>PDF · Drive</span></a></li>
+          <li><a href="https://angeloferretti.blogspot.com/2021/08/cinema-4d-corona-renderer-7-physical-material.html#sec2" target="_blank" rel="noopener"><b>Luce e materiali · Angelo Ferretti</b><span>blog</span></a></li>
+        </ul>
+      </section>
     </section>
   </div>
 </main>
@@ -657,13 +715,14 @@ const shortcuts = [
 
   /* ---------- Schede con indirizzo proprio (#lezioni, #video...): il tasto Indietro funziona ---------- */
   const TAB_NAMES = { lezioni: 'lezioni', archivio: 'archivio', appunti: 'appunti', calendario: 'calendario', programma: 'programma',
-    video: 'video', brand: 'brand', scorciatoie: 'scorciatoie' };
-  const ALIAS = { percorso: 'programma' };
+    video: 'video', brand: 'brand', scorciatoie: 'scorciatoie', corona: 'corona' };
+  // i vecchi indirizzi della pagina Corona (corona.html#videoteca...) portano alla scheda Corona
+  const ALIAS = { percorso: 'programma', dizionario: 'corona', proiezioni: 'corona', videoteca: 'corona' };
   const box = $('#schede-box');
 
   function apriScheda(id, daStoria) {
-    if (id !== 'video') fermaVideo();
     const cambia = $('#' + id).hidden;
+    if (cambia) fermaVideo();
     document.querySelectorAll('.scheda[role=tab]').forEach(t => {
       const selezionata = t.dataset.tab === id;
       t.setAttribute('aria-selected', String(selezionata));
@@ -934,7 +993,7 @@ const shortcuts = [
     videoAvviati.forEach((pulsante, player) => player.replaceWith(pulsante));
     videoAvviati.clear();
   }
-  $('#lista-video').addEventListener('click', e => {
+  [$('#lista-video'), $('#lista-video-corona')].forEach(lista => lista.addEventListener('click', e => {
     const b = e.target.closest('.v-schermo[data-src]'); if (!b) return;
     fermaVideo();
     const player = document.createElement('div');
@@ -943,9 +1002,88 @@ const shortcuts = [
     frame.src = b.dataset.src; frame.allow = 'autoplay; fullscreen; encrypted-media'; frame.allowFullscreen = true;
     frame.title = b.getAttribute('aria-label').replace(/^Guarda: /, '');
     player.appendChild(frame); videoAvviati.set(player, b); b.replaceWith(player); frame.focus();
-  });
+  }));
 
   /* ---------- Brand ---------- */
+
+  /* ---------- Corona: dizionario PBR, proiezioni delle texture, videoteca ---------- */
+  const CORONA_PBR = {
+    pbr: { t: 'Physical Material', d: "Sistema di shading avanzato basato sullo standard PBR (Physically Based Rendering). Garantisce che i materiali reagiscano alla luce in modo fisicamente corretto in ogni condizione di illuminazione, migliorando drasticamente la resa fotografica rispetto ai materiali tradizionali." },
+    metal: { t: 'Metalness', d: "Definisce la natura fisica del materiale: impostato su «Metal» crea un conduttore fortemente riflettente, su «Non-Metal» crea un materiale dielettrico.<br><br><strong>Materiali ibridi:</strong> è possibile usare texture in scala di grigi per creare mix: ad esempio un tessuto (nero) con ricami in oro (bianco)." },
+    base: { t: 'Base Layer', d: "Contenitore principale delle proprietà visive e di riflessione della superficie. Scegli un parametro per approfondirne la logica:",
+      sub: [['col', 'Color / Texture'], ['rough', 'Roughness'], ['ior', 'IOR'], ['edge', 'Edge Color'], ['normal', 'Normal / Bump']] },
+    col: { t: 'Color / Texture', d: "Definisce l'Albedo (colore puro). Può essere un colore a tinta unita (es. per vernici o plastiche) o una mappa d'immagine (legno, marmo, ecc.)." },
+    rough: { t: 'Roughness', d: "Controlla la micro-rugosità della superficie. 0% = specchio perfetto. 100% = completamente opaco." },
+    ior: { t: 'IOR', d: "Index of Refraction. Valore scientifico che determina la deviazione della luce (se la rifrazione è attiva) e l'intensità della riflessione ad angolazioni radenti (effetto Fresnel)." },
+    edge: { t: 'Edge Color', d: "Attivo e rilevante principalmente quando la Metalness è su «Metal». Permette di variare il colore della riflessione esclusivamente nei punti in cui l'oggetto è inquadrato di profilo o con angolazioni radenti, restituendo un metallo visivamente più complesso." },
+    normal: { t: 'Normal / Bump', d: "Simulano micro-rilievi superficiali alterando il calcolo della luce senza aggiungere reale geometria. Il <strong>Bump</strong> utilizza mappe in scala di grigi (generando un'illusione basilare); la <strong>Normal Map</strong> utilizza i canali RGB per determinare l'inclinazione esatta dei pixel, offrendo una precisione superiore." },
+    disp: { t: 'Displacement', d: "Sposta fisicamente i poligoni del modello 3D durante il calcolo del render, leggendo i valori di una texture in scala di grigi. È essenziale per alterare la silhouette e creare rilievi profondi (muri in pietra, terreni, intagli)." },
+    refr: { t: 'Refraction', d: "Gestisce la trasparenza fisica e il passaggio della luce attraverso i volumi (es. vetro o liquidi). Essendo un calcolo fisico basato sull'IOR, richiede tassativamente che l'oggetto 3D possieda uno spessore reale." },
+    opac: { t: 'Opacity', d: "Semplice maschera di ritaglio (clipping) bidimensionale. Leggendo una mappa in scala di grigi, decide quali pixel calcolare (bianco) e quali rendere totalmente trasparenti, bucati (nero): utile per creare reti o sagomare foglie senza modellarle." },
+    volum: { t: 'Volumetrics', d: "Gestisce il colore degli oggetti trasparenti e densi (come i liquidi o i vetri spessi) tramite l'assorbimento volumetrico della luce, molto più realistico rispetto a colorare semplicemente la superficie. Scegli per esplorare:",
+      sub: [['abs', 'Absorption'], ['dist', 'Distance']] },
+    abs: { t: 'Absorption Color', d: "Il colore che il materiale assume quando la luce bianca vi penetra e alcune lunghezze d'onda vengono assorbite. L'intensità visiva di questo colore cresce all'aumentare dello spessore dell'oggetto." },
+    dist: { t: 'Distance', d: "Parametro in centimetri che stabilisce la distanza percorsa dalla luce prima di essere completamente saturata dal colore di assorbimento. Valori bassi creano vetri subito saturi e scuri; valori alti mantengono il vetro limpido, permettendo alla luce di viaggiare più a fondo." }
+  };
+  const CORONA_VOCI = ['pbr', 'metal', 'base', 'disp', 'refr', 'opac', 'volum'];
+  const CORONA_PROIEZIONI = {
+    cubica: { t: 'Proiezione cubica', d: "La proiezione cubica (o Box mapping) proietta la texture simultaneamente da sei direzioni ortogonali, avvolgendo l'oggetto in una «scatola» immaginaria.<br><br><strong>Quando usarla:</strong> è il metodo più rapido e diffuso nell'ArchViz. Perfetta per elementi architettonici regolari e arredi squadrati come muri, pavimenti, soffitti e battiscopa." },
+    uvw: { t: 'Mappatura UVW', d: "Il metodo nativo e più accurato. La texture aderisce alla geometria seguendo le sue coordinate interne (UV), ottenute «srotolando» il modello 3D su un piano 2D.<br><br><strong>Quando usarla:</strong> quando serve molto controllo sulla texture, oppure per superfici organiche e molto complesse. Garantisce che la texture segua l'andamento reale della geometria, indispensabile per divani, cuscini o tessuti." },
+    piatta: { t: 'Proiezione piatta', d: "Proietta l'immagine bidimensionale lungo un singolo asse, esattamente come un videoproiettore puntato su un muro. Su superfici curve o perpendicolari alla proiezione genera un vistoso allungamento (stretching).<br><br><strong>Quando usarla:</strong> ideale per inserire grafiche piane e localizzate su superfici dritte, come l'immagine nello schermo di una TV, un quadro in una cornice o la copertina di un libro." },
+    cilindrica: { t: 'Proiezione cilindrica', d: "Avvolge la texture attorno a un asse centrale verticale. L'immagine si adatta perfettamente alle pareti laterali, ma subisce una distorsione a raggiera sulle facce piane superiori e inferiori (i «tappi»).<br><br><strong>Quando usarla:</strong> la scelta più logica per oggetti a base tubolare, come un'etichetta a 360° su un flacone o la venatura su una colonna." },
+    sferica: { t: 'Proiezione sferica', d: "Avvolge la texture curvandola su entrambi gli assi, come la carta stampata su un mappamondo. L'immagine si restringe e si distorce ai due poli.<br><br><strong>Quando usarla:</strong> raramente nella modellazione standard. Serve soprattutto nell'illuminazione, per mappare correttamente gli sfondi panoramici a 360° sull'ambiente (Sky)." },
+    frontale: { t: 'Proiezione frontale', d: "Proietta la texture dal punto di vista della telecamera attiva, come se l'immagine fosse «stampata» sullo schermo e cadesse sugli oggetti 3D della scena.<br><br><strong>Quando usarla:</strong> quasi solo per il foto-inserimento (compositing) e il «camera mapping»: volumi 3D invisibili su cui si proietta la fotografia di sfondo, così l'oggetto 3D si mimetizza con il reale per raccogliere ombre o generare riflessi corretti." }
+  };
+  const CORONA_IOR = [['Acqua', '1.33'], ['Ceramica / Piastrelle / Smalto', '1.53'], ['Cristallo', '2.00'], ['Ghiaccio', '1.31'],
+    ['Legno (laccato / verniciato)', '1.52'], ['Marmo / Granito / Pietra', '1.55'], ['Pelle / Cuoio', '1.40'], ['Plastica generica', '1.50'],
+    ['Plexiglass', '1.49'], ['Tessuto generico', '1.35'], ['Vernice da muro', '1.50'], ['Vetro architettonico / Finestre', '1.52'],
+    ['Vetro satinato (usa la Roughness!)', '1.52']];
+  const CORONA_VIDEO = [
+    { title: 'Inizio percorso (base)', videos: [
+      { type: 'drive', id: '1dF76yqoBlC1WVoJ4Umma8l3PlfAvMf4m', t: 'Introduzione a Corona', d: 'Lezione introduttiva: posizionamento della camera, creazione delle prime luci e setup base del motore di render.' },
+      { type: 'drive', id: '1V_I3eWoWNTbYgSo58jSatvunc97u7T6h', t: 'Riassunto: introduzione a Corona', d: 'Video riassuntivo sui concetti base e l’introduzione al motore di render.' }] },
+    { title: 'Tecniche avanzate (pavimenti e workflow)', videos: [
+      { type: 'drive', id: '1yaZCMEVIx9Wd3r2I2eGBZ2D2OCIE0Ria', t: 'Mapping Randomizer', d: 'Il Corona Mapping Randomizer per variare le texture del parquet ed evitare ripetizioni evidenti.' },
+      { type: 'drive', id: '1iCa64ynHExNFwVM_oybuPfFKB9fIrkyZ', t: 'Corona Multishader', d: 'Il nodo Multishader per randomizzare i toni dei listelli di legno dei pavimenti in modo automatico.' },
+      { type: 'drive', id: '1aUcuu19rus5BWlqGnva1QEwxgxMOLxqc', t: 'Randomizer + Tile + approfondimenti', d: 'Il Mapping Randomizer insieme al nodo Tile, per un controllo geometrico e procedurale delle fughe.' },
+      { type: 'drive', id: '1s5Da3rPlMQSRCfNVkQ_A30O4Zs8K8ho5', t: 'Corona Decal', d: 'Le decal per applicare grafiche, etichette e dettagli localizzati senza modificare il materiale principale.' },
+      { type: 'drive', id: '1LFzrG7YWz9HnpFDsckkTL6wBs15qdudR', t: 'Salvare i progetti con texture e Cosmos', d: 'Come salvare i file includendo tutti i materiali e le texture scaricate dal Cosmos Browser.' }] }
+  ];
+  const voce = (id, etichetta) => `<button class="chip" type="button" data-voce="${id}" aria-pressed="false">${esc(etichetta)}</button>`;
+  const premi = (gruppo, b) => gruppo.querySelectorAll('.chip').forEach(c => c.setAttribute('aria-pressed', String(c === b)));
+  const tabellaIOR = () => `<div class="cor-ior"><input type="search" placeholder="Cerca un materiale (vetro, marmo…)" aria-label="Cerca un materiale">
+      <table><thead><tr><th>Materiale</th><th>IOR</th></tr></thead><tbody>${CORONA_IOR.map(([m, v]) => `<tr><td>${esc(m)}</td><td>${v}</td></tr>`).join('')}</tbody></table></div>`;
+  function mostraPBR(id) {
+    const v = CORONA_PBR[id];
+    $('#cor-spiega-pbr').innerHTML = `<h4>${esc(v.t)}</h4><div class="cor-testo">${v.d}</div>`
+      + (v.sub ? `<div class="cor-voci cor-voci--sotto">${v.sub.map(([k, l]) => voce(k, l)).join('')}</div><div class="cor-sotto" hidden></div>` : '');
+    premi($('#cor-voci-pbr'), $('#cor-voci-pbr').querySelector(`[data-voce="${id}"]`));
+  }
+  $('#cor-voci-pbr').innerHTML = CORONA_VOCI.map(k => voce(k, CORONA_PBR[k].t)).join('');
+  $('#cor-voci-pbr').addEventListener('click', e => { const b = e.target.closest('[data-voce]'); if (b) mostraPBR(b.dataset.voce); });
+  $('#cor-spiega-pbr').addEventListener('click', e => {
+    const b = e.target.closest('.cor-voci--sotto [data-voce]'); if (!b) return;
+    premi(b.parentElement, b);
+    const box = $('#cor-spiega-pbr .cor-sotto');
+    box.hidden = false;
+    box.innerHTML = `<div class="cor-sotto-testo">${CORONA_PBR[b.dataset.voce].d}</div>` + (b.dataset.voce === 'ior' ? tabellaIOR() : '');
+  });
+  $('#cor-spiega-pbr').addEventListener('input', e => {
+    if (!e.target.matches('.cor-ior input')) return;
+    const q = e.target.value.trim().toLowerCase();
+    e.target.closest('.cor-ior').querySelectorAll('tbody tr').forEach(r => { r.hidden = q && !r.cells[0].textContent.toLowerCase().includes(q); });
+  });
+  mostraPBR('pbr');
+  function mostraProiezione(id) {
+    const v = CORONA_PROIEZIONI[id];
+    $('#cor-spiega-proj').innerHTML = `<h4>${esc(v.t)}</h4><div class="cor-testo">${v.d}</div>`;
+    premi($('#cor-voci-proj'), $('#cor-voci-proj').querySelector(`[data-voce="${id}"]`));
+  }
+  $('#cor-voci-proj').innerHTML = Object.keys(CORONA_PROIEZIONI).map(k => voce(k, CORONA_PROIEZIONI[k].t.replace(/^Proiezione /, '').replace(/^\w/, c => c.toUpperCase()))).join('');
+  $('#cor-voci-proj').addEventListener('click', e => { const b = e.target.closest('[data-voce]'); if (b) mostraProiezione(b.dataset.voce); });
+  mostraProiezione('cubica');
+  $('#lista-video-corona').innerHTML = CORONA_VIDEO.map(g => `<h4 class="cor-video-titolo">${esc(g.title)}</h4><div class="v-griglia">${g.videos.map(schedaVideo).join('')}</div>`).join('');
+
   $('#lista-brand').innerHTML = BRAND.map(g => `
     <section class="b-gruppo"><div><h3>${esc(g.categoria)}</h3><p>${esc(g.descrizione)}</p></div>
       <ul class="b-lista">${g.marchi.map(m => `<li><a href="${m.url}" target="_blank" rel="noopener"><b>${esc(m.nome)}</b><span>${esc(m.dominio)}</span></a></li>`).join('')}</ul>
@@ -1170,5 +1308,6 @@ const shortcuts = [
     disegna();
   });
 </script>
+<script src="../../assets/wip.js?v=10" defer></script>
 </body>
 </html>
