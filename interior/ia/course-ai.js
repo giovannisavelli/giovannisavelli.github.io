@@ -84,12 +84,14 @@ const schedeIA = {
   'tab-archivio': 'archivio',
   'tab-appunti': 'appunti',
   'tab-calendario': 'calendario',
+  'tab-esperimenti': 'esperimenti',
   'tab-strumenti': 'strumenti',
   'tab-glossario': 'glossario',
   'tab-casi': 'casi-studio'
 };
 const aliasSchedeIA = {
-  'vibe-coding': 'tab-strumenti',
+  'vibe-coding': 'tab-esperimenti',
+  'guida-strumenti': 'tab-strumenti',
   'metodo': 'tab-appunti',
   'lezione-1': 'tab-appunti',
   'lezione-2': 'tab-appunti'
@@ -127,7 +129,7 @@ function schedaDaHashIA() {
   if (lezione && document.getElementById(lezione)) document.getElementById(lezione).open = true;
   if (nome) {
     requestAnimationFrame(() => {
-      const destinazione = nome === 'vibe-coding' || nome === 'metodo' || lezione
+      const destinazione = nome === 'vibe-coding' || nome === 'guida-strumenti' || nome === 'metodo' || lezione
         ? document.getElementById(nome) : navigazioneIA;
       destinazione?.scrollIntoView({ block: 'start', behavior: 'auto' });
     });
