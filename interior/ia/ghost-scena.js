@@ -476,8 +476,8 @@ function setMouse(e) {
 }
 // Col dito la sfera risponde solo se tocchi lei (il testo sopra resta libero per scorrere):
 // un tocco solleva la Shell per un attimo; tenendo il dito fermo un istante la pagina si ferma
-// e la Shell si apre sotto il dito, seguendolo; un trascinamento orizzontale ruota la sfera;
-// un movimento verticale veloce resta allo scorrimento della pagina.
+// e la sfera si gira in ogni direzione, con la Shell aperta sotto il dito; anche un trascinamento
+// partito di lato la gira in ogni direzione; un movimento verticale veloce fa scorrere la pagina.
 const cerchio = { x: 0, y: 0, r: 0 };      // la sfera sullo schermo, misurata da fit() rispetto alla scena
 let tocco = null, spegniTocco = 0;
 const sullaSfera = e => {
@@ -490,7 +490,12 @@ stage.addEventListener('pointerdown', e => {
     if (!sullaSfera(e)) return;
     clearTimeout(spegniTocco); setMouse(e); mouse.active = true;
     tocco = { x: e.clientX, y: e.clientY, id: e.pointerId, tieni: false };
-    tocco.timer = setTimeout(() => { if (tocco) { tocco.tieni = true; stage.setPointerCapture(e.pointerId); } }, 220);
+    // dito tenuto fermo un istante: da lì in poi si gira la sfera in ogni direzione, e la pagina resta ferma
+    tocco.timer = setTimeout(() => {
+      if (!tocco) return;
+      tocco.tieni = true; stage.setPointerCapture(e.pointerId);
+      pull.dragging = true; pull.px = tocco.ux ?? tocco.x; pull.py = tocco.uy ?? tocco.y; stage.classList.add('grabbing');
+    }, 220);
     return;
   }
   setMouse(e); mouse.active = true;
@@ -503,7 +508,7 @@ stage.addEventListener('pointermove', e => {
   if (!pull.dragging && e.target.closest('.ghost-controls')) { mouse.active = false; return; }
   if (e.pointerType === 'touch') {
     if (!tocco) return;
-    if (tocco.tieni) { setMouse(e); mouse.active = true; return; }
+    tocco.ux = e.clientX; tocco.uy = e.clientY;
     if (!pull.dragging) {
       const dx = e.clientX - tocco.x, dy = e.clientY - tocco.y;
       if (Math.abs(dy) > 10 && Math.abs(dy) > Math.abs(dx)) { clearTimeout(tocco.timer); tocco = null; mouse.active = false; return; }   // scorre la pagina
@@ -514,7 +519,7 @@ stage.addEventListener('pointermove', e => {
   setMouse(e); mouse.active = true;
   if (pull.dragging) {
     pull.rx += (e.clientX - pull.px) * .006;
-    if (e.pointerType !== 'touch') pull.ry += (e.clientY - pull.py) * .006;
+    pull.ry += (e.clientY - pull.py) * .006;
     pull.px = e.clientX; pull.py = e.clientY;
   }
 });
