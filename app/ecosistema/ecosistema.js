@@ -336,7 +336,7 @@ const c4d = tool('c4d', 'Cinema 4D', 'via MCP', -6.5, 14.56, CSS.c4d, g => {
   mesh(new THREE.SphereGeometry(.55, 24, 16), mat(0x13235c, COL.c4d, .45), g, 0, 1, 0, null);
   mesh(new THREE.TorusGeometry(.6, .06, 8, 40), mat(0xe8eefc, 0xffffff, .4), g, 0, 1, 0, null).rotation.set(1.2, .3, 0);
 });
-const higgs = tool('higgs', 'Higgsfield', 'Nano Banana Pro · genera Giovanni', 7.8, -17.55, CSS.amber, g => {
+const higgs = tool('higgs', 'Higgsfield', 'Nano Banana Pro · genero io', 7.8, -17.55, CSS.amber, g => {
   mesh(B(1.3, .9, .9), mat(0x221d10, COL.amber, .25), g, 0, .6, 0, COL.amber, .9);
   g.userData.sheet = mesh(B(.8, .03, .6), mat(0xf4efe0, COL.amber, .3), g, .1, 1.1, 0, null);
   g.userData.sheet.rotation.z = .25;
@@ -373,7 +373,7 @@ const gioRing = mesh(new THREE.RingGeometry(.5, .62, 40), new THREE.MeshBasicMat
 gioRing.rotation.x = -Math.PI / 2; gioRing.castShadow = false;
 const bulb = mesh(new THREE.IcosahedronGeometry(.26, 1), mat(0x3a2f10, COL.amber, 1.6), gio, 0, 2.15, 0, null); bulb.visible = false;
 clickable(gio, 'gio');
-const gioLbl = label(gio, 2.05, 'agent', '<b>Giovanni</b><span class="sub">chiede, corregge, approva</span><span class="chip" hidden></span>', CSS.green);
+const gioLbl = label(gio, 2.05, 'agent', '<b>Io</b><span class="sub">chiedo, correggo, approvo</span><span class="chip" hidden></span>', CSS.green);
 const gioSub = gioLbl.el.querySelector('.sub'), gioChip = gioLbl.el.querySelector('.chip');
 const GIO = at(gio, 1.5);
 
@@ -746,8 +746,8 @@ function goTo(to, quiet) {
   gioPath = { pts: [from, mid, SEAT[to].clone()], i: 0, k: 0, to };
   gioPhone.visible = false; where = 'walk';
   if (!quiet) {
-    if (to === 'sofa') log('Giovanni va in pausa: divano, TV, telefono in mano. Gli assistenti continuano a lavorare.');
-    else log(`Giovanni passa al ${to === 'pc' ? 'PC fisso' : 'MacBook'}: gli assistenti ripartono dal Diario, non da zero.`);
+    if (to === 'sofa') log('Vado in pausa: divano, TV, telefono in mano. Gli assistenti continuano a lavorare.');
+    else log(`Passo al ${to === 'pc' ? 'PC fisso' : 'MacBook'}: gli assistenti ripartono dal Diario, non da zero.`);
   }
 }
 function arrived(to) {
@@ -801,10 +801,10 @@ function stepAgent(A, dt) {
     if (!P) { A.t = 0; return; }
     if (A.mini) log(`${who(A)} parte per «${P.name}»: ${A.task}.`, A.color);
     else if (where === 'sofa') {
-      log(`Dal divano, Giovanni chiede a ${who(A)}: «${A.task}». La sessione gira sul PC, lui la guida dal telefono.`, A.color);
+      log(`Dal divano chiedo a ${who(A)}: «${A.task}». La sessione gira sul PC, io la guido dal telefono.`, A.color);
       beam(GIO, A.head, COL.gemini, 1.6, { h: 2 });
     } else {
-      log(`Giovanni chiede a ${who(A)}: «${A.task}». Rilegge il Diario e parte.`, A.color);
+      log(`Chiedo a ${who(A)}: «${A.task}». Rilegge il Diario e parte.`, A.color);
       beam(GIO, A.head, COL.green, 1.4, { h: 1.4 });
     }
     A.actEl.textContent = `va a: ${P.name}`; A.pack.visible = true;
@@ -825,7 +825,7 @@ function stepAgent(A, dt) {
     const P = A.job; diary++;
     A.pack.visible = false;
     if (P.progress >= .99) {
-      log(`${who(A)}: «${P.name}» è pronto. Chiede l'ok a Giovanni.`, A.color);
+      log(`${who(A)}: «${P.name}» è pronto. Mi chiede l'ok.`, A.color);
       beam(A.head, GIO, A.hex, 1.4, { h: 1.4, onEnd: () => ask(P) });
     } else log(`${who(A)} scrive nel Diario: «${A.task}», a buon punto.`, A.color);
     P.busy = null; A.job = null;
@@ -855,7 +855,7 @@ function startWork(A) {
 function imageFlow(A) {
   log(`${who(A)} scrive il prompt per Nano Banana Pro: soggetto, luce, formato, immagini da allegare.`, A.color);
   beam(A.head, GIO, A.hex, 1.6, { h: 2.4, big: true, onEnd: () => {
-    log('Giovanni incolla il prompt su Higgsfield e genera: i crediti sono suoi, decide lui quante prove fare.', CSS.amber);
+    log('Incollo il prompt su Higgsfield e genero: i crediti sono miei, decido io quante prove fare.', CSS.amber);
     beam(GIO, at(higgs, 1.1), COL.amber, 1.6, { h: 2.6, onEnd: () => {
       higgs.userData.flash = 1; audio.play('ding', 5);
       log("L'immagine scelta passa in Photoshop: si corregge solo dove serve, sul file ad alta risoluzione.", CSS.ps);
@@ -882,9 +882,9 @@ function stepApprovals(dt) {
   if (a.t > 1.4 && !a.done) {
     a.done = true; approved++; gioChip.textContent = 'ok ✓'; audio.play('fanfare', 0, 1.5);
     a.P.flash = 1;
-    if (a.P.out) { log(`Giovanni approva: «${a.P.name}» va online.`); beam(a.P.top, at(cloud, 0), COL.green, 1.8, { h: 2.4 }); }
-    else if (a.P.key === 'clienti') { log('Giovanni approva: il lavoro parte per il cliente.', CSS.client); beam(at(ps, 1.2), at(client, 1.3), COL.client, 2.2, { h: 4, big: true }); }
-    else log(`Giovanni approva «${a.P.name}».`);
+    if (a.P.out) { log(`Approvo: «${a.P.name}» va online.`); beam(a.P.top, at(cloud, 0), COL.green, 1.8, { h: 2.4 }); }
+    else if (a.P.key === 'clienti') { log('Approvo: il lavoro parte per il cliente.', CSS.client); beam(at(ps, 1.2), at(client, 1.3), COL.client, 2.2, { h: 4, big: true }); }
+    else log(`Approvo «${a.P.name}».`);
     if (!story) a.P.progress = .08 + Math.random() * .2;
   }
   if (a.t > 2.6) { approvals.shift(); gioChip.hidden = !approvals.length; }
@@ -893,7 +893,7 @@ function stepApprovals(dt) {
 // ---------- reel, telefono e pausa ----------
 let reelT = 4, soloT = 9;
 function sendReel() {
-  log(where === 'sofa' ? 'Dal divano, Giovanni manda un reel al suo bot Telegram.' : 'Giovanni manda un reel al suo bot Telegram.', CSS.gemini);
+  log(where === 'sofa' ? 'Dal divano mando un reel al mio bot Telegram.' : 'Mando un reel al mio bot Telegram.', CSS.gemini);
   beam(GIO, PHONE, COL.gemini, 1.5, { h: 2, onEnd: () => {
     geminiBusy = 2.4; audio.play('bloop', 0, 1);
     setTimeout(() => {
@@ -909,9 +909,9 @@ function stepFree(dt) {
   if (reelT < 0) { reelT = where === 'sofa' ? 6 + Math.random() * 4 : 13 + Math.random() * 8; if (!gioPath) sendReel(); }
   if (soloT < 0 && !gioPath) {
     soloT = 13 + Math.random() * 9;
-    if (where === 'sofa') log('Sul divano, TV accesa: Giovanni guarda le notifiche, gli assistenti lavorano da soli. L\'ecosistema glielo permette.');
-    else if (where === 'pc' && Math.random() < .55) { log('Giovanni ritocca a mano in Photoshop la zona da correggere.', CSS.ps); beam(GIO, at(ps, 1.1), COL.ps, 2.4, { h: 1.4 }); }
-    else { log('Giovanni rilegge il Diario e aggiunge una cosa da fare.'); beam(GIO, BRAIN_TOP, COL.green, 1.8, { h: 1.6 }); }
+    if (where === 'sofa') log('Sul divano, TV accesa: guardo le notifiche, gli assistenti lavorano da soli. L\'ecosistema me lo permette.');
+    else if (where === 'pc' && Math.random() < .55) { log('Ritocco a mano in Photoshop la zona da correggere.', CSS.ps); beam(GIO, at(ps, 1.1), COL.ps, 2.4, { h: 1.4 }); }
+    else { log('Rileggo il Diario e aggiungo una cosa da fare.'); beam(GIO, BRAIN_TOP, COL.green, 1.8, { h: 1.6 }); }
   }
   if (moveT > (where === 'sofa' ? 22 : 30) && !gioPath) { moveT = 0; placeIdx = (placeIdx + 1) % PLACES.length; goTo(PLACES[placeIdx]); }
 }
@@ -929,11 +929,11 @@ const isLive = k => !story || live.has(k);
 let bulbT = .7;
 const V = (x, y, z) => new THREE.Vector3(x, y, z);
 const STEPS = [
-  { t: "Giovanni ha un'idea", p: "È in pausa sul divano, con la TV accesa e il telefono in mano. L'idea arriva lì, non per forza davanti al computer.",
+  { t: "Mi viene un'idea", p: "Sono in pausa sul divano, con la TV accesa e il telefono in mano. L'idea arriva lì, non per forza davanti al computer.",
     dur: 7, live: ['gio', 'sofa'],
     go(i) { shot(at(gio, .9), 2.8, TH0 + .55, 1.12, 1.5);
       later(i, 1600, () => { bulb.visible = true; bulb.scale.setScalar(.01); bulbT = .7; bulb.material.emissive.setHex(COL.amber); audio.play('sparkle'); });
-      log("Giovanni ha un'idea per un cliente."); } },
+      log("Mi viene un'idea per un cliente."); } },
   { t: 'Subito ne parla con Claude e ChatGPT', p: "Dal telefono scrive a Claude e a ChatGPT, per non perdere l'idea. Due primi pareri, ancora dal divano.",
     dur: 10.5, live: ['gio', 'sofa', 'claude', 'codex'],
     go(i) { shot(claude.head, 2.3, TH0, 1.02, 2.4);
@@ -942,8 +942,8 @@ const STEPS = [
         beam(GIO, claude.head, COL.claude, 4, { both: true, h: 1, keep: keepStep(i) });
         beam(GIO, codex.head, COL.codex, 4, { both: true, h: .9, keep: keepStep(i) });
         shot(at(gio, .7), 2.3, TH0 + .55, 1.1, 1.6); });
-      log('Dal telefono, Giovanni ne parla con Claude e con ChatGPT.'); } },
-  { t: 'Poi va al PC e ci lavora da lì', p: "Il divano è servito ad accendere la scintilla. Al PC l'idea si valida, cambia, si rafforza: Giovanni porta le critiche dell'uno all'altro.",
+      log('Dal telefono ne parlo con Claude e con ChatGPT.'); } },
+  { t: 'Poi vado al PC e ci lavoro da lì', p: "Il divano è servito ad accendere la scintilla. Al PC l'idea si valida, cambia, si rafforza: porto le critiche dell'uno all'altro.",
     dur: 10.5, live: ['gio', 'sofa', 'pc', 'claude', 'codex'],
     go(i) { goTo('pc', true); shot(at(gio, 1), 1.9, TH0 + .15, 1.05, 2.8);
       later(i, 700, () => { moveAgent(claude, pc.position.clone().add(V(2.9, 0, -2.4))); moveAgent(codex, pc.position.clone().add(V(2.9, 0, 2.5))); });
@@ -951,15 +951,15 @@ const STEPS = [
         shot(pc.position.clone().add(V(1.6, 1, 0)), 2.2, TH0 - .3, 1.02, 1.8);
         beam(claude.head, GIO, COL.claude, 1.8, { h: 1.2, onEnd: () => beam(GIO, codex.head, COL.claude, 1.8, { h: 1 }) }); });
       later(i, 8200, () => { bulbT = 1.25; bulb.material.emissive.setHex(COL.green); audio.play('sparkle'); });
-      log("Giovanni va al PC: l'idea si valida e si rafforza."); } },
-  { t: 'Il brief va nel cervello centrale', p: "Quando l'idea regge, Giovanni la scrive nel cervello centrale: obiettivo, regole, materiali. Da qui partono tutti, su qualunque computer.",
+      log("Vado al PC: l'idea si valida e si rafforza."); } },
+  { t: 'Il brief va nel cervello centrale', p: "Quando l'idea regge, la scrivo nel cervello centrale: obiettivo, regole, materiali. Da qui partono tutti, su qualunque computer.",
     dur: 8.5, live: ['gio', 'pc', 'brain'],
     go(i) { bulbT = .01;
       const b = beam(GIO, BRAIN_TOP, COL.green, 3.4, { h: 2.2, big: true, once: true, onEnd: () => { brainFlash = 1; diary++; audio.play('brain'); } });
       shot(at(gio, 1), 2, TH0, 1.02, 2.5);
       later(i, 500, () => follow(b, 1.8, TH0 + .1, 1.05));
       later(i, 3300, () => shot(BRAIN_TOP, 2.3, TH0 + .35, 1.3, 1.5));
-      log('Giovanni scrive il brief nel cervello centrale.'); } },
+      log('Scrivo il brief nel cervello centrale.'); } },
   { t: 'Il lavoro si divide, anche coi sub-agent', p: "Claude scrive una parte del codice, Codex un'altra, leggendo lo stesso brief. I compiti lunghi (cercare, pianificare, controllare) li affidano ai sub-agent, che portano i dati.",
     dur: 11.5, live: ['brain', 'drone', 'clienti', 'claude', 'codex', 'gio', 'pc'],
     go(i) { bulb.visible = false; CL.busy = claude; CL.progress = .05;
@@ -983,12 +983,12 @@ const STEPS = [
       later(i, 1300, () => { const b = beam(claude.head, GIO, COL.claude, 3.6, { h: 3, big: true, once: true }); follow(b, 1.4, TH0, 1.02); });
       later(i, 5300, () => shot(at(gio, 1), 2.3, TH0 - .2, 1.05, 1.8));
       log('Claude scrive il prompt per Nano Banana Pro.', CSS.claude); } },
-  { t: 'Giovanni genera su Higgsfield', p: 'Incolla il prompt su Higgsfield e genera. Decide lui quante prove fare, perché i crediti sono suoi, e sceglie la migliore.',
+  { t: 'Genero su Higgsfield', p: 'Incollo il prompt su Higgsfield e genero. Decido io quante prove fare, perché i crediti sono miei, e scelgo la migliore.',
     dur: 8.5, live: ['gio', 'pc', 'higgs'],
     go(i) { const b = beam(GIO, at(higgs, 1.1), COL.amber, 3.8, { h: 3.4, once: true, onEnd: () => { higgs.userData.flash = 1; audio.play('ding', 5); } });
       later(i, 300, () => follow(b, 1.3, TH0, 1.02));
       later(i, 3900, () => shot(at(higgs, .9), 2.6, TH0 + .35, 1.1, 1.6));
-      log('Giovanni genera su Higgsfield.', CSS.amber); } },
+      log('Genero su Higgsfield.', CSS.amber); } },
   { t: 'Rifinitura in Photoshop', p: "L'immagine scelta passa in Photoshop. Si corregge solo dove serve, sul file ad alta risoluzione; Claude può preparare livelli e maschere con uno script.",
     dur: 9.5, live: ['higgs', 'ps', 'gio', 'claude', 'pc'],
     go(i) { shot(at(higgs, .9), 2.2, TH0 + .35, 1.1, 2);
@@ -999,12 +999,12 @@ const STEPS = [
         follow(b, 1.1, TH0, 1.02); });
       later(i, 5300, () => shot(at(ps, .9), 2.3, TH0 - .35, 1.05, 1.6));
       log("L'immagine passa in Photoshop.", CSS.ps); } },
-  { t: 'Giovanni controlla e consegna', p: 'Controlla tutto, da sé. Solo con il suo ok il lavoro parte per il cliente.',
+  { t: 'Controllo e consegno', p: 'Controllo tutto, di persona. Solo con il mio ok il lavoro parte per il cliente.',
     dur: 9.5, live: ['gio', 'ps', 'client', 'pc', 'clienti'],
     go(i) { CL.progress = 1;
       shot(at(gio, 1), 2.7, TH0 + .2, 1.05, 2);
       gioChip.hidden = false; gioChip.textContent = 'approva?';
-      later(i, 1700, () => { gioChip.textContent = 'ok ✓'; approved++; CL.flash = 1; audio.play('fanfare'); log('Giovanni approva: il lavoro parte per il cliente.', CSS.client); });
+      later(i, 1700, () => { gioChip.textContent = 'ok ✓'; approved++; CL.flash = 1; audio.play('fanfare'); log('Approvo: il lavoro parte per il cliente.', CSS.client); });
       later(i, 2800, () => {
         const b = beam(at(ps, 1.2), at(client, 1.3), COL.client, 4.4, { h: 4.5, big: true, once: true, onEnd: () => { client.userData.flash = 1; audio.play('fanfare'); } });
         follow(b, 1.1, TH0, 1.02); });
@@ -1096,28 +1096,28 @@ addEventListener('pointerup', e => {
 const INFO = {
   brain: ['La memoria', 'Cervello centrale', 'Google Drive conserva la memoria comune, le istruzioni di ogni progetto e un Diario che dice cosa è stato fatto e cosa resta aperto. Non comanda: ricorda. Sta appeso ai suoi cavi, che lo legano a tutto il resto: nessun lavoro resta chiuso in una chat.', CSS.green],
   drone: ['Sub-agent', 'I sub-agent', 'Claude e Codex affidano i compiti lunghi a degli aiutanti: Explore cerca nei file, Plan prepara il piano, Verifica controlla. Lavorano in parallelo e riportano i risultati: qui volano da un punto all’altro portando i dati.', CSS.claude],
-  gio: ['Chi decide', 'Giovanni', 'Il lavoro parte da lui: ha le idee, chiede agli assistenti, manda i reel al bot, genera le immagini, ritocca a mano, approva. Anche dal divano.', CSS.green],
-  sofa: ['La pausa', 'Divano, TV, telefono', "Con l'ecosistema Giovanni può staccarsi dalla scrivania: le sessioni continuano a girare sul PC e lui le guida dal telefono, manda reel al bot, segue un'app che cresce mentre guarda la TV.", CSS.gemini],
+  gio: ['Chi decide', 'Io', 'Il lavoro parte da me: ho le idee, chiedo agli assistenti, mando i reel al bot, genero le immagini, ritocco a mano, approvo. Anche dal divano.', CSS.green],
+  sofa: ['La pausa', 'Divano, TV, telefono', "Con l'ecosistema posso staccarmi dalla scrivania: le sessioni continuano a girare sul PC e io le guido dal telefono, mando reel al bot, seguo un'app che cresce mentre guardo la TV.", CSS.gemini],
   pc: ['Postazione', 'PC fisso', 'Tre monitor e i programmi più pesanti: Photoshop, Blender, Cinema 4D, la voce clonata in locale, il bot Telegram. Legge e scrive lo stesso cervello centrale del Mac.', CSS.ink],
-  mac: ['Postazione', 'MacBook', "Quasi intercambiabile col PC: stessi file, stessa memoria. Quando Giovanni cambia computer, l'assistente rilegge il Diario e riparte da dove si era fermato.", CSS.ink],
+  mac: ['Postazione', 'MacBook', "Quasi intercambiabile col PC: stessi file, stessa memoria. Quando cambio computer, l'assistente rilegge il Diario e riparte da dove si era fermato.", CSS.ink],
   claude: ['Assistente', 'Claude', 'Claude Code lavora sui file dei progetti, scrive codice e prompt, comanda Photoshop, Blender e Cinema 4D, chiede a Gemini di guardare i video e, per i lavori grandi, apre più sessioni in parallelo.', CSS.claude],
   codex: ['Assistente', 'ChatGPT · Codex', "L'assistente di OpenAI. Si usa per confrontare le idee e per scrivere codice sugli stessi progetti. Non vede le chat di Claude: legge gli stessi file e lo stesso Diario. Per questo collaborano «quasi» insieme.", CSS.codex],
   mini: ['Sessioni parallele', 'Sonnet e Haiku', 'Per i lavori con parti indipendenti Claude apre altre sessioni con modelli più economici: Sonnet per costruire, Haiku per leggere e controllare. Fanno prima, ma costano: si usano solo quando conviene.', CSS.mini],
-  bot: ['Strumento', 'Gemini e il bot Telegram', 'Giovanni manda i reel al suo bot; Gemini li guarda e risponde in chat con un resoconto. Le novità utili finiscono nel cervello centrale. Anche Claude può chiedere a Gemini di guardare un video, via API.', CSS.gemini],
+  bot: ['Strumento', 'Gemini e il bot Telegram', 'Mando i reel al mio bot; Gemini li guarda e risponde in chat con un resoconto. Le novità utili finiscono nel cervello centrale. Anche Claude può chiedere a Gemini di guardare un video, via API.', CSS.gemini],
   ps: ['Strumento', 'Photoshop', "La rifinitura: l'immagine generata si corregge solo dove serve, sul file ad alta risoluzione. Claude può comandarlo con degli script (livelli, maschere, oggetti avanzati), sempre in modo reversibile.", CSS.ps],
   blender: ['Strumento', 'Blender', 'Collegato con MCP: Claude manda comandi alla finestra di Blender aperta, costruisce scene, luci e render senza servizi a pagamento.', CSS.blender],
-  c4d: ['Strumento', 'Cinema 4D', 'Anche Cinema 4D è collegato con MCP: Claude prepara scene ed esempi per il corso di Rendering 3D, Giovanni li controlla e li rifinisce.', CSS.c4d],
-  higgs: ['Strumento', 'Higgsfield · Nano Banana Pro', "Il prompt lo scrivono Claude o ChatGPT: soggetto, luce, formato, immagini da allegare e in che ordine. Giovanni lo incolla su Higgsfield e genera. L'immagine scelta poi passa in Photoshop.", CSS.amber],
-  online: ['Pubblicazione', 'Online', "Il sito dei corsi sta su GitHub Pages, gli esercizi in aula su Cloudflare. Tutti e due gratuiti. Ci si arriva solo dopo l'ok di Giovanni.", CSS.green],
-  client: ['Consegna', 'Cliente', 'Riceve il lavoro finito: codice e immagini controllati da Giovanni. Le prove e le anteprime restano nel cervello centrale.', CSS.client],
-  sito: ['Progetto', 'Sito dei corsi', 'Le pagine dei corsi AANT. Gli assistenti preparano e controllano su computer e telefono; la pubblicazione parte solo con il sì di Giovanni.', CSS.green],
-  sleep: ['Progetto', 'Sleep Physics', 'Il gioco di fisica di Giovanni per TikTok: sfere che cadono e rimbalzano, combo e sfide «Mystery». Una regia sceglie seed, sfide e musica e prepara i video; il codice lo scrivono Claude e Codex.', CSS.green],
+  c4d: ['Strumento', 'Cinema 4D', 'Anche Cinema 4D è collegato con MCP: Claude prepara scene ed esempi per il corso di Rendering 3D, io li controllo e li rifinisco.', CSS.c4d],
+  higgs: ['Strumento', 'Higgsfield · Nano Banana Pro', "Il prompt lo scrivono Claude o ChatGPT: soggetto, luce, formato, immagini da allegare e in che ordine. Io lo incollo su Higgsfield e genero. L'immagine scelta poi passa in Photoshop.", CSS.amber],
+  online: ['Pubblicazione', 'Online', "Il sito dei corsi sta su GitHub Pages, gli esercizi in aula su Cloudflare. Tutti e due gratuiti. Ci si arriva solo dopo il mio ok.", CSS.green],
+  client: ['Consegna', 'Cliente', 'Riceve il lavoro finito: codice e immagini controllati da me. Le prove e le anteprime restano nel cervello centrale.', CSS.client],
+  sito: ['Progetto', 'Sito dei corsi', 'Le pagine dei corsi AANT. Gli assistenti preparano e controllano su computer e telefono; la pubblicazione parte solo con il mio sì.', CSS.green],
+  sleep: ['Progetto', 'Sleep Physics', 'Il mio gioco di fisica per TikTok: sfere che cadono e rimbalzano, combo e sfide «Mystery». Una regia sceglie seed, sfide e musica e prepara i video; il codice lo scrivono Claude e Codex.', CSS.green],
   esercizi: ['Progetto', 'Esercizi in aula', 'Piccole app con QR per gli studenti, come «La frase a gruppi»: girano su Cloudflare e si provano prima con telefoni veri.', CSS.green],
-  eidolon: ['Progetto', 'Eidolon Noeima', 'Il progetto di ritratti di Giovanni. Gli assistenti scrivono i prompt e confrontano i volti con i riferimenti; Giovanni genera e rifinisce in Photoshop.', CSS.green],
+  eidolon: ['Progetto', 'Eidolon Noeima', 'Il mio progetto di ritratti. Gli assistenti scrivono i prompt e confrontano i volti con i riferimenti; io genero e rifinisco in Photoshop.', CSS.green],
   makkelijk: ['Progetto', 'Makkelijk', 'Foto di famiglia dal taglio documentaristico per un cliente: schede dei personaggi, prompt e tante prove, con più assistenti coordinati. Il lavoro è chiuso, il metodo è rimasto ed è raccolto in un file di lezioni.', CSS.green],
-  italmanager: ['Progetto', 'Italmanager · CROSSBAR', 'La carriera online di Giovanni in Football Manager, raccontata da CROSSBAR: articoli delle partite, copertine e bannerini delle vittorie. Gli assistenti scrivono testi e prompt, Giovanni genera e impagina.', CSS.green],
-  voce: ['Progetto', 'Animazioni con voce', 'Spiegazioni animate ricavate dai videocorsi, narrate con la voce di Giovanni clonata sul PC, senza servizi a pagamento.', CSS.green],
-  clienti: ['Progetto', 'Lavori per clienti', 'Codice e immagini. Gli assistenti scrivono pagine e prompt; Giovanni genera, rifinisce in Photoshop e consegna.', CSS.green],
+  italmanager: ['Progetto', 'Italmanager · CROSSBAR', 'La mia carriera online in Football Manager, raccontata da CROSSBAR: articoli delle partite, copertine e bannerini delle vittorie. Gli assistenti scrivono testi e prompt, io genero e impagino.', CSS.green],
+  voce: ['Progetto', 'Animazioni con voce', 'Spiegazioni animate ricavate dai videocorsi, narrate con la mia voce clonata sul PC, senza servizi a pagamento.', CSS.green],
+  clienti: ['Progetto', 'Lavori per clienti', 'Codice e immagini. Gli assistenti scrivono pagine e prompt; io genero, rifinisco in Photoshop e consegno.', CSS.green],
 };
 const card = document.getElementById('card');
 function openCard(key) {
@@ -1146,7 +1146,7 @@ addEventListener('pointerdown', wake); addEventListener('keydown', wake);
 
 // ---------- animazione ----------
 let clock = 0, last = performance.now(), brainFlash = 0;
-log('Giovanni apre la giornata al PC fisso.');
+log('Apro la giornata al PC fisso.');
 // quando la scena esce dallo schermo non si disegna: meno lavoro per il computer e per la batteria del telefono
 let onScreen = true;
 new IntersectionObserver(([e]) => { onScreen = e.isIntersecting; audio.setAwake(onScreen && !document.hidden); }).observe(box);

@@ -207,7 +207,7 @@ export async function renderWav(kind = 'musica') {
   const c = new OfflineAudioContext(2, Math.ceil(sr * sec), sr), g = graph(c, c.destination);
   if (kind === 'musica') for (let b = 0; b < 16; b++) scheduleBar(c, g, .1 + b * BAR, b);
   else {
-    const list = [['pop', 0], ['ding', 0], ['sparkle'], ['fanfare'], ['whoosh', .7], ['brain'], ['step'], ['bloop'], ['tick'], ['babble', 'Giovanni ha un’idea. È in pausa sul divano, con la TV accesa.']];
+    const list = [['pop', 0], ['ding', 0], ['sparkle'], ['fanfare'], ['whoosh', .7], ['brain'], ['step'], ['bloop'], ['tick'], ['babble', 'Mi viene un’idea. Sono in pausa sul divano, con la TV accesa.']];
     list.forEach(([n, a], k) => FX[n](c, g.sfx, .2 + k * 1.3, a));
   }
   const buf = await c.startRendering();
