@@ -261,3 +261,6 @@ figcaption em.si{color:var(--green);background:rgba(119,231,183,.12)}
 .zoom-aiuto{display:none;position:fixed;left:0;right:0;bottom:calc(66px + env(safe-area-inset-bottom,0px));margin:0;text-align:center;color:var(--muted);font:500 11px var(--mono);letter-spacing:.04em}
 body.zoom-aperto{position:fixed;left:0;right:0;overflow:hidden}
 @media(max-width:600px){.zoom-palco{padding:max(64px,env(safe-area-inset-top,0px)) 10px 120px}.zoom-aiuto{display:block}}
+.zoom-palco>img{grid-area:1/1}
+.zoom-vicina{visibility:hidden;max-width:100%;max-height:100%;object-fit:contain;border-radius:4px;box-shadow:0 30px 80px rgba(0,0,0,.55);will-change:transform;pointer-events:none}
+.zoom-freccia[hidden]{display:none}

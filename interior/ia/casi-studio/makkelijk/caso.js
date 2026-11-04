@@ -1,45 +1,74 @@
 // Clic su una foto: si apre ingrandita, con la pagina dietro sfocata e ferma.
-// Foto prima o dopo: frecce ← → della tastiera, pulsanti, oppure il dito a destra o a sinistra.
+// Si scorrono solo le foto dello stesso capitolo, come un carosello: mentre una esce di lato, entra la vicina.
+// Foto prima o dopo: frecce ← → della tastiera, pulsanti, oppure il dito di lato.
 // Per chiudere: la ×, Esc, un clic fuori dalla foto, oppure il dito in su o in giù.
 (function () {
   const zoom = document.getElementById('zoom');
   if (!zoom || !zoom.showModal) return;
-  const img = zoom.querySelector('img');
+  const palco = zoom.querySelector('.zoom-palco');
+  const img = palco.querySelector('img');
+  const vicina = img.cloneNode(); vicina.className = 'zoom-vicina'; vicina.alt = ''; palco.appendChild(vicina);
   const conta = zoom.querySelector('.zoom-conta');
-  const foto = [...document.querySelectorAll('figure img, .sf-corpo > img')];
+  const frecce = [...zoom.querySelectorAll('.zoom-freccia')];
+  const tutte = [...document.querySelectorAll('figure img, .sf-corpo > img')];
   const piano = !matchMedia('(prefers-reduced-motion: reduce)').matches;
-  let qui = 0, scrollPrima = 0;
+  let gruppo = [], qui = 0, scrollPrima = 0, inCorsa = false;
+  const largo = () => palco.clientWidth || innerWidth;
+  const sorgente = f => f.currentSrc || f.src;
+  const sposta = (el, x) => { el.style.transform = 'translateX(' + x + 'px)'; };
 
-  function mostra(i, verso) {
-    qui = (i + foto.length) % foto.length;
-    img.src = foto[qui].currentSrc || foto[qui].src;
-    img.alt = foto[qui].alt;
-    if (conta) conta.textContent = `${qui + 1} / ${foto.length}`;
-    if (verso && piano) img.animate([{ transform: `translateX(${verso * 28}%)`, opacity: 0 }, { transform: 'none', opacity: 1 }], { duration: 260, easing: 'cubic-bezier(.2,.8,.2,1)' });
+  function mostra(i) {
+    qui = (i + gruppo.length) % gruppo.length;
+    img.src = sorgente(gruppo[qui]); img.alt = gruppo[qui].alt;
+    img.style.transform = ''; img.style.opacity = '';
+    vicina.style.visibility = 'hidden';
+    if (conta) conta.textContent = gruppo.length > 1 ? (qui + 1) + ' / ' + gruppo.length : '';
+    frecce.forEach(f => { f.hidden = gruppo.length < 2; });
   }
-  function passa(verso) {
-    // la foto attuale scivola via dalla parte opposta, poi entra la nuova
+  // la foto vicina aspetta fuori schermo, dalla parte da cui entrerà
+  function prepara(verso) {
+    vicina.src = sorgente(gruppo[(qui + verso + gruppo.length) % gruppo.length]);
+    vicina.style.visibility = 'visible';
+    sposta(vicina, verso * largo());
+  }
+  function passa(verso, da) {
+    da = da || 0;
+    if (gruppo.length < 2 || inCorsa) return;
     if (!piano) { mostra(qui + verso); return; }
-    const via = img.animate([{ transform: getComputedStyle(img).transform === 'none' ? 'none' : getComputedStyle(img).transform, opacity: 1 }, { transform: `translateX(${-verso * 28}%)`, opacity: 0 }], { duration: 160, easing: 'ease-in' });
-    via.onfinish = () => { img.style.transform = ''; mostra(qui + verso, verso); };
+    prepara(verso);
+    const W = largo(), durata = 300, curva = 'cubic-bezier(.22,.8,.25,1)';
+    inCorsa = true;
+    img.animate([{ transform: 'translateX(' + da + 'px)' }, { transform: 'translateX(' + (-verso * W) + 'px)' }], { duration: durata, easing: curva, fill: 'forwards' });
+    const entra = vicina.animate([{ transform: 'translateX(' + (verso * W + da) + 'px)' }, { transform: 'translateX(0px)' }], { duration: durata, easing: curva, fill: 'forwards' });
+    entra.onfinish = () => {
+      mostra(qui + verso);
+      img.getAnimations().forEach(a => a.cancel()); vicina.getAnimations().forEach(a => a.cancel());
+      inCorsa = false;
+    };
   }
-  // la pagina dietro resta ferma: niente scorrimento mentre guardi una foto
-  function blocca() { scrollPrima = scrollY; document.body.classList.add('zoom-aperto'); document.body.style.top = `-${scrollPrima}px`; }
+  function blocca() { scrollPrima = scrollY; document.body.classList.add('zoom-aperto'); document.body.style.top = (-scrollPrima) + 'px'; }
   function sblocca() { document.body.classList.remove('zoom-aperto'); document.body.style.top = ''; scrollTo({ top: scrollPrima, behavior: 'instant' }); }
-  function apri(i) { mostra(i); blocca(); zoom.showModal(); if (piano) zoom.animate([{ opacity: 0 }, { opacity: 1 }], { duration: 180 }); }
+  function apri(f) {
+    // solo le foto dello stesso capitolo; quelle dentro un riquadro «Approfondisci» girano solo fra loro
+    const riquadro = f.closest('.approfondisci'), casa = riquadro || f.closest('.capitolo');
+    gruppo = tutte.filter(x => casa && casa.contains(x) && (riquadro || !x.closest('.approfondisci')));
+    if (!gruppo.length) gruppo = [f];
+    mostra(gruppo.indexOf(f)); blocca(); zoom.showModal();
+    if (piano) zoom.animate([{ opacity: 0 }, { opacity: 1 }], { duration: 180 });
+  }
   function chiudi(versoY) {
     if (!zoom.open) return;
     if (!piano) { zoom.close(); return; }
-    const fine = img.animate([{ transform: img.style.transform || 'none', opacity: 1 }, { transform: `translateY(${(versoY || 0) * 40}%) scale(.92)`, opacity: 0 }], { duration: 200, easing: 'ease-in' });
-    fine.onfinish = () => { img.style.transform = ''; zoom.close(); };
+    const fine = img.animate([{ transform: img.style.transform || 'none', opacity: getComputedStyle(img).opacity }, { transform: 'translateY(' + ((versoY || 0) * 40) + '%) scale(.92)', opacity: 0 }], { duration: 200, easing: 'ease-in', fill: 'forwards' });
+    fine.onfinish = () => { zoom.close(); fine.cancel(); img.style.transform = ''; img.style.opacity = ''; };
   }
   zoom.addEventListener('close', sblocca);
 
-  foto.forEach((f, i) => f.addEventListener('click', () => apri(i)));
+  tutte.forEach(f => f.addEventListener('click', () => apri(f)));
   zoom.querySelector('.zoom-prima').addEventListener('click', e => { e.stopPropagation(); passa(-1); });
   zoom.querySelector('.zoom-dopo').addEventListener('click', e => { e.stopPropagation(); passa(1); });
   zoom.querySelector('.zoom-chiudi').addEventListener('click', e => { e.stopPropagation(); chiudi(0); });
-  zoom.addEventListener('click', e => { if (e.target === zoom || e.target.classList.contains('zoom-palco')) chiudi(0); });
+  zoom.addEventListener('click', e => { if (e.target === zoom || e.target === palco) chiudi(0); });
   zoom.addEventListener('cancel', e => { e.preventDefault(); chiudi(0); });
   document.addEventListener('keydown', e => {
     if (!zoom.open) return;
@@ -47,24 +76,38 @@
     if (e.key === 'ArrowRight') { e.preventDefault(); passa(1); }
   });
 
-  // il dito trascina la foto: di lato cambia foto, in su o in giù la chiude
+  // il dito trascina la foto: di lato la vicina entra insieme a lei, in su o in giù la chiude
   let t = null;
-  zoom.addEventListener('touchstart', e => { if (e.touches.length === 1) t = { x: e.touches[0].clientX, y: e.touches[0].clientY, asse: null }; }, { passive: true });
+  zoom.addEventListener('touchstart', e => { if (e.touches.length === 1 && !inCorsa) t = { x: e.touches[0].clientX, y: e.touches[0].clientY, asse: null, dx: 0, dy: 0, verso: 0 }; }, { passive: true });
   zoom.addEventListener('touchmove', e => {
     if (!t) return;
     const dx = e.touches[0].clientX - t.x, dy = e.touches[0].clientY - t.y;
     if (!t.asse && Math.hypot(dx, dy) > 8) t.asse = Math.abs(dx) > Math.abs(dy) ? 'x' : 'y';
-    if (t.asse === 'x') img.style.transform = `translateX(${dx}px)`;
-    if (t.asse === 'y') { img.style.transform = `translateY(${dy}px) scale(${1 - Math.min(.12, Math.abs(dy) / 1500)})`; img.style.opacity = String(1 - Math.min(.6, Math.abs(dy) / 500)); }
+    if (t.asse === 'x') {
+      if (gruppo.length < 2) sposta(img, dx * .25);            // una sola foto: si sposta appena, poi torna
+      else {
+        const verso = dx < 0 ? 1 : -1;
+        if (verso !== t.verso) { prepara(verso); t.verso = verso; }
+        sposta(img, dx); sposta(vicina, verso * largo() + dx);
+      }
+    }
+    if (t.asse === 'y') {
+      img.style.transform = 'translateY(' + dy + 'px) scale(' + (1 - Math.min(.12, Math.abs(dy) / 1500)) + ')';
+      img.style.opacity = String(1 - Math.min(.6, Math.abs(dy) / 500));
+    }
     t.dx = dx; t.dy = dy;
   }, { passive: true });
   zoom.addEventListener('touchend', () => {
     if (!t) return;
-    const { asse, dx = 0, dy = 0 } = t; t = null; img.style.opacity = '';
-    if (asse === 'x' && Math.abs(dx) > 60) { passa(dx < 0 ? 1 : -1); return; }
+    const asse = t.asse, dx = t.dx, dy = t.dy, verso = t.verso; t = null;
+    if (asse === 'x' && gruppo.length > 1 && Math.abs(dx) > 60) { passa(verso, dx); return; }
     if (asse === 'y' && Math.abs(dy) > 90) { chiudi(dy > 0 ? 1 : -1); return; }
-    if (piano && img.style.transform) img.animate([{ transform: img.style.transform }, { transform: 'none' }], { duration: 180, easing: 'ease-out' });
-    img.style.transform = '';
+    // non abbastanza: tutto torna al suo posto
+    if (piano && img.style.transform) {
+      img.animate([{ transform: img.style.transform, opacity: img.style.opacity || 1 }, { transform: 'none', opacity: 1 }], { duration: 200, easing: 'ease-out' });
+      if (asse === 'x' && verso) vicina.animate([{ transform: vicina.style.transform, visibility: 'visible' }, { transform: 'translateX(' + (verso * largo()) + 'px)', visibility: 'visible' }], { duration: 200, easing: 'ease-out' });
+    }
+    img.style.transform = ''; img.style.opacity = ''; vicina.style.visibility = 'hidden';
   });
 })();
 

@@ -474,23 +474,42 @@ function setMouse(e) {
   mouse.x = e.clientX - sr.left; mouse.y = e.clientY - sr.top;
   mouse.ndc.set((e.clientX - r.left) / r.width * 2 - 1, -((e.clientY - r.top) / r.height) * 2 + 1);
 }
-// Col dito: un tocco solleva la Shell dove tocchi; un trascinamento orizzontale ruota la sfera;
-// un movimento verticale resta allo scorrimento della pagina, senza che la sfera lo «catturi».
+// Col dito la sfera risponde solo se tocchi lei (il testo sopra resta libero per scorrere):
+// un tocco solleva la Shell per un attimo; tenendo il dito fermo un istante la pagina si ferma
+// e la Shell si apre sotto il dito, seguendolo; un trascinamento orizzontale ruota la sfera;
+// un movimento verticale veloce resta allo scorrimento della pagina.
+const cerchio = { x: 0, y: 0, r: 0 };      // la sfera sullo schermo, misurata da fit() rispetto alla scena
 let tocco = null, spegniTocco = 0;
+const sullaSfera = e => {
+  const sr = stage.getBoundingClientRect();
+  return Math.hypot(e.clientX - sr.left - cerchio.x, e.clientY - sr.top - cerchio.y) < cerchio.r * 1.15;
+};
 stage.addEventListener('pointerdown', e => {
   if (e.target.closest('.ghost-controls')) return;
+  if (e.pointerType === 'touch') {
+    if (!sullaSfera(e)) return;
+    clearTimeout(spegniTocco); setMouse(e); mouse.active = true;
+    tocco = { x: e.clientX, y: e.clientY, id: e.pointerId, tieni: false };
+    tocco.timer = setTimeout(() => { if (tocco) { tocco.tieni = true; stage.setPointerCapture(e.pointerId); } }, 220);
+    return;
+  }
   setMouse(e); mouse.active = true;
-  if (e.pointerType === 'touch') { clearTimeout(spegniTocco); tocco = { x: e.clientX, y: e.clientY, id: e.pointerId }; return; }
   pull.dragging = true; pull.px = e.clientX; pull.py = e.clientY;
   stage.setPointerCapture(e.pointerId); stage.classList.add('grabbing');
 });
+// mentre il dito è tenuto sulla sfera, la pagina non scorre
+stage.addEventListener('touchmove', e => { if (tocco && (tocco.tieni || pull.dragging)) e.preventDefault(); }, { passive: false });
 stage.addEventListener('pointermove', e => {
   if (!pull.dragging && e.target.closest('.ghost-controls')) { mouse.active = false; return; }
-  if (tocco && !pull.dragging) {
-    const dx = e.clientX - tocco.x, dy = e.clientY - tocco.y;
-    if (Math.abs(dy) > 10 && Math.abs(dy) > Math.abs(dx)) { tocco = null; mouse.active = false; return; }   // sta scorrendo la pagina
-    if (Math.abs(dx) > 10) { pull.dragging = true; pull.px = e.clientX; pull.py = e.clientY; stage.setPointerCapture(e.pointerId); stage.classList.add('grabbing'); }
-    else return;
+  if (e.pointerType === 'touch') {
+    if (!tocco) return;
+    if (tocco.tieni) { setMouse(e); mouse.active = true; return; }
+    if (!pull.dragging) {
+      const dx = e.clientX - tocco.x, dy = e.clientY - tocco.y;
+      if (Math.abs(dy) > 10 && Math.abs(dy) > Math.abs(dx)) { clearTimeout(tocco.timer); tocco = null; mouse.active = false; return; }   // scorre la pagina
+      if (Math.abs(dx) > 10) { clearTimeout(tocco.timer); pull.dragging = true; pull.px = e.clientX; pull.py = e.clientY; stage.setPointerCapture(e.pointerId); stage.classList.add('grabbing'); }
+      else return;
+    }
   }
   setMouse(e); mouse.active = true;
   if (pull.dragging) {
@@ -502,7 +521,12 @@ stage.addEventListener('pointermove', e => {
 const endDrag = e => {
   pull.dragging = false; pull.rx = pull.ry = 0; stage.classList.remove('grabbing');
   // col dito la Shell resta sollevata ancora un attimo, poi si richiude
-  if (e.pointerType === 'touch') { tocco = null; clearTimeout(spegniTocco); spegniTocco = setTimeout(() => { mouse.active = false; }, 1400); }
+  if (e.pointerType === 'touch') {
+    const avevaTocco = !!tocco;
+    if (tocco) clearTimeout(tocco.timer);
+    tocco = null; clearTimeout(spegniTocco);
+    if (avevaTocco) spegniTocco = setTimeout(() => { mouse.active = false; }, 1400); else mouse.active = false;
+  }
 };
 stage.addEventListener('pointerup', endDrag);
 stage.addEventListener('pointercancel', endDrag);
@@ -532,12 +556,14 @@ function fit() {
     top = sr.top + 146; bottom = sr.bottom - 76; cx = sr.left + sr.width * .52;
   }
   const space = Math.max(120, bottom - top);
-  camera.position.z = 2 * r.height / (2 * T16 * space * (small ? .62 : .86));
+  const quota = small ? .8 : .86;   // sul telefono la sfera è più grande, così è facile toccarla
+  camera.position.z = 2 * r.height / (2 * T16 * space * quota);
   camera.updateProjectionMatrix();
   linksSvg.setAttribute('viewBox', `0 0 ${sr.width} ${sr.height}`);
   if (!small) drawRuler(sr.width, sr.height);
   const k = camera.position.z * T16;
   rig.position.set((((cx - r.left) / r.width) * 2 - 1) * k * camera.aspect, -((((top + bottom) / 2 - r.top) / r.height) * 2 - 1) * k, 0);
+  cerchio.x = cx - sr.left; cerchio.y = (top + bottom) / 2 - sr.top; cerchio.r = space * quota / 2;
   U.uAspect.value = camera.aspect;
 }
 fit(); addEventListener('resize', fit); document.fonts.ready.then(fit);
