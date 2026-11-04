@@ -27,6 +27,14 @@ body.ai-page .guide-ai-plan b { color: #e6f1e9; font-size: 14px; }
 body.ai-page .guide-ai-plan strong { color: var(--green); font: 600 13px/1.4 'Geist Mono',monospace; }
 body.ai-page .guide-ai-plan p { margin: 0; color: #aebfb1; font-size: 13px; line-height: 1.45; }
 body.ai-page .guide-ai-tool-body .guide-ai-tool-foot { margin: 10px 0 0; color: #8ea497; font-size: 11px; line-height: 1.5; }
+body.ai-page .guide-ai-facts, body.ai-page .guide-ai-models { margin: 0; padding: 0; list-style: none; border-top: 1px solid rgba(188,230,216,.19); }
+body.ai-page .guide-ai-facts li, body.ai-page .guide-ai-models li { display: grid; grid-template-columns: minmax(92px,.55fr) minmax(0,1.45fr); gap: 9px 15px; padding: 12px 0; border-bottom: 1px solid rgba(188,230,216,.14); }
+body.ai-page .guide-ai-facts b, body.ai-page .guide-ai-models b { color: #e6f1e9; font-size: 14px; font-weight: 600; line-height: 1.4; }
+body.ai-page .guide-ai-facts span, body.ai-page .guide-ai-models small { color: #aebfb1; font-size: 13px; line-height: 1.48; }
+body.ai-page .guide-ai-models li > span { padding-top: 3px; color: var(--green); font: 600 10px/1.4 'Geist Mono',monospace; letter-spacing: .03em; }
+body.ai-page .guide-ai-models li > div { display: flex; flex-direction: column; gap: 2px; }
+body.ai-page .guide-ai-models small { display: block; }
+body.ai-page .guide-ai-tool-body > p.guide-ai-fineprint { margin: 13px 0 0; color: #9fb3a5; font-size: 12px; line-height: 1.55; }
 body.ai-page .guide-ai-extra { margin-top: 34px; }
 body.ai-page .guide-ai-extra summary { min-height: 116px; }
 body.ai-page .guide-ai-extra-body p { margin-bottom: 0; }
@@ -40,4 +48,4 @@ body.ai-page .guide-ai-sources p { flex-basis: 100%; margin: 0 0 5px; line-heigh
 body.ai-page .guide-ai-sources a { color: var(--green); text-decoration: underline; text-underline-offset: 3px; }
 body.ai-page #guida-strumenti { scroll-margin-top: 140px; }
 @media(max-width:760px){body.ai-page .guide-ai-group-heading{display:block}body.ai-page .guide-ai-group-heading p{margin-top:8px}body.ai-page .guide-ai-tool-grid{grid-template-columns:1fr}body.ai-page .guide-ai-tool summary{min-height:132px}}
-@media(max-width:480px){body.ai-page .guide-ai-tool summary,body.ai-page .guide-ai-extra summary{padding:18px 56px 18px 18px}body.ai-page .guide-ai-tool-body,body.ai-page .guide-ai-extra-body{margin:0 18px 18px}body.ai-page .guide-ai-plan{grid-template-columns:minmax(70px,.45fr) minmax(0,1fr)}body.ai-page .guide-ai-plan p{grid-column:1/-1}body.ai-page .guide-ai-group{margin-top:28px}}
+@media(max-width:480px){body.ai-page .guide-ai-tool summary,body.ai-page .guide-ai-extra summary{padding:18px 56px 18px 18px}body.ai-page .guide-ai-tool-body,body.ai-page .guide-ai-extra-body{margin:0 18px 18px}body.ai-page .guide-ai-plan{grid-template-columns:minmax(70px,.45fr) minmax(0,1fr)}body.ai-page .guide-ai-plan p{grid-column:1/-1}body.ai-page .guide-ai-facts li,body.ai-page .guide-ai-models li{grid-template-columns:1fr;gap:3px}body.ai-page .guide-ai-group{margin-top:28px}}
