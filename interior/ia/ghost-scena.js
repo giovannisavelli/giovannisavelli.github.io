@@ -474,21 +474,36 @@ function setMouse(e) {
   mouse.x = e.clientX - sr.left; mouse.y = e.clientY - sr.top;
   mouse.ndc.set((e.clientX - r.left) / r.width * 2 - 1, -((e.clientY - r.top) / r.height) * 2 + 1);
 }
+// Col dito: un tocco solleva la Shell dove tocchi; un trascinamento orizzontale ruota la sfera;
+// un movimento verticale resta allo scorrimento della pagina, senza che la sfera lo «catturi».
+let tocco = null, spegniTocco = 0;
 stage.addEventListener('pointerdown', e => {
   if (e.target.closest('.ghost-controls')) return;
+  setMouse(e); mouse.active = true;
+  if (e.pointerType === 'touch') { clearTimeout(spegniTocco); tocco = { x: e.clientX, y: e.clientY, id: e.pointerId }; return; }
   pull.dragging = true; pull.px = e.clientX; pull.py = e.clientY;
   stage.setPointerCapture(e.pointerId); stage.classList.add('grabbing');
-  setMouse(e); mouse.active = true;
 });
 stage.addEventListener('pointermove', e => {
   if (!pull.dragging && e.target.closest('.ghost-controls')) { mouse.active = false; return; }
+  if (tocco && !pull.dragging) {
+    const dx = e.clientX - tocco.x, dy = e.clientY - tocco.y;
+    if (Math.abs(dy) > 10 && Math.abs(dy) > Math.abs(dx)) { tocco = null; mouse.active = false; return; }   // sta scorrendo la pagina
+    if (Math.abs(dx) > 10) { pull.dragging = true; pull.px = e.clientX; pull.py = e.clientY; stage.setPointerCapture(e.pointerId); stage.classList.add('grabbing'); }
+    else return;
+  }
   setMouse(e); mouse.active = true;
   if (pull.dragging) {
-    pull.rx += (e.clientX - pull.px) * .006; pull.ry += (e.clientY - pull.py) * .006;
+    pull.rx += (e.clientX - pull.px) * .006;
+    if (e.pointerType !== 'touch') pull.ry += (e.clientY - pull.py) * .006;
     pull.px = e.clientX; pull.py = e.clientY;
   }
 });
-const endDrag = e => { pull.dragging = false; pull.rx = pull.ry = 0; stage.classList.remove('grabbing'); if (e.pointerType === 'touch') mouse.active = false; };
+const endDrag = e => {
+  pull.dragging = false; pull.rx = pull.ry = 0; stage.classList.remove('grabbing');
+  // col dito la Shell resta sollevata ancora un attimo, poi si richiude
+  if (e.pointerType === 'touch') { tocco = null; clearTimeout(spegniTocco); spegniTocco = setTimeout(() => { mouse.active = false; }, 1400); }
+};
 stage.addEventListener('pointerup', endDrag);
 stage.addEventListener('pointercancel', endDrag);
 stage.addEventListener('pointerleave', () => { if (!pull.dragging) mouse.active = false; });

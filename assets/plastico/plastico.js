@@ -191,7 +191,20 @@ function inquadra() {
   const r = box.getBoundingClientRect();
   renderer.setSize(r.width, r.height, false);
   camera.aspect = r.width / r.height;
-  if (piccolo()) { camera.position.set(500, 1500, 1850); camera.lookAt(500, 0, 300); camera.setViewOffset(r.width, r.height, 0, 0, r.width, r.height); }
+  if (piccolo()) {
+    // sul telefono la camera si avvicina finché l'edificio riempie lo schermo da bordo a bordo
+    camera.clearViewOffset();
+    const centro = new THREE.Vector3(500, 0, 300), dir = new THREE.Vector3(0, 1700, 950).normalize(), p = new THREE.Vector3();
+    const angoli = []; for (const x of [60, 940]) for (const y of [0, H]) for (const z of [40, 560]) angoli.push(new THREE.Vector3(x, y, z));
+    let vicino = 600, lontano = 5000;
+    for (let k = 0; k < 24; k++) {
+      const d = (vicino + lontano) / 2;
+      camera.position.copy(centro).addScaledVector(dir, d); camera.lookAt(centro); camera.updateMatrixWorld(); camera.updateProjectionMatrix();
+      const dentro = angoli.every(a => { p.copy(a).project(camera); return Math.abs(p.x) < .97 && Math.abs(p.y) < .9; });
+      if (dentro) lontano = d; else vicino = d;
+    }
+    camera.position.copy(centro).addScaledVector(dir, lontano); camera.lookAt(centro);
+  }
   else {
     camera.position.set(560, 1180, 1820); camera.lookAt(500, 0, 330);
     // l'edificio sta a destra del titolo: si sposta l'inquadratura, non la scena
@@ -212,10 +225,22 @@ hero.addEventListener('pointermove', e => {
 });
 hero.addEventListener('pointerleave', () => { ultimo = -1e9; });
 const aulaIn = p => STANZE.findIndex(s => p && p.x > s.x + 10 && p.x < s.x + s.w - 10 && p.z > s.y + 10 && p.z < s.y + s.h - 10);
+// Col dito il primo tocco su un'aula la illumina e abbatte i suoi muri; il secondo tocco sulla stessa aula entra nel corso.
+let dito = false, scelta = -1;
+hero.addEventListener('pointerdown', e => {
+  dito = e.pointerType === 'touch';
+  if (!dito) return;
+  const r = box.getBoundingClientRect();
+  ndc.set(((e.clientX - r.left) / r.width) * 2 - 1, -((e.clientY - r.top) / r.height) * 2 + 1);
+  ray.setFromCamera(ndc, camera);
+  if (ray.ray.intersectPlane(piano, punto)) { mouse = punto.clone(); ultimo = performance.now(); }
+});
 hero.addEventListener('click', e => {
   if (e.target.closest('a, button')) return;
   const i = aulaIn(mouse && performance.now() - ultimo < 500 ? mouse : null);
-  if (i >= 0) location.href = BASE + STANZE[i].href;
+  if (i < 0) { scelta = -1; return; }
+  if (dito && i !== scelta) { scelta = i; ultimo = performance.now() + 2500; return; }   // resta illuminata qualche secondo
+  location.href = BASE + STANZE[i].href;
 });
 
 // ---------- animazione ----------
