@@ -32,7 +32,7 @@
     @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*:before,*:after{transition-duration:.01ms!important;animation-duration:.01ms!important}}
   </style>
   <link rel="stylesheet" href="../../assets/agenda.css?v=20261029d">
-  <link rel="stylesheet" href="course-ai.css?v=20261029-giorno">
+  <link rel="stylesheet" href="course-ai.css?v=20261104-lez2">
   <link rel="stylesheet" href="guida-strumenti.css?v=20261028-compact01">
   <link rel="stylesheet" href="glossario.css?v=20261101c">
   <script src="glossario.js?v=20261101e" defer></script>
@@ -62,12 +62,19 @@
       "Esperimento: il Laboratorio della Varianza",
       "I diversi modi di scrivere un prompt"
      ]
+    },
+    "2": {
+     "titolo": "Un caso vero, dall’inizio alla fine",
+     "ore": "4 ore · in preparazione",
+     "voci": [
+      "Caso studio: «Una famiglia che non esiste» (Makkelijk)"
+     ]
     }
    }
   };
   </script>
   <script src="../../assets/agenda.js?v=20261029d" defer></script>
-  <script src="course-ai.js?v=20261102-pd3" defer></script>
+  <script src="course-ai.js?v=20261104-lez2" defer></script>
   <script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.170.0/examples/jsm/"}}</script>
 </head>
 <body class="ai-page">
@@ -107,6 +114,7 @@
           <button class="course-tab" type="button" role="tab" id="btn-elenco" data-tab="tab-elenco" aria-controls="tab-elenco" aria-selected="false">Programma</button>
           <button class="course-tab" type="button" role="tab" id="btn-strumenti" data-tab="tab-strumenti" aria-controls="tab-strumenti" aria-selected="false">Strumenti</button>
           <button class="course-tab" type="button" role="tab" id="btn-glossario" data-tab="tab-glossario" aria-controls="tab-glossario" aria-selected="false">Glossario</button>
+          <button class="course-tab" type="button" role="tab" id="btn-casi" data-tab="tab-casi" aria-controls="tab-casi" aria-selected="false">Casi studio</button>
         </nav>
       </div>
       <section class="course-panel" role="tabpanel" id="tab-programma" aria-labelledby="btn-programma">
@@ -132,7 +140,7 @@
           </div>
           <ol class="lesson-index" aria-label="Incontri del corso">
             <li><a href="#lezione-1"><span class="lesson-index-number">01</span><strong>LLM, prompt e varianza</strong><small>4 ore · traccia iniziale</small><span class="lesson-index-arrow" aria-hidden="true">→</span></a></li>
-            <li class="pending"><span class="lesson-card"><span class="lesson-index-number">02</span><strong>Lezione in preparazione</strong><small>4 ore</small><span class="lesson-index-status">In arrivo</span></span></li>
+            <li><a href="#lezione-2"><span class="lesson-index-number">02</span><strong>Un caso vero, dall’inizio alla fine</strong><small>4 ore · in preparazione</small><span class="lesson-index-arrow" aria-hidden="true">→</span></a></li>
             <li class="pending"><span class="lesson-card"><span class="lesson-index-number">03</span><strong>Lezione in preparazione</strong><small>4 ore</small><span class="lesson-index-status">In arrivo</span></span></li>
             <li class="pending"><span class="lesson-card"><span class="lesson-index-number">04</span><strong>Lezione in preparazione</strong><small>4 ore</small><span class="lesson-index-status">In arrivo</span></span></li>
             <li class="pending"><span class="lesson-card"><span class="lesson-index-number">05</span><strong>Lezione in preparazione</strong><small>4 ore</small><span class="lesson-index-status">In arrivo</span></span></li>
@@ -167,6 +175,16 @@
                   <div><span class="kicker">Il metodo</span><h2 id="method-title">Ogni strumento ha bisogno di una competenza.</h2><p>Nel corso, l’IA entra nel processo di progettazione insieme alle domande che permettono di valutarla. L’armatura cresce. Il nucleo anche.</p></div>
                   <div class="principles"><article><b>01</b><div><strong>Produrre</strong><small>Usare gli strumenti per esplorare possibilità, senza confondere velocità e qualità.</small></div></article><article><b>02</b><div><strong>Leggere</strong><small>Riconoscere forme, riferimenti, proporzioni, materiali e scelte che l’immagine nasconde.</small></div></article><article><b>03</b><div><strong>Decidere</strong><small>Delegare solo ciò che sai controllare. Correggere e motivare il risultato.</small></div></article></div>
                 </section>
+              </div>
+            </details>
+            <details class="lesson-note" id="lezione-2" name="appunti-lezioni">
+              <summary><span class="lesson-note-number">02</span><span class="lesson-note-main"><strong>Un caso vero, dall’inizio alla fine</strong><small>Seconda lezione · in preparazione</small></span><span class="lesson-note-toggle" aria-hidden="true"></span></summary>
+              <div class="lesson-note-content">
+                <div class="lesson-opening"><span class="section-meta">SECONDA LEZIONE · 4 ORE</span><h3>Si comincia da un lavoro vero.</h3><p>Prima di parlare di strumenti, guardiamo come è andato un lavoro fatto con l’IA per un cliente: le foto finite, il brief, il metodo, gli errori e come li abbiamo corretti.</p></div>
+                <div class="lesson-track" aria-label="Percorso della seconda lezione">
+                  <article class="lesson-step"><span class="step-index">02 / A</span><div><h3>Caso studio: una famiglia che non esiste</h3><p>Cinque foto per Makkelijk, un’app olandese. Le schede dei personaggi, il cervello centrale su Drive, i cancelli, la ricerca della spontaneità e la review che ha cambiato tutto.</p><a href="casi-studio/makkelijk/">Apri il caso studio <span aria-hidden="true">↗</span></a></div></article>
+                </div>
+                <p class="lesson-index-note">Gli altri argomenti della lezione sono ancora da definire.</p>
               </div>
             </details>
           </div>
@@ -394,6 +412,18 @@
               <div class="guide-ai-tool-body"><p>Con il fine-tuning si riaddestra il modello su esempi propri: cambiano i suoi pesi, cioè le connessioni interne, e nasce un modello nuovo. Servono dati, tempo e competenze. Con la memoria il modello resta lo stesso: gli si danno da leggere preferenze, istruzioni e file ogni volta che lavora. È la differenza fra cambiare il cervello a una persona e darle un quaderno di appunti.</p><p class="glo-esempi-titolo">ESEMPI</p><ul class="glo-esempi"><li>Nel mio lavoro uso solo la <b>memoria</b>: le regole e il diario dei progetti sono file su Drive, che gli assistenti leggono a ogni sessione su tutti e due i computer.</li><li>Nelle immagini si usa spesso un <b>fine-tuning leggero</b>, la LoRA, per insegnare a un modello un volto, un oggetto o uno stile.</li></ul></div>
             </details>
           </div>
+        </div>
+      </section>
+      </section>
+      <section class="course-panel" role="tabpanel" id="tab-casi" aria-labelledby="btn-casi" hidden>
+      <section class="course-block exercise-block" id="casi-studio" aria-labelledby="cases-title">
+        <div class="section-heading">
+          <span class="section-meta">CASI STUDIO · LAVORI VERI</span>
+          <h2 id="cases-title">Come è andata davvero.</h2>
+          <p>Lavori fatti con l’IA per clienti veri, raccontati dall’inizio alla fine: il brief, il metodo, gli errori e come si sono corretti.</p>
+        </div>
+        <div class="exercise-list">
+          <article><span class="exercise-number">01 / FOTOGRAFIA</span><div><h3>Una famiglia che non esiste</h3><p>Cinque foto per Makkelijk, un’app olandese. Un casting fatto con l’IA, un cervello centrale su Drive, la ricerca della spontaneità e una review che ha cambiato tutto.</p></div><a href="casi-studio/makkelijk/">Apri il caso <span aria-hidden="true">↗</span></a></article>
         </div>
       </section>
       </section>

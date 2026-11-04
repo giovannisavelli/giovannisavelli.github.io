@@ -305,3 +305,6 @@ body.ai-page .course-notice a { margin-top: 1px; }
 
 /* Argomenti della giornata: il componente è comune (assets/agenda.css); qui solo i colori e il carattere di IA */
 body.ai-page .agenda { --ag-accent: var(--green); --ag-on-accent: #102019; --ag-text: #edf1ed; --ag-muted: #8fa39a; --ag-surface: #111516; --ag-border: rgba(188,230,216,.16); --ag-mono: 'Geist Mono', monospace; }
+
+/* Aprendo una lezione da un link, il titolo resta visibile sotto la barra delle schede */
+.lesson-note { scroll-margin-top: 160px; }

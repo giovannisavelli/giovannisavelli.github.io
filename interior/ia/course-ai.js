@@ -85,12 +85,14 @@ const schedeIA = {
   'tab-appunti': 'appunti',
   'tab-calendario': 'calendario',
   'tab-strumenti': 'strumenti',
-  'tab-glossario': 'glossario'
+  'tab-glossario': 'glossario',
+  'tab-casi': 'casi-studio'
 };
 const aliasSchedeIA = {
   'vibe-coding': 'tab-strumenti',
   'metodo': 'tab-appunti',
-  'lezione-1': 'tab-appunti'
+  'lezione-1': 'tab-appunti',
+  'lezione-2': 'tab-appunti'
 };
 const pulsantiSchedeIA = [...document.querySelectorAll('.course-tab')];
 const navigazioneIA = document.getElementById('sezioni-corso');
@@ -120,12 +122,12 @@ function schedaDaHashIA() {
   const id = Object.keys(schedeIA).find(scheda => schedeIA[scheda] === nome)
     || aliasSchedeIA[nome] || 'tab-programma';
   apriSchedaIA(id);
-  if (nome === 'lezione-1' || nome === 'metodo') {
-    document.getElementById('lezione-1').open = true;
-  }
+  // «#lezione-2» apre la scheda Appunti con quella lezione già aperta; «#metodo» sta dentro la prima
+  const lezione = nome === 'metodo' ? 'lezione-1' : (/^lezione-\d+$/.test(nome) ? nome : '');
+  if (lezione && document.getElementById(lezione)) document.getElementById(lezione).open = true;
   if (nome) {
     requestAnimationFrame(() => {
-      const destinazione = nome === 'vibe-coding' || nome === 'metodo' || nome === 'lezione-1'
+      const destinazione = nome === 'vibe-coding' || nome === 'metodo' || lezione
         ? document.getElementById(nome) : navigazioneIA;
       destinazione?.scrollIntoView({ block: 'start', behavior: 'auto' });
     });
