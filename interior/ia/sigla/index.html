@@ -66,6 +66,8 @@
        Due tratti di fila si sciolgono uno nell'altro: il nuovo compare mentre il vecchio sfuma */
     .clip-video video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0; transition: opacity .9s ease; }
     .clip-video video.vivo, .clip-video iframe.vivo { opacity: 1; }
+    /* un trailer preso da un file si vede come da YouTube: ingrandito del 12%, così le fasce coprono loghi e sottotitoli stampati */
+    .clip-video video.grande { transform: scale(1.12); }
     .clip.locale .fascia.su { height: 0 !important; }
     .clip.locale .fascia.giu { height: 26%; background: linear-gradient(rgba(0,0,0,0), rgba(0,0,0,.82)); }
     .clip.locale .clip-it { text-shadow: 0 1px 3px #000, 0 0 16px rgba(0,0,0,.9); }
@@ -276,7 +278,7 @@
   <section class="crediti" id="crediti" aria-label="Crediti">
     <button class="btn chiudi" type="button" id="chiudi-crediti">Chiudi ✕</button>
     <h2>Crediti</h2>
-    <p>Sigla didattica, senza scopo di lucro, per il corso di Intelligenza Artificiale dell’AANT. Gli spezzoni non sono copiati: sono i trailer ufficiali e i video originali, trasmessi da YouTube dai canali dei loro autori. Tutti i diritti appartengono ai rispettivi proprietari. Le traduzioni italiane delle battute sono nostre. Musica, suoni e animazioni sono originali.</p>
+    <p>Sigla didattica, senza scopo di lucro, per il corso di Intelligenza Artificiale dell’AANT. Gli spezzoni sono brevi brani, per uso didattico in aula, dei trailer ufficiali e dei video originali dei loro autori; per Akira, brani del film. Tutti i diritti appartengono ai rispettivi proprietari. Le traduzioni italiane delle battute sono nostre. Musica, suoni e animazioni sono originali.</p>
     <ol id="lista-crediti"></ol>
   </section>
 
@@ -293,6 +295,8 @@
   <script type="module" src="sigla-scena.js?v=4"></script>
   <script src="suono.js?v=5"></script>
   <script src="../../../assets/fx/effetti.js"></script>
+  <!-- l'elenco degli spezzoni ritagliati sul PC (lo scrive _strumenti/ritaglia.js); se manca, si usa YouTube -->
+  <script src="clip/elenco.js"></script>
   <script>
   /* =====================================================================
      SPEZZONI: secondi di inizio e fine nel video («da», «a»), più tratti di fila se serve.
@@ -393,35 +397,35 @@
     blade:  { anno: 1982, tit: 'Blade Runner', chi: 'Ridley Scott · dal romanzo di Philip K. Dick',
               riga: 'Los Angeles, 2019. Le aziende costruiscono esseri umani artificiali, i replicanti. Chi li distingue da noi?',
               chiave: 'Il corpo diventa un <em>prodotto</em>.',
-              video: 'eogpIG53Cis', canale: 'Rotten Tomatoes Classic Trailers', fonte: 'trailer originale', clip: CLIP_BLADE },
+              file: 'blade', video: 'eogpIG53Cis', canale: 'Rotten Tomatoes Classic Trailers', fonte: 'trailer originale', clip: CLIP_BLADE },
     neuro:  { anno: 1984, tit: 'Neuromante', chi: 'William Gibson · romanzo',
               riga: 'Il libro che dà le regole al genere. Inventa una parola che oggi usiamo tutti: cyberspazio.',
               chiave: 'Possiamo credere tutti insieme a qualcosa <em>che non c’è</em>. Come quando un’IA «allucina».',
-              file: 'dami-cq', video: 'TPTtcV3qJ4U', canale: 'Dami Lee', fonte: 'Is Chongqing REALLY a Cyberpunk City?', clip: CLIP_GIBSON },
+              file: 'dami-cq', pulito: true, video: 'TPTtcV3qJ4U', canale: 'Dami Lee', fonte: 'Is Chongqing REALLY a Cyberpunk City?', clip: CLIP_GIBSON },
     akira:  { anno: 1988, tit: 'Akira', chi: 'Katsuhiro Otomo',
               riga: 'Il film d’animazione che porta il cyberpunk in tutto il mondo. Ragazzi di strada, una città enorme, un potere fuori controllo.',
               chiave: 'Un potere più grande di chi lo riceve <em>lo distrugge</em>. Tenetelo a mente.',
-              file: 'akira', canale: 'Akira Committee', fonte: 'dal film, versione inglese', clip: CLIP_AKIRA,
+              file: 'akira', pulito: true, canale: 'Akira Committee', fonte: 'dal film, versione inglese', clip: CLIP_AKIRA,
               yt: { video: 'mIuBGdeNxvQ', canale: 'IMAX', fonte: 'trailer ufficiale 4K', clip: CLIP_AKIRA_TRAILER } },
     gits:   { anno: 1995, tit: 'Ghost in the Shell', chi: 'Mamoru Oshii · dal manga di Masamune Shirow',
               riga: 'Il film da cui è nato questo corso. Motoko ha un corpo quasi tutto artificiale. Che cosa resta di lei?',
-              video: 'R1K__7QhLaA', canale: 'Lionsgate Movies', fonte: 'trailer ufficiale della riedizione 4K', clip: CLIP_GITS },
+              file: 'gits', video: 'R1K__7QhLaA', canale: 'Lionsgate Movies', fonte: 'trailer ufficiale della riedizione 4K', clip: CLIP_GITS },
     matrix: { anno: 1999, tit: 'Matrix', chi: 'Lana e Lilly Wachowski',
               riga: 'Il cyberpunk arriva al grande pubblico. Il mondo che vediamo è una simulazione, e quasi nessuno se ne accorge.',
-              video: 'ky7ksownEEE', canale: 'Warner Bros. Entertainment', fonte: 'scena ufficiale, 25° anniversario', clip: CLIP_MATRIX },
+              file: 'matrix', video: 'ky7ksownEEE', canale: 'Warner Bros. Entertainment', fonte: 'scena ufficiale, 25° anniversario', clip: CLIP_MATRIX },
     cp2077: { anno: 2020, tit: 'Cyberpunk 2077', chi: 'CD PROJEKT RED · videogioco',
               riga: 'Un videogioco. Night City, 2077: il corpo si compra a pezzi dal ripperdoc, il medico di strada. Occhi, braccia, riflessi.',
               chiave: 'L’armatura è in vendita, per tutti. Ma <em>chi la controlla?</em>',
-              video: 'qIcTM8WXFjk', canale: 'Cyberpunk 2077', fonte: 'trailer cinematico ufficiale', clip: CLIP_2077 },
+              file: 'cp2077', video: 'qIcTM8WXFjk', canale: 'Cyberpunk 2077', fonte: 'trailer cinematico ufficiale', clip: CLIP_2077 },
     edge:   { anno: 2022, tit: 'Cyberpunk: Edgerunners', chi: 'Studio Trigger · Netflix',
               riga: 'Una serie in dieci episodi, nel mondo di Cyberpunk 2077. È la storia che spiega meglio di tutte perché siamo qui.',
               chiave: 'Non è il cromo a distruggerti. È averne <em>più di quanto riesci a reggere</em>.',
-              video: 'ax5YUmkWf_Y', canale: 'Netflix', fonte: 'trailer ufficiale (versione Studio Trigger)' },
+              file: 'edge', video: 'ax5YUmkWf_Y', canale: 'Netflix', fonte: 'trailer ufficiale (versione Studio Trigger)' },
   };
   // le parole di Dami Lee, dai due video da cui è nata l'idea del corso
   const DAMI = {
-    teseo:  { file: 'dami-hk', video: 'FnPo0eTIRJQ', canale: 'Dami Lee', fonte: 'Why This Cyberpunk City is Dying', clip: CLIP_TESEO },
-    motoko: { file: 'dami-hk', video: 'FnPo0eTIRJQ', canale: 'Dami Lee', fonte: 'Why This Cyberpunk City is Dying', clip: CLIP_MOTOKO },
+    teseo:  { file: 'dami-hk', pulito: true, video: 'FnPo0eTIRJQ', canale: 'Dami Lee', fonte: 'Why This Cyberpunk City is Dying', clip: CLIP_TESEO },
+    motoko: { file: 'dami-hk', pulito: true, video: 'FnPo0eTIRJQ', canale: 'Dami Lee', fonte: 'Why This Cyberpunk City is Dying', clip: CLIP_MOTOKO },
   };
   const ANNI = [1982, 1984, 1988, 1995, 1999, 2020, 2022, 2026];
 
@@ -522,18 +526,19 @@
      Un'opera con «file» usa i suoi ritagli se ci sono tutti; se no usa YouTube («yt», oppure i suoi stessi dati). */
   const LOC = window.CLIP_LOCALI || { pad: 1, file: [] };
   const nomeLocale = (o, t) => `${o.file}_${t.da.toFixed(2)}.mp4`;
-  const locale = o => !!o.file && [].concat(o.clip || []).every(t => LOC.file.includes(nomeLocale(o, t)));
+  const locale = o => { const c = [].concat(o.clip || []); return !!o.file && c.length > 0 && c.every(t => LOC.file.includes(nomeLocale(o, t))); };
   const fonteDi = o => (o.file && !locale(o)) ? (o.yt ? { ...o, ...o.yt, file: null } : { ...o, file: null }) : o;
   const videoLoc = {};
+  const tuttiLocali = () => [...Object.values(OPERE), ...Object.values(DAMI), ...TAPPE_EDGE.map(t => ({ ...OPERE.edge, clip: t.clip }))].filter(locale);
   function videoLocale(nome) {
     if (!videoLoc[nome]) {
       const v = document.createElement('video');
-      v.src = 'clip/' + nome; v.preload = 'auto'; v.muted = true; v.playsInline = true; v.disablePictureInPicture = true;
+      v.src = 'clip/' + nome; v.preload = 'metadata'; v.muted = true; v.playsInline = true; v.disablePictureInPicture = true;
       $('#lettori').appendChild(v); videoLoc[nome] = v;
     }
     return videoLoc[nome];
   }
-  const tuttiGliSpezzoni = () => [...Object.values(OPERE), ...Object.values(DAMI), ...TAPPE_EDGE.map(t => ({ video: OPERE.edge.video, clip: t.clip }))]
+  const tuttiGliSpezzoni = () => [...Object.values(OPERE), ...Object.values(DAMI), ...TAPPE_EDGE.map(t => ({ ...OPERE.edge, clip: t.clip }))]
     .map(fonteDi).filter(o => o.clip && !o.file);
   /* ---------- YouTube: un lettore per ogni tratto ----------
      L'icona del play e le scritte di YouTube compaiono nei primi secondi dopo che un video parte.
@@ -570,7 +575,7 @@
   const tag = document.createElement('script'); tag.src = 'https://www.youtube.com/iframe_api'; document.head.appendChild(tag);
   // al primo avvio: i ritagli sul PC si caricano tutti subito (sono piccoli), così ogni tratto parte all'istante
   function preparaVideo() {
-    [...Object.values(OPERE), ...Object.values(DAMI)].filter(locale).forEach(o => [].concat(o.clip).forEach(t => videoLocale(nomeLocale(o, t))));
+    tuttiLocali().forEach(o => [].concat(o.clip).forEach(t => videoLocale(nomeLocale(o, t))));
   }
   // nasconde tutti i lettori YouTube
   function mostraLettore() { document.querySelectorAll('#lettori iframe').forEach(f => f.classList.remove('vivo', 'svelto')); }
@@ -667,7 +672,10 @@
   }
   // prepara i lettori di uno spezzone all'inizio del capitolo; «ms» = fra quanto deve comparire il primo tratto
   function prepara(o, ms) {
-    o = fonteDi(o); if (o.file || !o.clip) return;
+    o = fonteDi(o);
+    // ritagli da file: si comincia a scaricarli adesso, all'inizio del capitolo (online non si scaricano tutti all'avvio)
+    if (o.file) { [].concat(o.clip).forEach(t => { const v = videoLocale(nomeLocale(o, t)); v.preload = 'auto'; v.load(); }); return; }
+    if (!o.clip) return;
     const tratti = [].concat(o.clip), ps = lettoriDi(o.video);
     if (ps.length < tratti.length) return;
     tratti.forEach((t, i) => { if (ps[i]._t !== t) avvia(ps[i], t); });
@@ -842,10 +850,14 @@
   }
   async function spezzoneLocale(o, id, rec) {
     const tratti = [].concat(o.clip), off = t => Math.max(0, t.da - LOC.pad);
+    // «pulito» (film, video saggi): immagine intera e dissolvenze a cavallo del taglio, grazie al margine dei ritagli.
+    // Trailer: fasce e ingrandimento come su YouTube, e dissolvenze tutte dentro i tratti (subito fuori ci sono cartelli e loghi)
+    const pulito = !!o.pulito;
+    const entrata = (t, i) => pulito ? (i ? t.da - XF / 2 : t.da - .3) : t.da;
     const inGioco = new Set();
     attivo = { pauseVideo: () => inGioco.forEach(v => v.pause()), playVideo: () => inGioco.forEach(v => v.play().catch(() => {})) };
     mostraLettore(null);
-    $('#clip').classList.add('locale');
+    $('#clip').classList.toggle('locale', pulito);
     $('#clip-rec').textContent = rec;
     $('#clip-opera').innerHTML = o.tit ? `<b>${o.tit}</b> · ${o.chi.split(' · ')[0]} · ${o.anno}` : `<b>${o.canale}</b> · ${o.fonte}`;
     $('#clip-fonte').textContent = o.tit ? `${o.fonte}` : 'video saggio · YouTube, Dami Lee';
@@ -856,33 +868,40 @@
       if (id !== corsa) return clearInterval(giro);
       if (cur) testi(curT, cur.currentTime + off(curT));
     };
+    // tutti i tratti si mettono subito al loro punto d'entrata (fermi): al momento del cambio basta farli partire
+    const vids = tratti.map(t => videoLocale(nomeLocale(o, t)));
+    vids.forEach(v => v.classList.toggle('grande', !pulito));
+    await Promise.all(tratti.map((t, i) => salto(vids[i], Math.max(0, entrata(t, i) - off(t))))); if (id !== corsa) return;
     for (let i = 0; i < tratti.length; i++) {
-      const t = tratti[i], v = videoLocale(nomeLocale(o, t));
-      // il primo tratto parte un attimo prima, mentre il riquadro compare; gli altri a metà della dissolvenza
-      await salto(v, Math.max(0, (i ? t.da - XF / 2 : t.da - .3) - off(t))); if (id !== corsa) return;
+      const t = tratti[i], v = vids[i];
+      const xf = i === 0 ? .6 : (pulito ? XF : xfDi(tratti[i - 1], t));
       v.volume = 0; v.muted = false;
       try { await v.play(); } catch (e) { v.muted = true; await v.play().catch(() => {}); }
       if (id !== corsa) { v.pause(); return; }
       inGioco.add(v);
       const prima = cur;
       cur = v; curT = t;
+      v.style.transitionDuration = xf + 's';
       v.classList.add('vivo');
-      sfuma(v, t.voce ? (t.vol || 90) / 100 : 0, XF * 1000);
+      sfuma(v, t.voce ? (t.vol || 90) / 100 : 0, xf * 1000);
       Suono.abbassa(!!t.voce);
       fasce(t);
       if (i === 0) { $('#clip').classList.add('on'); giro = setInterval(aggiorna, 40); }
       if (prima) {
-        prima.classList.remove('vivo'); sfuma(prima, 0, XF * 1000);
-        (async () => { await aspetta(XF * 1000 + 100); prima.pause(); inGioco.delete(prima); })();
+        prima.style.transitionDuration = xf + 's';
+        prima.classList.remove('vivo'); sfuma(prima, 0, xf * 1000);
+        (async () => { await aspetta(xf * 1000 + 100); prima.pause(); inGioco.delete(prima); })();
       }
-      // il tratto finisce a metà della dissolvenza con il successivo; l'ultimo un attimo prima, mentre il riquadro sfuma
-      const fine = i < tratti.length - 1 ? t.a - XF / 2 : t.a - .6;
+      // quando finisce il tratto: col successivo si sciolgono insieme; l'ultimo chiude un attimo prima della sua fine
+      const dopo = tratti[i + 1];
+      const fine = dopo ? (pulito ? t.a - XF / 2 : t.a - xfDi(t, dopo)) : (pulito ? t.a - .6 : t.a - .35);
       await finoA(v, fine - off(t), id);
       if (id !== corsa) { clearInterval(giro); return; }
     }
-    // fine: il riquadro sfuma mentre il video va ancora avanti, poi tutto si ferma
+    // fine: il riquadro sfuma (i trailer spariscono in fretta: subito dopo c'è spesso un cartello), poi tutto si ferma
+    if (!pulito) { cur.style.transitionDuration = '.35s'; cur.classList.remove('vivo'); }
     $('#clip').classList.remove('on'); $('#clip-perche').classList.remove('on');
-    sfuma(cur, 0, 600); Suono.abbassa(false);
+    sfuma(cur, 0, pulito ? 600 : 350); Suono.abbassa(false);
     await aspetta(700);
     clearInterval(giro);
     inGioco.forEach(v => { v.pause(); v.classList.remove('vivo'); }); inGioco.clear();
@@ -935,7 +954,7 @@
     { nome: '1984 · Neuromante', fn: id => opera(id, 'neuro') },
     { nome: '1988 · Akira', fn: id => opera(id, 'akira') },
     { nome: '1995 · Ghost in the Shell', fn: async (id, ok) => {
-      prepara(OPERE.gits, epocaMs(OPERE.gits) + durataLocale(DAMI.teseo));
+      prepara(DAMI.teseo); prepara(OPERE.gits, epocaMs(OPERE.gits) + durataLocale(DAMI.teseo));
       await epoca(id, OPERE.gits); if (!ok()) return;
       await spezzone(DAMI.teseo, id, 'Dami Lee · da qui è nata l’idea'); if (!ok()) return;
       await spezzone(OPERE.gits, id, 'Archivio · 1995');
@@ -976,6 +995,7 @@
       $('#linea').classList.remove('on');
     } },
     { nome: 'Oggi: l’armatura è l’IA', fn: async (id, ok) => {
+      prepara(DAMI.motoko);
       await spezzone(DAMI.motoko, id, 'Dami Lee · Hong Kong'); if (!ok()) return;
       await racconta(id, 'Oggi', 'La nostra armatura si chiama <em>intelligenza artificiale</em>. Scrive, disegna, progetta, risponde. Ci rende più veloci e più forti.', { extra: 1400 });
     } },
