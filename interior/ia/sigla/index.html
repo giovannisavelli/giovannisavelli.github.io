@@ -61,8 +61,21 @@
     .cap-tasti button { min-height: 34px; padding: 0 14px; border: 1px solid rgba(236,235,228,.25); background: rgba(9,11,12,.8); color: var(--ink-2); font: 500 10px var(--mono); letter-spacing: .14em; text-transform: uppercase; cursor: pointer; }
     .cap-tasti button:hover { border-color: var(--green); color: var(--green); }
     /* il riquadro di YouTube è più grande della cornice: così titolo e comandi restano fuori */
-    #lettori.taglio iframe { opacity: 0; }
-    .clip-video iframe { transition: opacity .18s; position: absolute; left: -6%; top: -9%; width: 112%; height: 118%; border: 0; pointer-events: none; }
+    .clip-video iframe { opacity: 0; transition: opacity .6s ease; position: absolute; left: -6%; top: -9%; width: 112%; height: 118%; border: 0; pointer-events: none; }
+    /* versione da aula: gli spezzoni sono file sul PC, in un lettore nostro (niente YouTube, quindi niente icone del play).
+       Due tratti di fila si sciolgono uno nell'altro: il nuovo compare mentre il vecchio sfuma */
+    .clip-video video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0; transition: opacity .9s ease; }
+    .clip-video video.vivo, .clip-video iframe.vivo { opacity: 1; }
+    .clip.locale .fascia.su { height: 0 !important; }
+    .clip.locale .fascia.giu { height: 26%; background: linear-gradient(rgba(0,0,0,0), rgba(0,0,0,.82)); }
+    .clip.locale .clip-it { text-shadow: 0 1px 3px #000, 0 0 16px rgba(0,0,0,.9); }
+    .clip-perche span { transition: opacity .35s ease; }
+    /* un solo posto da leggere: la fascia in basso. Sottotitoli (qualcuno parla) gialli; didascalie (nessuno parla) bianche */
+    .clip-perche { display: none !important; }
+    .clip-it.dida { color: var(--ink); font-weight: 400; font-size: clamp(16px, 1.55vw, 26px); }
+    .clip-it { transition: opacity .3s ease; }
+    .clip-it.cambia { opacity: 0; }
+    .clip-perche span.cambia { opacity: 0; }
     .clip-cornice { position: absolute; inset: -14px; pointer-events: none;
       background:
         linear-gradient(var(--ink), var(--ink)) left top / 22px 1px no-repeat, linear-gradient(var(--ink), var(--ink)) left top / 1px 22px no-repeat,
@@ -75,12 +88,12 @@
     .fascia.giu { bottom: 0; height: 20%; }
     .clip-dida { position: absolute; left: -14px; right: -14px; bottom: -44px; display: flex; justify-content: space-between; gap: 20px; color: var(--ink-3); font: 500 10px/1.4 var(--mono); letter-spacing: .18em; text-transform: uppercase; }
     .clip-dida b { color: var(--ink); font-weight: 500; }
-    .clip-it { position: absolute; left: 6%; right: 6%; bottom: 0; z-index: 3; height: 20%; margin: 0; display: grid; place-items: center; color: var(--ink); font-size: clamp(15px, 1.45vw, 23px); line-height: 1.35; text-align: center; text-wrap: balance; }
+    .clip-it { position: absolute; left: 5%; right: 5%; bottom: 0; z-index: 3; height: 20%; margin: 0; display: grid; place-items: center; color: #f5df92; font-size: clamp(18px, 1.8vw, 31px); font-weight: 500; line-height: 1.3; text-align: center; text-wrap: balance; text-shadow: 0 1px 2px #000; }
     /* sopra lo spezzone: perché lo stiamo guardando */
     .clip-perche { position: absolute; left: -14px; right: -14px; bottom: calc(100% + 26px); display: flex; align-items: baseline; gap: 18px; opacity: 0; transform: translateY(6px); transition: opacity .6s ease, transform .6s ease; }
     .clip-perche.on { opacity: 1; transform: none; }
     .clip-perche small { flex: none; color: var(--green); font: 500 10px var(--mono); letter-spacing: .22em; text-transform: uppercase; }
-    .clip-perche span { color: var(--ink); font-size: clamp(17px, 1.7vw, 28px); line-height: 1.25; font-weight: 600; letter-spacing: -.02em; }
+    .clip-perche span { color: var(--ink-2); font-size: clamp(14px, 1.25vw, 21px); line-height: 1.3; font-weight: 500; letter-spacing: -.01em; }
     .clip-rec { position: absolute; right: -14px; top: -38px; color: var(--green); font: 500 10px var(--mono); letter-spacing: .2em; text-transform: uppercase; }
     .clip-rec::before { content: ""; display: inline-block; width: 6px; height: 6px; margin-right: 9px; border-radius: 50%; background: var(--green); box-shadow: 0 0 10px var(--green); animation: battito 1.2s ease-in-out infinite; vertical-align: 1px; }
     @keyframes battito { 50% { opacity: .25; } }
@@ -220,7 +233,7 @@
   <section class="avvio" id="avvio">
     <small>Intelligenza Artificiale · Interior Design · Lezione 01</small>
     <h1>High tech, low life</h1>
-    <p>La sigla del corso: una breve storia del cyberpunk, da Blade Runner a Edgerunners. Si guarda a schermo intero, con l’audio acceso: circa sette minuti. Con la barra spaziatrice la metti in pausa; muovendo il mouse compaiono i capitoli, per saltare a un punto preciso (anche con le frecce ← →).</p>
+    <p>La sigla del corso: una breve storia del cyberpunk, da Blade Runner a Edgerunners. Si guarda a schermo intero, con l’audio acceso: circa otto minuti. Con la barra spaziatrice la metti in pausa; muovendo il mouse compaiono i capitoli, per saltare a un punto preciso (anche con le frecce ← →).</p>
     <div class="azioni" style="display:flex;gap:14px;flex-wrap:wrap;justify-content:center">
       <button class="btn pieno" type="button" id="via">▶ Avvia la sigla</button>
       <button class="btn" type="button" data-crediti>Crediti</button>
@@ -297,62 +310,78 @@
     [1335, '«Mi viene in mente una frase di William Gibson, che qualcuno chiama il padre del cyberpunk.»'],
     [1342.4, '«Il cyberspazio è un’allucinazione consensuale: milioni di persone d’accordo su qualcosa che non c’è.»'],
     [1352, '«E quando viviamo il mondo attraverso i social, come facciamo a sapere che cosa è reale?»']] };
+  // Akira: dal film intero (versione da aula, file sul PC). I secondi sono quelli del film.
   const CLIP_AKIRA = [
-    { da: 0.9, a: 3.4, perche: 'Neo-Tokyo, la città del futuro, ricostruita dopo una guerra.' },
-    { da: 13.3, a: 15.55, perche: 'Tetsuo, in un letto d’ospedale militare. Fuori, le bande di ragazzi in moto.' },
-    { da: 16.95, a: 19.85, perche: 'La città esplode: rivolte, folle, insegne al neon. Il «punk» di cyberpunk.' },
+    { da: 23.5, a: 38.3, perche: 'Tokyo, 16 luglio 1988. Una luce bianca cancella la città.' },
+    { da: 236.8, a: 248.4, perche: 'Trentun anni dopo, al suo posto c’è Neo-Tokyo: neon, grattacieli, bande di ragazzi in moto.' },
+    { da: 5958.6, a: 5969.0, perche: 'Tetsuo, uno dei ragazzi, riceve un potere enorme. Perde un braccio, e se ne costruisce uno con i rottami.' },
+    { da: 6214.2, a: 6225.9, voce: true, perche: 'Il medico che lo studia lo dice chiaro: è un potere più grande di lui.',
+      sub: [[6214.2, '«Non posso esserne del tutto sicuro, ma sembra che il potere tenuto a freno dai farmaci…'],
+            [6218.9, '…si stia liberando. Forse non riuscirà a controllare un potere che si è svegliato così all’improvviso.'],
+            [6223.0, 'È in condizioni gravissime.»']] },
+    { da: 6396.0, a: 6403.0, perche: 'E il suo corpo non lo regge più.' },
   ];
+  // il trailer IMAX, usato solo se i file del film non ci sono (per esempio nella copia online)
+  const CLIP_AKIRA_TRAILER = [
+    { da: 20.15, a: 28.75, perche: 'Tetsuo riceve un potere enorme, e non riesce a controllarlo.' },
+  ];
+  // Matrix: la scena intera della pillola (Warner Bros. Entertainment, 25° anniversario), un solo tratto senza tagli.
+  // I tempi delle battute vengono dai sottotitoli ufficiali della stessa scena (Movieclips), che coincidono con le inquadrature.
   const CLIP_MATRIX = [
-    { da: 2.9, a: 5.7, perche: 'Un messaggio sullo schermo di Neo, un programmatore qualunque.', it: '«Svegliati, Neo…»' },
-    { da: 37.1, a: 39.25, perche: 'La scelta: la pillola rossa per vedere la verità, la blu per tornare a dormire.' },
-    { da: 66.1, a: 67.55, perche: 'Chi capisce le regole della simulazione le può piegare.' },
+    { da: 80.95, a: 118.0, voce: true, sub: [
+      [80.95, '«Questa è la tua ultima occasione.'], [83.4, 'Dopo non si torna più indietro.'],
+      [86.16, 'Prendi la pillola azzurra: fine della storia.'], [89.92, 'Ti svegli nel tuo letto e credi a quello che vuoi credere.'],
+      [93.34, 'Prendi la pillola rossa: resti nel Paese delle Meraviglie,'], [97.3, 'e ti mostro quanto è profonda la tana del bianconiglio.»'],
+      [100.3, ''], [109.9, '«Ricorda:'], [112.02, 'ti offro solo la verità. Niente di più.»'], [114.9, '']] },
   ];
+  // in locale Dami Lee parla di fila, senza tagli: «perche» può cambiare ai secondi del video, come «sub»
   const CLIP_TESEO = [
-    { da: 0.3, a: 10.1, voce: true, perche: 'La domanda da cui è nato questo corso.',
-      sub: [[0, '«Se sostituisci il tuo corpo e la tua memoria, pezzo per pezzo…'], [5.2, '…a che punto smetti di essere te?'], [7.5, 'E che cosa ti rende te?»']] },
-    { da: 18.8, a: 28.9, voce: true, perche: 'Shell è il corpo artificiale. Ghost è quello che resta di umano.',
-      sub: [[18, '«La protagonista, Motoko, è quasi del tutto artificiale…'], [23.8, '…e l’unica cosa umana che le resta è il ghost, la sua coscienza.»']] },
+    { da: 0.3, a: 28.9, voce: true, perche: 'La domanda da cui è nato questo corso.',
+      sub: [[0, '«Se sostituisci il tuo corpo e la tua memoria, pezzo per pezzo…'], [5.2, '…a che punto smetti di essere te?'], [7.5, 'E che cosa ti rende te?»'],
+            [10.1, '«È la domanda centrale di Ghost in the Shell: un futuro cyberpunk in cui le persone sostituiscono parti del corpo con parti cibernetiche.'],
+            [18.7, 'La protagonista, Motoko, è quasi del tutto artificiale…'], [23.8, '…e l’unica cosa umana che le resta è il ghost, la sua coscienza.»']] },
   ];
   const CLIP_GITS = [
     { da: 2.7, a: 8.6, voce: true, perche: 'Il corpo di Motoko viene costruito in laboratorio, pezzo per pezzo.', it: '«Se un’impresa tecnologica è possibile, l’uomo la realizzerà.»' },
     { da: 31.2, a: 35.1, voce: true, perche: 'Detto nel 1995. Vale per il computer, e vale per l’IA.', it: '«L’umanità ha sottovalutato le conseguenze dell’informatizzazione.»' },
-    { da: 40.8, a: 42.8, perche: 'La città è Hong Kong, trasformata in futuro.' },
+    { da: 40.55, a: 42.75, perche: 'È Hong Kong, trasformata in futuro.' },
   ];
   const CLIP_2077 = [
     { da: 9.0, a: 13.4, perche: 'Night City: tutto è in vendita, anche il corpo.' },
     { da: 153.5, a: 156.3, perche: 'Lame dentro le braccia: il corpo diventa un’arma.' },
-    { da: 201.0, a: 204.4, perche: 'Ma un impianto che non controlli tu lo controlla qualcun altro.', it: 'Un’hacker entra negli impianti di V e manda in corto le sue lame.' },
+    { da: 200.6, a: 204.45, perche: 'Un’hacker entra nei suoi impianti: un impianto che non controlli tu, lo controlla qualcun altro.' },
   ];
   // Edgerunners, raccontato in cinque tappe: ogni tappa ha il suo testo e il suo spezzone
   const TAPPE_EDGE = [
     { nome: 'Il sogno', testo: 'David ha diciassette anni. Sua madre lavora giorno e notte per pagargli la scuola migliore. Il suo sogno per lui: <em>arrivare in cima.</em>',
       clip: [
-        { da: 34.8, a: 37.7, voce: true, perche: 'L’Accademia Arasaka: la scuola dei figli dei ricchi.', it: '«Devi diventare uno dell’élite…»' },
-        { da: 38.8, a: 43.1, voce: true, su: 24, perche: 'Il sogno della madre: la cima della torre. Poi la perde.', sub: [[38, '«…e arrivare all’ultimo piano della Torre Arasaka.»'], [41.7, '«Mamma…»']] },
+        { da: 34.85, a: 43.1, voce: true, su: [[34.85, 19], [37.7, 24], [41.6, 19]], perche: 'L’Accademia Arasaka e la torre: il sogno della madre per David.',
+          sub: [[35.95, '«Devi diventare uno dell’élite…»'], [37.8, '«…e arrivare all’ultimo piano della Torre Arasaka.»'], [41.8, '«Mamma…»']] },
       ] },
     { nome: 'Il Sandevistan', testo: 'Tra le cose di sua madre c’è un impianto militare: il <em>Sandevistan</em>. Rallenta il mondo intorno a chi lo porta. David se lo fa installare.',
       clip: [
-        { da: 51.2, a: 55.6, voce: true, perche: 'L’impianto va dentro la colonna vertebrale.', it: '«Installamelo.»' },
-        { da: 60.2, a: 62.1, perche: 'E funziona: David diventa più veloce di tutti.' },
+        { da: 51.35, su: 19, a: 55.5, voce: true, perche: 'L’impianto va dentro la colonna vertebrale.', it: '«Installamelo.»' },
+        { da: 58.9, su: 19, a: 62.2, perche: 'E funziona: David diventa più veloce di tutti.' },
       ] },
     { nome: 'Sempre più cromo', testo: 'Il suo corpo regge il cromo meglio degli altri. Così ne aggiunge ancora. <em>E ancora.</em>',
       clip: [
-        { da: 80.8, a: 83.7, voce: true, perche: 'Entra in una banda di mercenari: gli edgerunner.', it: '«Fammi vedere che cosa sai fare.»' },
-        { da: 87.6, a: 90.2, voce: true, perche: 'Ogni lavoro chiede più potenza. Ogni impianto ne porta un altro.', it: '«Questo è cromo di tutt’altro livello.»' },
+        { da: 79.65, su: 19, a: 83.5, voce: true, perche: 'Entra in una banda di mercenari. E ogni lavoro chiede più cromo.', sub: [[80.2, '«Fammi vedere che cosa sai fare.»']] },
+        { da: 86.55, su: 19, a: 90.9, voce: true, sub: [[86.55, '«Mostro.»'], [87.2, '«Questo è cromo di tutt’altro livello.»']] },
       ] },
     { nome: 'Cyberpsicosi', testo: 'Ma la mente non è fatta di cromo. Quando gli impianti superano chi li porta, arriva la <em>cyberpsicosi</em>: non controlli più niente.', rosso: true,
       clip: [
-        { da: 15.0, a: 17.05, perche: 'Un cyberpsicopatico: più cromo che persona.' },
-        { da: 96.2, a: 98.2, perche: 'Anche i più forti della banda cominciano a tremare.' },
-        { da: 99.8, a: 102.8, voce: true, perche: 'E David?', it: '«Mi stupisce che tu non sia ancora impazzito.»' },
+        { da: 15.05, su: 19, a: 18.6, perche: 'Un cyberpsicopatico: più cromo che persona.' },
+        { da: 96.85, su: 19, a: 102.6, voce: true, perche: 'Anche i più forti cominciano a tremare. E David?', sub: [[99.8, '«Mi stupisce che tu non sia ancora impazzito.»']] },
       ] },
     { nome: 'L’armatura', testo: 'Alla fine indossa l’armatura più potente di tutte. È enorme, è velocissima. <em>Ma chi la sta guidando?</em>', rosso: true,
-      clip: [{ da: 103.8, a: 105.2, perche: 'L’armatura più potente di tutte.' }] },
+      clip: [{ da: 103.85, su: 19, a: 106.15, perche: 'L’armatura più potente di tutte.' }] },
   ];
   const CLIP_MOTOKO = [
-    { da: 1462.3, a: 1477.1, voce: true, perche: 'Torniamo a Dami Lee e a Ghost in the Shell.',
-      sub: [[1462, '«In Ghost in the Shell, Motoko sostituisce le braccia, gli occhi e perfino la memoria.'], [1470.3, 'Tutto per potenziarsi: più veloce, più forte, più efficiente.»']] },
-    { da: 1490.0, a: 1497.9, voce: true, perche: 'Ecco il punto.', it: '«In un sistema costruito per ottimizzare, il ghost è la prima cosa che se ne va.»' },
+    { da: 1462.3, a: 1497.9, voce: true, perche: 'Torniamo a Dami Lee e a Ghost in the Shell.',
+      sub: [[1462, '«In Ghost in the Shell, Motoko sostituisce le braccia, gli occhi e perfino la memoria.'], [1470.3, 'Tutto per potenziarsi: più veloce, più forte, più efficiente.'],
+            [1477, 'E l’unica cosa che non riesce a calcolare è la parte che la rende lei: il ghost.'],
+            [1484.1, 'Perché tenersi il ghost la renderebbe un cyborg meno efficiente.'],
+            [1490.4, 'In un sistema costruito per ottimizzare, il ghost è la prima cosa che se ne va.»']] },
   ];
 
   /* =====================================================================
@@ -367,18 +396,19 @@
               video: 'eogpIG53Cis', canale: 'Rotten Tomatoes Classic Trailers', fonte: 'trailer originale', clip: CLIP_BLADE },
     neuro:  { anno: 1984, tit: 'Neuromante', chi: 'William Gibson · romanzo',
               riga: 'Il libro che dà le regole al genere. Inventa una parola che oggi usiamo tutti: cyberspazio.',
-              chiave: 'Possiamo credere tutti insieme a qualcosa <em>che non c’è</em>.',
-              video: 'TPTtcV3qJ4U', canale: 'Dami Lee', fonte: 'Is Chongqing REALLY a Cyberpunk City?', clip: CLIP_GIBSON },
+              chiave: 'Possiamo credere tutti insieme a qualcosa <em>che non c’è</em>. Come quando un’IA «allucina».',
+              file: 'dami-cq', video: 'TPTtcV3qJ4U', canale: 'Dami Lee', fonte: 'Is Chongqing REALLY a Cyberpunk City?', clip: CLIP_GIBSON },
     akira:  { anno: 1988, tit: 'Akira', chi: 'Katsuhiro Otomo',
               riga: 'Il film d’animazione che porta il cyberpunk in tutto il mondo. Ragazzi di strada, una città enorme, un potere fuori controllo.',
               chiave: 'Un potere più grande di chi lo riceve <em>lo distrugge</em>. Tenetelo a mente.',
-              video: 'mIuBGdeNxvQ', canale: 'IMAX', fonte: 'trailer ufficiale 4K', clip: CLIP_AKIRA },
+              file: 'akira', canale: 'Akira Committee', fonte: 'dal film, versione inglese', clip: CLIP_AKIRA,
+              yt: { video: 'mIuBGdeNxvQ', canale: 'IMAX', fonte: 'trailer ufficiale 4K', clip: CLIP_AKIRA_TRAILER } },
     gits:   { anno: 1995, tit: 'Ghost in the Shell', chi: 'Mamoru Oshii · dal manga di Masamune Shirow',
               riga: 'Il film da cui è nato questo corso. Motoko ha un corpo quasi tutto artificiale. Che cosa resta di lei?',
               video: 'R1K__7QhLaA', canale: 'Lionsgate Movies', fonte: 'trailer ufficiale della riedizione 4K', clip: CLIP_GITS },
     matrix: { anno: 1999, tit: 'Matrix', chi: 'Lana e Lilly Wachowski',
               riga: 'Il cyberpunk arriva al grande pubblico. Il mondo che vediamo è una simulazione, e quasi nessuno se ne accorge.',
-              video: 'L0fw0WzFaBM', canale: 'Warner Bros. UK & Ireland', fonte: 'trailer ufficiale del 20° anniversario', clip: CLIP_MATRIX },
+              video: 'ky7ksownEEE', canale: 'Warner Bros. Entertainment', fonte: 'scena ufficiale, 25° anniversario', clip: CLIP_MATRIX },
     cp2077: { anno: 2020, tit: 'Cyberpunk 2077', chi: 'CD PROJEKT RED · videogioco',
               riga: 'Un videogioco. Night City, 2077: il corpo si compra a pezzi dal ripperdoc, il medico di strada. Occhi, braccia, riflessi.',
               chiave: 'L’armatura è in vendita, per tutti. Ma <em>chi la controlla?</em>',
@@ -390,8 +420,8 @@
   };
   // le parole di Dami Lee, dai due video da cui è nata l'idea del corso
   const DAMI = {
-    teseo:  { video: 'FnPo0eTIRJQ', canale: 'Dami Lee', fonte: 'Why This Cyberpunk City is Dying', clip: CLIP_TESEO },
-    motoko: { video: 'FnPo0eTIRJQ', canale: 'Dami Lee', fonte: 'Why This Cyberpunk City is Dying', clip: CLIP_MOTOKO },
+    teseo:  { file: 'dami-hk', video: 'FnPo0eTIRJQ', canale: 'Dami Lee', fonte: 'Why This Cyberpunk City is Dying', clip: CLIP_TESEO },
+    motoko: { file: 'dami-hk', video: 'FnPo0eTIRJQ', canale: 'Dami Lee', fonte: 'Why This Cyberpunk City is Dying', clip: CLIP_MOTOKO },
   };
   const ANNI = [1982, 1984, 1988, 1995, 1999, 2020, 2022, 2026];
 
@@ -453,7 +483,9 @@
   /* ---------- crediti: si costruiscono dalle stesse opere ---------- */
   const yt = id => `https://www.youtube.com/watch?v=${id}`;
   const CREDITI = [
-    ...Object.values(OPERE).filter(o => o.video && o.canale !== 'Dami Lee').map(o => ({ eti: `${o.anno} · ${o.fonte}`, tit: o.tit, chi: o.chi, link: yt(o.video), canale: o.canale })),
+    // senza i ritagli sul PC (per esempio sul sito) Akira è il trailer IMAX: i crediti citano quello
+    ...Object.values(OPERE).map(o => (o.yt && !(window.CLIP_LOCALI && window.CLIP_LOCALI.file.length)) ? { ...o, ...o.yt, file: null } : o)
+      .filter(o => (o.video || o.file) && o.canale !== 'Dami Lee').map(o => ({ eti: `${o.anno} · ${o.fonte}`, tit: o.tit, chi: o.chi + (o.video ? '' : ` · ${o.canale}`), link: o.video && yt(o.video), canale: o.canale })),
     { eti: '1984 · romanzo', tit: 'Neuromante (Neuromancer)', chi: 'William Gibson · Ace Books. Citata la definizione di cyberspazio.' },
     { eti: '2026 · serie', tit: 'Cyberpunk: Edgerunners 2', chi: 'Studio Trigger · CD PROJEKT RED · Netflix. Solo citata.' },
     { eti: 'Video saggio', tit: 'Why This Cyberpunk City is Dying', chi: 'Dami Lee · su Hong Kong e Ghost in the Shell. Da qui è nata l’idea del corso.', link: yt('FnPo0eTIRJQ'), canale: 'Dami Lee' },
@@ -486,97 +518,394 @@
 
   /* ---------- YouTube: un lettore per ogni video, caricati in silenzio all'avvio ---------- */
   const lettori = {}, pronti = {};
-  const tuttiGliSpezzoni = () => [...Object.values(OPERE), ...Object.values(DAMI), ...TAPPE_EDGE.map(t => ({ video: OPERE.edge.video, clip: t.clip }))].filter(o => o.clip);
-  const VIDEO = [...new Set(tuttiGliSpezzoni().map(o => o.video))];
+  /* ---------- versione da aula: spezzoni ritagliati sul PC (cartella clip/) ----------
+     Un'opera con «file» usa i suoi ritagli se ci sono tutti; se no usa YouTube («yt», oppure i suoi stessi dati). */
+  const LOC = window.CLIP_LOCALI || { pad: 1, file: [] };
+  const nomeLocale = (o, t) => `${o.file}_${t.da.toFixed(2)}.mp4`;
+  const locale = o => !!o.file && [].concat(o.clip || []).every(t => LOC.file.includes(nomeLocale(o, t)));
+  const fonteDi = o => (o.file && !locale(o)) ? (o.yt ? { ...o, ...o.yt, file: null } : { ...o, file: null }) : o;
+  const videoLoc = {};
+  function videoLocale(nome) {
+    if (!videoLoc[nome]) {
+      const v = document.createElement('video');
+      v.src = 'clip/' + nome; v.preload = 'auto'; v.muted = true; v.playsInline = true; v.disablePictureInPicture = true;
+      $('#lettori').appendChild(v); videoLoc[nome] = v;
+    }
+    return videoLoc[nome];
+  }
+  const tuttiGliSpezzoni = () => [...Object.values(OPERE), ...Object.values(DAMI), ...TAPPE_EDGE.map(t => ({ video: OPERE.edge.video, clip: t.clip }))]
+    .map(fonteDi).filter(o => o.clip && !o.file);
+  /* ---------- YouTube: un lettore per ogni tratto ----------
+     L'icona del play e le scritte di YouTube compaiono nei primi secondi dopo che un video parte.
+     Così ogni tratto ha il suo lettore: parte nascosto e muto prima delle scritte del capitolo e arriva al suo inizio
+     da solo, senza salti negli ultimi secondi (vedi «guida»). Si mostra solo quando titolo e icona sono già spariti.
+     Due tratti di fila si sciolgono uno nell'altro, dentro i loro
+     limiti («da» e «a»), perché subito prima e subito dopo nei trailer ci sono spesso cartelli e loghi. */
+  const quanti = {};   // per ogni video, quanti lettori servono: il massimo dei tratti di uno spezzone
+  tuttiGliSpezzoni().forEach(o => { quanti[o.video] = Math.max(quanti[o.video] || 0, [].concat(o.clip).length); });
+  const VIDEO = Object.keys(quanti);
+  const lettoriDi = v => (lettori[v] || []).filter(p => p._pronto);
   window.onYouTubeIframeAPIReady = () => {
     VIDEO.forEach(v => {
-      const d = document.createElement('div'); d.id = 'yt-' + v; $('#lettori').appendChild(d);
-      lettori[v] = new YT.Player(d.id, { videoId: v, playerVars: { controls: 0, disablekb: 1, fs: 0, iv_load_policy: 3, rel: 0, playsinline: 1, modestbranding: 1, cc_load_policy: 0, hl: 'en' },
-        // niente sottotitoli di YouTube: sotto il video ci sono i nostri, in italiano
-        events: { onReady: () => { pronti[v] = true; lettori[v].mute(); spegniSottotitoli(lettori[v]); },
-                  onApiChange: () => spegniSottotitoli(lettori[v]) } });
+      lettori[v] = [];
+      for (let k = 0; k < quanti[v]; k++) {
+        const d = document.createElement('div'); d.id = `yt-${v}-${k}`; $('#lettori').appendChild(d);
+        const p = new YT.Player(d.id, { videoId: v, playerVars: { controls: 0, disablekb: 1, fs: 0, iv_load_policy: 3, rel: 0, playsinline: 1, modestbranding: 1, cc_load_policy: 0, hl: 'en' },
+          events: {
+            // niente sottotitoli di YouTube: sotto il video ci sono i nostri, in italiano
+            onReady: () => { p._pronto = true; pronti[v] = true; p.mute(); spegniSottotitoli(p); },
+            onApiChange: () => spegniSottotitoli(p),
+            // _dal: da quando il lettore va senza essersi fermato (un salto non conta, una pausa sì)
+            onStateChange: e => {
+              if (e.data === 1) { if (p._fermo !== false) { p._dal = performance.now(); p._fermo = false; } }
+              else if (e.data !== 3) p._fermo = true;
+            } } });
+        p._vid = v;
+        lettori[v].push(p);
+      }
     });
   };
-  function spegniSottotitoli(p) { try { p.unloadModule('captions'); p.unloadModule('cc'); } catch (e) {} }
+  // alcuni video (per esempio la scena di Matrix di Warner Bros.) accendono da soli i sottotitoli inglesi: si spengono in tutti i modi
+  function spegniSottotitoli(p) { try { p.setOption('captions', 'track', {}); } catch (e) {} try { p.unloadModule('captions'); p.unloadModule('cc'); } catch (e) {} }
   const tag = document.createElement('script'); tag.src = 'https://www.youtube.com/iframe_api'; document.head.appendChild(tag);
-  // il primo avvio fa partire ogni video in silenzio per un attimo, così ogni spezzone poi parte subito
+  // al primo avvio: i ritagli sul PC si caricano tutti subito (sono piccoli), così ogni tratto parte all'istante
   function preparaVideo() {
-    tuttiGliSpezzoni().forEach(o => {
-      if (!pronti[o.video]) return;
-      const p = lettori[o.video]; p.mute(); p.seekTo([].concat(o.clip)[0].da, true); p.playVideo(); setTimeout(() => p.pauseVideo(), 1200);
+    [...Object.values(OPERE), ...Object.values(DAMI)].filter(locale).forEach(o => [].concat(o.clip).forEach(t => videoLocale(nomeLocale(o, t))));
+  }
+  // nasconde tutti i lettori YouTube
+  function mostraLettore() { document.querySelectorAll('#lettori iframe').forEach(f => f.classList.remove('vivo', 'svelto')); }
+  // alza o abbassa il volume di un lettore YouTube (0-100) in «ms» millisecondi; a zero lo rimette muto
+  function sfumaYT(p, a, ms) {
+    clearInterval(p._sf);
+    if (a > 0 && p.isMuted()) { p.setVolume(0); p.unMute(); p._vol = 0; }
+    const da = p._vol || 0, t0 = performance.now();
+    p._sf = setInterval(() => {
+      const k = Math.min(1, (performance.now() - t0) / ms);
+      p._vol = Math.round(da + (a - da) * k); p.setVolume(p._vol);
+      if (k >= 1) { clearInterval(p._sf); if (a === 0) p.mute(); }
+    }, 40);
+  }
+  /* L'attesa senza salti. Misurato il 5/11: titolo e icona compaiono per circa 4,5 s quando un lettore parte
+     e per circa 4 s dopo ogni salto (seekTo); cambiare velocità o volume invece non li fa comparire.
+     Così un lettore nascosto salta solo se mancano più di 5,5 s alla sua entrata; per il resto arriva al punto
+     giusto cambiando velocità (da 0,25× a 2×). Si mostra solo se dall'ultimo avvio o salto sono passati QUIETE ms. */
+  const QUIETE = 5200;
+  const VEL = [0.25, 0.5, 0.75, 1, 1.25, 1.5, 1.75, 2];
+  // la velocità chiesta a YouTube è solo un consiglio: si controlla quella vera e, se serve, si richiede
+  function vel(p, v) { if (p.getPlaybackRate() !== v) p.setPlaybackRate(v); }
+  function salta(p, sec) { p.seekTo(Math.max(0, sec), true); p._salto = performance.now(); }
+  // Lo «stato» che YouTube dichiara a volte resta su «non avviato» anche se il video va (il tempo avanza):
+  // per sapere se un lettore va davvero si guarda il suo tempo. p._vaDa = da quando va senza fermarsi.
+  function osserva(p) {
+    const ora = p.getCurrentTime(), adesso = performance.now();
+    if (p._tPrec == null) { p._tPrec = ora; p._tCambio = adesso; return ora; }
+    if (Math.abs(ora - p._tPrec) > .004) { p._tPrec = ora; p._tCambio = adesso; if (!p._vaDa) p._vaDa = adesso; }
+    else if (adesso - p._tCambio > 700) p._vaDa = 0;     // fermo da più di 0,7 secondi
+    return ora;
+  }
+  const pulito = p => !!p._vaDa && performance.now() - Math.max(p._vaDa, p._salto || 0) >= QUIETE;
+  const pronto = (p, t) => pulito(p) && p.getCurrentTime() >= t.da - .06;
+  // dissolvenza fra due tratti: al massimo XF, e non più di un terzo di ciascuno
+  const xfDi = (prima, t) => Math.min(XF, (prima.a - prima.da) / 3, (t.a - t.da) / 3);
+  // quanto durano le scritte che precedono uno spezzone (servono a sapere quando dovrà comparire)
+  const epocaMs = o => 3800 + o.riga.split(' ').length * 260 + 800;
+  const raccontaMs = (html, extra) => { const n = html.split(/\s+/).filter(Boolean).length; return n * 350 + extra + 900; };
+  const durataLocale = o => [].concat(o.clip).reduce((s, t) => s + (t.a - t.da) * 1000 + 250, 1000);
+  // guida un lettore nascosto: deve arrivare al suo «da» fra p._quando() millisecondi (null = non si sa ancora)
+  function guida(p) {
+    clearInterval(p._guida);
+    p._guida = setInterval(() => {
+      if (p._mostrato) return;
+      const adesso = performance.now(), ora = osserva(p);
+      // fermo: a volte YouTube perde il comando «parti» (si ripete ogni secondo); se resta fermo 2,5 s
+      // si ricarica il video al punto giusto
+      if (!p._vaDa) {
+        if (!p._fermoDa) p._fermoDa = adesso;
+        if (adesso - (p._riprova || 0) > 1000) { p._riprova = adesso; p.playVideo(); }
+        if (adesso - p._fermoDa > 2500) {
+          const q = p._quando ? p._quando() : null, dove = q != null && q > 0 ? p._t.da - q / 1000 : p._t.da - 6;
+          p.loadVideoById({ videoId: p._vid, startSeconds: Math.max(0, dove) }); p.mute();
+          p._salto = adesso; p._fermoDa = adesso; p._tPrec = null;
+        }
+        return;
+      }
+      p._fermoDa = 0;
+      const t = p._t, dist = t.da - ora;
+      const q = p._quando ? p._quando() : null;
+      const puoSaltare = adesso - (p._salto || 0) > 1000;
+      if (q == null || q <= 0) {
+        // non si sa quando servirà (o lo si aspetta da un momento all'altro): gira in tondo, ma ogni giro dura più di QUIETE
+        if (p._attesa) return vel(p, 1);
+        const dove = Math.max(0, t.da - 6), giro = t.da - dove;
+        if (dist <= .25 && puoSaltare) salta(p, dove);
+        return vel(p, VEL.filter(v => giro / v >= 5.6).pop() || .25);
+      }
+      const rem = q / 1000, dove = t.da - rem;
+      // lontano dall'entrata: un salto va bene (titolo e icona avranno tempo di sparire)
+      if (rem > 5.5) {
+        if (dove >= 0) { if (Math.abs(ora - dove) > .6 && puoSaltare) { salta(p, dove); return vel(p, 1); } }
+        else {
+          // il tratto è nei primi secondi del video: il lettore resta «parcheggiato» all'inizio, piano piano
+          if ((ora > Math.min(t.da * .5, 1) || dist <= .25) && puoSaltare) salta(p, 0);
+          return vel(p, .25);
+        }
+      }
+      if (dist <= .05) return vel(p, .25);                       // già arrivato: va piano piano
+      const serve = dist / rem;
+      vel(p, VEL.reduce((m, v) => Math.abs(v - serve) < Math.abs(m - serve) ? v : m, 1));
+    }, 100);
+  }
+  // fa partire un lettore nascosto e muto, 6 secondi prima del suo tratto
+  function avvia(p, t) {
+    clearInterval(p._guida); clearInterval(p._sf);
+    p.getIframe().classList.remove('vivo', 'svelto');
+    p._mostrato = false; p._attesa = false; p._quando = null;
+    p.mute(); p._vol = 0; p._t = t; vel(p, 1);
+    p._tPrec = null; p._vaDa = 0; p._fermoDa = 0;
+    salta(p, t.da - 6); p.playVideo();
+    guida(p);
+  }
+  // prepara i lettori di uno spezzone all'inizio del capitolo; «ms» = fra quanto deve comparire il primo tratto
+  function prepara(o, ms) {
+    o = fonteDi(o); if (o.file || !o.clip) return;
+    const tratti = [].concat(o.clip), ps = lettoriDi(o.video);
+    if (ps.length < tratti.length) return;
+    tratti.forEach((t, i) => { if (ps[i]._t !== t) avvia(ps[i], t); });
+    if (ms == null) return;
+    // la scaletta: ogni tratto entra quando il precedente arriva alla sua dissolvenza (un po' più tardi, per sicurezza)
+    let T = orologio() + ms + 300;
+    tratti.forEach((t, i) => {
+      if (i > 0) { const pt = tratti[i - 1]; T += (pt.a - xfDi(pt, t) - pt.da) * 1000; }
+      const Ti = T; ps[i]._quando = () => Ti - orologio();
     });
   }
-  function mostraLettore(v) { document.querySelectorAll('#lettori iframe').forEach(f => { f.style.visibility = f.id === 'yt-' + v ? 'visible' : 'hidden'; }); }
+  // aspetta una condizione (al massimo «max» ms dell'orologio della regia)
+  async function finche(cond, id, max) {
+    const t0 = orologio();
+    while (id === corsa && !cond() && orologio() - t0 < max) await aspetta(40);
+  }
   // audio di un tratto: se qualcuno parla si sente il video e la musica si abbassa; se no, video muto e musica piena
-  function audio(p, t) {
-    if (t.voce) { p.unMute(); p.setVolume(t.vol || 90); Suono.abbassa(true); }
-    else { p.mute(); Suono.abbassa(false); }
+  function audio(p, t, ms) {
+    sfumaYT(p, t.voce ? (t.vol || 90) : 0, ms);
+    Suono.abbassa(!!t.voce);
   }
   // «su»: in alcuni tratti i sottotitoli inglesi stanno in alto, e la fascia di sopra si allarga
-  function fasce(t) { $('.fascia.su').style.height = (t.su || 13) + '%'; }
-  function perche(t) {
+  // valori che cambiano ai secondi del video: [[secondo, valore], …]
+  const valA = (arr, sec) => (arr.filter(([s]) => s <= sec).pop() || arr[0])[1];
+  function fasce(t, sec = t.da) { const v = Array.isArray(t.su) ? valA(t.su, sec) : t.su; $('.fascia.su').style.height = (v || 13) + '%'; }
+  // quanto serve per leggere una frase (circa 4 parole al secondo, più una pausa)
+  const lettura = testo => Math.min(3600, Math.max(1800, 900 + String(testo).split(/\s+/).length * 230));
+  // il testo di un tratto al secondo «sec», sempre nella fascia in basso e uno alla volta:
+  // se qualcuno parla il sottotitolo (giallo); se il tratto è muto la sua didascalia (bianca); se no niente
+  let testoOra = '';
+  function testi(t, sec) {
+    let txt = '', dida = false;
+    if (t.sub) { const r = t.sub.filter(([s]) => s <= sec).pop(); txt = r ? r[1] : ''; }
+    else if (t.it) txt = t.it;
+    else if (!t.voce && t.perche) { txt = percheA(t, sec); dida = true; }
+    if (Array.isArray(t.su)) fasce(t, sec);
+    if (txt === testoOra) return;
+    const el = $('#clip-it'), cambio = dida && testoOra;   // le didascalie si sciolgono una nell'altra
+    testoOra = txt;
+    if (!cambio) { el.textContent = txt; el.classList.toggle('dida', dida); return; }
+    el.classList.add('cambia');
+    setTimeout(() => { if (testoOra !== txt) return; el.textContent = txt; el.classList.toggle('dida', dida); el.classList.remove('cambia'); }, 300);
+  }
+  const percheA = (t, sec) => Array.isArray(t.perche) ? valA(t.perche, sec) : t.perche;
+  function perche(t, sec = t.da) {
     fasce(t);
-    if (!t.perche) return $('#clip-perche').classList.remove('on');
-    $('#perche').textContent = t.perche; $('#clip-perche').classList.add('on');
+    const testo = percheA(t, sec);
+    if (!testo) return $('#clip-perche').classList.remove('on');
+    $('#perche').textContent = testo; $('#clip-perche').classList.add('on');
+  }
+  // cambia la frase sopra lo spezzone con una piccola dissolvenza
+  let percheOra = '';
+  function cambiaPerche(testo) {
+    if (!testo || testo === percheOra) return;
+    percheOra = testo; const s = $('#perche');
+    s.classList.add('cambia');
+    setTimeout(() => { s.textContent = percheOra; s.classList.remove('cambia'); }, 350);
   }
   // aspetta che il video stia davvero andando e sia arrivato al secondo «sec» (o che passi «max»)
   async function arriva(p, sec, id, max = 5000) {
     const t0 = orologio();
     while (orologio() - t0 < max && id === corsa) {
-      if (p.getPlayerState() === 1 && p.getCurrentTime() >= sec) return true;
+      if (p.getCurrentTime() >= sec) return true;   // basta il tempo: lo stato dichiarato da YouTube non è affidabile
       await aspetta(40);
     }
     return false;
   }
-  // uno spezzone può avere più tratti dello stesso video. Ogni tratto parte un secondo prima, nascosto e muto:
-  // così l'icona del play di YouTube non si vede mai; il tratto si chiude quando il video arriva davvero alla fine
+  // uno spezzone può avere più tratti dello stesso video, ognuno col suo lettore già in attesa (vedi «guida»)
   async function spezzone(o, id, rec) {
-    const tratti = [].concat(o.clip || []);
-    if (!tratti.length || !pronti[o.video] || id !== corsa) return;
-    const p = lettori[o.video];
-    attivo = p;
-    mostraLettore(o.video);
+    o = fonteDi(o);
+    if (o.file) return spezzoneLocale(o, id, rec);
+    const tratti = [].concat(o.clip || []), ps = lettoriDi(o.video);
+    if (!tratti.length || ps.length < tratti.length || id !== corsa) return;
+    if (ps[0]._t !== tratti[0]) prepara(o, 6500);   // nessuno l'ha preparato prima: compare fra 6,5 s
+    const usati = ps.slice(0, tratti.length);
+    // la pausa ferma solo il lettore che si vede; quelli in attesa continuano a girare, nascosti
+    attivo = { pauseVideo: () => usati.forEach(p => p.getIframe().classList.contains('vivo') && p.pauseVideo()),
+               playVideo: () => usati.forEach(p => p.getIframe().classList.contains('vivo') && p.playVideo()) };
+    $('#clip').classList.remove('locale');
     $('#clip-rec').textContent = rec;
     $('#clip-opera').innerHTML = o.tit ? `<b>${o.tit}</b> · ${o.chi.split(' · ')[0]} · ${o.anno}` : `<b>${o.canale}</b> · ${o.fonte}`;
     $('#clip-fonte').textContent = o.tit ? `${o.fonte} · YouTube, ${o.canale}` : 'video saggio · YouTube';
-    // i sottotitoli: «it» per tutto il tratto, oppure «sub» con i secondi del video in cui cambiano
-    const sottotitolo = () => {
-      const t = tratti.find(x => x.sub && p.getCurrentTime() >= x.da - .5 && p.getCurrentTime() <= x.a + .5);
-      if (t) { const r = t.sub.filter(([sec]) => sec <= p.getCurrentTime()).pop(); $('#clip-it').textContent = r ? r[1] : ''; }
-    };
-    let sotto = 0;
+    let cur = null, curT = null;
+    testoOra = ''; $('#clip-it').textContent = '';
+    // ogni 60 ms: il testo in basso, preso dal secondo vero del video
+    const giro = setInterval(() => {
+      if (id !== corsa) return clearInterval(giro);
+      if (cur) testi(curT, cur.getCurrentTime());
+    }, 60);
+    const fuori = () => { clearInterval(giro); };
     for (let i = 0; i < tratti.length; i++) {
-      const t = tratti[i];
-      if (i > 0) { $('#lettori').classList.add('taglio'); await aspetta(180); }
-      // il primo tratto parte 1,2 s prima (il riquadro è ancora nascosto); gli altri 0,35 s prima, dietro un breve nero
-      p.mute(); p.seekTo(Math.max(0, t.da - (i ? .35 : 1.2)), true); p.playVideo();
-      await arriva(p, t.da, id); if (id !== corsa) return;
-      audio(p, t); $('#clip-it').textContent = t.it || ''; perche(t);
-      if (i === 0) { $('#clip').classList.add('on'); sotto = setInterval(sottotitolo, 120); }
-      else $('#lettori').classList.remove('taglio');
-      await arriva(p, t.a - .25, id, (t.a - t.da + 4) * 1000);
-      if (id !== corsa) return clearInterval(sotto);
+      const t = tratti[i], p = usati[i];
+      let xf = .6, alBuio = false;
+      if (i === 0 && t.da < 2) {
+        // il tratto comincia nei primi secondi del video: non c'è spazio per far partire il lettore prima.
+        // Si parte al buio: si sente e si leggono i sottotitoli, l'immagine arriva quando YouTube ha tolto titolo e icona
+        alBuio = true;
+        clearInterval(p._guida); p._mostrato = true;
+        vel(p, 1); salta(p, t.da); p.playVideo(); p._tPrec = null; p._vaDa = 0;
+        cur = p; curT = t; fasce(t); audio(p, t, 600); $('#clip').classList.add('on');
+        await finche(() => { osserva(p); return pulito(p); }, id, 9000);
+      } else if (i === 0) {
+        p._attesa = true;
+        await finche(() => pronto(p, t), id, 9000);
+      } else {
+        xf = xfDi(curT, t);
+        // da adesso il prossimo lettore si regola sul tratto che si vede
+        const a0 = cur, t0 = curT;
+        p._quando = () => (t0.a - xf - a0.getCurrentTime()) * 1000;
+        await finche(() => a0.getCurrentTime() >= t0.a - xf || pronto(p, t), id, 30000);
+        p._attesa = true;
+        // si aspetta il prossimo lettore solo finché il tratto che si vede è dentro i suoi limiti (dopo ci sono cartelli e loghi)
+        await finche(() => pronto(p, t) || a0.getCurrentTime() >= t0.a - .4, id, 1200);
+      }
+      if (id !== corsa) return fuori();
+      // un lettore che non è pronto (bloccato da YouTube) non si mostra mai: con l'icona o al punto sbagliato
+      // sarebbe peggio di un tratto in meno. Senza il primo tratto lo spezzone si salta; senza un altro finisce lì.
+      if (!pronto(p, t)) {
+        if (i > 0) break;
+        fuori(); usati.forEach(q => { clearInterval(q._guida); q.pauseVideo(); q._t = null; q._quando = null; q._attesa = q._mostrato = false; });
+        attivo = null; $('#clip').classList.remove('on'); $('#clip-perche').classList.remove('on'); return;
+      }
+      p._mostrato = true; clearInterval(p._guida); vel(p, 1);
+      const prima = alBuio ? null : cur; cur = p; curT = t;
+      p.getIframe().style.transitionDuration = xf + 's';
+      p.getIframe().classList.add('vivo');
+      audio(p, t, xf * 1000);
+      if (i === 0) { fasce(t); $('#clip').classList.add('on'); }
+      else fasce(t);
+      if (prima) {
+        prima.getIframe().style.transitionDuration = xf + 's';
+        prima.getIframe().classList.remove('vivo'); sfumaYT(prima, 0, xf * 1000);
+        (async () => { await aspetta(xf * 1000 + 150); prima.pauseVideo(); })();
+      }
     }
-    clearInterval(sotto);
-    // il video sparisce subito (mentre il riquadro sfuma andrebbe avanti e mostrerebbe il cartello successivo del trailer)
-    $('#lettori').classList.add('taglio');
+    // fine: il video sparisce in fretta (subito dopo, nei trailer, c'è spesso un cartello) e il riquadro sfuma
+    await arriva(cur, curT.a - .35, id, (curT.a - curT.da + 6) * 1000); if (id !== corsa) return fuori();
+    cur.getIframe().style.transitionDuration = '.35s'; cur.getIframe().classList.remove('vivo');
     $('#clip').classList.remove('on'); $('#clip-perche').classList.remove('on');
-    p.mute(); Suono.abbassa(false);
-    await aspetta(250); p.pauseVideo(); attivo = null;
-    await aspetta(350); $('#lettori').classList.remove('taglio');
-    await aspetta(400);
+    sfumaYT(cur, 0, 350); Suono.abbassa(false);
+    await aspetta(450);
+    fuori();
+    usati.forEach(p => { clearInterval(p._guida); p.pauseVideo(); p._t = null; p._quando = null; p._attesa = p._mostrato = false; });
+    attivo = null; $('#clip-it').textContent = '';
+    await aspetta(700);
+  }
+
+  /* ---------- spezzone dai ritagli sul PC ----------
+     Il tempo è quello vero del video (currentTime): sottotitoli e frasi seguono il fotogramma, non un orologio a parte.
+     Fra un tratto e l'altro c'è una dissolvenza incrociata di XF secondi, centrata sul punto di taglio:
+     il nuovo tratto parte XF/2 prima del suo «da», il vecchio continua XF/2 dopo il suo «a» (i ritagli hanno 1 s di margine). */
+  const XF = 0.9;
+  // alza o abbassa il volume di un video in «ms» millisecondi
+  function sfuma(v, a, ms) {
+    const da = v.volume, t0 = performance.now();
+    clearInterval(v._sf);
+    v._sf = setInterval(() => {
+      const k = Math.min(1, (performance.now() - t0) / ms);
+      v.volume = Math.max(0, Math.min(1, da + (a - da) * k));
+      if (k >= 1) clearInterval(v._sf);
+    }, 30);
+  }
+  const salto = (v, sec) => new Promise(r => {
+    const fatto = () => { clearTimeout(tm); r(); };
+    const tm = setTimeout(fatto, 2500);
+    v.addEventListener('seeked', fatto, { once: true });
+    v.currentTime = sec;
+  });
+  // aspetta che il video arrivi al secondo «sec» del suo file (in pausa il video è fermo, quindi aspetta anche lui)
+  async function finoA(v, sec, id) {
+    while (id === corsa && v.currentTime < sec && !v.ended) await aspetta(25);
+  }
+  async function spezzoneLocale(o, id, rec) {
+    const tratti = [].concat(o.clip), off = t => Math.max(0, t.da - LOC.pad);
+    const inGioco = new Set();
+    attivo = { pauseVideo: () => inGioco.forEach(v => v.pause()), playVideo: () => inGioco.forEach(v => v.play().catch(() => {})) };
+    mostraLettore(null);
+    $('#clip').classList.add('locale');
+    $('#clip-rec').textContent = rec;
+    $('#clip-opera').innerHTML = o.tit ? `<b>${o.tit}</b> · ${o.chi.split(' · ')[0]} · ${o.anno}` : `<b>${o.canale}</b> · ${o.fonte}`;
+    $('#clip-fonte').textContent = o.tit ? `${o.fonte}` : 'video saggio · YouTube, Dami Lee';
+    let cur = null, curT = null, giro = 0;
+    testoOra = ''; $('#clip-it').textContent = '';
+    // ogni 40 ms: il testo in basso, preso dal secondo vero del video
+    const aggiorna = () => {
+      if (id !== corsa) return clearInterval(giro);
+      if (cur) testi(curT, cur.currentTime + off(curT));
+    };
+    for (let i = 0; i < tratti.length; i++) {
+      const t = tratti[i], v = videoLocale(nomeLocale(o, t));
+      // il primo tratto parte un attimo prima, mentre il riquadro compare; gli altri a metà della dissolvenza
+      await salto(v, Math.max(0, (i ? t.da - XF / 2 : t.da - .3) - off(t))); if (id !== corsa) return;
+      v.volume = 0; v.muted = false;
+      try { await v.play(); } catch (e) { v.muted = true; await v.play().catch(() => {}); }
+      if (id !== corsa) { v.pause(); return; }
+      inGioco.add(v);
+      const prima = cur;
+      cur = v; curT = t;
+      v.classList.add('vivo');
+      sfuma(v, t.voce ? (t.vol || 90) / 100 : 0, XF * 1000);
+      Suono.abbassa(!!t.voce);
+      fasce(t);
+      if (i === 0) { $('#clip').classList.add('on'); giro = setInterval(aggiorna, 40); }
+      if (prima) {
+        prima.classList.remove('vivo'); sfuma(prima, 0, XF * 1000);
+        (async () => { await aspetta(XF * 1000 + 100); prima.pause(); inGioco.delete(prima); })();
+      }
+      // il tratto finisce a metà della dissolvenza con il successivo; l'ultimo un attimo prima, mentre il riquadro sfuma
+      const fine = i < tratti.length - 1 ? t.a - XF / 2 : t.a - .6;
+      await finoA(v, fine - off(t), id);
+      if (id !== corsa) { clearInterval(giro); return; }
+    }
+    // fine: il riquadro sfuma mentre il video va ancora avanti, poi tutto si ferma
+    $('#clip').classList.remove('on'); $('#clip-perche').classList.remove('on');
+    sfuma(cur, 0, 600); Suono.abbassa(false);
+    await aspetta(700);
+    clearInterval(giro);
+    inGioco.forEach(v => { v.pause(); v.classList.remove('vivo'); }); inGioco.clear();
+    attivo = null; $('#clip-it').textContent = '';
+    await aspetta(300);
+    $('#clip').classList.remove('locale');
+    await aspetta(300);
   }
 
   function pulisci() {
+    Object.values(videoLoc).forEach(v => { v.pause(); v.classList.remove('vivo'); clearInterval(v._sf); v.volume = 0; });
+    $('#clip').classList.remove('intro');
     ['#cartello', '#citazione', '#titolo', '#clip', '#epoca', '#linea', '#racconto', '#clip-perche'].forEach(s => $(s).classList.remove('on'));
     $('#cartello').classList.remove('psy');
     $('#terminale').innerHTML = '';
-    Object.keys(lettori).forEach(v => { if (pronti[v]) { lettori[v].pauseVideo(); lettori[v].mute(); } });
+    Object.values(lettori).flat().forEach(p => { if (p._pronto) { clearInterval(p._guida); clearInterval(p._sf); p.pauseVideo(); p.mute(); p._t = null; p._quando = null; p._attesa = p._mostrato = false; } });
+    mostraLettore();
   }
 
   // un'opera della linea del tempo: la scheda dell'anno, lo spezzone, poi la frase che resta
   async function opera(id, k, rec) {
     const o = OPERE[k];
+    prepara(o, epocaMs(o));
     await epoca(id, o); if (id !== corsa) return;
     if (o.clip) { await spezzone(o, id, rec || 'Archivio · ' + o.anno); if (id !== corsa) return; }
     if (o.chiave) await racconta(id, `${o.anno} · ${o.tit}`, o.chiave, { chiave: true, extra: 1400 });
@@ -606,6 +935,7 @@
     { nome: '1984 · Neuromante', fn: id => opera(id, 'neuro') },
     { nome: '1988 · Akira', fn: id => opera(id, 'akira') },
     { nome: '1995 · Ghost in the Shell', fn: async (id, ok) => {
+      prepara(OPERE.gits, epocaMs(OPERE.gits) + durataLocale(DAMI.teseo));
       await epoca(id, OPERE.gits); if (!ok()) return;
       await spezzone(DAMI.teseo, id, 'Dami Lee · da qui è nata l’idea'); if (!ok()) return;
       await spezzone(OPERE.gits, id, 'Archivio · 1995');
@@ -625,6 +955,7 @@
       await aspetta(1000);
     } },
     { nome: '1999 · Matrix', fn: async (id, ok) => {
+      prepara(OPERE.matrix, epocaMs(OPERE.matrix));
       await epoca(id, OPERE.matrix); if (!ok()) return;
       await spezzone(OPERE.matrix, id, 'Archivio · 1999'); if (!ok()) return;
       await citazione(id, 'Come faresti a distinguere il mondo dei sogni dal mondo reale?', '<b>Morpheus</b> · Matrix, 1999');
@@ -635,6 +966,7 @@
     { nome: '2022 · Edgerunners', fn: async id => { await epoca(id, OPERE.edge); $('#linea').classList.remove('on'); } },
     // Edgerunners: la storia di David, una tappa alla volta
     ...TAPPE_EDGE.map((t, n) => ({ nome: `Edgerunners · ${t.nome}`, fn: async (id, ok) => {
+      prepara({ ...OPERE.edge, clip: t.clip }, raccontaMs(t.testo, 1600));
       await racconta(id, `Edgerunners · ${n + 1} / ${TAPPE_EDGE.length}`, t.testo, { rosso: t.rosso, extra: 1600 }); if (!ok()) return;
       await spezzone({ ...OPERE.edge, clip: t.clip }, id, `Edgerunners · ${n + 1} / ${TAPPE_EDGE.length}`);
     } })),
