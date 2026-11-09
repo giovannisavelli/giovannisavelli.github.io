@@ -155,7 +155,7 @@ function pezzo(cx, cz, lungo, spesso, alto, asseX) {
   // nascita: i muri salgono dal pavimento a onda, partendo dall'ingresso
   const nasce = .9 + Math.hypot(cx - 500, cz - 560) / 620 * 1.5 + Math.random() * .15;
   mesh.scale.y = ridotto ? 1 : .001;
-  pezzi.push({ perno, mesh, cx, cz, asseX, lungo, ang: 0, vel: 0, verso: 1, nasce, cresciuto: ridotto });
+  pezzi.push({ perno, mesh, cx, cz, asseX, lungo, spesso, alto, ang: 0, vel: 0, verso: 1, limite: Math.PI / 2, nasce, cresciuto: ridotto });
 }
 for (const m of MURI) {
   const asseX = m.z1 === m.z2, lungo = Math.hypot(m.x2 - m.x1, m.z2 - m.z1);
@@ -168,6 +168,49 @@ for (const m of MURI) {
   }
 }
 for (const [x, z] of PILASTRI) pezzo(x, z, 14, 14, H + 6, true);
+
+// ---------- collisioni: un pannello non attraversa gli altri ----------
+// Il pannello ruota sulla base. Dalla parte in cui cade c'è uno spazio largo quanto lui e profondo quanto è alto:
+// se dentro c'è un ostacolo, il pannello si ferma quando lo tocca. Un pilastro o un muro in piedi lo fanno appoggiare
+// inclinato; un pannello già a terra lo fa sdraiare sopra, appena sollevato.
+// lato = +1 o -1: verso dove va la cima del pannello (asse z per i muri lungo x, asse x per gli altri)
+const latoDi = p => p.asseX ? p.verso : -p.verso;
+const versoDi = (p, lato) => p.asseX ? lato : -lato;
+function ingombro(o) {
+  // l'impronta sul pavimento di un pannello in questo momento, con la sua altezza
+  const mezzo = o.lungo / 2, sp = o.spesso / 2;
+  const fuori = o.ang < .3 ? 0 : o.alto * Math.sin(o.ang), alto = o.ang < .3 ? o.alto : Math.max(o.spesso, o.alto * Math.cos(o.ang));
+  const lato = latoDi(o);
+  const p0 = -sp + Math.min(0, lato * fuori), p1 = sp + Math.max(0, lato * fuori);   // di traverso, rispetto alla base
+  return o.asseX ? { x0: o.cx - mezzo, x1: o.cx + mezzo, z0: o.cz + p0, z1: o.cz + p1, alto }
+                 : { x0: o.cx + p0, x1: o.cx + p1, z0: o.cz - mezzo, z1: o.cz + mezzo, alto };
+}
+function angoloMassimo(p, lato) {
+  // l'angolo a cui il pannello tocca il primo ostacolo cadendo da quella parte (90° = arriva a terra)
+  let max = Math.PI / 2;
+  const mezzo = p.lungo / 2 - 1, sp = p.spesso / 2;
+  for (const o of pezzi) {
+    if (o === p) continue;
+    // un pannello che cade conta solo se è già più giù di questo: chi arriva prima prende il posto
+    if (o.ang >= .3 && !(o.ang > p.ang + .02 || (Math.abs(o.ang - p.ang) <= .02 && pezzi.indexOf(o) < pezzi.indexOf(p)))) continue;
+    const r = ingombro(o);
+    // l'ostacolo nelle coordinate del pannello: u lungo il pannello, v verso dove cade
+    const [u0, u1, a, b] = p.asseX ? [r.x0 - p.cx, r.x1 - p.cx, (r.z0 - p.cz) * lato, (r.z1 - p.cz) * lato]
+                                   : [r.z0 - p.cz, r.z1 - p.cz, (r.x0 - p.cx) * lato, (r.x1 - p.cx) * lato];
+    const v0 = Math.min(a, b), v1 = Math.max(a, b);
+    if (u1 <= -mezzo || u0 >= mezzo || v1 <= sp + .5 || v0 >= p.alto) continue;
+    const d = Math.max(0, v0 - sp);                       // spazio libero fra la faccia del pannello e l'ostacolo
+    if (d < 2) return 0;
+    max = Math.min(max, Math.max(Math.asin(Math.min(1, d / p.alto)), Math.atan(d / Math.max(r.alto, .1))));
+  }
+  return max;
+}
+function scegliLato(p, voluto) {
+  // si cade dalla parte voluta (lontano dal mouse); se lì è quasi tutto bloccato, dall'altra
+  const a = angoloMassimo(p, voluto);
+  if (a >= .25) return voluto;
+  return angoloMassimo(p, -voluto) > a ? -voluto : voluto;
+}
 
 // ---------- i nomi dei corsi, sospesi sopra le aule (HTML, seguono la proiezione della telecamera) ----------
 const etichette = document.createElement('div'); etichette.className = 'etichette'; box.appendChild(etichette);
@@ -193,7 +236,7 @@ function inquadra() {
   camera.aspect = r.width / r.height;
   if (piccolo()) {
     // sul telefono la camera si avvicina finché l'edificio riempie lo schermo da bordo a bordo
-    camera.clearViewOffset();
+    camera.clearViewOffset(); camera.zoom = 1;
     const centro = new THREE.Vector3(500, 0, 300), dir = new THREE.Vector3(0, 1700, 950).normalize(), p = new THREE.Vector3();
     const angoli = []; for (const x of [60, 940]) for (const y of [0, H]) for (const z of [40, 560]) angoli.push(new THREE.Vector3(x, y, z));
     let vicino = 600, lontano = 5000;
@@ -207,8 +250,11 @@ function inquadra() {
   }
   else {
     camera.position.set(560, 1180, 1820); camera.lookAt(500, 0, 330);
-    // l'edificio sta a destra del titolo: si sposta l'inquadratura, non la scena
-    camera.setViewOffset(r.width, r.height, -r.width * .19, -r.height * .03, r.width, r.height);
+    camera.zoom = 1.1;   // un poco più grande, per riempire lo spazio a destra del titolo
+    // l'edificio sta a destra del titolo e in alto: si sposta l'inquadratura, non la scena
+    // sugli schermi bassi sale meno, così i nomi delle aule non finiscono sotto la barra in alto
+    const su = .06 + .06 * Math.min(1, Math.max(0, (r.height - 650) / 350));
+    camera.setViewOffset(r.width, r.height, -r.width * .19, r.height * su, r.width, r.height);
   }
   camera.updateProjectionMatrix();
 }
@@ -291,13 +337,18 @@ function frame(now) {
     }
     const d = Math.hypot(p.cx - fuoco.x, p.cz - fuoco.z);
     const giu = costruito && d < R;
-    if (giu && p.ang < .05) p.verso = p.asseX ? Math.sign(p.cz - fuoco.z || 1) : -Math.sign(p.cx - fuoco.x || 1);
-    if (ridotto) p.ang = giu ? TERRA : 0;
+    if (giu && p.ang < .05) {
+      const voluto = p.asseX ? Math.sign(p.cz - fuoco.z || 1) : Math.sign(p.cx - fuoco.x || 1);   // lontano dal mouse
+      p.verso = versoDi(p, scegliLato(p, voluto));
+    }
+    // fin dove può arrivare adesso: a terra, o appoggiato al primo ostacolo
+    if (giu || p.ang > .01) p.limite = Math.min(TERRA, angoloMassimo(p, latoDi(p)));
+    if (ridotto) p.ang = giu ? p.limite : 0;
     else if (giu) {
-      // cade come un corpo pesante: lento all'inizio, sempre più veloce, poi batte a terra e rimbalza appena
+      // cade come un corpo pesante: lento all'inizio, sempre più veloce, poi batte (a terra o sull'ostacolo) e rimbalza appena
       p.vel += (1.2 + 24 * Math.sin(p.ang + .04)) * dt;
       p.ang += p.vel * dt;
-      if (p.ang >= TERRA) { p.ang = TERRA; p.vel = Math.abs(p.vel) > .8 ? -p.vel * .2 : 0; }
+      if (p.ang >= p.limite) { p.ang = p.limite; p.vel = Math.abs(p.vel) > .8 ? -p.vel * .2 : 0; }
     } else {
       // si rialza con calma, senza rimbalzi
       p.vel += ((0 - p.ang) * 14 - p.vel * 7.5) * dt; p.ang += p.vel * dt;
