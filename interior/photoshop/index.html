@@ -251,12 +251,16 @@
        "titolo": "I primi strumenti per scontornare",
        "ore": "2 ore",
        "voci": [
+        "Prima della prova: RGB, CMYK e profili colore",
+        "Impostazioni colore di Photoshop",
+        "Esperimenti interattivi sul colore",
         "Sopra e sotto: come funzionano i livelli",
         "Il pennello: dimensione e durezza",
         "Costruire la selezione: aggiungi, sottrai, interseca",
         "La prova: sedia e mela",
         "Il bordo lineare: lazo poligonale",
-        "Il bordo curvo: pennello e lazo"
+        "Il bordo curvo: pennello e lazo",
+        "Il primo salvataggio: PSD, PSB, TIFF, JPEG e PNG"
        ]
       },
       "3": {
@@ -342,6 +346,7 @@
             <button class="tab-btn" type="button" role="tab" id="btn-appunti" data-tab="tab-appunti" aria-controls="tab-appunti" aria-selected="false">Appunti</button>
             <button class="tab-btn" type="button" role="tab" id="btn-calendario" data-tab="tab-calendario" aria-controls="tab-calendario" aria-selected="false">Calendario</button>
             <button class="tab-btn" type="button" role="tab" id="btn-elenco" data-tab="tab-elenco" aria-controls="tab-elenco" aria-selected="false" tabindex="-1">Programma</button>
+            <button class="tab-btn" type="button" role="tab" id="btn-esperimenti" data-tab="tab-esperimenti" aria-controls="tab-esperimenti" aria-selected="false">Esperimenti</button>
             <button class="tab-btn" type="button" role="tab" id="btn-video" data-tab="tab-video" aria-controls="tab-video" aria-selected="false">Video</button>
             <button class="tab-btn" type="button" role="tab" id="btn-risorse" data-tab="tab-risorse" aria-controls="tab-risorse" aria-selected="false">Risorse</button>
             <button class="tab-btn" type="button" role="tab" id="btn-scorciatoie" data-tab="tab-scorciatoie" aria-controls="tab-scorciatoie" aria-selected="false">Scorciatoie</button>
@@ -371,6 +376,14 @@
                 <li><a href="#lezione-6"><span class="lesson-index-number">06</span><strong>Esonero</strong><small>4 ore</small><span class="lesson-index-arrow" aria-hidden="true">→</span></a></li>
             </ol>
             <p class="lesson-index-note">La quinta lezione è una traccia di lavoro da sviluppare insieme. Per l’esonero, modalità e consegna sono ancora da definire.</p>
+        </section>
+
+        <section class="panel" role="tabpanel" id="tab-esperimenti" aria-labelledby="btn-esperimenti" hidden>
+            <h2>Esperimenti</h2>
+            <p class="panel-intro">Prove interattive per osservare come cambia un’immagine quando cambiano luce, profilo e destinazione del file.</p>
+            <ol class="lesson-index" aria-label="Esperimenti del corso">
+                <li><a href="esperimenti/colore.html"><span class="lesson-index-number">02</span><strong>Laboratorio del colore</strong><small>RGB · CMYK · profili</small><span class="lesson-index-arrow" aria-hidden="true">→</span></a></li>
+            </ol>
         </section>
 
         <section class="panel" role="tabpanel" id="tab-archivio" aria-labelledby="btn-archivio" hidden>
@@ -424,10 +437,18 @@
             <article class="lesson-opening lesson-opening--second" aria-labelledby="lesson-two-title">
                 <p class="lesson-label">Seconda lezione · 2 ore</p>
                 <h3 id="lesson-two-title">Non esiste uno <span>strumento unico.</span></h3>
-                <p class="lesson-deck">Una sedia e una mela, due contorni diversi. Prima capiamo come funzionano livelli e selezioni, poi proviamo pennello e lazo su entrambi.</p>
+                <p class="lesson-deck">Una sedia e una mela, due contorni diversi. Prima controlliamo modo e profilo colore del documento; poi proviamo livelli, pennello e lazo. Al primo salvataggio scegliamo il formato adatto.</p>
                 <div class="lesson-thought"><p>La domanda non è «qual è lo strumento migliore?», ma <strong>«quale controllo mi serve per questo bordo?»</strong> La forma dell’oggetto ci aiuta a scegliere.</p></div>
             </article>
 
+            <h4 class="lesson-section-title">Prima della prova: colori e profili</h4>
+            <p class="lesson-section-copy">Prima di iniziare distinguiamo due scelte: <strong>come sono descritti i colori</strong> e <strong>quali parti del lavoro devono restare modificabili</strong>. Il profilo colore e l’estensione del file rispondono a domande diverse.</p>
+            <div class="lesson-route" aria-label="Colore e impostazioni di Photoshop">
+                <section><span>01 / MODO COLORE</span><h4>RGB e CMYK</h4><p>In RGB ogni pixel è descritto dai canali rosso, verde e blu: è il modo di lavoro naturale per le immagini viste su schermo. CMYK descrive i colori attraverso gli inchiostri di stampa. Non convertiamo un file in CMYK alla cieca: per una stampa conta anche il profilo richiesto da chi la realizza.</p></section>
+                <section><span>02 / PROFILO</span><h4>sRGB e Adobe RGB</h4><p>Sono due spazi colore <em>all’interno di RGB</em>, non due formati di file. Adobe RGB comprende una gamma di colori più ampia; sRGB è la scelta comune per le immagini destinate al web. Il profilo incorporato permette agli altri programmi di interpretare correttamente i colori del documento.</p></section>
+                <section><span>03 / IMPOSTAZIONI</span><h4>Dove si controllano</h4><p>Apriamo <strong>Modifica → Impostazioni colore</strong>: controlliamo gli spazi di lavoro RGB e CMYK, impostiamo quello adatto al lavoro e vediamo come Photoshop gestisce i profili dei file aperti. Qui non si sceglie tra JPEG, TIFF o PNG: il formato si sceglie nei comandi di salvataggio o esportazione.</p></section>
+            </div>
+            <div class="lesson-materials"><div><strong>Laboratorio del colore</strong><p>Prova in prima persona la somma delle luci RGB, la sottrazione degli inchiostri CMYK e le differenze tra sRGB, Adobe RGB e ProPhoto RGB. Alla fine scegli come preparare tre consegne.</p></div><a href="esperimenti/colore.html">Apri gli esperimenti →</a></div>
             <div class="lesson-route" aria-label="I tre passaggi della seconda lezione">
                 <section><span>01 / LIVELLI</span><h4>Sopra e sotto</h4><p>Creiamo due livelli trasparenti, dipingiamo un segno su ciascuno e ne invertiamo l’ordine. <strong>Il livello sopra copre quello sotto solo dove contiene pixel visibili.</strong> Nascondiamo un livello per vedere cosa appartiene a ciascuno.</p></section>
                 <section><span>02 / PENNELLO</span><h4>Dimensione e durezza</h4><p>Proviamo un pennello grande e uno piccolo, con bordo duro e morbido. Guardiamo il contorno a ingrandimento reale: la dimensione cambia quanti pixel occupa il segno, la durezza cambia la transizione del bordo.</p></section>
@@ -454,6 +475,16 @@
                 <p><strong>Da osservare:</strong> per questa sedia il lazo potrebbe essere più comodo sui bordi regolari; per la mela il pennello potrebbe seguire meglio la curva. Conta il risultato sul bordo, non il nome dello strumento.</p>
                 <p><strong>Dimensione e durezza:</strong> se passi da 100 px a 50 px lasciando la durezza al 100%, l’impostazione resta 100%. Il bordo occupa però meno pixel e può apparire diverso. Ingrandisci, osserva la transizione e ammorbidisci il pennello se il risultato lo richiede.</p>
             </div>
+            <h4 class="lesson-section-title">Quale file salviamo?</h4>
+            <p class="lesson-section-copy">Partiamo dalla stessa prova e confrontiamo un file da continuare a modificare con una copia da mostrare o usare altrove. L’estensione da sola non garantisce che i livelli siano stati conservati: bisogna controllare le opzioni di salvataggio.</p>
+            <div class="adjustment-list" role="group" aria-label="Formati dei file della seconda lezione">
+                <details class="adjustment-item"><summary><strong>PSD · lavoro in Photoshop</strong><span class="adjustment-icon" aria-hidden="true"></span></summary><div class="adjustment-content"><p>È il formato di lavoro di Photoshop: conserva livelli, maschere e altre parti modificabili. Salviamo qui la prova con la foto originale e le versioni separate.</p></div></details>
+                <details class="adjustment-item"><summary><strong>PSB · documento molto grande</strong><span class="adjustment-icon" aria-hidden="true"></span></summary><div class="adjustment-content"><p>È il formato Photoshop per documenti che superano i limiti del PSD. Non rende migliore l’immagine: serve quando dimensioni o peso del progetto richiedono un file più grande.</p></div></details>
+                <details class="adjustment-item"><summary><strong>TIFF · qualità e scambio</strong><span class="adjustment-icon" aria-hidden="true"></span></summary><div class="adjustment-content"><p>È adatto a conservare un’immagine di alta qualità e a scambiarla con altri programmi. In Photoshop può mantenere i livelli, se scegliamo l’opzione apposita, oppure essere un’immagine unita. Per questo <em>Mela.tif</em> non ci dice da solo se contiene livelli: lo verifichiamo aprendolo.</p></div></details>
+                <details class="adjustment-item"><summary><strong>JPEG · copia finale leggera</strong><span class="adjustment-icon" aria-hidden="true"></span></summary><div class="adjustment-content"><p>È comodo per mostrare una fotografia finita e occupa meno spazio, ma comprime l’immagine con perdita di dati. Non conserva livelli né trasparenza: teniamo sempre anche il file modificabile.</p></div></details>
+                <details class="adjustment-item"><summary><strong>PNG · trasparenza</strong><span class="adjustment-icon" aria-hidden="true"></span></summary><div class="adjustment-content"><p>È utile quando una sagoma deve avere lo sfondo trasparente, per esempio per inserirla in un’altra composizione. Non sostituisce il file di lavoro con i livelli.</p></div></details>
+            </div>
+            <div class="exercise-result"><p><strong>Facciamolo sulla prova:</strong> salviamo il lavoro in PSD mantenendo i livelli; poi creiamo una copia JPEG per vedere il risultato fuori da Photoshop. Se vogliamo usare una sagoma senza sfondo, proviamo anche un PNG. Ogni volta controlliamo nome, cartella e profilo colore del file salvato.</p></div>
             <div class="lesson-materials"><div><strong>File dell’esercizio</strong><p>Nella cartella Scontorno trovi il JPG della sedia e <em>Mela.tif</em>. Scaricali prima di iniziare e conserva le prove in un PSD: foto originale sotto, versioni colorate su livelli trasparenti separati.</p></div><a href="https://drive.google.com/drive/folders/1P75fdlznkZRsj4Gv88O6EybMpIsw72m1" target="_blank" rel="noopener noreferrer">Apri sedia e mela ↗</a></div>
                 </div>
             </details>
@@ -781,6 +812,7 @@
         "tab-archivio": "archivio",
         "tab-appunti": "appunti",
         "tab-calendario": "calendario",
+        "tab-esperimenti": "esperimenti",
         "tab-video": "video",
         "tab-risorse": "risorse",
         "tab-scorciatoie": "scorciatoie"
