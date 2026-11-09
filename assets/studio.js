@@ -10,24 +10,31 @@
   const mouse = matchMedia('(pointer: fine)').matches;
   window.Studio = { leggi, salva, esc, fermo, mouse };
 
-  /* ---------- Alta leggibilità (stessa chiave del sito ufficiale) ----------
-   * Spenta per decisione di Giovanni (02/11/2026): si riprende quando il sito è pronto.
-   * Per riaccenderla basta mettere LETTURA_ATTIVA = true. */
-  const LETTURA_ATTIVA = false;
-  const btnLeggi = document.getElementById('btn-leggibile');
-  if (btnLeggi && !LETTURA_ATTIVA) btnLeggi.hidden = true;
-  function leggibilita(on) {
-    document.body.classList.toggle('leggibile', on);
-    if (btnLeggi) btnLeggi.setAttribute('aria-pressed', String(on));
-    if (on && !document.getElementById('lexend')) {
-      document.head.appendChild(Object.assign(document.createElement('link'),
-        { id: 'lexend', rel: 'stylesheet', href: 'https://fonts.googleapis.com/css2?family=Lexend:wght@400;600&display=swap' }));
-    }
+  /* ---------- Testata e piede: scritti una volta qui, uguali in tutte le pagine ----------
+   * Nella pagina basta:
+   *   <header class="top" id="top" data-testata>  (dentro, i link propri della pagina: <a href="#programma">Programma</a>)
+   *   <footer class="wrap piede-sito" data-firma="Photoshop" data-nota="Photoshop · Interior Design"></footer>
+   * Sulla home: data-testata="casa" (niente «Tutti i corsi») e data-firma senza data-nota. */
+  const radice = (document.currentScript && document.currentScript.src || '').replace(/assets\/studio\.js.*$/, '') || '/';
+  const FRECCIA = '<svg class="icona" viewBox="0 0 24 24" aria-hidden="true"><path d="M19 12H5M11 6l-6 6 6 6"/></svg>';
+  const ANNO = '2026/27';
+  const top0 = document.querySelector('header[data-testata]');
+  if (top0) {
+    const casa = top0.dataset.testata === 'casa';
+    const propri = [...top0.querySelectorAll('a')].map(a => { a.classList.add('solo-desk'); return a.outerHTML; }).join('');
+    top0.innerHTML = `<div class="wrap">
+      <a class="marchio" href="${radice}"><i>GS</i><span>Giovanni Savelli<small>Corsi AANT ${ANNO}</small></span></a>
+      <nav class="menu" aria-label="Menu">${propri}${casa ? '' : `<a class="bordo" href="${radice}">${FRECCIA}<span class="solo-desk">Tutti i corsi</span><span class="solo-tel">Corsi</span></a>`}</nav>
+    </div>`;
   }
-  leggibilita(LETTURA_ATTIVA && leggi('dyslexia-pref') === 'true');
-  if (btnLeggi && LETTURA_ATTIVA) btnLeggi.addEventListener('click', () => {
-    const on = !document.body.classList.contains('leggibile'); leggibilita(on); salva('dyslexia-pref', String(on));
-  });
+  const piede0 = document.querySelector('footer[data-firma]');
+  if (piede0) {
+    const nota = piede0.dataset.nota;
+    piede0.innerHTML = `<div class="grande-firma" aria-hidden="true">${esc(piede0.dataset.firma)}</div>
+      <div class="piede">${nota
+        ? `<a href="${radice}">${FRECCIA}Tutti i miei corsi</a><span>${esc(nota)} · Giovanni Savelli · ${ANNO}</span>`
+        : `<span>Giovanni Savelli, Accademia delle Arti e Nuove Tecnologie</span><span>Anno accademico ${ANNO}</span>`}</div>`;
+  }
 
   /* ---------- Testata che diventa vetro scorrendo ---------- */
   const testata = document.getElementById('top');

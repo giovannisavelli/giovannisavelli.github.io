@@ -1,0 +1,37 @@
+/* =====================================================================
+   Modellazione 3D · lo stile proprio del corso. Testata, schede, scorciatoie del telefono e piede
+   sono comuni a tutto il sito: stanno in assets/studio.css e assets/schede.js.
+   ===================================================================== */
+/* ---------- pannelli delle schede ---------- */
+.course-panel { padding-top: 44px; scroll-margin-top: 160px; }
+.course-panel h2 { margin: 0 0 16px; color: var(--ink); font: 600 clamp(36px, 4.4vw, 64px)/1.05 var(--sans); letter-spacing: -.04em; }
+.course-panel .course-empty h2 { font-size: clamp(28px, 3.2vw, 40px); }
+.course-panel-intro { max-width: 68ch; color: var(--ink-2); font: 400 17px/1.6 var(--sans); }
+@media (max-width: 760px) { .course-panel { padding-top: 32px; } }
+
+/* ---------- apertura con la stanzetta «Lavori in corso» ---------- */
+/* La stanzetta occupa la scena principale; sul telefono precede il testo. */
+.solo-lavori .course-hero:has(.course-hero-wip) { display: flex; align-items: center; padding-top: 96px; padding-bottom: 60px; }
+.solo-lavori .course-hero > div:first-child { position: relative; z-index: 1; width: min(29%, 320px); }
+.solo-lavori .course-heading { font-size: clamp(48px, 4vw, 64px); }
+.course-hero-wip { display: grid; justify-items: center; gap: 4px; }
+.solo-lavori .course-hero-wip { position: absolute; top: 50%; right: -24px; width: min(960px, 76vw); transform: translateY(-50%); }
+.course-hero-wip .wip-anim { margin: 0; }
+.course-hero-wip .etichetta { color: var(--accent); }
+@media (max-width: 1100px) {
+  .solo-lavori .course-hero:has(.course-hero-wip) { display: grid; grid-template-columns: minmax(0, 1fr); gap: 18px; padding-top: 82px; padding-bottom: 56px; }
+  .solo-lavori .course-hero > div:first-child { width: 100%; min-width: 0; }
+  .solo-lavori .course-hero-wip { position: static; order: -1; width: min(900px, 100%); margin-inline: auto; transform: none; }
+}
+@media (max-width: 760px) {
+  .solo-lavori .course-hero:has(.course-hero-wip) { padding-top: 86px; }
+  .solo-lavori .course-hero-wip { width: calc(100% + 36px); margin-inline: -18px; }
+  .solo-lavori .course-heading { font-size: clamp(42px, 13.4vw, 76px); }
+}
+/* Finché il corso non è pronto si vede solo l'omino: per mostrare tutto, togliere «solo-lavori» dal <body>. */
+.course-lead--lavori { display: none; }
+.solo-lavori .course-lead--lavori { display: block; color: var(--ink-2); font-size: 17px; }
+.solo-lavori .course-facts, .solo-lavori .course-content, .solo-lavori .course-actions .btn.pieno,
+.solo-lavori .course-mobile-nav, .solo-lavori .course-bottom-nav, .solo-lavori .mobile-actions { display: none !important; }
+.solo-lavori .course-hero { min-height: clamp(760px, calc(100svh - 110px), 900px); }
+@media (max-width: 1100px) { .solo-lavori .course-hero { min-height: 0; } }

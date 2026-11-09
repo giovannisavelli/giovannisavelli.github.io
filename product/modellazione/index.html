@@ -12,47 +12,13 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Geist:wght@100..900&family=Geist+Mono:wght@400;500;600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="../../assets/studio.css">
-  <link rel="stylesheet" href="../../assets/course-ui.css?v=unified-20261014">
-<link rel="stylesheet" href="../../assets/agenda.css?v=20261029d">
-<style>
-  /* La stanzetta occupa la scena principale; sul telefono precede il testo. */
-  .solo-lavori .course-hero:has(.course-hero-wip) { display: flex; align-items: center; padding-top: 96px; padding-bottom: 60px; }
-  .solo-lavori .course-hero > div:first-child { position: relative; z-index: 1; width: min(29%, 320px); }
-  .solo-lavori .course-heading { font-size: clamp(48px, 4vw, 64px); }
-  .course-hero-wip { display: grid; justify-items: center; gap: 4px; }
-  .solo-lavori .course-hero-wip { position: absolute; top: 50%; right: -24px; width: min(960px, 76vw); transform: translateY(-50%); }
-  .course-hero-wip .wip-anim { margin: 0; }
-  .course-hero-wip .etichetta { color: var(--accent); }
-  @media (max-width: 1100px) {
-    .solo-lavori .course-hero:has(.course-hero-wip) { display: grid; grid-template-columns: minmax(0, 1fr); gap: 18px; padding-top: 82px; padding-bottom: 56px; }
-    .solo-lavori .course-hero > div:first-child { width: 100%; min-width: 0; }
-    .solo-lavori .course-hero-wip { position: static; order: -1; width: min(900px, 100%); margin-inline: auto; transform: none; }
-  }
-  @media (max-width: 760px) {
-    .solo-lavori .course-hero:has(.course-hero-wip) { padding-top: 86px; }
-    .solo-lavori .course-hero-wip { width: calc(100% + 36px); margin-inline: -18px; }
-    .solo-lavori .course-heading { font-size: clamp(42px, 13.4vw, 76px); }
-  }
-  /* Finché il corso non è pronto si vede solo l'omino: per mostrare tutto, togliere «solo-lavori» dal <body>. */
-  .course-lead--lavori { display: none; }
-  .solo-lavori .course-lead--lavori { display: block; color: var(--ink-2); font-size: 17px; }
-  .solo-lavori .course-facts, .solo-lavori .course-content, .solo-lavori .course-actions .btn.pieno,
-  .solo-lavori .course-mobile-nav, .solo-lavori .course-bottom-nav, .solo-lavori .mobile-actions { display: none !important; }
-  .solo-lavori .course-hero { min-height: clamp(760px, calc(100svh - 110px), 900px); }
-  @media (max-width: 1100px) { .solo-lavori .course-hero { min-height: 0; } }
-</style>
+  <link rel="stylesheet" href="../../assets/studio.css?v=riordino-20261109">
+  <link rel="stylesheet" href="../../assets/agenda.css?v=20261029d">
+  <link rel="stylesheet" href="modellazione.css?v=riordino-20261109">
+  <script src="../../assets/schede.js?v=riordino-20261109"></script>
 </head>
-<body class="course-page solo-lavori" style="--accent: #9d7bff">
-<header class="top" id="top">
-  <div class="wrap">
-    <a class="marchio" href="../../"><i>GS</i><span>Giovanni Savelli<small>Corsi AANT 2026/27</small></span></a>
-    <nav class="menu" aria-label="Menu principale">
-      <a class="bordo" href="../../"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 12H5M11 6l-6 6 6 6"/></svg><span class="solo-desk">Tutti i corsi</span><span class="solo-tel">Corsi</span></a>
-      <button type="button" id="btn-leggibile" aria-pressed="false" aria-label="Alta leggibilità">Aa</button>
-    </nav>
-  </div>
-</header>
+<body class="corso solo-lavori" style="--accent: #9d7bff">
+<header class="top" id="top" data-testata></header>
 <main class="wrap">
   <section class="course-hero" aria-labelledby="course-title">
     <div>
@@ -80,15 +46,15 @@
     </dl>
   </div>
   <div class="course-content">
-    <nav class="course-tabs" role="tablist" aria-label="Sezioni del corso" data-initial-tab="lezioni">
-      <button class="course-tab" id="tab-lezioni" type="button" role="tab" aria-controls="lezioni" aria-selected="true" tabindex="0" data-panel="lezioni">Lezioni</button>
-      <button class="course-tab" id="tab-archivio" type="button" role="tab" aria-controls="archivio" aria-selected="false" tabindex="-1" data-panel="archivio">Archivio</button>
-      <button class="course-tab" id="tab-appunti" type="button" role="tab" aria-controls="appunti" aria-selected="false" tabindex="-1" data-panel="appunti">Appunti</button>
-      <button class="course-tab" id="tab-calendario" type="button" role="tab" aria-controls="calendario" aria-selected="false" tabindex="-1" data-panel="calendario">Calendario</button>
-      <button class="course-tab" id="tab-programma" type="button" role="tab" aria-controls="programma" aria-selected="false" tabindex="-1" data-panel="programma">Programma</button>
+    <nav class="schede" role="tablist" aria-label="Sezioni del corso">
+      <button class="scheda" id="tab-lezioni" type="button" role="tab" data-scheda="lezioni">Lezioni</button>
+      <button class="scheda" id="tab-archivio" type="button" role="tab" data-scheda="archivio">Archivio</button>
+      <button class="scheda" id="tab-appunti" type="button" role="tab" data-scheda="appunti">Appunti</button>
+      <button class="scheda" id="tab-calendario" type="button" role="tab" data-scheda="calendario">Calendario</button>
+      <button class="scheda" id="tab-programma" type="button" role="tab" data-scheda="programma">Programma</button>
     </nav>
 
-    <section class="course-panel" id="lezioni" role="tabpanel" aria-labelledby="tab-lezioni">
+    <section class="course-panel" id="lezioni" role="tabpanel" data-scheda="lezioni" aria-labelledby="tab-lezioni">
       <div class="course-section-head">
         <p class="etichetta">Lezione del giorno</p>
         <h2>La lezione di oggi</h2>
@@ -101,7 +67,7 @@
         <p>Le lezioni si terranno nel secondo semestre. Da quel momento qui troverai la lezione del giorno, con gli argomenti da spuntare.</p>
       </div>
     </section>
-    <section class="course-panel" id="archivio" role="tabpanel" aria-labelledby="tab-archivio" hidden>
+    <section class="course-panel" id="archivio" role="tabpanel" data-scheda="archivio" aria-labelledby="tab-archivio" hidden>
       <div class="course-section-head">
         <p class="etichetta">Archivio lezioni · 2026/27</p>
         <h2>Archivio lezioni</h2>
@@ -113,21 +79,21 @@
         <p>Le lezioni compariranno qui dopo gli incontri.</p>
       </div>
     </section>
-    <section class="course-panel" id="appunti" role="tabpanel" aria-labelledby="tab-appunti" hidden>
+    <section class="course-panel" id="appunti" role="tabpanel" data-scheda="appunti" aria-labelledby="tab-appunti" hidden>
       <div class="course-empty">
         <p class="etichetta">Appunti · 2026/27</p>
         <h2>Appunti in arrivo</h2>
         <p>Le spiegazioni e i materiali di ogni lezione saranno raccolti qui.</p>
       </div>
     </section>
-    <section class="course-panel" id="calendario" role="tabpanel" aria-labelledby="tab-calendario" hidden>
+    <section class="course-panel" id="calendario" role="tabpanel" data-scheda="calendario" aria-labelledby="tab-calendario" hidden>
       <div class="course-empty">
         <p class="etichetta">Calendario · 2026/27</p>
         <h2>Le date sono in arrivo</h2>
         <p>Il calendario verrà pubblicato qui dopo la conferma dell’Accademia.</p>
       </div>
     </section>
-    <section class="course-panel" id="programma" role="tabpanel" aria-labelledby="tab-programma" hidden>
+    <section class="course-panel" id="programma" role="tabpanel" data-scheda="programma" aria-labelledby="tab-programma" hidden>
       <div class="course-empty">
         <p class="etichetta">Programma · Product Design</p>
         <h2>Il corso prende forma</h2>
@@ -137,13 +103,7 @@
     </section>
   </div>
 </main>
-<footer class="wrap course-footer">
-  <div class="grande-firma" aria-hidden="true">Modellazione 3D</div>
-  <div class="piede">
-    <a href="../../"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 12H5M11 6l-6 6 6 6"/></svg>Tutti i miei corsi</a>
-    <span>Modellazione 3D · Product Design · Giovanni Savelli · 2026/27</span>
-  </div>
-</footer>
+<footer class="wrap piede-sito" data-firma="Modellazione 3D" data-nota="Modellazione 3D · Product Design"></footer>
 <script src="../../assets/fx/effetti.js"></script>
 <script>
 // Le lezioni del corso. «giorno» è la lezione del giorno (scheda Lezioni); «archivio» sono quelle già fatte.
@@ -151,8 +111,7 @@
 window.LEZIONI_CORSO = {"prefisso": "pd-mod-2627", "giorno": null, "archivio": [], "lezioni": {}};
 </script>
 <script src="../../assets/agenda.js?v=20261029d"></script>
-<script src="../../assets/studio.js"></script>
-<script src="../../assets/course-tabs.js?v=unified-20261014"></script>
+<script src="../../assets/studio.js?v=riordino-20261109"></script>
 <script src="../../assets/wip.js?v=20" defer></script>
 </body>
 </html>

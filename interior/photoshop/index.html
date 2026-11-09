@@ -10,225 +10,13 @@
     <meta property="og:description" content="Calendario 2026/2027 delle classi 2A, 2B e 2C e materiali del corso.">
     <meta name="theme-color" content="#0a0a0d">
     <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='18' fill='%230b1624'/><text x='50' y='68' text-anchor='middle' font-size='55' font-family='Arial' fill='%2331A8FF'>Ps</text></svg>">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Geist:wght@300..800&family=Geist+Mono:wght@400;500;600&display=swap" rel="stylesheet">
-    <style>
-        :root {
-            --bg: #080b11;
-            --surface: #101620;
-            --surface-strong: #151e2b;
-            --border: rgba(163, 195, 225, .16);
-            --text: #f4f8fc;
-            --muted: #aab8c8;
-            --accent: #31a8ff;
-            --accent-soft: rgba(49, 168, 255, .12);
-            --warning: #fbbf24;
-            --radius: 18px;
-        }
-        *, *::before, *::after { box-sizing: border-box; }
-        html { scroll-behavior: smooth; }
-        body {
-            margin: 0;
-            min-height: 100vh;
-            background: radial-gradient(circle at 85% 0, rgba(49,168,255,.14), transparent 38%), radial-gradient(circle at 0 48%, rgba(33,88,151,.09), transparent 38%), var(--bg);
-            color: var(--text);
-            font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-            -webkit-font-smoothing: antialiased;
-        }
-        button { font: inherit; }
-        a { color: inherit; }
-        .shell { width: min(1120px, calc(100% - 32px)); margin: 0 auto; }
-        .topbar { display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap; padding: 22px 0; }
-        .back-link { color: var(--muted); font-family: "JetBrains Mono", monospace; font-size: 12px; text-decoration: none; }
-        .back-link:hover, .back-link:focus-visible { color: var(--accent); }
-        .year { border: 1px solid var(--border); border-radius: 100px; padding: 7px 12px; color: var(--muted); font-family: "JetBrains Mono", monospace; font-size: 11px; }
-        .hero {
-            display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 28px; align-items: center;
-            margin: 10px 0 24px; padding: clamp(28px, 6vw, 56px);
-            border: 1px solid rgba(49,168,255,.26); border-radius: 24px;
-            background: linear-gradient(125deg, #122239, #0c1420 60%, #101b2c);
-            box-shadow: 0 18px 55px rgba(0,0,0,.22);
-        }
-        .eyebrow, .kicker { margin: 0 0 12px; color: var(--accent); font-family: "JetBrains Mono", monospace; font-size: 11px; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; }
-        h1 { margin: 0; font-family: "Space Grotesk", sans-serif; font-size: clamp(38px, 7vw, 72px); line-height: 1; letter-spacing: -.04em; }
-        .subtitle { margin: 18px 0 0; max-width: 630px; color: #d6e5f1; font-size: clamp(15px, 2vw, 18px); line-height: 1.55; }
-        .meta { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 22px; }
-        .meta span { border: 1px solid var(--border); border-radius: 100px; padding: 7px 11px; color: var(--muted); font-size: 12px; }
-        .ps-mark { display: grid; place-items: center; width: clamp(80px, 14vw, 146px); aspect-ratio: 1; border: 2px solid #31a8ff; border-radius: 22px; background: #071e34; color: #31a8ff; font-family: Inter, sans-serif; font-size: clamp(42px, 7vw, 78px); font-weight: 700; letter-spacing: -.08em; box-shadow: 0 0 48px rgba(49,168,255,.15); }
-        .notice { display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap; margin-bottom: 24px; padding: 17px 20px; border: 1px solid rgba(49,168,255,.28); border-radius: var(--radius); background: var(--accent-soft); }
-        .notice strong { display: block; font-size: 15px; }
-        .notice p { margin: 4px 0 0; color: var(--muted); font-size: 13px; line-height: 1.5; }
-        .notice a { display: inline-flex; align-items: center; min-height: 42px; border-radius: 100px; padding: 10px 16px; background: var(--accent); color: #06111d; font-size: 13px; font-weight: 700; text-decoration: none; white-space: nowrap; }
-        .notice a:hover, .notice a:focus-visible { background: #7ccbff; }
-        .tabs { display: flex; gap: 9px; flex-wrap: wrap; margin-bottom: 24px; scroll-margin-top: 24px; }
-        .tab-btn { min-height: 43px; border: 1px solid var(--border); border-radius: 100px; padding: 10px 15px; background: var(--surface); color: var(--muted); font-size: 13px; font-weight: 600; cursor: pointer; }
-        .tab-btn:hover, .tab-btn:focus-visible { border-color: var(--accent); color: var(--text); }
-        .tab-btn[aria-selected="true"] { border-color: var(--accent); background: var(--accent); color: #06111d; }
-        .panel { min-height: 280px; padding: clamp(22px, 4vw, 36px); border: 1px solid var(--border); border-radius: 22px; background: rgba(16,22,32,.9); }
-        .panel[hidden] { display: none; }
-        .panel h2 { margin: 0 0 12px; font-family: "Space Grotesk", sans-serif; font-size: clamp(25px, 3.8vw, 33px); }
-        .panel-intro { max-width: 730px; margin: 0 0 24px; color: var(--muted); font-size: 15px; line-height: 1.65; }
-        .empty { max-width: 720px; padding: 28px; border: 1px dashed rgba(163,195,225,.26); border-radius: 16px; background: rgba(255,255,255,.02); }
-        .empty h3 { margin: 0 0 8px; font-size: 18px; }
-        .empty p { margin: 0; color: var(--muted); font-size: 14px; line-height: 1.65; }
-        .lesson-opening { position: relative; overflow: hidden; padding: clamp(24px, 4vw, 42px); border: 1px solid rgba(49,168,255,.28); border-radius: 20px; background: radial-gradient(circle at 95% 0, rgba(49,168,255,.2), transparent 37%), linear-gradient(135deg, #14243a, #0b1421 72%); }
-        .lesson-opening::after { content: "01"; position: absolute; top: -56px; right: -8px; color: rgba(163,205,241,.055); font-family: "Space Grotesk", sans-serif; font-size: clamp(150px, 25vw, 290px); font-weight: 700; line-height: 1; pointer-events: none; }
-        .lesson-opening > * { position: relative; z-index: 1; }
-        .lesson-label { display: inline-flex; align-items: center; gap: 9px; margin: 0 0 20px; color: #a9d9ff; font-family: "JetBrains Mono", monospace; font-size: 11px; font-weight: 600; letter-spacing: .09em; text-transform: uppercase; }
-        .lesson-label::before { content: ""; width: 8px; height: 8px; border-radius: 50%; background: var(--accent); box-shadow: 0 0 0 5px rgba(49,168,255,.12); }
-        .lesson-opening h3 { max-width: 750px; margin: 0; font-family: "Space Grotesk", sans-serif; font-size: clamp(38px, 7vw, 68px); line-height: 1.03; letter-spacing: -.045em; }
-        .lesson-opening h3 span { color: var(--accent); }
-        .lesson-deck { max-width: 620px; margin: 17px 0 0; color: #d5e6f4; font-size: clamp(15px, 2vw, 18px); line-height: 1.55; }
-        .lesson-thought { max-width: 790px; margin: 32px 0 0; padding: 20px 23px; border-left: 3px solid var(--accent); border-radius: 0 12px 12px 0; background: rgba(3,12,23,.43); }
-        .lesson-thought p { margin: 0; color: #e2eff9; font-size: clamp(15px, 2vw, 18px); line-height: 1.6; }
-        .lesson-thought strong { color: #85ccff; font-weight: 700; }
-        .interface-path { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 13px; margin-top: 18px; }
-        .interface-step { min-height: 228px; padding: 22px; border: 1px solid var(--border); border-radius: 16px; background: var(--surface-strong); }
-        .interface-step:nth-child(2) { background: #142032; }
-        .interface-step:nth-child(3) { border-color: rgba(49,168,255,.3); background: #11283e; }
-        .step-number { display: block; margin-bottom: 28px; color: var(--accent); font-family: "JetBrains Mono", monospace; font-size: 12px; font-weight: 600; }
-        .interface-step h4 { margin: 0 0 9px; font-family: "Space Grotesk", sans-serif; font-size: clamp(19px, 2.6vw, 23px); line-height: 1.2; }
-        .interface-step p { margin: 0; color: var(--muted); font-size: 13px; line-height: 1.65; }
-        .lesson-end { display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap; margin-top: 20px; }
-        .lesson-end p { max-width: 650px; margin: 0; color: var(--muted); font-size: 13px; line-height: 1.6; }
-        .lesson-end a { color: var(--accent); font-size: 13px; font-weight: 700; text-decoration: none; white-space: nowrap; }
-        .lesson-end a:hover, .lesson-end a:focus-visible { text-decoration: underline; }
-        .lesson-opening--second { margin-top: 46px; background: radial-gradient(circle at 90% 5%, rgba(49,168,255,.18), transparent 35%), linear-gradient(135deg, #101e2e, #0b1421 72%); }
-        .lesson-opening--third, .lesson-opening--fourth, .lesson-opening--fifth, .lesson-opening--sixth { margin-top: 46px; background: radial-gradient(circle at 90% 5%, rgba(49,168,255,.17), transparent 36%), linear-gradient(135deg, #142335, #0b1421 72%); }
-        .lesson-opening { scroll-margin-top: 82px; }
-        .lesson-opening--second::after { content: "02"; }
-        .lesson-opening--third::after { content: "03"; }
-        .lesson-opening--fourth::after { content: "04"; }
-        .lesson-opening--fifth::after { content: "05"; }
-        .lesson-opening--sixth::after { content: "06"; }
-        .lesson-index { display: grid; gap: 11px; max-width: 830px; margin: 0; padding: 0; list-style: none; }
-        .lesson-index a { display: grid; grid-template-columns: 42px minmax(0, 1fr) auto 20px; align-items: center; gap: 13px; min-height: 72px; padding: 12px 17px; border: 1px solid var(--border); border-radius: 13px; background: var(--surface-strong); color: var(--text); text-decoration: none; }
-        .lesson-index a:hover, .lesson-index a:focus-visible { border-color: var(--accent); background: #1b2c3c; }
-        .lesson-index-number { color: var(--accent); font: 700 15px "JetBrains Mono", monospace; }
-        .lesson-index strong { font: 700 clamp(18px, 2.5vw, 23px)/1.2 "Space Grotesk", sans-serif; }
-        .lesson-index small { color: var(--muted); font-size: 12px; }
-        .lesson-index-arrow { color: var(--accent); font-size: 20px; text-align: right; }
-        .lesson-index-note { margin: 18px 0 0; color: var(--muted); font-size: 13px; line-height: 1.6; }
-        .lesson-route { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; margin: 18px 0 0; }
-        .lesson-route section, .exercise-card { padding: 21px; border: 1px solid var(--border); border-radius: 15px; background: var(--surface-strong); }
-        .lesson-route span, .exercise-card .step-number { color: var(--accent); font: 600 11px "JetBrains Mono", monospace; letter-spacing: .06em; }
-        .lesson-route h4, .exercise-card h4 { margin: 11px 0 8px; font: 700 21px/1.2 "Space Grotesk", sans-serif; }
-        .lesson-route p, .exercise-card p, .exercise-card li { margin: 0; color: var(--muted); font-size: 13px; line-height: 1.65; }
-        .lesson-route strong, .exercise-card strong { color: var(--text); }
-        .lesson-section-title { margin: 33px 0 10px; font: 700 clamp(22px, 3vw, 28px)/1.2 "Space Grotesk", sans-serif; }
-        .lesson-section-copy { max-width: 780px; margin: 0 0 17px; color: var(--muted); font-size: 14px; line-height: 1.65; }
-        .exercise-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
-        .exercise-card ul { margin: 12px 0 0; padding-left: 18px; }
-        .exercise-card li + li { margin-top: 6px; }
-        .exercise-card--chair { border-color: rgba(49,168,255,.3); }
-        .exercise-card--apple { border-color: rgba(142,207,165,.3); }
-        .exercise-result { margin-top: 14px; padding: 19px 21px; border-left: 3px solid var(--accent); border-radius: 0 12px 12px 0; background: rgba(49,168,255,.08); }
-        .exercise-result p { margin: 0; color: #d8e7f3; font-size: 14px; line-height: 1.65; }
-        .exercise-result p + p { margin-top: 8px; }
-        .curve-figure { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); align-items: center; gap: 24px; max-width: 860px; margin: 18px 0 0; padding: 22px; border: 1px solid rgba(49,168,255,.28); border-radius: 16px; background: #0b1b2b; }
-        .curve-figure svg { display: block; width: 100%; height: auto; }
-        .curve-figure figcaption { color: var(--muted); font-size: 13px; line-height: 1.65; }
-        .curve-figure figcaption strong { display: block; margin-bottom: 10px; color: var(--text); font: 700 21px/1.2 "Space Grotesk", sans-serif; }
-        .curve-figure figcaption p { margin: 0 0 10px; }
-        .curve-figure figcaption small { display: block; color: #8fb0cb; font-size: 11px; }
-        .lesson-materials { display: flex; align-items: center; justify-content: space-between; gap: 14px; flex-wrap: wrap; margin-top: 19px; padding: 18px 20px; border: 1px solid rgba(49,168,255,.28); border-radius: 14px; background: var(--accent-soft); }
-        .lesson-materials p { max-width: 620px; margin: 4px 0 0; color: var(--muted); font-size: 13px; line-height: 1.55; }
-        .lesson-materials a, .resource-link { display: inline-flex; align-items: center; justify-content: center; min-height: 43px; padding: 10px 15px; border-radius: 9px; background: var(--accent); color: #06111d; font-size: 13px; font-weight: 700; text-decoration: none; }
-        .lesson-materials a:hover, .lesson-materials a:focus-visible, .resource-link:hover, .resource-link:focus-visible { background: #83caff; }
-        .shortcut-lead { max-width: 860px; margin: 0 0 24px; padding: 18px 20px; border: 1px solid rgba(49,168,255,.25); border-radius: 14px; background: var(--accent-soft); line-height: 1.65; }
-        .shortcut-lead strong { color: var(--accent); }
-        .shortcut-platform { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; max-width: 860px; margin-bottom: 20px; padding: 13px 16px; border: 1px solid var(--border); border-radius: 13px; background: var(--surface-strong); }
-        .shortcut-platform span { color: var(--muted); font-size: 13px; }
-        .shortcut-platform strong { color: var(--text); }
-        .shortcut-platform button { min-height: 40px; padding: 8px 14px; border: 1px solid var(--accent); border-radius: 100px; background: var(--accent-soft); color: var(--accent); font-size: 13px; font-weight: 700; cursor: pointer; }
-        .shortcut-platform button:hover, .shortcut-platform button:focus-visible { background: var(--accent); color: #06111d; }
-        .shortcut-platform-note { max-width: 860px; margin: -7px 0 20px; color: var(--muted); font-size: 12px; line-height: 1.5; }
-        .shortcut-group { margin-top: 30px; }
-        .shortcut-group h3 { margin: 0 0 8px; font-family: "Space Grotesk", sans-serif; font-size: 21px; }
-        .shortcut-group > p { margin: 0 0 16px; color: var(--muted); font-size: 13px; line-height: 1.6; }
-        .shortcut-list { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr)); gap: 10px; margin: 0; padding: 0; list-style: none; }
-        .shortcut-list li { display: flex; align-items: center; gap: 14px; min-height: 72px; padding: 13px 15px; border: 1px solid var(--border); border-radius: 13px; background: var(--surface-strong); }
-        .shortcut-list kbd { flex: 0 0 auto; padding: 7px 9px; border: 1px solid rgba(49,168,255,.35); border-radius: 8px; background: #091a2a; color: var(--accent); font-family: "JetBrains Mono", monospace; font-size: 12px; font-weight: 600; white-space: nowrap; }
-        .shortcut-list strong, .shortcut-list small { display: block; }
-        .shortcut-list strong { font-size: 13px; line-height: 1.4; }
-        .shortcut-list small { margin-top: 3px; color: var(--muted); font-size: 12px; line-height: 1.4; }
-        .shortcut-note { max-width: 860px; margin: 25px 0 0; color: var(--muted); font-size: 13px; line-height: 1.65; }
-        .shortcut-note a { color: var(--accent); text-decoration: none; }
-        .shortcut-note a:hover, .shortcut-note a:focus-visible { text-decoration: underline; }
-        .video-course-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; margin: 0 0 14px; }
-        .video-course-choice { min-height: 112px; padding: 17px 19px; border: 1px solid var(--border); border-radius: 14px; background: var(--surface-strong); color: var(--text); text-align: left; cursor: pointer; }
-        .video-course-choice:hover, .video-course-choice:focus-visible, .video-course-choice[aria-pressed="true"] { border-color: var(--accent); }
-        .video-course-choice[aria-pressed="true"] { background: var(--accent-soft); }
-        .video-course-choice span, .video-course-choice strong, .video-course-choice small { display: block; }
-        .video-course-choice span { color: var(--accent); font: 600 11px "JetBrains Mono", monospace; text-transform: uppercase; }
-        .video-course-choice strong { margin: 7px 0 4px; font: 700 21px "Space Grotesk", sans-serif; }
-        .video-course-choice small { color: var(--muted); font-size: 12px; }
-        .video-course-panel[hidden] { display: none; }
-        .video-course-panel h3 { margin: 0 0 8px; font: 700 22px "Space Grotesk", sans-serif; }
-        .video-course-panel > p:first-of-type { max-width: 760px; margin: 0 0 17px; color: var(--muted); font-size: 13px; line-height: 1.6; }
-        .video-start { display: inline-flex; align-items: center; justify-content: center; min-height: 44px; margin: 0 0 23px; padding: 10px 17px; border: 1px solid var(--accent); border-radius: 9px; background: var(--accent); color: #06111d; font-size: 13px; font-weight: 700; cursor: pointer; }
-        .video-start:hover, .video-start:focus-visible { background: #83caff; }
-        .video-frame { position: relative; width: min(100%, 960px); aspect-ratio: 16 / 9; margin: 0 auto; border: 1px solid var(--border); border-radius: 16px; overflow: hidden; background: #070d16; scroll-margin-top: 85px; }
-        .video-frame iframe { display: block; width: 100%; height: 100%; border: 0; }
-        .video-frame iframe[hidden] { display: none; }
-        .video-current { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; max-width: 960px; margin: 14px auto 26px; color: var(--muted); font-size: 13px; }
-        .video-current a, .video-folder-link { color: var(--accent); font-weight: 600; text-decoration: none; }
-        .video-current a:hover, .video-folder-link:hover { text-decoration: underline; }
-        .video-list { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); grid-auto-rows: 1fr; gap: 10px; margin: 0; padding: 0; list-style: none; }
-        .video-list li { min-width: 0; }
-        .video-choice { display: flex; flex-direction: column; justify-content: space-between; width: 100%; height: 100%; min-height: 112px; padding: 13px 14px; border: 1px solid var(--border); border-radius: 12px; background: var(--surface-strong); color: var(--text); text-align: left; cursor: pointer; }
-        .video-choice:hover, .video-choice:focus-visible { border-color: var(--accent); }
-        .video-choice[aria-pressed="true"] { border-color: var(--accent); background: var(--accent-soft); }
-        .video-choice strong, .video-choice span { display: block; }
-        .video-choice strong { font-size: 13px; }
-        .video-choice span { margin-top: 12px; overflow-wrap: anywhere; color: var(--muted); font-family: "JetBrains Mono", monospace; font-size: 11px; }
-        .video-footer { max-width: 860px; margin: 20px 0 0; color: var(--muted); font-size: 13px; line-height: 1.6; }
-        .calendar-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 290px), 1fr)); gap: 16px; }
-        .class-card { padding: 21px; border: 1px solid var(--border); border-radius: var(--radius); background: var(--surface-strong); }
-        .class-card h3 { margin: 0 0 4px; color: var(--accent); font-family: "Space Grotesk", sans-serif; font-size: 24px; }
-        .class-detail { margin: 0 0 16px; color: var(--muted); font-size: 12px; }
-        .schedule-list { margin: 0; padding: 0; list-style: none; }
-        .schedule-list li { display: flex; justify-content: space-between; gap: 12px; padding: 11px 0; border-top: 1px solid var(--border); font-size: 13px; line-height: 1.4; }
-        .schedule-list time { font-weight: 600; }
-        .schedule-list span { color: #c1d3e5; white-space: nowrap; }
-        .schedule-lesson { display: grid; flex: 1 1 0; gap: 2px; min-width: 0; }
-        .schedule-lesson a { color: var(--accent); font-size: 13px; font-weight: 700; text-decoration: none; }
-        .schedule-lesson a:hover, .schedule-lesson a:focus-visible { text-decoration: underline; }
-        .calendar-note { margin: 20px 0 0; padding: 15px 17px; border: 1px solid rgba(251,191,36,.3); border-radius: 13px; background: rgba(251,191,36,.07); color: #f9d77e; font-size: 13px; line-height: 1.6; }
-        .site-footer { display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap; padding: 30px 0 40px; color: var(--muted); font-family: "JetBrains Mono", monospace; font-size: 11px; }
-        .site-footer a { color: var(--text); text-decoration: none; }
-        .site-footer a:hover { color: var(--accent); }
-        @media (min-width: 621px) and (max-width: 900px) { .video-list { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
-        @media (max-width: 620px) {
-            .hero { grid-template-columns: 1fr; }
-            .ps-mark { grid-row: 1; width: 74px; border-radius: 14px; font-size: 42px; }
-            .schedule-list li { gap: 10px; }
-            .shortcut-list li { flex-wrap: wrap; }
-            .shortcut-list kbd { max-width: 100%; white-space: normal; }
-            .interface-path { grid-template-columns: 1fr; }
-            .lesson-route, .exercise-grid, .curve-figure { grid-template-columns: 1fr; }
-            .video-course-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
-            .video-course-choice { min-height: 100px; padding: 12px; }
-            .video-course-choice span { font-size: 9px; }
-            .video-course-choice strong { font-size: 17px; }
-            .video-course-choice small { font-size: 11px; }
-            .lesson-index a { grid-template-columns: 34px minmax(0, 1fr) 18px; gap: 8px; padding: 12px; }
-            .lesson-index small { display: none; }
-            .lesson-opening--second, .lesson-opening--third, .lesson-opening--fourth, .lesson-opening--fifth, .lesson-opening--sixth { margin-top: 32px; }
-            .video-list { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-            .interface-step { min-height: 0; }
-            .step-number { margin-bottom: 18px; }
-        }
-        @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
-    </style>
-    <link rel="stylesheet" href="../../design/course.css?v=sections-20261014">
-    <link rel="stylesheet" href="../../assets/studio.css">
+    <link rel="stylesheet" href="../../assets/studio.css?v=riordino-20261109">
     <link rel="stylesheet" href="../../assets/agenda.css?v=20261029d">
-    <link rel="stylesheet" href="studio-photoshop.css?v=schede-20261102">
-    <script src="../../design/course.js?v=sections-20261014" defer></script>
-    <link rel="stylesheet" href="../../assets/course-ui.css?v=sections-20261014">
+    <link rel="stylesheet" href="photoshop.css?v=riordino-20261109">
+    <script src="../../assets/schede.js?v=riordino-20261109"></script>
     <script src="../../assets/fx/effetti.js" defer></script>
     <script>
     // Le lezioni del corso. «giorno» è la lezione del giorno (scheda Lezioni); «archivio» sono quelle già fatte.
@@ -248,19 +36,14 @@
        ]
       },
       "2": {
-       "titolo": "I primi strumenti per scontornare",
+       "titolo": "Colore, scontorno e salvataggio",
        "ore": "2 ore",
        "voci": [
-        "Prima della prova: RGB, CMYK e profili colore",
-        "Impostazioni colore di Photoshop",
-        "Esperimenti interattivi sul colore",
-        "Sopra e sotto: come funzionano i livelli",
-        "Il pennello: dimensione e durezza",
-        "Costruire la selezione: aggiungi, sottrai, interseca",
-        "La prova: sedia e mela",
-        "Il bordo lineare: lazo poligonale",
-        "Il bordo curvo: pennello e lazo",
-        "Il primo salvataggio: PSD, PSB, TIFF, JPEG e PNG"
+        "Colore: RGB, CMYK e profili",
+        "Impostazioni colore ed esperimenti interattivi",
+        "Scontorno: livelli, pennello e lazo",
+        "Sedia e mela: due contorni a confronto",
+        "Salvataggio, se resta tempo: PSD, PSB, TIFF, JPEG e PNG"
        ]
       },
       "3": {
@@ -309,17 +92,13 @@
     };
     </script>
     <script src="../../assets/agenda.js?v=20261029d" defer></script>
-    <script src="../../assets/studio.js" defer></script>
+    <script src="../../assets/studio.js?v=riordino-20261109" defer></script>
+    <script src="photoshop.js?v=riordino-20261109" defer></script>
 </head>
-<body class="course-page gs-course gs-course--photoshop">
-<button class="fab-accessibility" type="button" id="btn-leggibile" aria-pressed="false" aria-label="Alta leggibilità">Aa</button>
+<body class="corso gs-course--photoshop">
+<header class="top" id="top" data-testata><a href="#programma">Programma</a><a href="#calendario">Calendario</a><a href="#video">Video</a></header>
 <div class="alone" id="alone" aria-hidden="true"></div>
 <div class="shell">
-    <div class="topbar">
-        <a class="back-link" href="../../">← Tutti i miei corsi</a>
-        <span class="year">A.A. 2026/2027</span>
-    </div>
-
     <header class="hero">
         <div class="hero-copy">
             <p class="eyebrow">AANT · Interior Design · 2° anno</p>
@@ -340,19 +119,19 @@
     </header>
 
     <main>
-        <nav class="tabs" id="calendario" role="tablist" aria-label="Sezioni del corso">
-            <button class="tab-btn" type="button" role="tab" id="btn-programma" data-tab="tab-programma" aria-controls="tab-programma" aria-selected="true">Lezioni</button>
-            <button class="tab-btn" type="button" role="tab" id="btn-archivio" data-tab="tab-archivio" aria-controls="tab-archivio" aria-selected="false">Archivio</button>
-            <button class="tab-btn" type="button" role="tab" id="btn-appunti" data-tab="tab-appunti" aria-controls="tab-appunti" aria-selected="false">Appunti</button>
-            <button class="tab-btn" type="button" role="tab" id="btn-calendario" data-tab="tab-calendario" aria-controls="tab-calendario" aria-selected="false">Calendario</button>
-            <button class="tab-btn" type="button" role="tab" id="btn-elenco" data-tab="tab-elenco" aria-controls="tab-elenco" aria-selected="false" tabindex="-1">Programma</button>
-            <button class="tab-btn" type="button" role="tab" id="btn-esperimenti" data-tab="tab-esperimenti" aria-controls="tab-esperimenti" aria-selected="false">Esperimenti</button>
-            <button class="tab-btn" type="button" role="tab" id="btn-video" data-tab="tab-video" aria-controls="tab-video" aria-selected="false">Video</button>
-            <button class="tab-btn" type="button" role="tab" id="btn-risorse" data-tab="tab-risorse" aria-controls="tab-risorse" aria-selected="false">Risorse</button>
-            <button class="tab-btn" type="button" role="tab" id="btn-scorciatoie" data-tab="tab-scorciatoie" aria-controls="tab-scorciatoie" aria-selected="false">Scorciatoie</button>
+        <nav class="schede" role="tablist" aria-label="Sezioni del corso">
+            <button class="scheda" type="button" role="tab" id="btn-programma" data-scheda="lezioni">Lezioni</button>
+            <button class="scheda" type="button" role="tab" id="btn-archivio" data-scheda="archivio">Archivio</button>
+            <button class="scheda" type="button" role="tab" id="btn-appunti" data-scheda="appunti">Appunti</button>
+            <button class="scheda" type="button" role="tab" id="btn-calendario" data-scheda="calendario">Calendario</button>
+            <button class="scheda" type="button" role="tab" id="btn-elenco" data-scheda="programma">Programma</button>
+            <button class="scheda" type="button" role="tab" id="btn-esperimenti" data-scheda="esperimenti">Esperimenti</button>
+            <button class="scheda" type="button" role="tab" id="btn-video" data-scheda="video">Video</button>
+            <button class="scheda" type="button" role="tab" id="btn-risorse" data-scheda="risorse">Risorse</button>
+            <button class="scheda" type="button" role="tab" id="btn-scorciatoie" data-scheda="scorciatoie">Scorciatoie</button>
         </nav>
 
-        <section class="panel" role="tabpanel" id="tab-programma" aria-labelledby="btn-programma">
+        <section class="panel" role="tabpanel" id="tab-programma" data-scheda="lezioni" aria-labelledby="btn-programma">
             <p class="kicker">Lezione del giorno</p>
             <h2>La lezione di oggi</h2>
             <p class="panel-intro">Gli argomenti di oggi, da spuntare mentre li facciamo. Le spiegazioni complete sono negli appunti; le lezioni già fatte restano nell’archivio.</p>
@@ -363,13 +142,13 @@
             <ol class="lesson-index" id="lezione-del-giorno" aria-label="Lezione del giorno"></ol>
         </section>
 
-        <section class="panel" role="tabpanel" id="tab-elenco" aria-labelledby="btn-elenco" hidden>
+        <section class="panel" role="tabpanel" id="tab-elenco" data-scheda="programma" aria-labelledby="btn-elenco" hidden>
             <p class="kicker">Il percorso in breve</p>
             <h2>Programma lezioni</h2>
             <p class="panel-intro">Tutte le lezioni del corso. Scegline una per leggere gli appunti; le date della tua classe sono nel calendario.</p>
             <ol class="lesson-index" aria-label="Lezioni con programma pubblicato">
                 <li><a href="#lezione-1"><span class="lesson-index-number">01</span><strong>Conosciamoci</strong><small>2 ore</small><span class="lesson-index-arrow" aria-hidden="true">→</span></a></li>
-                <li><a href="#lezione-2"><span class="lesson-index-number">02</span><strong>I primi strumenti per scontornare</strong><small>2 ore</small><span class="lesson-index-arrow" aria-hidden="true">→</span></a></li>
+                <li><a href="#lezione-2"><span class="lesson-index-number">02</span><strong>Colore, scontorno e salvataggio</strong><small>2 ore</small><span class="lesson-index-arrow" aria-hidden="true">→</span></a></li>
                 <li><a href="#lezione-3"><span class="lesson-index-number">03</span><strong>Istogramma e regolazioni</strong><small>4 ore</small><span class="lesson-index-arrow" aria-hidden="true">→</span></a></li>
                 <li><a href="#lezione-4"><span class="lesson-index-number">04</span><strong>Fotoinserimento: le due sedie</strong><small>4 ore</small><span class="lesson-index-arrow" aria-hidden="true">→</span></a></li>
                 <li><a href="#lezione-5"><span class="lesson-index-number">05</span><strong>Manifesti e oggetti avanzati</strong><small>4 ore</small><span class="lesson-index-arrow" aria-hidden="true">→</span></a></li>
@@ -378,7 +157,7 @@
             <p class="lesson-index-note">La quinta lezione è una traccia di lavoro da sviluppare insieme. Per l’esonero, modalità e consegna sono ancora da definire.</p>
         </section>
 
-        <section class="panel" role="tabpanel" id="tab-esperimenti" aria-labelledby="btn-esperimenti" hidden>
+        <section class="panel" role="tabpanel" id="tab-esperimenti" data-scheda="esperimenti" aria-labelledby="btn-esperimenti" hidden>
             <h2>Esperimenti</h2>
             <p class="panel-intro">Prove interattive per osservare come cambia un’immagine quando cambiano luce, profilo e destinazione del file.</p>
             <ol class="lesson-index" aria-label="Esperimenti del corso">
@@ -388,7 +167,7 @@
             </ol>
         </section>
 
-        <section class="panel" role="tabpanel" id="tab-archivio" aria-labelledby="btn-archivio" hidden>
+        <section class="panel" role="tabpanel" id="tab-archivio" data-scheda="archivio" aria-labelledby="btn-archivio" hidden>
             <p class="kicker">Lezioni svolte</p>
             <h2>Archivio lezioni</h2>
             <p class="panel-intro">Le lezioni già fatte, in ordine, con gli argomenti trattati.</p>
@@ -396,7 +175,7 @@
             <div class="empty" id="archivio-vuoto"><h3>Archivio ancora vuoto</h3><p>Il corso inizia a novembre 2026. Le lezioni verranno aggiunte dopo il loro svolgimento.</p></div>
         </section>
 
-        <section class="panel" role="tabpanel" id="tab-appunti" aria-labelledby="btn-appunti" hidden>
+        <section class="panel" role="tabpanel" id="tab-appunti" data-scheda="appunti" aria-labelledby="btn-appunti" hidden>
             <p class="kicker">Il piccolo manuale del corso</p>
             <h2>Appunti delle lezioni</h2>
             <p class="panel-intro">Qui trovi le spiegazioni delle lezioni e, quando disponibili, le prove pratiche. Apri la lezione che ti serve.</p>
@@ -434,24 +213,26 @@
             </details>
 
             <details class="lesson-note" id="lezione-2" name="appunti-lezioni">
-                <summary><span class="lesson-note-number">02</span><span class="lesson-note-main"><strong>I primi strumenti per scontornare</strong><small>2 ore</small></span><span class="lesson-note-toggle" aria-hidden="true"></span></summary>
+                <summary><span class="lesson-note-number">02</span><span class="lesson-note-main"><strong>Colore, scontorno e salvataggio</strong><small>2 ore</small></span><span class="lesson-note-toggle" aria-hidden="true"></span></summary>
                 <div class="lesson-note-content">
             <article class="lesson-opening lesson-opening--second" aria-labelledby="lesson-two-title">
                 <p class="lesson-label">Seconda lezione · 2 ore</p>
-                <h3 id="lesson-two-title">Non esiste uno <span>strumento unico.</span></h3>
-                <p class="lesson-deck">Una sedia e una mela, due contorni diversi. Prima controlliamo modo e profilo colore del documento; poi proviamo livelli, pennello e lazo. Al primo salvataggio scegliamo il formato adatto.</p>
-                <div class="lesson-thought"><p>La domanda non è «qual è lo strumento migliore?», ma <strong>«quale controllo mi serve per questo bordo?»</strong> La forma dell’oggetto ci aiuta a scegliere.</p></div>
+                <h3 id="lesson-two-title">Colore, scontorno <span>e salvataggio.</span></h3>
+                <p class="lesson-deck">Partiamo da RGB, CMYK e profili colore; poi usiamo livelli, pennello e lazo sulle sagome di una sedia e una mela. Infine vediamo come salvare il lavoro e preparare una copia finale.</p>
+                <div class="lesson-thought"><p>Tre scelte dello stesso lavoro: <strong>come leggere il colore, come isolare l’oggetto e come conservare il risultato.</strong> Il salvataggio è previsto alla fine; se le due ore non bastano, lo riprendiamo all’inizio della terza lezione.</p></div>
             </article>
 
-            <h4 class="lesson-section-title">Prima della prova: colori e profili</h4>
-            <p class="lesson-section-copy">Prima di iniziare distinguiamo due scelte: <strong>come sono descritti i colori</strong> e <strong>quali parti del lavoro devono restare modificabili</strong>. Il profilo colore e l’estensione del file rispondono a domande diverse.</p>
+            <h4 class="lesson-section-title">Il colore del documento</h4>
+            <p class="lesson-section-copy">Prima della prova distinguiamo il <strong>modo colore</strong> dal <strong>profilo</strong>: il primo descrive i canali dell’immagine, il secondo dà significato ai valori dei colori. Il formato del file sarà una scelta successiva, al momento del salvataggio.</p>
             <div class="lesson-route" aria-label="Colore e impostazioni di Photoshop">
-                <section><span>01 / MODO COLORE</span><h4>RGB e CMYK</h4><p>In RGB ogni pixel è descritto dai canali rosso, verde e blu: è il modo di lavoro naturale per le immagini viste su schermo. CMYK descrive i colori attraverso gli inchiostri di stampa. Non convertiamo un file in CMYK alla cieca: per una stampa conta anche il profilo richiesto da chi la realizza.</p></section>
+                <section><span>01 / MODO COLORE</span><h4>RGB e CMYK</h4><p>RGB somma luce rossa, verde e blu: è il modo di lavoro naturale per le immagini viste su schermo. CMYK usa inchiostri che sottraggono luce alla carta. Non convertiamo un file in CMYK alla cieca: per una stampa conta anche il profilo richiesto da chi la realizza.</p></section>
                 <section><span>02 / PROFILO</span><h4>sRGB e Adobe RGB</h4><p>Sono due spazi colore <em>all’interno di RGB</em>, non due formati di file. Adobe RGB comprende una gamma di colori più ampia; sRGB è la scelta comune per le immagini destinate al web. Il profilo incorporato permette agli altri programmi di interpretare correttamente i colori del documento.</p></section>
                 <section><span>03 / IMPOSTAZIONI</span><h4>Dove si controllano</h4><p>Apriamo <strong>Modifica → Impostazioni colore</strong>: controlliamo gli spazi di lavoro RGB e CMYK, impostiamo quello adatto al lavoro e vediamo come Photoshop gestisce i profili dei file aperti. Qui non si sceglie tra JPEG, TIFF o PNG: il formato si sceglie nei comandi di salvataggio o esportazione.</p></section>
             </div>
             <div class="lesson-materials"><div><strong>Laboratorio del colore</strong><p>Prova in prima persona la somma delle luci RGB, la sottrazione degli inchiostri CMYK e le differenze tra sRGB, Adobe RGB e ProPhoto RGB. Alla fine scegli come preparare tre consegne.</p></div><a href="esperimenti/colore.html">Apri gli esperimenti →</a></div>
-            <div class="lesson-route" aria-label="I tre passaggi della seconda lezione">
+            <h4 class="lesson-section-title">Gli strumenti per scontornare</h4>
+            <p class="lesson-section-copy">Prima di seguire il bordo, separiamo ogni tentativo dalla foto originale. Proviamo livelli, pennello e selezioni; poi scegliamo il controllo più adatto alla forma.</p>
+            <div class="lesson-route" aria-label="Livelli, pennello e lazo">
                 <section><span>01 / LIVELLI</span><h4>Sopra e sotto</h4><p>Creiamo due livelli trasparenti, dipingiamo un segno su ciascuno e ne invertiamo l’ordine. <strong>Il livello sopra copre quello sotto solo dove contiene pixel visibili.</strong> Nascondiamo un livello per vedere cosa appartiene a ciascuno.</p></section>
                 <section><span>02 / PENNELLO</span><h4>Dimensione e durezza</h4><p>Proviamo un pennello grande e uno piccolo, con bordo duro e morbido. Guardiamo il contorno a ingrandimento reale: la dimensione cambia quanti pixel occupa il segno, la durezza cambia la transizione del bordo.</p></section>
                 <section><span>03 / LAZO</span><h4>Costruire la selezione</h4><p>Tracciamo un contorno e usiamo le quattro modalità nella barra delle opzioni: <strong>nuova selezione, aggiungi, sottrai e interseca.</strong> Proviamo anche il lazo poligonale sui tratti rettilinei.</p></section>
@@ -477,8 +258,8 @@
                 <p><strong>Da osservare:</strong> per questa sedia il lazo potrebbe essere più comodo sui bordi regolari; per la mela il pennello potrebbe seguire meglio la curva. Conta il risultato sul bordo, non il nome dello strumento.</p>
                 <p><strong>Dimensione e durezza:</strong> se passi da 100 px a 50 px lasciando la durezza al 100%, l’impostazione resta 100%. Il bordo occupa però meno pixel e può apparire diverso. Ingrandisci, osserva la transizione e ammorbidisci il pennello se il risultato lo richiede.</p>
             </div>
-            <h4 class="lesson-section-title">Quale file salviamo?</h4>
-            <p class="lesson-section-copy">Partiamo dalla stessa prova e confrontiamo un file da continuare a modificare con una copia da mostrare o usare altrove. L’estensione da sola non garantisce che i livelli siano stati conservati: bisogna controllare le opzioni di salvataggio.</p>
+            <h4 class="lesson-section-title">Salvare il lavoro e preparare una copia</h4>
+            <p class="lesson-section-copy">Partiamo dalle prove con sedia e mela: conserviamo un file modificabile e prepariamo una copia da mostrare o usare altrove. L’estensione da sola non garantisce che i livelli siano stati conservati: controlliamo sempre le opzioni di salvataggio.</p>
             <div class="adjustment-list" role="group" aria-label="Formati dei file della seconda lezione">
                 <details class="adjustment-item"><summary><strong>PSD · lavoro in Photoshop</strong><span class="adjustment-icon" aria-hidden="true"></span></summary><div class="adjustment-content"><p>È il formato di lavoro di Photoshop: conserva livelli, maschere e altre parti modificabili. Salviamo qui la prova con la foto originale e le versioni separate.</p></div></details>
                 <details class="adjustment-item"><summary><strong>PSB · documento molto grande</strong><span class="adjustment-icon" aria-hidden="true"></span></summary><div class="adjustment-content"><p>È il formato Photoshop per documenti che superano i limiti del PSD. Non rende migliore l’immagine: serve quando dimensioni o peso del progetto richiedono un file più grande.</p></div></details>
@@ -618,7 +399,7 @@
             </div>
         </section>
 
-        <section class="panel" role="tabpanel" id="tab-calendario" aria-labelledby="btn-calendario" hidden>
+        <section class="panel" role="tabpanel" id="tab-calendario" data-scheda="calendario" aria-labelledby="btn-calendario" hidden>
             <p class="kicker">1° semestre · A.A. 2026/2027</p>
             <h2>Calendario lezioni</h2>
             <p class="panel-intro">Scegli la tua classe. Le date con un titolo aprono gli appunti della lezione; per le altre il programma è ancora da definire.</p>
@@ -627,42 +408,42 @@
                     <h3 id="classe-2a">Classe 2A</h3>
                     <p class="class-detail">6 incontri · 20 ore confermate</p>
                     <ul class="schedule-list">
-                        <li><div class="schedule-lesson"><time datetime="2026-11-24">Mar 24 nov 2026</time><a href="#lezione-1">01 · Conosciamoci →</a></div><span>11:00–13:00</span></li>
-                        <li><div class="schedule-lesson"><time datetime="2026-12-01">Mar 1 dic 2026</time><a href="#lezione-2">02 · I primi strumenti per scontornare →</a></div><span>11:00–13:00</span></li>
-                        <li><div class="schedule-lesson"><time datetime="2026-12-15">Mar 15 dic 2026</time><a href="#lezione-3">03 · Istogramma e regolazioni →</a></div><span>09:00–13:00</span></li>
-                        <li><div class="schedule-lesson"><time datetime="2027-01-12">Mar 12 gen 2027</time><a href="#lezione-4">04 · Fotoinserimento: le due sedie →</a></div><span>09:00–13:00</span></li>
-                        <li><div class="schedule-lesson"><time datetime="2027-01-19">Mar 19 gen 2027</time><a href="#lezione-5">05 · Manifesti e oggetti avanzati →</a></div><span>09:00–13:00</span></li>
-                        <li><div class="schedule-lesson"><time datetime="2027-01-26">Mar 26 gen 2027</time><a href="#lezione-6">06 · Esonero →</a></div><span>09:00–13:00</span></li>
+                        <li><div class="schedule-lesson"><time datetime="2026-11-24">Martedì 24 novembre 2026</time><a href="#lezione-1">01 · Conosciamoci →</a></div><span>11:00–13:00</span></li>
+                        <li><div class="schedule-lesson"><time datetime="2026-12-01">Martedì 1 dicembre 2026</time><a href="#lezione-2">02 · Colore, scontorno e salvataggio →</a></div><span>11:00–13:00</span></li>
+                        <li><div class="schedule-lesson"><time datetime="2026-12-15">Martedì 15 dicembre 2026</time><a href="#lezione-3">03 · Istogramma e regolazioni →</a></div><span>09:00–13:00</span></li>
+                        <li><div class="schedule-lesson"><time datetime="2027-01-12">Martedì 12 gennaio 2027</time><a href="#lezione-4">04 · Fotoinserimento: le due sedie →</a></div><span>09:00–13:00</span></li>
+                        <li><div class="schedule-lesson"><time datetime="2027-01-19">Martedì 19 gennaio 2027</time><a href="#lezione-5">05 · Manifesti e oggetti avanzati →</a></div><span>09:00–13:00</span></li>
+                        <li><div class="schedule-lesson"><time datetime="2027-01-26">Martedì 26 gennaio 2027</time><a href="#lezione-6">06 · Esonero →</a></div><span>09:00–13:00</span></li>
                     </ul>
                 </section>
                 <section class="class-card" aria-labelledby="classe-2b">
                     <h3 id="classe-2b">Classe 2B</h3>
                     <p class="class-detail">6 incontri · 20 ore confermate</p>
                     <ul class="schedule-list">
-                        <li><div class="schedule-lesson"><time datetime="2026-11-24">Mar 24 nov 2026</time><a href="#lezione-1">01 · Conosciamoci →</a></div><span>14:00–16:00</span></li>
-                        <li><div class="schedule-lesson"><time datetime="2026-12-01">Mar 1 dic 2026</time><a href="#lezione-2">02 · I primi strumenti per scontornare →</a></div><span>14:00–16:00</span></li>
-                        <li><div class="schedule-lesson"><time datetime="2026-12-15">Mar 15 dic 2026</time><a href="#lezione-3">03 · Istogramma e regolazioni →</a></div><span>14:00–18:00</span></li>
-                        <li><div class="schedule-lesson"><time datetime="2027-01-12">Mar 12 gen 2027</time><a href="#lezione-4">04 · Fotoinserimento: le due sedie →</a></div><span>14:00–18:00</span></li>
-                        <li><div class="schedule-lesson"><time datetime="2027-01-19">Mar 19 gen 2027</time><a href="#lezione-5">05 · Manifesti e oggetti avanzati →</a></div><span>14:00–18:00</span></li>
-                        <li><div class="schedule-lesson"><time datetime="2027-01-26">Mar 26 gen 2027</time><a href="#lezione-6">06 · Esonero →</a></div><span>14:00–18:00</span></li>
+                        <li><div class="schedule-lesson"><time datetime="2026-11-24">Martedì 24 novembre 2026</time><a href="#lezione-1">01 · Conosciamoci →</a></div><span>14:00–16:00</span></li>
+                        <li><div class="schedule-lesson"><time datetime="2026-12-01">Martedì 1 dicembre 2026</time><a href="#lezione-2">02 · Colore, scontorno e salvataggio →</a></div><span>14:00–16:00</span></li>
+                        <li><div class="schedule-lesson"><time datetime="2026-12-15">Martedì 15 dicembre 2026</time><a href="#lezione-3">03 · Istogramma e regolazioni →</a></div><span>14:00–18:00</span></li>
+                        <li><div class="schedule-lesson"><time datetime="2027-01-12">Martedì 12 gennaio 2027</time><a href="#lezione-4">04 · Fotoinserimento: le due sedie →</a></div><span>14:00–18:00</span></li>
+                        <li><div class="schedule-lesson"><time datetime="2027-01-19">Martedì 19 gennaio 2027</time><a href="#lezione-5">05 · Manifesti e oggetti avanzati →</a></div><span>14:00–18:00</span></li>
+                        <li><div class="schedule-lesson"><time datetime="2027-01-26">Martedì 26 gennaio 2027</time><a href="#lezione-6">06 · Esonero →</a></div><span>14:00–18:00</span></li>
                     </ul>
                 </section>
                 <section class="class-card" aria-labelledby="classe-2c">
                     <h3 id="classe-2c">Classe 2C</h3>
                     <p class="class-detail">6 incontri · 20 ore confermate</p>
                     <ul class="schedule-list">
-                        <li><div class="schedule-lesson"><time datetime="2026-11-20">Ven 20 nov 2026</time><a href="#lezione-1">01 · Conosciamoci →</a></div><span>11:00–13:00</span></li>
-                        <li><div class="schedule-lesson"><time datetime="2026-11-27">Ven 27 nov 2026</time><a href="#lezione-2">02 · I primi strumenti per scontornare →</a></div><span>11:00–13:00</span></li>
-                        <li><div class="schedule-lesson"><time datetime="2026-12-04">Ven 4 dic 2026</time><a href="#lezione-3">03 · Istogramma e regolazioni →</a></div><span>09:00–13:00</span></li>
-                        <li><div class="schedule-lesson"><time datetime="2026-12-11">Ven 11 dic 2026</time><a href="#lezione-4">04 · Fotoinserimento: le due sedie →</a></div><span>09:00–13:00</span></li>
-                        <li><div class="schedule-lesson"><time datetime="2026-12-18">Ven 18 dic 2026</time><a href="#lezione-5">05 · Manifesti e oggetti avanzati →</a></div><span>09:00–13:00</span></li>
-                        <li><div class="schedule-lesson"><time datetime="2027-01-15">Ven 15 gen 2027</time><a href="#lezione-6">06 · Esonero →</a></div><span>09:00–13:00</span></li>
+                        <li><div class="schedule-lesson"><time datetime="2026-11-20">Venerdì 20 novembre 2026</time><a href="#lezione-1">01 · Conosciamoci →</a></div><span>11:00–13:00</span></li>
+                        <li><div class="schedule-lesson"><time datetime="2026-11-27">Venerdì 27 novembre 2026</time><a href="#lezione-2">02 · Colore, scontorno e salvataggio →</a></div><span>11:00–13:00</span></li>
+                        <li><div class="schedule-lesson"><time datetime="2026-12-04">Venerdì 4 dicembre 2026</time><a href="#lezione-3">03 · Istogramma e regolazioni →</a></div><span>09:00–13:00</span></li>
+                        <li><div class="schedule-lesson"><time datetime="2026-12-11">Venerdì 11 dicembre 2026</time><a href="#lezione-4">04 · Fotoinserimento: le due sedie →</a></div><span>09:00–13:00</span></li>
+                        <li><div class="schedule-lesson"><time datetime="2026-12-18">Venerdì 18 dicembre 2026</time><a href="#lezione-5">05 · Manifesti e oggetti avanzati →</a></div><span>09:00–13:00</span></li>
+                        <li><div class="schedule-lesson"><time datetime="2027-01-15">Venerdì 15 gennaio 2027</time><a href="#lezione-6">06 · Esonero →</a></div><span>09:00–13:00</span></li>
                     </ul>
                 </section>
             </div>
         </section>
 
-        <section class="panel" role="tabpanel" id="tab-video" aria-labelledby="btn-video" hidden>
+        <section class="panel" role="tabpanel" id="tab-video" data-scheda="video" aria-labelledby="btn-video" hidden>
             <p class="kicker">Archivio del docente · 2 corsi video</p>
             <h2>Guarda, studia, poi sperimenta</h2>
             <p class="panel-intro">Inizia da <em>Photoshop base</em> e guardalo per intero. Poi passa a <em>Ombre</em>, il corso più avanzato. Entrambi fanno parte della preparazione obbligatoria: scegli un corso e apri i video qui sotto.</p>
@@ -721,14 +502,14 @@
 
         </section>
 
-        <section class="panel" role="tabpanel" id="tab-risorse" aria-labelledby="btn-risorse" hidden>
+        <section class="panel" role="tabpanel" id="tab-risorse" data-scheda="risorse" aria-labelledby="btn-risorse" hidden>
             <p class="kicker">File utili</p>
             <h2>Risorse</h2>
             <p class="panel-intro">I file di lavoro da usare durante le lezioni.</p>
-            <div class="lesson-materials"><div><strong>Lezione 02 · Scontorno</strong><p>Il JPG della sedia e <em>Mela.tif</em> per confrontare pennello e lazo sui due contorni.</p></div><a href="https://drive.google.com/drive/folders/1P75fdlznkZRsj4Gv88O6EybMpIsw72m1" target="_blank" rel="noopener noreferrer">Apri i file su Drive ↗</a></div>
+            <div class="lesson-materials"><div><strong>Lezione 02 · Sedia e mela</strong><p>Il JPG della sedia e <em>Mela.tif</em> per confrontare pennello e lazo sui due contorni.</p></div><a href="https://drive.google.com/drive/folders/1P75fdlznkZRsj4Gv88O6EybMpIsw72m1" target="_blank" rel="noopener noreferrer">Apri i file su Drive ↗</a></div>
         </section>
 
-        <section class="panel" role="tabpanel" id="tab-scorciatoie" aria-labelledby="btn-scorciatoie" hidden>
+        <section class="panel" role="tabpanel" id="tab-scorciatoie" data-scheda="scorciatoie" aria-labelledby="btn-scorciatoie" hidden>
             <p class="kicker">Consultazione rapida</p>
             <h2>Scorciatoie</h2>
             <p class="panel-intro">I comandi essenziali di Photoshop, da tenere a portata di mano mentre lavori. Scegli la tastiera che usi per vedere le combinazioni corrette.</p>
@@ -801,168 +582,8 @@
     </main>
 
 </div>
-<footer class="wrap course-footer">
-    <div class="grande-firma" aria-hidden="true">Photoshop</div>
-    <div class="piede"><a href="../../">← Tutti i miei corsi</a><span>Photoshop · Interior Design · Giovanni Savelli · 2026/27</span></div>
-</footer>
+<nav class="azioni-tel" aria-label="Accesso rapido alle sezioni"><a href="#programma" data-vai-scheda="programma">Programma</a><a href="#calendario" data-vai-scheda="calendario">Calendario</a><a href="#video" data-vai-scheda="video">Video</a></nav>
+<footer class="wrap piede-sito" data-firma="Photoshop" data-nota="Photoshop · Interior Design"></footer>
 
-<script>
-    // Ogni scheda ha un indirizzo condivisibile. Il programma apre la pagina ora che la prima lezione è disponibile.
-    const TAB_NAMES = {
-        "tab-programma": "lezioni",
-        "tab-elenco": "programma",
-        "tab-archivio": "archivio",
-        "tab-appunti": "appunti",
-        "tab-calendario": "calendario",
-        "tab-esperimenti": "esperimenti",
-        "tab-video": "video",
-        "tab-risorse": "risorse",
-        "tab-scorciatoie": "scorciatoie"
-    };
-    const DEFAULT_TAB = "tab-programma";
-
-    function openTab(id, updateAddress) {
-        if (!TAB_NAMES[id]) return;
-        if (id !== "tab-video") stopVideo();
-        document.querySelectorAll(".tab-btn").forEach(function (button) {
-            const selected = button.dataset.tab === id;
-            button.setAttribute("aria-selected", String(selected));
-            button.tabIndex = selected ? 0 : -1;
-        });
-        document.querySelectorAll(".panel").forEach(function (panel) {
-            panel.hidden = panel.id !== id;
-        });
-        if (updateAddress && location.hash !== "#" + TAB_NAMES[id]) {
-            history.pushState(null, "", "#" + TAB_NAMES[id]);
-        }
-        document.dispatchEvent(new CustomEvent("course:sectionchange"));
-    }
-
-    function scrollToCourseContent(target) {
-        requestAnimationFrame(function () {
-            const behavior = window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth";
-            const tabs = document.querySelector(".tabs");
-            // Con la barra attaccata in alto, scrollIntoView non si muove: si porta in vista l'inizio della scheda aperta.
-            if (target === tabs && getComputedStyle(tabs).position === "sticky") {
-                const panel = document.querySelector(".panel:not([hidden])");
-                const top = panel.getBoundingClientRect().top + window.scrollY
-                    - tabs.getBoundingClientRect().height - (parseFloat(getComputedStyle(tabs).top) || 0);
-                window.scrollTo({ top: Math.max(0, top), behavior: behavior });
-                return;
-            }
-            target.scrollIntoView({ block: "start", behavior: behavior });
-        });
-    }
-
-    function showTabFromHash() {
-        const lesson = document.getElementById(location.hash.slice(1));
-        const isLesson = lesson && lesson.classList.contains("lesson-note");
-        const tab = Object.keys(TAB_NAMES).find(function (key) {
-            return "#" + TAB_NAMES[key] === location.hash;
-        });
-        openTab(isLesson ? "tab-appunti" : tab || DEFAULT_TAB, false);
-        if (isLesson) {
-            lesson.open = true;
-            scrollToCourseContent(lesson);
-        }
-        else if (tab) scrollToCourseContent(document.querySelector(".tabs"));
-    }
-
-    const courseTabs = Array.from(document.querySelectorAll(".tabs > .tab-btn"));
-    courseTabs.forEach(function (button, index) {
-        button.addEventListener("click", function () {
-            openTab(button.dataset.tab, true);
-            scrollToCourseContent(document.querySelector(".tabs"));
-        });
-        button.addEventListener("keydown", function (event) {
-            let next;
-            if (event.key === "ArrowRight") next = (index + 1) % courseTabs.length;
-            else if (event.key === "ArrowLeft") next = (index - 1 + courseTabs.length) % courseTabs.length;
-            else if (event.key === "Home") next = 0;
-            else if (event.key === "End") next = courseTabs.length - 1;
-            else return;
-            event.preventDefault();
-            courseTabs[next].focus({ preventScroll: true });
-            courseTabs[next].click();
-        });
-    });
-    document.addEventListener("click", function (event) {
-        if (event.defaultPrevented || event.button !== 0 || event.ctrlKey || event.metaKey || event.shiftKey || event.altKey) return;
-        const link = event.target.closest('a[href^="#"]');
-        if (!link || link.target === "_blank") return;
-        const hash = link.getAttribute("href");
-        const target = document.getElementById(hash.slice(1));
-        const isLesson = target && target.classList.contains("lesson-note");
-        const isTab = Object.values(TAB_NAMES).includes(hash.slice(1));
-        if (!isLesson && !isTab) return;
-        event.preventDefault();
-        if (location.hash !== hash) history.pushState(null, "", hash);
-        showTabFromHash();
-    });
-    function stopVideo() {
-        const player = document.getElementById("video-player");
-        if (!player || player.hidden) return;
-        player.src = "about:blank";
-        player.hidden = true;
-        document.getElementById("video-frame").hidden = true;
-        document.getElementById("video-current").hidden = true;
-        document.getElementById("video-current-title").textContent = "Nessun video selezionato";
-        document.getElementById("video-direct-link").hidden = true;
-        document.querySelectorAll(".video-choice").forEach(function (button) { button.setAttribute("aria-pressed", "false"); });
-    }
-    document.getElementById("video-start").addEventListener("click", function () {
-        document.querySelector(".video-course-panel:not([hidden]) .video-choice")?.click();
-    });
-    document.querySelectorAll(".video-course-choice").forEach(function (button) {
-        button.addEventListener("click", function () {
-            const course = button.dataset.videoCourse;
-            stopVideo();
-            document.querySelectorAll(".video-course-choice").forEach(function (choice) { choice.setAttribute("aria-pressed", String(choice === button)); });
-            document.querySelectorAll(".video-course-panel").forEach(function (panel) { panel.hidden = panel.id !== "video-panel-" + course; });
-            document.getElementById("video-start").textContent = course === "ombre" ? "Inizia dal capitolo 1 →" : "Inizia dal video 01 →";
-        });
-    });
-    document.querySelectorAll(".video-choice").forEach(function (button) {
-        button.addEventListener("click", function () {
-            const id = button.dataset.videoId;
-            const title = button.dataset.videoTitle;
-            const player = document.getElementById("video-player");
-            player.src = "https://drive.google.com/file/d/" + id + "/preview";
-            player.title = title;
-            player.hidden = false;
-            document.getElementById("video-frame").hidden = false;
-            document.getElementById("video-current").hidden = false;
-            document.getElementById("video-current-title").textContent = title;
-            const directLink = document.getElementById("video-direct-link");
-            directLink.href = "https://drive.google.com/file/d/" + id + "/view";
-            directLink.hidden = false;
-            document.querySelectorAll(".video-choice").forEach(function (choice) { choice.setAttribute("aria-pressed", String(choice === button)); });
-            document.getElementById("video-frame").scrollIntoView({ block: "start", behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth" });
-        });
-    });
-    const shortcutKeys = document.querySelectorAll("#tab-scorciatoie kbd");
-    const shortcutToggle = document.getElementById("shortcut-platform-toggle");
-    shortcutKeys.forEach(function (key) { key.dataset.windows = key.textContent; });
-
-    function showShortcutPlatform(isMac) {
-        shortcutKeys.forEach(function (key) { key.textContent = isMac && key.dataset.mac ? key.dataset.mac : key.dataset.windows; });
-        document.getElementById("shortcut-platform-name").textContent = isMac ? "Mac" : "Windows";
-        document.getElementById("shortcut-platform-note").textContent = isMac
-            ? "Su Mac, Cmd è il tasto ⌘ e Option è il tasto ⌥."
-            : "Le combinazioni mostrate sono quelle predefinite per Windows.";
-        shortcutToggle.textContent = isMac ? "Mostra tasti Windows" : "Mostra tasti Mac";
-        shortcutToggle.dataset.platform = isMac ? "mac" : "windows";
-        try { localStorage.setItem("photoshop-shortcut-platform", isMac ? "mac" : "windows"); } catch (error) { /* La guida funziona anche senza memoria locale. */ }
-    }
-
-    shortcutToggle.addEventListener("click", function () { showShortcutPlatform(shortcutToggle.dataset.platform !== "mac"); });
-    try {
-        if (localStorage.getItem("photoshop-shortcut-platform") === "mac") showShortcutPlatform(true);
-    } catch (error) { /* La guida resta su Windows se la memoria locale non è disponibile. */ }
-    window.addEventListener("popstate", showTabFromHash);
-    window.addEventListener("hashchange", showTabFromHash);
-    window.addEventListener("load", function () { if (location.hash) showTabFromHash(); }, { once: true });
-    showTabFromHash();
-</script>
 </body>
 </html>
