@@ -155,7 +155,7 @@ function pezzo(cx, cz, lungo, spesso, alto, asseX) {
   // nascita: i muri salgono dal pavimento a onda, partendo dall'ingresso
   const nasce = .9 + Math.hypot(cx - 500, cz - 560) / 620 * 1.5 + Math.random() * .15;
   mesh.scale.y = ridotto ? 1 : .001;
-  pezzi.push({ perno, mesh, cx, cz, asseX, lungo, spesso, alto, ang: 0, vel: 0, verso: 1, limite: Math.PI / 2, appoggio: null, nasce, cresciuto: ridotto });
+  pezzi.push({ perno, mesh, cx, cz, asseX, lungo, spesso, alto, ang: 0, vel: 0, verso: 1, limite: Math.PI / 2, appoggio: null, dal: 0, nasce, cresciuto: ridotto });
 }
 for (const m of MURI) {
   const asseX = m.z1 === m.z2, lungo = Math.hypot(m.x2 - m.x1, m.z2 - m.z1);
@@ -174,6 +174,7 @@ for (const [x, z] of PILASTRI) pezzo(x, z, 14, 14, H + 6, true);
 // se dentro c'è un ostacolo, il pannello si ferma quando lo tocca. Un pilastro o un muro in piedi lo fanno appoggiare
 // inclinato; un pannello già a terra lo fa sdraiare sopra, appena sollevato.
 // lato = +1 o -1: verso dove va la cima del pannello (asse z per i muri lungo x, asse x per gli altri)
+let ordine = 0;   // l'ordine in cui i pannelli cominciano a cadere
 const latoDi = p => p.asseX ? p.verso : -p.verso;
 const versoDi = (p, lato) => p.asseX ? lato : -lato;
 function ingombro(o) {
@@ -191,9 +192,9 @@ function angoloMassimo(p, lato) {
   let max = Math.PI / 2, chi = null;
   const mezzo = p.lungo / 2 - 1, sp = p.spesso / 2;
   for (const o of pezzi) {
-    if (o === p) continue;
-    // un pannello che cade conta solo se è già più giù di questo: chi arriva prima prende il posto
-    if (o.ang >= .3 && !(o.ang > p.ang + .02 || (Math.abs(o.ang - p.ang) <= .02 && pezzi.indexOf(o) < pezzi.indexOf(p)))) continue;
+    if (o === p || o.appoggio === p) continue;   // chi è appoggiato a questo pannello non lo spinge
+    // un pannello che cade conta solo se ha cominciato a cadere prima: chi arriva prima prende il posto
+    if (o.ang >= .3 && !(o.dal < p.dal)) continue;
     const r = ingombro(o);
     // l'ostacolo nelle coordinate del pannello: u lungo il pannello, v verso dove cade
     const [u0, u1, a, b] = p.asseX ? [r.x0 - p.cx, r.x1 - p.cx, (r.z0 - p.cz) * lato, (r.z1 - p.cz) * lato]
@@ -205,6 +206,15 @@ function angoloMassimo(p, lato) {
     if (tocca < max) { max = tocca; chi = o; }
   }
   return [max, chi];
+}
+function nelloSpazio(o, p) {
+  // la base di p sta nello spazio dove o sta cadendo (davanti alla sua faccia, fin dove arriva la sua cima)?
+  const lato = latoDi(o), mezzo = o.lungo / 2 - 1, sp = o.spesso / 2;
+  const v0 = Math.min(lato * (sp + .5), lato * o.alto), v1 = Math.max(lato * (sp + .5), lato * o.alto);
+  const [ox0, ox1, oz0, oz1] = o.asseX ? [o.cx - mezzo, o.cx + mezzo, o.cz + v0, o.cz + v1] : [o.cx + v0, o.cx + v1, o.cz - mezzo, o.cz + mezzo];
+  const a = p.lungo / 2, b = p.spesso / 2;
+  const [px0, px1, pz0, pz1] = p.asseX ? [p.cx - a, p.cx + a, p.cz - b, p.cz + b] : [p.cx - b, p.cx + b, p.cz - a, p.cz + a];
+  return ox0 < px1 && px0 < ox1 && oz0 < pz1 && pz0 < oz1;
 }
 function scegliLato(p, voluto) {
   // si cade dalla parte voluta (lontano dal mouse); se lì è quasi tutto bloccato, dall'altra
@@ -337,20 +347,29 @@ function frame(now) {
       if (q >= 1) { p.cresciuto = true; p.mesh.scale.y = 1; }
     }
     const d = Math.hypot(p.cx - fuoco.x, p.cz - fuoco.z);
-    const giu = costruito && d < R;
-    if (giu && p.ang < .05) {
+    let giu = costruito && d < R;
+    const regge = pezzi.some(o => o !== p && o.appoggio === p && o.ang > .1);   // qualcuno è appoggiato a lui
+    // chi sta nello spazio dove un altro pannello sta già cadendo non comincia a cadere: resta in piedi e gli fa da appoggio
+    // (se hanno cominciato quasi insieme, cede quello partito dopo e si rialza)
+    if (giu && p.ang < .15 && pezzi.some(o => o !== p && o.ang > .02 && o.dal < p.dal && nelloSpazio(o, p))) { giu = false; p.dal = ++ordine; }
+    if (giu && p.ang < .05 && !regge) {
       const voluto = p.asseX ? Math.sign(p.cz - fuoco.z || 1) : Math.sign(p.cx - fuoco.x || 1);   // lontano dal mouse
       p.verso = versoDi(p, scegliLato(p, voluto));
+      p.dal = ++ordine;
     }
     // fin dove può arrivare adesso: a terra, o appoggiato al primo ostacolo
     if (giu || p.ang > .01) {
       const [lim, chi] = angoloMassimo(p, latoDi(p));
       p.limite = Math.min(TERRA, lim); p.appoggio = lim < TERRA ? chi : null;
     } else p.appoggio = null;
-    // chi ha un altro pannello appoggiato sopra non si rialza finché quello non se ne va
-    const sotto = p.ang > .3 && pezzi.some(o => o !== p && o.appoggio === p && o.ang > .3);
-    if (ridotto) p.ang = giu ? p.limite : sotto ? p.ang : 0;
-    else if (giu) {
+    // chi regge un altro pannello resta fermo (in piedi, dove si era già appoggiato, o se gli cadrebbe addosso)
+    // finché quello non se ne va: così pilastro e muro non si spingono a vicenda e non si attraversano
+    const sotto = regge && (p.ang < .05 || p.ang >= p.limite - .02 || pezzi.some(o => o !== p && o.appoggio === p && o.ang > .1 &&
+      ((p.asseX ? o.cz - p.cz : o.cx - p.cx) * latoDi(p) > 0)));
+    if (ridotto) p.ang = sotto ? p.ang : giu ? p.limite : 0;
+    else if (sotto) {
+      p.vel = 0;
+    } else if (giu) {
       if (p.ang > p.limite + .02) {
         // un ostacolo è arrivato nel suo spazio: si rialza piano fino a toccarlo, senza scatti
         p.ang += (p.limite - p.ang) * (1 - Math.exp(-dt * 8)); p.vel = 0;
@@ -361,8 +380,6 @@ function frame(now) {
         if (p.ang >= p.limite) { p.ang = p.limite; p.vel = Math.abs(p.vel) > .8 ? -p.vel * .2 : 0; }
       }
       if (p.ang < 0) { p.ang = 0; p.vel = Math.max(0, p.vel); }   // mai oltre la verticale: niente giri su se stesso
-    } else if (sotto) {
-      p.vel = 0;
     } else {
       // si rialza con calma, senza rimbalzi
       p.vel += ((0 - p.ang) * 14 - p.vel * 7.5) * dt; p.ang += p.vel * dt;
