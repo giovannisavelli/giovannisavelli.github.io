@@ -132,6 +132,15 @@
     .ris-verdetto.ok{color:var(--ok)}
     .best{margin:10px 0 0;color:var(--ink-2);font-size:14px}
     .best:empty{display:none}
+    .perche{margin-top:22px;border:1px solid var(--line);border-radius:14px;background:var(--bg-2)}
+    .perche summary{display:flex;align-items:center;justify-content:space-between;gap:16px;min-height:56px;padding:12px 18px;list-style:none;cursor:pointer}
+    .perche summary::-webkit-details-marker{display:none}
+    .perche summary:hover{background:rgba(56,189,248,.06)}
+    .perche-i{color:var(--accent);font:500 20px var(--mono);transition:transform .2s}
+    .perche[open] .perche-i{transform:rotate(45deg)}
+    .perche-body{padding:0 18px 16px;max-width:80ch;color:var(--ink-2)}
+    .perche-body p{margin:0 0 10px}
+    .perche-body strong{color:var(--ink)}
     .best strong{color:var(--ink)}
 
     /* 03 Profili */
@@ -203,7 +212,7 @@
     .quiz-feedback strong{color:var(--ink)}
     .quiz-next[hidden]{display:none}
 
-    .back{margin:0;padding:0 0 32px}
+    .back{margin:0;padding:0 0 32px;display:flex;flex-wrap:wrap;gap:14px 22px;align-items:center}
     .foot{display:flex;justify-content:space-between;align-items:flex-start;gap:20px;border-top:1px solid var(--line);padding:18px 0 42px;color:var(--muted);font-size:12px}
     .foot p{max-width:72ch;margin:0}
     .foot strong,.foot a{color:var(--accent)}
@@ -358,6 +367,15 @@
           <p class="best" id="best" aria-live="polite"></p>
         </div>
       </div>
+      <details class="perche">
+        <summary><span class="card-k" style="margin:0">Perché i numeri RGB arrivano a 255?</span><span class="perche-i" aria-hidden="true">+</span></summary>
+        <div class="perche-body">
+          <p>Nel file ogni pixel ha tre numeri, uno per canale: rosso, verde e blu. In un'immagine a <strong>8 bit</strong> ogni canale si scrive con 8 cifre che possono essere solo 0 o 1. Le combinazioni possibili sono 2 × 2 × 2 × 2 × 2 × 2 × 2 × 2 = <strong>256</strong>.</p>
+          <p>Si comincia a contare da 0, che vuol dire canale spento: l'ultimo numero è quindi <strong>255</strong>, il canale al massimo. Tre canali da 256 livelli fanno 256 × 256 × 256, cioè circa <strong>16,7 milioni</strong> di colori.</p>
+          <p>A <strong>16 bit</strong> ogni canale ha 65.536 livelli, e i passaggi da un colore all'altro diventano molto più fini. Per questo un profilo molto ampio come ProPhoto RGB si usa a 16 bit: 256 gradini distribuiti su tanti colori sono pochi, e nelle sfumature compaiono delle strisce.</p>
+          <p>Gli inchiostri invece si misurano in percentuale: quanta carta coprono, da 0 a 100%.</p>
+        </div>
+      </details>
       <p class="thought"><strong>Cosa ci portiamo a casa.</strong> Lo schermo arriva a colori che gli inchiostri non raggiungono: si dice che sono <em>fuori gamma</em>. Per questo una stampa si prepara con chi stampa, e un colore acceso visto a schermo va controllato prima di prometterlo al cliente.</p>
     </section>
 
@@ -487,7 +505,7 @@
       </div>
     </section>
 
-    <p class="back"><a class="link" href="../#lezione-2">Torna agli appunti della lezione 02 →</a></p>
+    <p class="back"><a class="download" href="gamma.html">Prossimo esperimento: La gamma cromatica →</a> <a class="link" href="../#lezione-2">Torna agli appunti della lezione 02 →</a></p>
   </main>
 
   <footer class="foot"><p><strong>Simulazione didattica.</strong> Le immagini e gli inchiostri imitano il comportamento reale; il risultato vero dipende da monitor, profilo, carta e macchina da stampa.</p><a href="../#esperimenti">← Torna al corso</a></footer>

@@ -1,0 +1,679 @@
+<!doctype html>
+<html lang="it">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#050507">
+  <title>La gamma cromatica · AANT</title>
+  <meta name="description" content="Quanti colori descrivono sRGB, Adobe RGB e ProPhoto RGB rispetto a quelli che vede l'occhio. Una nuvola di punti da girare in 3D. Corso Photoshop Interior, lezione 2.">
+  <style>
+    @font-face{font-family:Geist;src:url('../../../app/varianza/fonts/geist-sans-latin-400-normal.woff2') format('woff2');font-weight:400;font-display:swap}
+    @font-face{font-family:Geist;src:url('../../../app/varianza/fonts/geist-sans-latin-600-normal.woff2') format('woff2');font-weight:600;font-display:swap}
+    @font-face{font-family:'Geist Mono';src:url('../../../app/varianza/fonts/geist-mono-latin-500-normal.woff2') format('woff2');font-weight:500;font-display:swap}
+    :root{
+      color-scheme:dark;
+      --bg:#050507; --bg-2:#0d0d11; --line:rgba(244,241,236,.13); --line-2:rgba(244,241,236,.24);
+      --ink:#f4f1ec; --ink-2:#d2cdcb; --muted:#9e999c; --accent:#38bdf8;
+      --c-srgb:#f4f1ec; --c-adobe:#38bdf8; --c-pro:#f5b450; --c-print:#f39a8b;
+      --mono:'Geist Mono',ui-monospace,monospace; --sans:Geist,system-ui,Arial,sans-serif;
+    }
+    *,*::before,*::after{box-sizing:border-box}
+    html{background:var(--bg)}
+    body{margin:0;background:var(--bg);color:var(--ink);font:400 16px/1.6 var(--sans);-webkit-font-smoothing:antialiased;overflow-x:hidden}
+    a{color:inherit} button{font:inherit;color:inherit}
+    :focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+    .shell{width:min(1320px,calc(100% - 64px));margin:0 auto}
+    .top{min-height:72px;display:flex;justify-content:space-between;align-items:center;gap:16px;border-bottom:1px solid var(--line)}
+    .top a{text-decoration:none}
+    .brand{display:inline-flex;align-items:center;gap:12px;font-size:14px;font-weight:600}
+    .brand-mark{width:37px;height:37px;display:grid;place-items:center;border:1px solid var(--accent);color:var(--accent);font:600 12px var(--mono)}
+    .return{color:var(--muted);font:500 11px var(--mono);letter-spacing:.06em;text-transform:uppercase;text-align:right}
+    .return:hover,.brand:hover{color:var(--accent)}
+    .return .short{display:none}
+
+    .intro{padding:clamp(40px,6vw,80px) 0 clamp(28px,4vw,48px);display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,.9fr);gap:clamp(24px,5vw,72px);align-items:end}
+    .eyebrow{margin:0 0 18px;color:var(--muted);font:500 12px/1.35 var(--mono);letter-spacing:.08em;text-transform:uppercase}
+    .eyebrow b{color:var(--accent);font-weight:500}
+    h1{margin:0;font-size:clamp(44px,6.6vw,92px);font-weight:600;line-height:.98;letter-spacing:-.05em}
+    h1 span,h2 span{color:var(--accent)}
+    .intro p{margin:0;color:var(--ink-2);font-size:clamp(16px,1.35vw,18px);max-width:52ch}
+    .intro .hint{margin-top:14px;color:var(--muted);font:500 12px var(--mono);letter-spacing:.06em;text-transform:uppercase}
+
+    /* Scena che resta ferma mentre scorrono i passi */
+    .scrolly{position:relative}
+    .stage{position:sticky;top:0;height:100svh;overflow:hidden;background:radial-gradient(ellipse at 62% 45%,rgba(56,189,248,.05),transparent 55%),var(--bg)}
+    .stage canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
+    #hud{pointer-events:none}
+    #gl{touch-action:pan-y;cursor:crosshair}
+    .stage.giro #gl{cursor:grab}
+    .stage.trascino #gl{cursor:grabbing}
+    .zoom{position:absolute;top:clamp(36px,4vw,44px);right:clamp(12px,2vw,28px);z-index:3;display:flex;flex-direction:column;align-items:flex-end;gap:8px}
+    .zoom .tasti{display:flex;gap:6px}
+    .zoom button{width:38px;height:38px;display:grid;place-items:center;border:1px solid var(--line-2);border-radius:10px;background:rgba(5,5,7,.78);font:500 16px var(--mono);cursor:pointer;transition:border-color .2s}
+    .zoom button:hover{border-color:var(--accent);color:var(--accent)}
+    #aiuto{max-width:250px;margin:0;padding:6px 10px;border-radius:8px;color:var(--muted);font:500 10px/1.5 var(--mono);letter-spacing:.04em;text-align:right;text-transform:uppercase;transition:color .2s,background .2s}
+    #aiuto.acceso{color:var(--ink);background:rgba(56,189,248,.25)}
+    #aiuto .tel{display:none}
+    @media(hover:none){#aiuto .pc{display:none}#aiuto .tel{display:inline}}
+    @media(max-width:900px){.zoom{top:40px;right:12px}#aiuto{max-width:170px;padding:4px 8px}}
+    .chips{position:absolute;right:clamp(12px,2vw,28px);bottom:clamp(12px,2vw,24px);display:flex;flex-wrap:wrap;justify-content:flex-end;gap:6px;max-width:min(520px,calc(100% - 24px));z-index:3}
+    .chips button{display:inline-flex;align-items:center;gap:7px;min-height:36px;padding:6px 12px;border:1px solid var(--line-2);border-radius:999px;background:rgba(5,5,7,.78);font:500 11px var(--mono);letter-spacing:.06em;text-transform:uppercase;cursor:pointer;transition:border-color .2s,opacity .2s}
+    .chips button i{width:9px;height:9px;border-radius:50%;background:var(--c)}
+    .chips button[aria-pressed=false]{opacity:.45}
+    .chips button:hover{border-color:var(--c)}
+    .nogl{position:absolute;inset:0;display:grid;place-items:center;padding:24px;color:var(--muted);text-align:center}
+    .steps{position:relative;z-index:2;margin-top:-100svh;pointer-events:none}
+    .step{min-height:92svh;display:flex;align-items:center;padding:0 clamp(16px,4vw,64px)}
+    .step:first-child{min-height:100svh}
+    .step:last-child{min-height:170svh;align-items:flex-start;padding-top:22svh}
+    .card{pointer-events:auto;width:min(390px,100%);padding:20px 22px;border:1px solid var(--line);border-radius:16px;background:rgba(9,9,12,.84);backdrop-filter:blur(6px)}
+    .card .k{display:flex;align-items:center;gap:10px;margin:0 0 10px;color:var(--accent);font:500 11px var(--mono);letter-spacing:.08em;text-transform:uppercase}
+    .card .k i{width:9px;height:9px;border-radius:50%;background:var(--c,var(--accent))}
+    .card h2{margin:0 0 10px;font-size:clamp(24px,2.4vw,32px);font-weight:600;line-height:1.08;letter-spacing:-.035em}
+    .card p{margin:0;color:var(--ink-2);font-size:15px}
+    .card p + p{margin-top:10px}
+    .card .num{display:block;margin:14px 0 4px;font:600 46px/1 var(--mono);letter-spacing:-.04em;color:var(--c,var(--accent))}
+    .card .num small{font-size:14px;color:var(--muted);letter-spacing:0}
+
+    .sec{padding:clamp(48px,6vw,88px) 0;border-top:1px solid var(--line)}
+    .label{display:inline-flex;align-items:center;gap:10px;margin:0 0 14px;color:var(--accent);font:500 12px var(--mono);letter-spacing:.08em;text-transform:uppercase}
+    .label::before{content:"";width:7px;height:7px;border-radius:50%;background:var(--accent);box-shadow:0 0 0 5px rgba(56,189,248,.12)}
+    .sec h2{margin:0 0 28px;font-size:clamp(34px,4.2vw,58px);font-weight:600;line-height:1.02;letter-spacing:-.045em}
+    .bars{display:grid;gap:14px;max-width:860px}
+    .bar{display:grid;grid-template-columns:120px minmax(0,1fr) 56px;align-items:center;gap:14px}
+    .bar b{font-weight:600}
+    .bar .track{height:14px;border-radius:999px;background:rgba(244,241,236,.07);overflow:hidden}
+    .bar .fill{height:100%;border-radius:999px;background:var(--c)}
+    .bar span{font:500 14px var(--mono);text-align:right;color:var(--ink-2)}
+    .takeaways{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;margin-top:40px}
+    .takeaways div{padding:20px;border:1px solid var(--line);border-radius:16px;background:var(--bg-2)}
+    .takeaways strong{display:block;margin-bottom:6px;font-size:18px}
+    .takeaways p{margin:0;color:var(--ink-2);font-size:15px}
+    .note{margin:22px 0 0;max-width:80ch;color:var(--muted);font-size:14px}
+    .next{display:inline-flex;align-items:center;gap:10px;margin-top:28px;min-height:44px;padding:9px 18px;border:1px solid rgba(56,189,248,.48);border-radius:999px;background:rgba(56,189,248,.1);font-weight:600;text-decoration:none}
+    .next:hover{border-color:var(--accent);background:rgba(56,189,248,.19)}
+    .foot{display:flex;justify-content:space-between;align-items:flex-start;gap:20px;border-top:1px solid var(--line);padding:18px 0 42px;color:var(--muted);font-size:12px}
+    .foot p{max-width:72ch;margin:0}
+    .foot strong,.foot a{color:var(--accent)}
+    .foot a{flex:none;text-decoration:none}
+
+    @media(max-width:900px){
+      .intro{grid-template-columns:1fr}
+      .takeaways{grid-template-columns:1fr}
+      .step{align-items:flex-end;padding-bottom:84px}
+      .step:first-child{align-items:flex-end}
+      .step:last-child{align-items:flex-start;padding-top:60svh}
+      .card{width:100%;padding:16px 18px}
+      .card h2{font-size:22px}
+      .card .num{font-size:36px;margin-top:10px}
+      .chips{left:12px;right:12px;bottom:12px;justify-content:center;max-width:none}
+      .chips button{min-height:32px;padding:5px 10px;font-size:10px}
+    }
+    @media(max-width:760px){.shell{width:calc(100% - 32px)}}
+    @media(max-width:680px){
+      .brand{font-size:12px;gap:8px}.brand-mark{width:35px;height:35px}
+      .return{font-size:10px}.return .long{display:none}.return .short{display:inline}
+      .foot{display:block}.foot a{display:inline-block;margin-top:12px}
+      .bar{grid-template-columns:86px minmax(0,1fr) 46px;gap:10px}
+    }
+    @media(max-width:360px){.brand span:last-child{max-width:110px;line-height:1.2}.return{font-size:9px}}
+  </style>
+</head>
+<body>
+<div class="shell">
+  <header class="top">
+    <a class="brand" href="../../../"><span class="brand-mark">GS</span><span>Giovanni Savelli · AANT</span></a>
+    <a class="return" href="../#esperimenti">← <span class="long">Corso di Photoshop</span><span class="short">Corso Photoshop</span></a>
+  </header>
+  <section class="intro">
+    <div>
+      <p class="eyebrow"><b>Photoshop Interior</b> · Lezione 02 · Esperimenti</p>
+      <h1>La gamma cromatica<span>.</span></h1>
+    </div>
+    <div>
+      <p>Ogni punto qui sotto è un colore che l'occhio può vedere. Dentro questa nuvola, ogni profilo ne descrive solo una parte: è la sua <strong>gamma cromatica</strong>. Scorri: prima la guardiamo dall'alto, come nei libri, poi la giriamo.</p>
+      <p class="hint">↓ Scorri</p>
+    </div>
+  </section>
+</div>
+
+<section class="scrolly" aria-label="La gamma cromatica dei profili">
+  <div class="stage" id="stage">
+    <canvas id="gl" aria-label="Nuvola di punti dei colori visibili con le gamme di sRGB, Adobe RGB, ProPhoto RGB e della stampa" role="img"></canvas>
+    <canvas id="hud" aria-hidden="true"></canvas>
+    <div class="zoom">
+      <div class="tasti"><button type="button" id="z-meno" aria-label="Allontana">−</button><button type="button" id="z-piu" aria-label="Avvicina">+</button><button type="button" id="z-reset" aria-label="Rimetti la vista del racconto">⟲</button></div>
+      <p id="aiuto"><span class="pc">Trascina: ruota · Ctrl + rotella: zoom · Maiusc + trascina: sposta</span><span class="tel">Dito fermo, poi trascina: ruota<br>Due dita: zoom</span></p>
+    </div>
+    <div class="chips" role="group" aria-label="Mostra o nascondi">
+      <button type="button" data-set="occhio" style="--c:linear-gradient(90deg,#f33,#3f6,#36f)" aria-pressed="true"><i></i>Occhio</button>
+      <button type="button" data-set="srgb" style="--c:var(--c-srgb)" aria-pressed="false"><i></i>sRGB</button>
+      <button type="button" data-set="adobe" style="--c:var(--c-adobe)" aria-pressed="false"><i></i>Adobe RGB</button>
+      <button type="button" data-set="pro" style="--c:var(--c-pro)" aria-pressed="false"><i></i>ProPhoto</button>
+      <button type="button" data-set="stampa" style="--c:var(--c-print)" aria-pressed="false"><i></i>Stampa</button>
+    </div>
+  </div>
+  <div class="steps">
+    <div class="step" data-step="0"><div class="card"><p class="k"><i style="--c:#7ee0a8"></i>01 / L'occhio</p><h2>Tutti i colori che vediamo</h2><p>Dall'alto la nuvola forma il «ferro di cavallo». Sul bordo curvo ci sono i colori puri dell'arcobaleno, con la loro lunghezza d'onda in nanometri. In basso c'è la linea dei viola, che nell'arcobaleno non esiste.</p><p>Al centro il bianco. Muovi il mouse sul diagramma: il mirino ti dice dove sei.</p></div></div>
+    <div class="step" data-step="1"><div class="card" style="--c:var(--c-srgb)"><p class="k"><i></i>02 / sRGB</p><h2>Lo schermo e il web</h2><p>Il triangolo di sRGB: tre angoli, cioè il rosso, il verde e il blu più puri che il profilo può descrivere. Tutto quello che sta fuori, in sRGB non esiste.</p><p>Spegni «Occhio» nei pulsanti in basso: restano solo i colori che sRGB sa descrivere.</p><span class="num">34%<small> dei colori visibili</small></span></div></div>
+    <div class="step" data-step="2"><div class="card" style="--c:var(--c-adobe)"><p class="k"><i></i>03 / Adobe RGB</p><h2>Più verdi e più azzurri</h2><p>Il rosso e il blu sono gli stessi di sRGB: cambia l'angolo del verde, che sale molto. È il profilo in cui lavoriamo in questo corso.</p><span class="num">45%<small> dei colori visibili</small></span></div></div>
+    <div class="step" data-step="3"><div class="card" style="--c:var(--c-pro)"><p class="k"><i></i>04 / ProPhoto RGB</p><h2>Quasi tutto, e anche di più</h2><p>Copre quasi tutti i colori visibili. Ma guarda gli angoli del verde e del blu: escono dal ferro di cavallo. Lì ci sono numeri che non corrispondono a nessun colore che l'occhio possa vedere.</p><p>Gamma così ampia vuol dire passi più grandi tra un colore e l'altro. A 8 bit ogni canale ha 256 gradini, da 0 a 255; a 16 bit ne ha 65.536: per questo ProPhoto si usa a 16 bit.</p><span class="num">80%<small> dei colori visibili</small></span></div></div>
+    <div class="step" data-step="4"><div class="card" style="--c:var(--c-print)"><p class="k"><i></i>05 / La stampa</p><h2>Gli inchiostri del laboratorio</h2><p>La macchia rosa è la stampa simulata nel Laboratorio del colore: più piccola anche di sRGB.</p><p>Il punto blu è l'<strong>insegna LED</strong> della gara. Dall'alto sembra dentro la stampa. Allora perché in CMYK nessuno riusciva a rifarla? Scorri e giriamo il diagramma.</p></div></div>
+    <div class="step" data-step="5"><div class="card"><p class="k"><i style="--c:var(--accent)"></i>06 / È un solido</p><h2>Visto di lato, è un volume</h2><p>Il diagramma piatto è solo una vista dall'alto. In verticale c'è la luminosità: in basso i colori scuri, in cima il bianco. Ogni profilo è un solido, e salendo si stringe.</p><p>Ora si vede: l'insegna LED sta <strong>sopra</strong> il solido della stampa. Il suo blu c'è, ma gli inchiostri non lo fanno così luminoso.</p><p class="k" style="margin:14px 0 0">Giralo in ogni direzione e avvicinati</p></div></div>
+  </div>
+</section>
+
+<div class="shell">
+  <section class="sec" aria-labelledby="sintesi-t">
+    <p class="label">In sintesi</p>
+    <h2 id="sintesi-t">Quanta parte dei colori visibili<span>?</span></h2>
+    <div class="bars">
+      <div class="bar" style="--c:var(--c-srgb)"><b>sRGB</b><div class="track"><div class="fill" style="width:34%"></div></div><span>34%</span></div>
+      <div class="bar" style="--c:var(--c-adobe)"><b>Adobe RGB</b><div class="track"><div class="fill" style="width:45%"></div></div><span>45%</span></div>
+      <div class="bar" style="--c:var(--c-pro)"><b>ProPhoto</b><div class="track"><div class="fill" style="width:80%"></div></div><span>80%</span></div>
+    </div>
+    <p class="note">Percentuali dell'area del ferro di cavallo (diagramma CIE 1931 xy) coperta da ciascun triangolo. Con altri diagrammi, o contando anche la luminosità, i numeri cambiano un poco; l'ordine resta questo.</p>
+    <div class="takeaways">
+      <div><strong>Più ampio non vuol dire migliore</strong><p>Una gamma ampia serve se l'immagine ha davvero quei colori e se chi la riceve li sa leggere. Altrimenti si converte nel profilo di destinazione.</p></div>
+      <div><strong>Lo schermo ha la sua gamma</strong><p>Anche il monitor ha una gamma. Su uno schermo sRGB i colori fuori sRGB di questa pagina sono solo avvicinati: li vedi, ma non come sono davvero.</p></div>
+      <div><strong>La stampa è un'altra cosa</strong><p>La gamma degli inchiostri ha una forma diversa e si stringe soprattutto nei colori luminosi e saturi. Per questo si chiede il profilo a chi stampa.</p></div>
+    </div>
+    <a class="next" href="salvataggio.html">Prossimo esperimento: Il JPEG si consuma →</a>
+  </section>
+</div>
+<div class="shell">
+  <footer class="foot"><p><strong>Schema didattico.</strong> La nuvola è calcolata dalle curve di sensibilità dell'occhio (osservatore standard CIE 1931); la stampa è quella simulata nel Laboratorio del colore. Altezza: chiarezza L*.</p><a href="../#esperimenti">← Torna al corso</a></footer>
+</div>
+
+<script type="module">
+import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.js';
+
+/* ---------------- dati e conversioni ---------------- */
+// Bordo dei colori visibili (CIE 1931, 2°): [nm, x, y]
+const LOCUS = [[380,.1741,.0050],[400,.1733,.0048],[420,.1714,.0051],[430,.1689,.0069],[440,.1644,.0109],[450,.1566,.0177],[460,.1440,.0297],[465,.1355,.0399],[470,.1241,.0578],[475,.1096,.0868],[480,.0913,.1327],[485,.0687,.2007],[490,.0454,.2950],[495,.0235,.4127],[500,.0082,.5384],[505,.0039,.6548],[510,.0139,.7502],[515,.0389,.8120],[520,.0743,.8338],[525,.1142,.8262],[530,.1547,.8059],[535,.1929,.7816],[540,.2296,.7543],[545,.2658,.7243],[550,.3016,.6923],[555,.3373,.6589],[560,.3731,.6245],[565,.4087,.5896],[570,.4441,.5547],[575,.4788,.5202],[580,.5125,.4866],[585,.5448,.4544],[590,.5752,.4242],[595,.6029,.3965],[600,.6270,.3725],[610,.6658,.3340],[620,.6915,.3083],[630,.7079,.2920],[640,.7190,.2809],[650,.7260,.2740],[660,.7300,.2700],[680,.7334,.2666],[700,.7347,.2653]];
+const TICK_NM = [460, 480, 490, 500, 510, 520, 540, 560, 580, 600, 620, 700];
+// Curve dell'occhio, approssimazione a lobi gaussiani (Wyman, Sloan, Shirley 2013)
+const g = (l, m, a, b) => { const s = l < m ? a : b; return Math.exp(-.5 * ((l - m) / s) ** 2); };
+const cmf = l => [
+  1.056 * g(l, 599.8, 37.9, 31.0) + .362 * g(l, 442.0, 16.0, 26.7) - .065 * g(l, 501.1, 20.4, 26.2),
+  .821 * g(l, 568.8, 46.9, 40.5) + .286 * g(l, 530.9, 16.3, 31.1),
+  1.217 * g(l, 437.0, 11.8, 36.0) + .681 * g(l, 459.0, 26.0, 13.8)
+];
+const inv3 = m => {
+  const [a, b, c] = m[0], [d, e, f] = m[1], [h, i, k] = m[2];
+  const A = e * k - f * i, B = -(d * k - f * h), C = d * i - e * h, det = a * A + b * B + c * C;
+  return [[A / det, -(b * k - c * i) / det, (b * f - c * e) / det], [B / det, (a * k - c * h) / det, -(a * f - c * d) / det], [C / det, -(a * i - b * h) / det, (a * e - b * d) / det]];
+};
+const mul = (m, v) => [0, 1, 2].map(r => m[r][0] * v[0] + m[r][1] * v[1] + m[r][2] * v[2]);
+function matrice(prim, w) {
+  const P = prim.map(([x, y]) => [x / y, 1, (1 - x - y) / y]);
+  const M = [0, 1, 2].map(r => [P[0][r], P[1][r], P[2][r]]);
+  const S = mul(inv3(M), [w[0] / w[1], 1, (1 - w[0] - w[1]) / w[1]]);
+  return M.map(r => r.map((v, j) => v * S[j]));
+}
+const D65 = [.3127, .3290], D50 = [.3457, .3585];
+const SPAZI = {
+  srgb: { prim: [[.64, .33], [.30, .60], [.15, .06]], w: D65, gamma: 'srgb' },
+  adobe: { prim: [[.64, .33], [.21, .71], [.15, .06]], w: D65, gamma: 2.2 },
+  pro: { prim: [[.7347, .2653], [.1596, .8404], [.0366, .0001]], w: D50, gamma: 1.8 }
+};
+for (const k in SPAZI) SPAZI[k].M = matrice(SPAZI[k].prim, SPAZI[k].w);
+const XYZ2SRGB = inv3(SPAZI.srgb.M);
+const lin8 = c => { c /= 255; return c <= .04045 ? c / 12.92 : ((c + .055) / 1.055) ** 2.4; };
+const enc = v => { v = Math.min(1, Math.max(0, v)); return v <= .0031308 ? 12.92 * v : 1.055 * v ** (1 / 2.4) - .055; };
+const decode = (v, gm) => gm === 'srgb' ? (v <= .04045 ? v / 12.92 : ((v + .055) / 1.055) ** 2.4) : v ** gm;
+const Lstar = Y => (Y > .008856 ? 116 * Math.cbrt(Y) - 16 : 903.3 * Y);
+// inchiostri del laboratorio (stesso modello di colore.html)
+const PAPER = [250, 248, 243].map(lin8);
+const INK = { c: [0, 158, 224], m: [226, 0, 122], y: [255, 237, 0], k: [35, 31, 32] };
+const TI = {}; for (const k in INK) TI[k] = INK[k].map((v, i) => Math.min(1, lin8(v) / PAPER[i]));
+const stampa = (c, m, y, k) => [0, 1, 2].map(i => PAPER[i] * (1 - c + c * TI.c[i]) * (1 - m + m * TI.m[i]) * (1 - y + y * TI.y[i]) * (1 - k + k * TI.k[i]));
+
+// coordinate della scena: x e y del diagramma in piano, chiarezza in alto
+const CX = .33, CY = .40, H = .55;
+const pos = XYZ => { const s = XYZ[0] + XYZ[1] + XYZ[2]; if (s <= 1e-9) return [.3127 - CX, 0, -(.329 - CY)]; return [XYZ[0] / s - CX, Lstar(Math.max(0, XYZ[1])) / 100 * H, -(XYZ[1] / s - CY)]; };
+const posXY = (x, y, h = 0) => [x - CX, h, -(y - CY)];
+const colorePunto = XYZ => { let l = mul(XYZ2SRGB, XYZ).map(v => Math.max(0, v)); const m = Math.max(...l, 1e-6); return l.map(v => enc(v / m)); };
+
+/* ---------------- generazione dei punti ---------------- */
+let seme = 7; // mulberry32: senza le righe regolari dei generatori più semplici
+const rnd = () => { seme |= 0; seme = seme + 0x6D2B79F5 | 0; let t = Math.imul(seme ^ seme >>> 15, 1 | seme); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; };
+function nuvolaOcchio(nSup, nDentro) {
+  // spettri «a banda» (colori ottimi): la superficie di tutti i colori che un oggetto può avere
+  const L0 = 405, L1 = 652, passo = 1;
+  const tab = []; for (let l = L0; l <= L1; l += passo) tab.push(cmf(l));
+  const cum = [[0, 0, 0]]; tab.forEach((c, i) => cum.push([cum[i][0] + c[0], cum[i][1] + c[1], cum[i][2] + c[2]]));
+  const tot = cum[cum.length - 1], n = tab.length;
+  const banda = (a, b) => [0, 1, 2].map(j => (cum[b][j] - cum[a][j]) / tot[1]);
+  const sup = [];
+  for (let i = 0; i < 90000; i++) {
+    let a = Math.floor(rnd() * n), b = Math.floor(rnd() * n); if (a > b) [a, b] = [b, a]; if (a === b) b = Math.min(n, a + 1);
+    let X = banda(a, b); if (rnd() < .5) X = [tot[0] / tot[1] - X[0], 1 - X[1], tot[2] / tot[1] - X[2]];
+    sup.push(X);
+  }
+  // per ogni zona del diagramma, la luminosità più alta che un colore di quella tinta può avere
+  const N = 90, maxY = new Float32Array(N * N);
+  for (const X of sup) {
+    const s = X[0] + X[1] + X[2]; if (s <= 1e-9) continue;
+    const bx = Math.floor(X[0] / s / .9 * N), by = Math.floor(X[1] / s / .9 * N);
+    if (bx >= 0 && by >= 0 && bx < N && by < N) maxY[by * N + bx] = Math.max(maxY[by * N + bx], X[1]);
+  }
+  const limite = (x, y) => {
+    const bx = Math.floor(x / .9 * N), by = Math.floor(y / .9 * N); let m = 0;
+    for (let dy = -1; dy <= 1; dy++) for (let dx = -1; dx <= 1; dx++) { const i = (by + dy) * N + bx + dx; if (i >= 0 && i < N * N) m = Math.max(m, maxY[i]); }
+    return m;
+  };
+  // punti distribuiti in modo uniforme sul diagramma: metà sul «tetto» del solido, metà dentro
+  const tutti = [];
+  while (tutti.length < nSup + nDentro) {
+    const x = rnd() * .75, y = rnd() * .85;
+    if (!dentroLocus([x, y])) continue;
+    const m = limite(x, y); if (m <= 0) continue;
+    const Y = rnd() < .55 ? m : m * Math.pow(rnd(), .6);
+    tutti.push([x / y * Y, Y, (1 - x - y) / y * Y]);
+  }
+  const P = new Float32Array(tutti.length * 3), C = new Float32Array(tutti.length * 3);
+  tutti.forEach((X, i) => { P.set(pos(X), i * 3); C.set(colorePunto(X), i * 3); });
+  return { P, C };
+}
+function superficieCubo(fn, n) {
+  // punti sulle sei facce del cubo dei valori, trasformati nel solido del profilo
+  const P = new Float32Array(n * 3);
+  for (let i = 0; i < n; i++) {
+    const v = [rnd(), rnd(), rnd()], f = Math.floor(rnd() * 3); v[f] = rnd() < .5 ? 0 : 1;
+    P.set(pos(fn(v)), i * 3);
+  }
+  return P;
+}
+function nuvolaProfilo(k, n) {
+  // punti sparsi in modo uniforme nel triangolo, alla chiarezza che quel profilo può raggiungere
+  const sp = SPAZI[k], inv = inv3(sp.M), [A, B, C] = sp.prim;
+  const P = new Float32Array(n * 3), Cc = new Float32Array(n * 3);
+  for (let i = 0; i < n; i++) {
+    let r1 = Math.sqrt(rnd()), r2 = rnd();
+    const x = (1 - r1) * A[0] + r1 * (1 - r2) * B[0] + r1 * r2 * C[0];
+    const y = (1 - r1) * A[1] + r1 * (1 - r2) * B[1] + r1 * r2 * C[1];
+    const X1 = [x / y, 1, (1 - x - y) / y], rgb = mul(inv, X1), m = Math.max(...rgb);
+    const Ymax = m > 0 ? 1 / m : 0;
+    const Y = rnd() < .55 ? Ymax : Ymax * Math.pow(rnd(), .6);
+    const X = X1.map(v => v * Y);
+    P.set(pos(X), i * 3); Cc.set(colorePunto(X), i * 3);
+  }
+  return { P, C: Cc };
+}
+function spigoliCubo(fn, per = 90) {
+  const V = [[0,0,0],[1,0,0],[0,1,0],[0,0,1],[1,1,0],[1,0,1],[0,1,1],[1,1,1]];
+  const E = [[0,1],[0,2],[0,3],[1,4],[1,5],[2,4],[2,6],[3,5],[3,6],[4,7],[5,7],[6,7]];
+  const out = [];
+  for (const [a, b] of E) for (let i = 0; i < per; i++) {
+    const t0 = i / per, t1 = (i + 1) / per;
+    const p0 = V[a].map((v, j) => v + (V[b][j] - v) * t0), p1 = V[a].map((v, j) => v + (V[b][j] - v) * t1);
+    out.push(...pos(fn(p0)), ...pos(fn(p1)));
+  }
+  return new Float32Array(out);
+}
+const daProfilo = k => v => mul(SPAZI[k].M, v.map(c => decode(c, SPAZI[k].gamma)));
+const daStampa = v => mul(SPAZI.srgb.M, stampa(v[0], v[1], v[2], 0));
+
+/* ---------------- Three.js ---------------- */
+const stage = document.getElementById('stage');
+const cv = document.getElementById('gl'), hud = document.getElementById('hud'), hc = hud.getContext('2d');
+let renderer;
+try { renderer = new THREE.WebGLRenderer({ canvas: cv, antialias: true, alpha: false }); }
+catch (e) { stage.insertAdjacentHTML('beforeend', '<p class="nogl">Il tuo browser non riesce a mostrare la scena 3D. Le percentuali sono qui sotto.</p>'); throw e; }
+renderer.setClearColor(0x050507, 1);
+const scene = new THREE.Scene();
+const cam = new THREE.OrthographicCamera(-1, 1, 1, -1, -10, 10);
+const target = new THREE.Vector3(.05, .2, -.02);
+
+// Ogni punto ha un numero a caso (aR) che decide il suo ritardo e la sua direzione.
+// uMix: 0 = punti sparsi come polvere, 1 = al loro posto. uLift: 0 = schiacciati sul piano, 1 = in rilievo.
+const VS = `attribute vec3 color; attribute float aR;
+uniform float uSize, uPix, uTime, uMix, uLift; varying vec3 vC; varying float vT, vM;
+void main(){
+  vC = color; float r = aR; vec3 p = position;
+  float l = clamp(uLift * 1.5 - r * .5, 0., 1.); l = l * l * (3. - 2. * l);
+  p.y *= l;
+  float m = clamp(uMix * 1.6 - r * .6, 0., 1.); m = m * m * (3. - 2. * m);
+  vec3 dir = normalize(vec3(sin(r * 91.7 + .3), .55 + .45 * cos(r * 53.3), sin(r * 27.1 + 1.3)));
+  p += dir * (1. - m) * (.18 + r * .42);
+  p += .0035 * vec3(sin(uTime * .7 + r * 40.), sin(uTime * .9 + r * 61.), cos(uTime * .8 + r * 23.));
+  float polvere = step(.985, fract(r * 977.)), f = fract(uTime * .07 + r * 13.);
+  p += polvere * dir * f * .22 * vec3(1., 1.6, 1.);
+  vT = .8 + .2 * sin(uTime * (.6 + r * .8) + r * 6.2832);
+  vM = m * mix(1., (1. - f) * (1. - f), polvere);
+  vec4 mv = modelViewMatrix * vec4(p, 1.); gl_Position = projectionMatrix * mv;
+  gl_PointSize = uSize * uPix * vT * (.6 + .4 * m);
+}`;
+const FS = `uniform float uAlpha; varying vec3 vC; varying float vT, vM;
+void main(){ float d = length(gl_PointCoord - .5); float a = smoothstep(.5, .05, d) * vM; if (a < .01) discard; gl_FragColor = vec4(vC, a * uAlpha * (.75 + .25 * vT)); }`;
+function punti(P, C, size, coloreUnico) {
+  const geo = new THREE.BufferGeometry();
+  geo.setAttribute('position', new THREE.BufferAttribute(P, 3));
+  let col = C;
+  if (!col) { col = new Float32Array(P.length); const c = new THREE.Color(coloreUnico); for (let i = 0; i < P.length; i += 3) col.set([c.r, c.g, c.b], i); }
+  geo.setAttribute('color', new THREE.BufferAttribute(col, 3));
+  const aR = new Float32Array(P.length / 3); for (let i = 0; i < aR.length; i++) aR[i] = rnd();
+  geo.setAttribute('aR', new THREE.BufferAttribute(aR, 1));
+  const mat = new THREE.ShaderMaterial({ vertexShader: VS, fragmentShader: FS, transparent: true, depthWrite: false, blending: THREE.AdditiveBlending,
+    uniforms: { uSize: { value: size }, uPix: { value: 1 }, uTime: { value: 0 }, uAlpha: { value: 0 }, uMix: { value: 0 }, uLift: { value: 0 } } });
+  const o = new THREE.Points(geo, mat); scene.add(o); return o;
+}
+function linee(P, colore) {
+  const geo = new THREE.BufferGeometry(); geo.setAttribute('position', new THREE.BufferAttribute(P, 3));
+  const mat = new THREE.LineBasicMaterial({ color: colore, transparent: true, opacity: 0, depthWrite: false, blending: THREE.AdditiveBlending });
+  const o = new THREE.LineSegments(geo, mat); scene.add(o); return o;
+}
+const mobile = matchMedia('(max-width: 900px)').matches;
+const occhio = nuvolaOcchio(mobile ? 26000 : 46000, mobile ? 12000 : 22000);
+const SET = {
+  occhio: { pts: punti(occhio.P, occhio.C, 2.1), max: .55 },
+  srgb: { pts: punti(...Object.values(nuvolaProfilo('srgb', mobile ? 30000 : 70000)), 2), lin: linee(spigoliCubo(daProfilo('srgb')), '#f4f1ec'), max: .55 },
+  adobe: { pts: punti(...Object.values(nuvolaProfilo('adobe', mobile ? 36000 : 85000)), 2), lin: linee(spigoliCubo(daProfilo('adobe')), '#38bdf8'), max: .55 },
+  pro: { pts: punti(...Object.values(nuvolaProfilo('pro', mobile ? 44000 : 100000)), 2), lin: linee(spigoliCubo(daProfilo('pro')), '#f5b450'), max: .55 },
+  stampa: { pts: punti(superficieCubo(daStampa, mobile ? 16000 : 30000), null, 2.2, '#ff8f7a'), lin: linee(spigoliCubo(daStampa), '#ffb0a0'), max: .75 }
+};
+for (const k in SET) { SET[k].a = 0; SET[k].m = 0; SET[k].on = k === 'occhio'; }
+let sollievo = 0; // quanto sono in rilievo i solidi: segue l'inclinazione della vista
+
+// punti notevoli
+const xyDa = XYZ => { const s = XYZ[0] + XYZ[1] + XYZ[2]; return [XYZ[0] / s, XYZ[1] / s]; };
+const LED = mul(SPAZI.srgb.M, [20, 122, 255].map(lin8));
+const ledXY = xyDa(LED), ledPos = pos(LED);
+// la luminosità più alta che la stampa raggiunge con la stessa tinta dell'insegna
+let ledMaxY = 0;
+for (let c = 0; c <= 20; c++) for (let m = 0; m <= 20; m++) for (let y = 0; y <= 20; y++) {
+  const X = mul(SPAZI.srgb.M, stampa(c / 20, m / 20, y / 20, 0)), q = xyDa(X);
+  if (Math.abs(q[0] - ledXY[0]) < .012 && Math.abs(q[1] - ledXY[1]) < .012) ledMaxY = Math.max(ledMaxY, X[1]);
+}
+const ledTetto = posXY(ledXY[0], ledXY[1], Lstar(ledMaxY) / 100 * H);
+const VELLUTO = mul(SPAZI.srgb.M, [176, 92, 66].map(lin8));
+const vellXY = xyDa(VELLUTO), vellPos = pos(VELLUTO);
+
+/* ---------------- telecamera e passi ---------------- */
+let step = 0, pitchBase = Math.PI / 2, pitch = Math.PI / 2, yaw = 0, giroT = 0, tempo = 0;
+// le scelte di chi guarda: rotazione, zoom e spostamento; tornano a zero quando cambia passo
+const U = { yaw: 0, pitch: 0, zoom: 1, panX: 0, panY: 0 };
+let ultimoTocco = -1e9, rientro = false, metaW = 1, metaH = 1;
+const toccato = () => { ultimoTocco = performance.now(); rientro = false; };
+const DEFAULT = [['occhio'], ['occhio', 'srgb'], ['occhio', 'srgb', 'adobe'], ['occhio', 'srgb', 'adobe', 'pro'], ['occhio', 'srgb', 'stampa'], ['occhio', 'stampa']];
+const chips = [...document.querySelectorAll('.chips button')];
+function impostaSet(lista) {
+  for (const k in SET) SET[k].on = lista.includes(k);
+  chips.forEach(b => b.setAttribute('aria-pressed', SET[b.dataset.set].on));
+}
+chips.forEach(b => b.addEventListener('click', () => { const s = SET[b.dataset.set]; s.on = !s.on; b.setAttribute('aria-pressed', s.on); }));
+const stepEls = [...document.querySelectorAll('.step')];
+function leggiScroll() {
+  const vh = innerHeight; let s = 0;
+  stepEls.forEach((el, i) => { const r = el.getBoundingClientRect(); if (r.top < vh * .55) s = i; });
+  if (s !== step) { if (step >= 0) rientro = true; step = s; impostaSet(DEFAULT[s]); }
+  const r = stepEls[5].getBoundingClientRect();
+  giroT = Math.min(1, Math.max(0, (vh * .8 - r.top) / (vh * .9)));
+  stage.classList.toggle('giro', giroT > .6);
+}
+addEventListener('scroll', leggiScroll, { passive: true });
+
+let W = 1, Hh = 1, DPR = 1;
+function misura() {
+  DPR = Math.min(2, devicePixelRatio || 1);
+  W = stage.clientWidth; Hh = stage.clientHeight;
+  renderer.setPixelRatio(DPR); renderer.setSize(W, Hh, false);
+  hud.width = W * DPR; hud.height = Hh * DPR;
+  for (const k in SET) SET[k].pts.material.uniforms.uPix.value = DPR;
+}
+addEventListener('resize', misura);
+new ResizeObserver(misura).observe(stage);
+
+function aggiornaCamera() {
+  const mob = W < 900;
+  const e = t => t * t * (3 - 2 * t);
+  const tgt = Math.PI / 2 - e(giroT) * (Math.PI / 2 - .42);
+  pitchBase += (tgt - pitchBase) * Math.min(1, kDt * 1.5);
+  const giro = a => Math.atan2(Math.sin(a), Math.cos(a));
+  if (rientro) { // cambiando passo, la vista torna quella del racconto
+    const k = Math.min(1, kDt * 1.4);
+    yaw = giro(yaw) * (1 - k); U.yaw = giro(U.yaw) * (1 - k); U.pitch *= 1 - k; U.panX *= 1 - k; U.panY *= 1 - k; U.zoom += (1 - U.zoom) * k;
+    if (Math.abs(yaw) + Math.abs(U.yaw) + Math.abs(U.pitch) + Math.abs(U.panX) + Math.abs(U.panY) + Math.abs(U.zoom - 1) < .002) rientro = false;
+  }
+  if (giroT > .95 && !lento && performance.now() - ultimoTocco > 4000) yaw += kDt * .02;
+  pitch = Math.max(-1.5, Math.min(Math.PI / 2, pitchBase + U.pitch));
+  const Y = yaw + U.yaw;
+  // inquadratura: il diagramma a destra su computer, in alto su telefono
+  const asp = W / Hh;
+  const hh0 = mob ? Math.max(.62, .55 / asp) : .56, hh = hh0 / U.zoom;
+  const offX = (mob ? -.035 : -hh0 * asp * .34) + U.panX, offY = (mob ? -hh0 * .28 : 0) + U.panY;
+  metaW = hh * asp; metaH = hh;
+  cam.left = -hh * asp + offX; cam.right = hh * asp + offX; cam.top = hh + offY; cam.bottom = -hh + offY;
+  cam.updateProjectionMatrix();
+  const R = 3, cp = Math.cos(pitch), sp = Math.sin(pitch);
+  cam.position.set(target.x + R * cp * Math.sin(Y), target.y + R * sp, target.z + R * cp * Math.cos(Y));
+  cam.up.set(-sp * Math.sin(Y), cp, -sp * Math.cos(Y));
+  cam.lookAt(target);
+}
+function zoomA(f, nx = 0, ny = 0) {
+  // zoom verso il punto indicato (nx, ny tra -1 e 1), che resta fermo sullo schermo
+  const z = Math.max(.6, Math.min(6, U.zoom * f)), r = U.zoom / z;
+  U.panX += nx * metaW * (1 - r); U.panY += ny * metaH * (1 - r); U.zoom = z; toccato();
+}
+
+/* ---------------- HUD in stile «tavola tecnica» ---------------- */
+const v3 = new THREE.Vector3();
+const proj = p => { v3.set(p[0], p[1] * sollievo, p[2]).project(cam); return [(v3.x + 1) / 2 * W, (1 - v3.y) / 2 * Hh]; };
+let mouse = null;
+cv.addEventListener('pointermove', e => { if (e.pointerType === 'mouse') { const r = cv.getBoundingClientRect(); mouse = [e.clientX - r.left, e.clientY - r.top]; } });
+cv.addEventListener('pointerleave', () => mouse = null);
+let drag = null;
+cv.addEventListener('contextmenu', e => e.preventDefault());
+cv.addEventListener('pointerdown', e => {
+  if (e.pointerType !== 'mouse') return;
+  drag = { x: e.clientX, y: e.clientY, yaw: U.yaw, pitch: U.pitch, panX: U.panX, panY: U.panY, sposta: e.shiftKey || e.button === 2 };
+  stage.classList.add('trascino'); toccato();
+});
+addEventListener('pointermove', e => {
+  if (!drag) return;
+  const dx = e.clientX - drag.x, dy = e.clientY - drag.y;
+  if (drag.sposta) { U.panX = drag.panX - dx * 2 * metaW / W; U.panY = drag.panY + dy * 2 * metaH / Hh; }
+  else { U.yaw = drag.yaw + dx * .008; U.pitch = drag.pitch - dy * .007; }
+  toccato();
+});
+const fineDrag = () => { drag = null; stage.classList.remove('trascino'); };
+addEventListener('pointerup', fineDrag);
+addEventListener('pointercancel', fineDrag);
+cv.addEventListener('wheel', e => {
+  if (!e.ctrlKey && !e.metaKey) { avviso(); return; } // la rotella da sola fa scorrere la pagina
+  e.preventDefault();
+  const r = cv.getBoundingClientRect();
+  zoomA(Math.exp(-e.deltaY * .0025), (e.clientX - r.left) / r.width * 2 - 1, 1 - (e.clientY - r.top) / r.height * 2);
+}, { passive: false });
+let tAvviso = 0;
+function avviso() {
+  const el = document.getElementById('aiuto'); el.classList.add('acceso');
+  clearTimeout(tAvviso); tAvviso = setTimeout(() => el.classList.remove('acceso'), 1600);
+}
+// col dito: di lato ruota subito; dito fermo un attimo e poi in ogni direzione; due dita zoom e sposta
+let tocco = null;
+const distanza = t => Math.hypot(t[0].clientX - t[1].clientX, t[0].clientY - t[1].clientY);
+const centro = t => [(t[0].clientX + t[1].clientX) / 2, (t[0].clientY + t[1].clientY) / 2];
+cv.addEventListener('touchstart', e => {
+  const t = e.touches;
+  if (tocco && tocco.timer) clearTimeout(tocco.timer);
+  if (t.length === 2) { tocco = { due: true, d: distanza(t), c: centro(t), zoom: U.zoom, panX: U.panX, panY: U.panY }; return; }
+  const qui = { x: t[0].clientX, y: t[0].clientY, yaw: U.yaw, pitch: U.pitch, preso: false, scorre: false };
+  qui.timer = setTimeout(() => { if (tocco === qui && !qui.scorre) { qui.preso = true; stage.classList.add('trascino'); } }, 230);
+  tocco = qui;
+}, { passive: true });
+cv.addEventListener('touchmove', e => {
+  if (!tocco) return;
+  const t = e.touches;
+  if (tocco.due && t.length === 2) {
+    e.preventDefault();
+    const r = cv.getBoundingClientRect(), c = centro(t);
+    U.zoom = Math.max(.6, Math.min(6, tocco.zoom * distanza(t) / tocco.d));
+    U.panX = tocco.panX - (c[0] - tocco.c[0]) * 2 * metaW / r.width;
+    U.panY = tocco.panY + (c[1] - tocco.c[1]) * 2 * metaH / r.height;
+    toccato(); return;
+  }
+  if (tocco.due) return;
+  const dx = t[0].clientX - tocco.x, dy = t[0].clientY - tocco.y;
+  if (!tocco.preso && !tocco.scorre && Math.hypot(dx, dy) > 8) {
+    if (Math.abs(dx) > Math.abs(dy) * 1.2) tocco.preso = true; else tocco.scorre = true;
+  }
+  if (tocco.preso) { e.preventDefault(); U.yaw = tocco.yaw + dx * .01; U.pitch = tocco.pitch - dy * .008; toccato(); }
+}, { passive: false });
+const fineTocco = () => { if (tocco && tocco.timer) clearTimeout(tocco.timer); tocco = null; stage.classList.remove('trascino'); };
+cv.addEventListener('touchend', e => { if (!e.touches.length) fineTocco(); else if (tocco && tocco.due) tocco = null; });
+cv.addEventListener('touchcancel', fineTocco);
+document.getElementById('z-piu').addEventListener('click', () => zoomA(1.35));
+document.getElementById('z-meno').addEventListener('click', () => zoomA(1 / 1.35));
+document.getElementById('z-reset').addEventListener('click', () => { rientro = true; });
+
+function dentroTri(p, t) {
+  const s = (a, b, c) => (a[0] - c[0]) * (b[1] - c[1]) - (b[0] - c[0]) * (a[1] - c[1]);
+  const d1 = s(p, t[0], t[1]), d2 = s(p, t[1], t[2]), d3 = s(p, t[2], t[0]);
+  return !((d1 < 0 || d2 < 0 || d3 < 0) && (d1 > 0 || d2 > 0 || d3 > 0));
+}
+function dentroLocus(p) {
+  let c = false; for (let i = 0, j = LOCUS.length - 1; i < LOCUS.length; j = i++) {
+    const [, xi, yi] = LOCUS[i], [, xj, yj] = LOCUS[j];
+    if ((yi > p[1]) !== (yj > p[1]) && p[0] < (xj - xi) * (p[1] - yi) / (yj - yi) + xi) c = !c;
+  } return c;
+}
+function disegnaHUD() {
+  const c = hc; c.setTransform(DPR, 0, 0, DPR, 0, 0); c.clearRect(0, 0, W, Hh);
+  const top = Math.max(0, (pitch - 1.2) / (Math.PI / 2 - 1.2));
+  c.font = '500 10px "Geist Mono", monospace'; c.textBaseline = 'middle';
+  // bordo dei colori visibili, con le lunghezze d'onda
+  c.strokeStyle = 'rgba(244,241,236,.55)'; c.lineWidth = 1; c.beginPath();
+  LOCUS.forEach(([, x, y], i) => { const q = proj(posXY(x, y)); i ? c.lineTo(q[0], q[1]) : c.moveTo(q[0], q[1]); });
+  c.closePath(); c.stroke();
+  c.fillStyle = 'rgba(244,241,236,.6)';
+  const cen = proj(posXY(.33, .36));
+  for (const nm of TICK_NM) {
+    const [, x, y] = LOCUS.find(r => r[0] === nm); const q = proj(posXY(x, y));
+    let dx = q[0] - cen[0], dy = q[1] - cen[1]; const d = Math.hypot(dx, dy) || 1; dx /= d; dy /= d;
+    c.beginPath(); c.moveTo(q[0], q[1]); c.lineTo(q[0] + dx * 7, q[1] + dy * 7); c.stroke();
+    c.textAlign = dx > .3 ? 'left' : dx < -.3 ? 'right' : 'center';
+    c.fillText(nm, q[0] + dx * 16, q[1] + dy * 13);
+  }
+  // righelli x e y
+  if (top > .02) {
+    c.globalAlpha = top; c.strokeStyle = 'rgba(244,241,236,.32)'; c.fillStyle = 'rgba(244,241,236,.5)';
+    const a0 = proj(posXY(0, -.03)), a1 = proj(posXY(.75, -.03));
+    c.beginPath(); c.moveTo(a0[0], a0[1]); c.lineTo(a1[0], a1[1]); c.stroke();
+    for (let i = 0; i <= 15; i++) { const q = proj(posXY(i * .05, -.03)), L = i % 2 ? 4 : 8; c.beginPath(); c.moveTo(q[0], q[1]); c.lineTo(q[0], q[1] + L); c.stroke(); if (!(i % 2)) { c.textAlign = 'center'; c.fillText((i * .05).toFixed(1), q[0], q[1] + 17); } }
+    const b0 = proj(posXY(-.03, 0)), b1 = proj(posXY(-.03, .85));
+    c.beginPath(); c.moveTo(b0[0], b0[1]); c.lineTo(b1[0], b1[1]); c.stroke();
+    for (let i = 0; i <= 17; i++) { const q = proj(posXY(-.03, i * .05)), L = i % 2 ? 4 : 8; c.beginPath(); c.moveTo(q[0], q[1]); c.lineTo(q[0] - L, q[1]); c.stroke(); if (!(i % 2)) { c.textAlign = 'right'; c.fillText((i * .05).toFixed(1), q[0] - 12, q[1]); } }
+    c.textAlign = 'left'; c.fillText('x', a1[0] + 10, a1[1]); c.fillText('y', b1[0] - 4, b1[1] - 12);
+    c.globalAlpha = 1;
+  }
+  // etichette dei triangoli
+  const nomi = { srgb: ['sRGB', '#f4f1ec'], adobe: ['Adobe RGB', '#38bdf8'], pro: ['ProPhoto', '#f5b450'] };
+  for (const k in nomi) {
+    if (SET[k].lin.material.opacity < .05) continue;
+    const g = SPAZI[k].prim[1]; const q = proj(posXY(g[0], g[1]));
+    c.globalAlpha = Math.min(1, SET[k].lin.material.opacity / .85); c.fillStyle = nomi[k][1]; c.textAlign = 'left';
+    c.fillText(nomi[k][0].toUpperCase(), q[0] + 10, q[1] - 4);
+    c.beginPath(); c.arc(q[0], q[1], 2.5, 0, 7); c.fill();
+  }
+  c.globalAlpha = 1;
+  // punto bianco
+  const wq = proj(posXY(D65[0], D65[1], top > .5 ? 0 : H));
+  c.strokeStyle = 'rgba(244,241,236,.7)'; c.beginPath(); c.moveTo(wq[0] - 5, wq[1]); c.lineTo(wq[0] + 5, wq[1]); c.moveTo(wq[0], wq[1] - 5); c.lineTo(wq[0], wq[1] + 5); c.stroke();
+  // insegna LED e velluto (dal passo 5)
+  if (SET.stampa.a > .05) {
+    c.globalAlpha = Math.min(1, SET.stampa.a / SET.stampa.max);
+    const lq = proj(top > .5 ? posXY(ledXY[0], ledXY[1]) : ledPos);
+    const pied = proj([ledPos[0], 0, ledPos[2]]);
+    if (top < .5) {
+      const tq = proj(ledTetto);
+      c.setLineDash([3, 3]); c.strokeStyle = 'rgba(244,241,236,.45)'; c.beginPath(); c.moveTo(pied[0], pied[1]); c.lineTo(tq[0], tq[1]); c.stroke();
+      c.setLineDash([]); c.strokeStyle = '#ffb0a0'; c.lineWidth = 2; c.beginPath(); c.moveTo(tq[0], tq[1]); c.lineTo(lq[0], lq[1]); c.stroke(); c.lineWidth = 1;
+      c.fillStyle = '#ffb0a0'; c.beginPath(); c.arc(tq[0], tq[1], 3.5, 0, 7); c.fill();
+      // scritte a sinistra del segno, o a destra se a sinistra non c'è posto
+      const scritta = (t, x, y) => { const w = c.measureText(t).width; if (x - 10 - w < 6) { c.textAlign = 'left'; c.fillText(t, x + 10, y); } else { c.textAlign = 'right'; c.fillText(t, x - 10, y); } };
+      scritta('LA STAMPA ARRIVA QUI', tq[0], tq[1] + 4);
+      scritta('TROPPO LUMINOSO ↑', (tq[0] + lq[0]) / 2, (tq[1] + lq[1]) / 2);
+    }
+    c.fillStyle = '#1e7aff'; c.strokeStyle = '#fff'; c.lineWidth = 1.5; c.beginPath(); c.arc(lq[0], lq[1], 6, 0, 7); c.fill(); c.stroke(); c.lineWidth = 1;
+    c.fillStyle = '#fff'; c.textAlign = 'left'; c.fillText('INSEGNA LED', lq[0] + 12, lq[1] - 2);
+    c.fillStyle = 'rgba(244,241,236,.6)'; c.fillText('R20 G122 B255', lq[0] + 12, lq[1] + 11);
+    const vq = proj(top > .5 ? posXY(vellXY[0], vellXY[1]) : vellPos);
+    c.fillStyle = 'rgb(176,92,66)'; c.strokeStyle = '#fff'; c.beginPath(); c.arc(vq[0], vq[1], 5, 0, 7); c.fill(); c.stroke();
+    c.fillStyle = '#fff'; c.fillText('VELLUTO', vq[0] + 10, vq[1]);
+    c.globalAlpha = 1;
+  }
+  // mirino che segue il mouse (solo vista dall'alto)
+  if (mouse && top > .9) {
+    // dal punto dello schermo alle coordinate x, y del diagramma
+    v3.set(mouse[0] / W * 2 - 1, 1 - mouse[1] / Hh * 2, 0).unproject(cam);
+    const x = v3.x + CX, y = -v3.z + CY;
+    const [mx, my] = mouse, s = 14, gap = 5;
+    c.strokeStyle = 'rgba(56,189,248,.95)'; c.lineWidth = 1;
+    c.beginPath();
+    [[-1, -1], [1, -1], [1, 1], [-1, 1]].forEach(([a, b]) => { c.moveTo(mx + a * s, my + b * (s - 6)); c.lineTo(mx + a * s, my + b * s); c.lineTo(mx + a * (s - 6), my + b * s); });
+    c.moveTo(mx - gap, my); c.lineTo(mx - 3 * gap, my); c.moveTo(mx + gap, my); c.lineTo(mx + 3 * gap, my);
+    c.stroke();
+    const vis = dentroLocus([x, y]);
+    const righe = [['X ' + x.toFixed(3) + '  Y ' + y.toFixed(3), '#fff']];
+    if (!vis) righe.push(['FUORI DAL VISIBILE', '#f39a8b']);
+    else for (const k of ['srgb', 'adobe', 'pro']) righe.push([(dentroTri([x, y], SPAZI[k].prim) ? '✓ ' : '✕ ') + nomi[k][0], dentroTri([x, y], SPAZI[k].prim) ? nomi[k][1] : 'rgba(244,241,236,.35)']);
+    const bx = mx + 22, by = my + 20, bw = 150, bh = righe.length * 14 + 12;
+    const fx = bx + bw > W ? mx - 22 - bw : bx;
+    c.fillStyle = 'rgba(5,5,7,.82)'; c.fillRect(fx, by - 8, bw, bh);
+    c.strokeStyle = 'rgba(244,241,236,.2)'; c.strokeRect(fx + .5, by - 7.5, bw - 1, bh - 1);
+    if (vis) {
+      const Xc = [x / y, 1, (1 - x - y) / y], col = colorePunto(Xc).map(v => Math.round(v * 255));
+      c.fillStyle = 'rgb(' + col.join(',') + ')'; c.fillRect(fx + bw - 22, by - 2, 14, 14);
+    }
+    righe.forEach(([t, col], i) => { c.fillStyle = col; c.textAlign = 'left'; c.fillText(t, fx + 8, by + 5 + i * 14); });
+  }
+  // croci agli angoli della scena
+  c.strokeStyle = 'rgba(244,241,236,.35)';
+  const m = 18;
+  [[m, m], [W - m, m], [m, Hh - m], [W - m, Hh - m]].forEach(([x, y]) => { c.beginPath(); c.moveTo(x - 6, y); c.lineTo(x + 6, y); c.moveTo(x, y - 6); c.lineTo(x, y + 6); c.stroke(); });
+  c.fillStyle = 'rgba(244,241,236,.45)'; c.textAlign = 'left';
+  c.fillText(top > .5 ? 'VISTA DALL’ALTO · CIE 1931 xy' : 'VISTA 3D · ALTEZZA = CHIAREZZA L*', m + 12, m + 1);
+}
+
+/* ---------------- ciclo ---------------- */
+let visibile = true;
+new IntersectionObserver(es => { visibile = es[0].isIntersecting; }).observe(stage);
+const lento = matchMedia('(prefers-reduced-motion: reduce)').matches;
+let tPrima = 0, kDt = .08;
+function frame(t) {
+  requestAnimationFrame(frame);
+  if (!visibile) return;
+  const dt = Math.min(.25, (t - tPrima) / 1000 || .016); tPrima = t;
+  kDt = 1 - Math.exp(-dt * 5);
+  tempo = lento ? 0 : t / 1000;
+  for (const k in SET) {
+    const s = SET[k], profilo = k === 'srgb' || k === 'adobe' || k === 'pro';
+    const obj = !s.on ? 0 : profilo && SET.occhio.on ? s.max * .12 : s.max;
+    s.a += (obj - s.a) * kDt;
+    s.pts.material.uniforms.uAlpha.value = s.a;
+    s.pts.material.uniforms.uTime.value = tempo;
+    if (s.size0 === undefined) s.size0 = s.pts.material.uniforms.uSize.value;
+    s.pts.material.uniforms.uSize.value = s.size0 * Math.pow(U.zoom, .6);
+    // i punti arrivano da una nuvola di polvere e ci tornano quando si spegne il gruppo
+    const kM = lento ? 1 : 1 - Math.exp(-dt * 1.3);
+    s.m += ((s.on ? 1 : 0) - s.m) * kM;
+    s.pts.material.uniforms.uMix.value = s.m;
+    s.pts.material.uniforms.uLift.value = sollievo;
+    s.pts.visible = s.a > .003 && s.m > .003;
+    if (s.lin) { const onL = s.on ? 1 : 0; s.lin.material.opacity += (onL * .85 - s.lin.material.opacity) * kDt; s.lin.visible = s.lin.material.opacity > .01; s.lin.scale.y = Math.max(.001, sollievo); }
+  }
+  // vista dall'alto: tutto schiacciato sul piano; inclinando, i punti si alzano a onda
+  const voluto = Math.min(1, Math.max(0, (Math.PI / 2 - pitch) / .35));
+  sollievo += (voluto - sollievo) * (lento ? 1 : 1 - Math.exp(-dt * 1.6));
+  aggiornaCamera();
+  renderer.render(scene, cam);
+  disegnaHUD();
+}
+misura(); step = -1; leggiScroll();
+requestAnimationFrame(frame);
+window.__gamma = { SET, get step() { return step; }, get pitch() { return pitch; } };
+</script>
+</body>
+</html>

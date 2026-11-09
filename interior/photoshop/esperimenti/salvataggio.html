@@ -1,0 +1,412 @@
+<!doctype html>
+<html lang="it">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#0a0a0d">
+  <title>Il JPEG si consuma · AANT</title>
+  <meta name="description" content="Qualità e peso del JPEG, perdite a ogni salvataggio, trasparenza del PNG e quale formato scegliere. Corso Photoshop Interior, lezione 2.">
+  <style>
+    @font-face{font-family:Geist;src:url('../../../app/varianza/fonts/geist-sans-latin-400-normal.woff2') format('woff2');font-weight:400;font-display:swap}
+    @font-face{font-family:Geist;src:url('../../../app/varianza/fonts/geist-sans-latin-600-normal.woff2') format('woff2');font-weight:600;font-display:swap}
+    @font-face{font-family:Geist;src:url('../../../app/varianza/fonts/geist-sans-latin-700-normal.woff2') format('woff2');font-weight:700;font-display:swap}
+    @font-face{font-family:'Geist Mono';src:url('../../../app/varianza/fonts/geist-mono-latin-500-normal.woff2') format('woff2');font-weight:500;font-display:swap}
+    @font-face{font-family:'Geist Mono';src:url('../../../app/varianza/fonts/geist-mono-latin-600-normal.woff2') format('woff2');font-weight:600;font-display:swap}
+    :root{
+      color-scheme:dark;
+      --bg:#0a0a0d; --bg-2:#111116; --bg-3:#191920;
+      --line:rgba(244,241,236,.13); --line-2:rgba(244,241,236,.22);
+      --ink:#f4f1ec; --ink-2:#d7d2d0; --muted:#a9a4a7;
+      --accent:#38bdf8; --accent-2:#7dd4fc; --wash:rgba(56,189,248,.08); --wash-2:rgba(56,189,248,.16);
+      --ok:#7ee0a8; --no:#f39a8b;
+      --mono:'Geist Mono',ui-monospace,monospace; --sans:Geist,system-ui,Arial,sans-serif;
+    }
+    *,*::before,*::after{box-sizing:border-box}
+    html{background:var(--bg);scroll-behavior:smooth}
+    body{margin:0;min-height:100vh;background:radial-gradient(ellipse at 85% 0%,rgba(56,189,248,.09),transparent 36%),var(--bg);color:var(--ink);font:400 16px/1.6 var(--sans);-webkit-font-smoothing:antialiased;overflow-x:hidden}
+    a{color:inherit} button,input{font:inherit;color:inherit} input{accent-color:var(--accent)}
+    :focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+    img,canvas{display:block;max-width:100%}
+    .shell{width:min(1320px,calc(100% - 64px));margin:0 auto}
+    .top{min-height:72px;display:flex;justify-content:space-between;align-items:center;gap:16px;border-bottom:1px solid var(--line)}
+    .top a{text-decoration:none}
+    .brand{display:inline-flex;align-items:center;gap:12px;font-size:14px;font-weight:600}
+    .brand-mark{width:37px;height:37px;display:grid;place-items:center;border:1px solid var(--accent);color:var(--accent);font:600 12px var(--mono)}
+    .return{color:var(--muted);font:500 11px var(--mono);letter-spacing:.06em;text-transform:uppercase;text-align:right}
+    .return:hover,.brand:hover{color:var(--accent)}
+    .return .short{display:none}
+
+    .hero{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,.95fr);gap:clamp(28px,5vw,72px);align-items:end;padding:clamp(40px,6vw,88px) 0 clamp(36px,5vw,64px)}
+    .eyebrow{margin:0 0 20px;color:var(--muted);font:500 12px/1.35 var(--mono);letter-spacing:.08em;text-transform:uppercase}
+    .eyebrow b{color:var(--accent);font-weight:500}
+    h1{margin:0 0 20px;font-size:clamp(44px,6.6vw,92px);font-weight:600;line-height:.98;letter-spacing:-.05em}
+    h1 span,h2 span{color:var(--accent)}
+    .hero-copy{max-width:56ch;margin:0;color:var(--ink-2);font-size:clamp(16px,1.35vw,18px)}
+    .index{list-style:none;margin:0;padding:0;display:grid;gap:8px}
+    .index a{display:grid;grid-template-columns:44px minmax(0,1fr) auto;align-items:center;gap:14px;min-height:62px;padding:12px 18px;border:1px solid var(--line);border-radius:16px;background:var(--bg-2);text-decoration:none;transition:border-color .2s,background .2s,transform .2s}
+    .index a:hover{border-color:rgba(56,189,248,.55);background:var(--wash);transform:translateY(-2px)}
+    .index .n{color:var(--accent);font:500 12px var(--mono);letter-spacing:.06em}
+    .index strong{display:block;font-weight:600;line-height:1.3}
+    .index small{display:block;color:var(--muted);font-size:13px;line-height:1.35}
+    .index .tag{color:var(--accent);font:500 10px var(--mono);letter-spacing:.08em;text-transform:uppercase;border:1px solid rgba(56,189,248,.5);border-radius:999px;padding:4px 9px;white-space:nowrap}
+    .index .arrow{color:var(--accent)}
+
+    .sec{padding:clamp(48px,6vw,88px) 0;border-top:1px solid var(--line);scroll-margin-top:12px}
+    .sec-head{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:clamp(20px,4vw,64px);align-items:end;margin-bottom:clamp(26px,3vw,40px)}
+    .label{display:inline-flex;align-items:center;gap:10px;margin:0 0 14px;color:var(--accent);font:500 12px var(--mono);letter-spacing:.08em;text-transform:uppercase}
+    .label::before{content:"";width:7px;height:7px;border-radius:50%;background:var(--accent);box-shadow:0 0 0 5px rgba(56,189,248,.12)}
+    h2{margin:0;font-size:clamp(34px,4.2vw,58px);font-weight:600;line-height:1.02;letter-spacing:-.045em}
+    .sec-head p{margin:0;color:var(--ink-2);max-width:60ch}
+    h3{margin:0;font-size:20px;font-weight:600;line-height:1.3;letter-spacing:-.02em}
+    .card{min-width:0;padding:clamp(16px,2.2vw,26px);border:1px solid var(--line);border-radius:16px;background:var(--bg-2)}
+    .card-k{display:block;margin-bottom:10px;color:var(--accent);font:500 11px var(--mono);letter-spacing:.08em;text-transform:uppercase}
+    .muted{color:var(--muted)} .small{font-size:13px}
+    .note{margin:22px 0 0;max-width:80ch;color:var(--muted);font-size:14px}
+    .thought{margin:22px 0 0;padding:16px 20px;border-left:1px solid var(--accent);border-radius:12px;background:rgba(56,189,248,.07);color:var(--ink-2)}
+    .thought strong{color:var(--ink)}
+    .classe-box{display:flex;gap:14px;align-items:flex-start;margin:0 0 22px;padding:14px 18px;border:1px dashed rgba(56,189,248,.5);border-radius:14px;color:var(--ink-2);font-size:15px}
+    .classe-box b{flex:none;color:var(--accent);font:500 11px/1.9 var(--mono);letter-spacing:.08em;text-transform:uppercase}
+    .btn{min-height:44px;padding:9px 16px;border:1px solid var(--line-2);border-radius:10px;background:var(--bg-3);font-weight:600;font-size:14px;cursor:pointer;transition:border-color .2s,background .2s}
+    .btn:hover{border-color:rgba(56,189,248,.62);background:#24252c}
+    .btn.primary{border-color:var(--accent);background:var(--accent);color:#07141b}
+    .btn.primary:hover{background:var(--accent-2)}
+    .btn:disabled{opacity:.4;cursor:not-allowed}
+    .seg{display:flex;flex-wrap:wrap;gap:6px}
+    .seg button{min-height:40px;padding:8px 14px;border:1px solid var(--line-2);border-radius:999px;background:none;font-size:14px;font-weight:600;cursor:pointer}
+    .seg button[aria-pressed=true]{border-color:var(--accent);background:var(--wash-2);color:var(--accent)}
+
+    /* 01 qualità */
+    .q-grid{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,.85fr);gap:16px}
+    .q-img{position:relative;border-radius:12px;overflow:hidden;border:1px solid var(--line);aspect-ratio:1}
+    .q-img canvas{width:100%;height:100%}
+    .q-img .frame{position:absolute;border:1.5px solid var(--accent);box-shadow:0 0 0 9999px rgba(0,0,0,.25);pointer-events:none}
+    .loupes{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+    .loupe{margin:0}
+    .loupe canvas{width:100%;aspect-ratio:1;border-radius:10px;border:1px solid var(--line);image-rendering:pixelated}
+    .loupe figcaption{margin-top:6px;color:var(--muted);font:500 11px var(--mono);letter-spacing:.06em;text-transform:uppercase}
+    .q-ctrl{display:grid;gap:16px;align-content:start}
+    .big{font:600 clamp(40px,5vw,64px)/1 var(--mono);letter-spacing:-.04em;font-variant-numeric:tabular-nums}
+    .stats{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+    .stat{padding:14px;border:1px solid var(--line);border-radius:12px;background:var(--bg-3)}
+    .stat small{display:block;color:var(--muted);font:500 10px var(--mono);letter-spacing:.08em;text-transform:uppercase}
+    .stat strong{display:block;margin-top:4px;font:600 26px/1.1 var(--mono);font-variant-numeric:tabular-nums}
+    .stat strong.acc{color:var(--accent)}
+    .range-row{display:grid;grid-template-columns:auto minmax(0,1fr) 52px;gap:12px;align-items:center}
+    .range-row label{font-weight:600}
+    .range-row output{font:500 14px var(--mono);text-align:right}
+    input[type=range]{width:100%;min-height:36px;margin:0;cursor:pointer}
+
+    /* 02 risalvataggi */
+    .gen{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+    .gen figure{margin:0}
+    .gen canvas{width:100%;aspect-ratio:1;border-radius:12px;border:1px solid var(--line);image-rendering:pixelated}
+    .gen figcaption{display:flex;justify-content:space-between;gap:10px;margin-top:10px;font:500 12px var(--mono);letter-spacing:.04em;color:var(--ink-2)}
+    .gen figcaption b{color:var(--ink)}
+    .gen figcaption .bad{color:var(--no)} .gen figcaption .good{color:var(--ok)}
+    .actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:18px;align-items:center}
+    .actions .count{margin-left:auto;font:600 14px var(--mono);color:var(--ink-2)}
+
+    /* 03 trasparenza */
+    .tr-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+    .tr-grid figure{margin:0}
+    .tr-grid canvas{width:100%;aspect-ratio:4/3;border-radius:12px;border:1px solid var(--line)}
+    .tr-grid figcaption{margin-top:8px;color:var(--ink-2);font-size:14px}
+
+    /* 04 formati */
+    .table-wrap{overflow-x:auto;border:1px solid var(--line);border-radius:16px}
+    table{width:100%;border-collapse:collapse;min-width:640px;font-size:15px}
+    th,td{padding:14px 16px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}
+    thead th{color:var(--muted);font:500 11px var(--mono);letter-spacing:.08em;text-transform:uppercase;background:var(--bg-2)}
+    tbody th{font:600 16px var(--sans);white-space:nowrap}
+    tbody th small{display:block;color:var(--muted);font:500 11px var(--mono);letter-spacing:.04em}
+    tbody tr:last-child th,tbody tr:last-child td{border-bottom:0}
+    td.si{color:var(--ok)} td.no{color:var(--no)} td.forse{color:#f5c76a}
+    td span{display:block;color:var(--muted);font-size:13px}
+    .next{display:inline-flex;align-items:center;gap:10px;margin-top:28px;min-height:44px;padding:9px 18px;border:1px solid rgba(56,189,248,.48);border-radius:999px;background:rgba(56,189,248,.1);font-weight:600;text-decoration:none}
+    .next:hover{border-color:var(--accent);background:rgba(56,189,248,.19)}
+    .foot{display:flex;justify-content:space-between;align-items:flex-start;gap:20px;border-top:1px solid var(--line);padding:18px 0 42px;color:var(--muted);font-size:12px}
+    .foot p{max-width:72ch;margin:0}
+    .foot strong,.foot a{color:var(--accent)}
+    .foot a{flex:none;text-decoration:none}
+
+    @media(max-width:980px){.hero,.sec-head,.q-grid{grid-template-columns:1fr}}
+    @media(max-width:760px){.shell{width:calc(100% - 32px)}.gen,.tr-grid{grid-template-columns:1fr}}
+    @media(max-width:680px){
+      .brand{font-size:12px;gap:8px}.brand-mark{width:35px;height:35px}
+      .return{font-size:10px}.return .long{display:none}.return .short{display:inline}
+      .foot{display:block}.foot a{display:inline-block;margin-top:12px}
+      .index a{grid-template-columns:34px minmax(0,1fr);padding:12px 14px}
+      .index .tag,.index .arrow{display:none}
+      .classe-box{flex-direction:column;gap:4px}
+      .actions .count{margin-left:0;width:100%}
+      .stat strong{font-size:22px}
+    }
+    @media(max-width:360px){.brand span:last-child{max-width:110px;line-height:1.2}.return{font-size:9px}}
+    @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*::before,*::after{transition:none!important}}
+  </style>
+</head>
+<body>
+<div class="shell">
+  <header class="top">
+    <a class="brand" href="../../../"><span class="brand-mark">GS</span><span>Giovanni Savelli · AANT</span></a>
+    <a class="return" href="../#esperimenti">← <span class="long">Corso di Photoshop</span><span class="short">Corso Photoshop</span></a>
+  </header>
+  <main>
+    <section class="hero">
+      <div>
+        <p class="eyebrow"><b>Photoshop Interior</b> · Lezione 02 · Esperimenti</p>
+        <h1>Il JPEG si consuma<span>.</span></h1>
+        <p class="hero-copy">Salvare sembra un gesto banale, ma ogni formato conserva cose diverse. Qui vediamo con gli occhi che cosa perde un JPEG, perché non si lavora mai su un JPEG e che cosa succede alla trasparenza.</p>
+      </div>
+      <ol class="index" aria-label="Le parti dell'esperimento">
+        <li><a href="#qualita"><span class="n">01</span><span><strong>Qualità e peso</strong><small>Fin dove si può comprimere?</small></span><span class="tag">In aula</span></a></li>
+        <li><a href="#risalva"><span class="n">02</span><span><strong>Ritocca e risalva</strong><small>Il JPEG perde a ogni salvataggio</small></span><span class="arrow" aria-hidden="true">→</span></a></li>
+        <li><a href="#trasparenza"><span class="n">03</span><span><strong>La trasparenza</strong><small>PNG contro JPEG</small></span><span class="arrow" aria-hidden="true">→</span></a></li>
+        <li><a href="#formati"><span class="n">04</span><span><strong>Quale formato</strong><small>Che cosa conserva ognuno</small></span><span class="arrow" aria-hidden="true">→</span></a></li>
+      </ol>
+    </section>
+
+    <!-- 01 -->
+    <section class="sec" id="qualita" aria-labelledby="q-t">
+      <div class="sec-head">
+        <div><p class="label">01 / Qualità e peso</p><h2 id="q-t">Fin dove si può comprimere<span>?</span></h2></div>
+        <p>Il JPEG diventa leggero buttando via dettagli che l'occhio nota poco. Muovi il cursore della qualità: il peso scende, e a un certo punto compaiono i quadratini e gli aloni intorno alle scritte.</p>
+      </div>
+      <p class="classe-box"><b>In aula</b><span>Ognuno cerca la qualità più bassa che non riesce a distinguere dall'originale, guardando solo la foto grande. Poi confrontiamo i numeri: di solito si sta molto sopra il minimo, e il peso è già una frazione del file senza perdita.</span></p>
+      <div class="q-grid">
+        <div class="card">
+          <div class="q-img"><canvas id="q-main" width="640" height="640" role="img" aria-label="La foto dei manifesti salvata come JPEG alla qualità scelta"></canvas><span class="frame" id="q-frame"></span></div>
+        </div>
+        <div class="card q-ctrl">
+          <div class="range-row"><label for="q">Qualità</label><input type="range" id="q" min="1" max="100" value="80"><output id="q-o">80</output></div>
+          <div class="stats">
+            <div class="stat"><small>JPEG</small><strong class="acc" id="q-kb">—</strong></div>
+            <div class="stat"><small>Senza perdita (PNG)</small><strong id="q-png">—</strong></div>
+          </div>
+          <div class="loupes">
+            <figure class="loupe"><canvas id="l-orig" width="96" height="96"></canvas><figcaption>Originale ×3</figcaption></figure>
+            <figure class="loupe"><canvas id="l-jpg" width="96" height="96"></canvas><figcaption id="l-cap">JPEG ×3</figcaption></figure>
+          </div>
+          <div class="seg" role="group" aria-label="Dove ingrandire">
+            <button type="button" data-z="brew" aria-pressed="true">Scritta</button>
+            <button type="button" data-z="orologio" aria-pressed="false">Orologio</button>
+            <button type="button" data-z="muro" aria-pressed="false">Muro</button>
+          </div>
+          <p class="muted small" style="margin:0">Il peso è quello del JPEG fatto dal tuo browser: Photoshop dà numeri un poco diversi, ma l'andamento è lo stesso. In Photoshop la qualità va da 0 a 12 in «Salva con nome» e in percentuale in «Esporta come».</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 02 -->
+    <section class="sec" id="risalva" aria-labelledby="r-t">
+      <div class="sec-head">
+        <div><p class="label">02 / Ritocca e risalva</p><h2 id="r-t">Ogni salvataggio toglie qualcosa<span>.</span></h2></div>
+        <p>Apri un JPEG, fai un piccolo ritocco, risalvi in JPEG. Il giorno dopo un altro ritocco, e di nuovo JPEG. Ogni volta la compressione butta via un po' di dettaglio, e le perdite si sommano. Con il PSD o il TIFF il salvataggio non perde niente, e i ritocchi fatti con i livelli di regolazione restano modificabili.</p>
+      </div>
+      <div class="gen">
+        <figure><canvas id="g-psd" width="200" height="200"></canvas><figcaption><b>PSD · stessi ritocchi</b><span class="good" id="g-psd-d">differenza 0,0</span></figcaption></figure>
+        <figure><canvas id="g-jpg" width="200" height="200"></canvas><figcaption><b>JPEG · ritocca e risalva</b><span id="g-jpg-d">differenza 0,0</span></figcaption></figure>
+      </div>
+      <div class="actions">
+        <button type="button" class="btn primary" id="g-1">Ritocca e salva</button>
+        <button type="button" class="btn" id="g-10">×10</button>
+        <button type="button" class="btn" id="g-0">Ricomincia</button>
+        <span class="count" id="g-n">Salvataggi: 0</span>
+      </div>
+      <p class="note">Il ritocco è leggero, a turno un poco più chiaro e un poco più scuro, così dopo due passaggi l'immagine dovrebbe tornare uguale. Salvataggi in JPEG a qualità 75. La «differenza» è la distanza media dall'originale, su una scala da 0 a 255 per ogni canale (perché 255 lo spiega il <a href="colore.html#campione" style="color:var(--accent)">Laboratorio del colore</a>); nel PSD resta zero. Ingrandimento ×3 sulla scritta.</p>
+      <p class="thought"><strong>La regola.</strong> Si lavora sempre nel file con i livelli, PSD o TIFF. Il JPEG si esporta alla fine, come copia, e non si riapre per lavorarci sopra.</p>
+    </section>
+
+    <!-- 03 -->
+    <section class="sec" id="trasparenza" aria-labelledby="t-t">
+      <div class="sec-head">
+        <div><p class="label">03 / La trasparenza</p><h2 id="t-t">La sedia senza sfondo<span>.</span></h2></div>
+        <p>Abbiamo scontornato una sedia e vogliamo metterla in un'altra foto. Il PNG conserva la trasparenza; il JPEG no: dove non c'era niente mette un colore pieno, di solito il bianco.</p>
+      </div>
+      <div class="seg" role="group" aria-label="Formato in cui salvare la sedia" style="margin-bottom:16px">
+        <button type="button" data-f="png" aria-pressed="true">Salvata in PNG</button>
+        <button type="button" data-f="jpg" aria-pressed="false">Salvata in JPEG</button>
+      </div>
+      <div class="tr-grid">
+        <figure><canvas id="t-file" width="480" height="360"></canvas><figcaption id="t-cap1">Il file: la scacchiera vuol dire «qui non c'è niente».</figcaption></figure>
+        <figure><canvas id="t-foto" width="480" height="360"></canvas><figcaption id="t-cap2">Inserita nella foto.</figcaption></figure>
+      </div>
+    </section>
+
+    <!-- 04 -->
+    <section class="sec" id="formati" aria-labelledby="f-t">
+      <div class="sec-head">
+        <div><p class="label">04 / Quale formato</p><h2 id="f-t">Che cosa conserva ognuno<span>.</span></h2></div>
+        <p>Il formato non rende l'immagine più bella: decide che cosa resta nel file. Prima ci si chiede a che cosa serve il file, poi si sceglie.</p>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th scope="col">Formato</th><th scope="col">Livelli</th><th scope="col">Trasparenza</th><th scope="col">Qualità</th><th scope="col">16 bit</th><th scope="col">Quando</th></tr></thead>
+          <tbody>
+            <tr><th scope="row">PSD<small>Photoshop</small></th><td class="si">Sì</td><td class="si">Sì</td><td class="si">Senza perdita</td><td class="si">Sì</td><td>Il file di lavoro, sempre.</td></tr>
+            <tr><th scope="row">PSB<small>Photoshop grande</small></th><td class="si">Sì</td><td class="si">Sì</td><td class="si">Senza perdita</td><td class="si">Sì</td><td>Come il PSD, quando il file è troppo grande per il PSD (oltre 2 GB o 30.000 pixel di lato).</td></tr>
+            <tr><th scope="row">TIFF</th><td class="forse">Se lo scegli<span>opzione al salvataggio</span></td><td class="si">Sì</td><td class="si">Senza perdita<span>se non scegli la compressione JPEG</span></td><td class="si">Sì</td><td>Alta qualità da scambiare con altri programmi o con chi stampa.</td></tr>
+            <tr><th scope="row">PNG</th><td class="no">No</td><td class="si">Sì</td><td class="si">Senza perdita</td><td class="si">Sì</td><td>Sagome scontornate, grafiche, schermate.</td></tr>
+            <tr><th scope="row">JPEG</th><td class="no">No</td><td class="no">No</td><td class="no">Con perdita</td><td class="no">No, solo 8 bit</td><td>La copia finale da mostrare o mandare: leggera, ma da non ritoccare.</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <a class="next" href="../#lezione-2">Torna agli appunti della lezione 02 →</a>
+    </section>
+  </main>
+  <footer class="foot"><p><strong>Simulazione didattica.</strong> Compressione fatta dal browser, non da Photoshop: i numeri cambiano, il comportamento è lo stesso.</p><a href="../#esperimenti">← Torna al corso</a></footer>
+</div>
+
+<script>
+(() => {
+  const $ = id => document.getElementById(id);
+  const kb = n => (n / 1024 < 100 ? (n / 1024).toFixed(1).replace('.', ',') : Math.round(n / 1024)) + ' KB';
+  const blob = (cv, tipo, q) => new Promise(r => cv.toBlob(r, tipo, q));
+  const carica = b => new Promise(r => { const im = new Image(); im.onload = () => r(im); im.src = URL.createObjectURL(b); });
+  const src = new Image();
+  src.src = 'img/salva-originale.png';
+  const S = 640;
+  const ZONE = { brew: [344, 384], orologio: [196, 150], muro: [60, 470] }, LATO = 32;
+  let zona = 'brew';
+
+  /* ---------- 01 qualità ---------- */
+  const base = document.createElement('canvas'); base.width = base.height = S;
+  const main = $('q-main'), mctx = main.getContext('2d');
+  let ultimo = null, lavoro = 0;
+  function cornice() {
+    const [x, y] = ZONE[zona], f = $('q-frame');
+    f.style.left = x / S * 100 + '%'; f.style.top = y / S * 100 + '%'; f.style.width = f.style.height = LATO / S * 100 + '%';
+  }
+  function lenti(img) {
+    // ingrandimento 3×: il quadrato azzurro sulla foto
+    const [x, y] = ZONE[zona];
+    for (const [id, im] of [['l-orig', base], ['l-jpg', img]]) {
+      const c = $(id).getContext('2d'); c.imageSmoothingEnabled = false;
+      c.drawImage(im, x, y, LATO, LATO, 0, 0, 96, 96);
+    }
+  }
+  async function comprimi() {
+    const q = +$('q').value, mio = ++lavoro;
+    $('q-o').textContent = q;
+    const b = await blob(base, 'image/jpeg', q / 100);
+    if (mio !== lavoro) return;
+    const im = await carica(b);
+    if (mio !== lavoro) return;
+    mctx.drawImage(im, 0, 0); ultimo = im;
+    $('q-kb').textContent = kb(b.size);
+    $('l-cap').textContent = 'JPEG ' + q + ' ×3';
+    lenti(im);
+    URL.revokeObjectURL(im.src);
+  }
+  $('q').addEventListener('input', comprimi);
+  document.querySelectorAll('[data-z]').forEach(b => b.addEventListener('click', () => {
+    zona = b.dataset.z;
+    document.querySelectorAll('[data-z]').forEach(x => x.setAttribute('aria-pressed', x === b));
+    cornice(); if (ultimo) lenti(ultimo);
+  }));
+
+  /* ---------- 02 risalvataggi ---------- */
+  const R = { x: 296, y: 360 };
+  const nuovoCv = () => { const t = document.createElement('canvas'); t.width = t.height = S; return t; };
+  const jpgCv = nuovoCv(), attesoCv = nuovoCv(), chiaroCv = nuovoCv();
+  let jpgImg = null, n = 0, occupato = false;
+  function ritocco(dest, img, chiaro) {
+    // un poco più chiara o un poco più scura: come una piccola correzione con le Curve
+    const c = dest.getContext('2d'); c.drawImage(img, 0, 0);
+    const d = c.getImageData(0, 0, S, S), k = chiaro ? 1.04 : 1 / 1.04;
+    for (let i = 0; i < d.data.length; i += 4) { d.data[i] *= k; d.data[i + 1] *= k; d.data[i + 2] *= k; }
+    c.putImageData(d, 0, 0);
+  }
+  function differenza(a, b) {
+    const d = a.getContext('2d').getImageData(0, 0, S, S).data, e = b.getContext('2d').getImageData(0, 0, S, S).data; let t = 0;
+    for (let i = 0; i < d.length; i += 4) t += Math.abs(d[i] - e[i]) + Math.abs(d[i + 1] - e[i + 1]) + Math.abs(d[i + 2] - e[i + 2]);
+    return t / (S * S * 3);
+  }
+  function mostraGen(cvSorg, id) {
+    const c = $(id).getContext('2d'); c.imageSmoothingEnabled = false;
+    c.drawImage(cvSorg, R.x + 16, R.y + 30, 66, 66, 0, 0, 200, 200);
+  }
+  async function passo() {
+    const tmp = nuovoCv();
+    ritocco(tmp, jpgImg || base, n % 2 === 0);
+    const im = await carica(await blob(tmp, 'image/jpeg', .75));
+    jpgCv.getContext('2d').drawImage(im, 0, 0); jpgImg = im;
+    n++;
+  }
+  function aggiornaGen() {
+    // nel PSD i ritocchi restano esatti: dopo un numero pari si torna all'originale
+    const atteso = n % 2 ? chiaroCv : base;
+    attesoCv.getContext('2d').drawImage(atteso, 0, 0);
+    mostraGen(n ? jpgCv : base, 'g-jpg'); mostraGen(attesoCv, 'g-psd');
+    const dj = n ? differenza(jpgCv, attesoCv) : 0;
+    $('g-jpg-d').textContent = 'differenza ' + dj.toFixed(1).replace('.', ',');
+    $('g-jpg-d').className = dj > 2 ? 'bad' : '';
+    $('g-n').textContent = 'Salvataggi: ' + n + (n % 2 ? ' · ora un poco più chiara' : '');
+  }
+  async function esegui(volte) {
+    if (occupato) return; occupato = true;
+    ['g-1', 'g-10', 'g-0'].forEach(id => $(id).disabled = true);
+    for (let i = 0; i < volte; i++) await passo();
+    aggiornaGen();
+    ['g-1', 'g-10', 'g-0'].forEach(id => $(id).disabled = false);
+    occupato = false;
+  }
+  $('g-1').addEventListener('click', () => esegui(1));
+  $('g-10').addEventListener('click', () => esegui(10));
+  $('g-0').addEventListener('click', () => { n = 0; jpgImg = null; aggiornaGen(); });
+
+  /* ---------- 03 trasparenza ---------- */
+  const sedia = document.createElement('canvas'); sedia.width = 480; sedia.height = 360;
+  (function disegnaSedia() {
+    const c = sedia.getContext('2d');
+    const legno = c.createLinearGradient(170, 0, 310, 0); legno.addColorStop(0, '#7a4a2a'); legno.addColorStop(.5, '#a8693d'); legno.addColorStop(1, '#6b3f22');
+    c.fillStyle = 'rgba(0,0,0,.35)'; c.beginPath(); c.ellipse(240, 330, 105, 14, 0, 0, 7); c.fill();
+    c.fillStyle = legno; c.strokeStyle = '#3d2412'; c.lineWidth = 2;
+    const gamba = (x1, y1, x2, y2, w) => { c.beginPath(); c.moveTo(x1 - w, y1); c.lineTo(x1 + w, y1); c.lineTo(x2 + w * .7, y2); c.lineTo(x2 - w * .7, y2); c.closePath(); c.fill(); c.stroke(); };
+    gamba(196, 70, 180, 325, 7); gamba(284, 70, 300, 325, 7);
+    gamba(214, 205, 206, 315, 5); gamba(266, 205, 274, 315, 5);
+    c.beginPath(); c.roundRect(190, 60, 100, 18, 8); c.fill(); c.stroke();
+    c.beginPath(); c.roundRect(196, 100, 88, 10, 4); c.fill(); c.stroke();
+    c.beginPath(); c.roundRect(196, 128, 88, 10, 4); c.fill(); c.stroke();
+    const seduta = c.createLinearGradient(0, 190, 0, 222); seduta.addColorStop(0, '#c48a5a'); seduta.addColorStop(1, '#8a5530');
+    c.fillStyle = seduta; c.beginPath(); c.moveTo(168, 198); c.lineTo(312, 198); c.lineTo(322, 214); c.lineTo(158, 214); c.closePath(); c.fill(); c.stroke();
+    c.fillStyle = '#5e361c'; c.fillRect(160, 214, 160, 9); c.strokeRect(160, 214, 160, 9);
+  })();
+  const sfondo = new Image(); sfondo.src = 'img/foto-giusta.jpg';
+  let formato = 'png', sediaJpg = null;
+  function scacchi(c, w, h) {
+    for (let y = 0; y < h; y += 16) for (let x = 0; x < w; x += 16) { c.fillStyle = ((x + y) / 16) % 2 ? '#d9d9d9' : '#ffffff'; c.fillRect(x, y, 16, 16); }
+  }
+  function disegnaTr() {
+    const f = $('t-file').getContext('2d'), p = $('t-foto').getContext('2d');
+    const img = formato === 'png' ? sedia : sediaJpg;
+    scacchi(f, 480, 360); if (img) f.drawImage(img, 0, 0);
+    if (sfondo.complete) p.drawImage(sfondo, 0, 120, 800, 600, 0, 0, 480, 360);
+    if (img) p.drawImage(img, 40, 40, 400, 300);
+    $('t-cap1').textContent = formato === 'png' ? 'Il file PNG: la scacchiera vuol dire «qui non c’è niente».' : 'Il file JPEG: dove non c’era niente adesso c’è il bianco.';
+    $('t-cap2').textContent = formato === 'png' ? 'Inserita nella foto: si vede solo la sedia.' : 'Inserita nella foto: si porta dietro un rettangolo bianco.';
+  }
+  (async () => {
+    const t = document.createElement('canvas'); t.width = 480; t.height = 360;
+    const c = t.getContext('2d'); c.fillStyle = '#fff'; c.fillRect(0, 0, 480, 360); c.drawImage(sedia, 0, 0);
+    sediaJpg = await carica(await blob(t, 'image/jpeg', .85)); disegnaTr();
+  })();
+  sfondo.onload = disegnaTr;
+  document.querySelectorAll('[data-f]').forEach(b => b.addEventListener('click', () => {
+    formato = b.dataset.f;
+    document.querySelectorAll('[data-f]').forEach(x => x.setAttribute('aria-pressed', x === b));
+    disegnaTr();
+  }));
+
+  /* ---------- avvio ---------- */
+  src.onload = async () => {
+    base.getContext('2d').drawImage(src, 0, 0, S, S);
+    ritocco(chiaroCv, base, true);
+    $('q-png').textContent = kb((await blob(base, 'image/png')).size);
+    cornice(); comprimi(); aggiornaGen();
+  };
+  disegnaTr();
+})();
+</script>
+</body>
+</html>
