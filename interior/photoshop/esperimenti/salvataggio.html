@@ -213,7 +213,7 @@
         <button type="button" class="btn" id="g-0">Ricomincia</button>
         <span class="count" id="g-n">Salvataggi: 0</span>
       </div>
-      <p class="note">Il ritocco è leggero, a turno un poco più chiaro e un poco più scuro, così dopo due passaggi l'immagine dovrebbe tornare uguale. Salvataggi in JPEG a qualità 75. La «differenza» è la distanza media dall'originale, su una scala da 0 a 255 per ogni canale (perché 255 lo spiega il <a href="colore.html#campione" style="color:var(--accent)">Laboratorio del colore</a>); nel PSD resta zero. Ingrandimento ×3 sulla scritta.</p>
+      <p class="note">Ogni giro è un ritocco piccolo e diverso, come capita davvero: un poco più chiara o un poco più scura, un pixel avanti o indietro, e un JPEG salvato a una qualità intorno a 75. La «differenza» è la distanza media dall'originale ritoccato, su una scala da 0 a 255 per ogni canale (perché 255 lo spiega il <a href="colore.html#campione" style="color:var(--accent)">Laboratorio del colore</a>). Nel PSD gli stessi ritocchi non perdono niente. Ingrandimento ×3 sulla scritta. Si arriva al massimo a 50 salvataggi.</p>
       <p class="thought"><strong>La regola.</strong> Si lavora sempre nel file con i livelli, PSD o TIFF. Il JPEG si esporta alla fine, come copia, e non si riapre per lavorarci sopra.</p>
     </section>
 
@@ -308,19 +308,36 @@
   /* ---------- 02 risalvataggi ---------- */
   const R = { x: 296, y: 360 };
   const nuovoCv = () => { const t = document.createElement('canvas'); t.width = t.height = S; return t; };
-  const jpgCv = nuovoCv(), attesoCv = nuovoCv(), chiaroCv = nuovoCv();
+  const jpgCv = nuovoCv(), attesoCv = nuovoCv();
   let jpgImg = null, n = 0, occupato = false;
-  function ritocco(dest, img, chiaro) {
-    // un poco più chiara o un poco più scura: come una piccola correzione con le Curve
-    const c = dest.getContext('2d'); c.drawImage(img, 0, 0);
-    const d = c.getImageData(0, 0, S, S), k = chiaro ? 1.04 : 1 / 1.04;
+  const QUAL = .75;
+  // Ogni salvataggio è un ritocco diverso, come nella realtà: luminosità un poco su o un poco giù,
+  // spostamento di un pixel avanti e indietro, qualità del JPEG che cambia (altri programmi, altre impostazioni).
+  // Nel PSD gli stessi ritocchi sono esatti: si confronta il JPEG con l'originale ritoccato una volta sola.
+  let fattore = 1;
+  function sposta(c, img, dx) {
+    c.drawImage(img, dx, 0);
+    if (dx > 0) c.drawImage(img, 0, 0, 1, S, 0, 0, 1, S); else if (dx < 0) c.drawImage(img, S - 1, 0, 1, S, S - 1, 0, 1, S);
+  }
+  function luce(c, k) {
+    const d = c.getImageData(0, 0, S, S);
     for (let i = 0; i < d.data.length; i += 4) { d.data[i] *= k; d.data[i + 1] *= k; d.data[i + 2] *= k; }
     c.putImageData(d, 0, 0);
   }
+  function ritocco(dest, img, avanti) {
+    // il fattore resta vicino a 1: a turno si schiarisce e si scurisce, di quantità diverse
+    const voluto = avanti ? 1.02 + .04 * Math.random() : 1 / (1.02 + .04 * Math.random());
+    const k = fattore > 1.04 ? Math.min(voluto, 1 / voluto) : fattore < .96 ? Math.max(voluto, 1 / voluto) : voluto;
+    fattore *= k;
+    const c = dest.getContext('2d');
+    sposta(c, img, avanti ? 1 : -1);
+    luce(c, k);
+  }
   function differenza(a, b) {
-    const d = a.getContext('2d').getImageData(0, 0, S, S).data, e = b.getContext('2d').getImageData(0, 0, S, S).data; let t = 0;
+    const B = 8, L = S - 2 * B; // i bordi non contano: lo spostamento li tocca anche nel PSD
+    const d = a.getContext('2d').getImageData(B, B, L, L).data, e = b.getContext('2d').getImageData(B, B, L, L).data; let t = 0;
     for (let i = 0; i < d.length; i += 4) t += Math.abs(d[i] - e[i]) + Math.abs(d[i + 1] - e[i + 1]) + Math.abs(d[i + 2] - e[i + 2]);
-    return t / (S * S * 3);
+    return t / (L * L * 3);
   }
   function mostraGen(cvSorg, id) {
     const c = $(id).getContext('2d'); c.imageSmoothingEnabled = false;
@@ -329,31 +346,34 @@
   async function passo() {
     const tmp = nuovoCv();
     ritocco(tmp, jpgImg || base, n % 2 === 0);
-    const im = await carica(await blob(tmp, 'image/jpeg', .75));
+    const q = QUAL - .08 + .16 * Math.random();
+    const im = await carica(await blob(tmp, 'image/jpeg', q));
     jpgCv.getContext('2d').drawImage(im, 0, 0); jpgImg = im;
     n++;
   }
   function aggiornaGen() {
     // nel PSD i ritocchi restano esatti: dopo un numero pari si torna all'originale
-    const atteso = n % 2 ? chiaroCv : base;
-    attesoCv.getContext('2d').drawImage(atteso, 0, 0);
+    const ac = attesoCv.getContext('2d');
+    ac.clearRect(0, 0, S, S); sposta(ac, base, n % 2 ? 1 : 0); luce(ac, fattore);
     mostraGen(n ? jpgCv : base, 'g-jpg'); mostraGen(attesoCv, 'g-psd');
     const dj = n ? differenza(jpgCv, attesoCv) : 0;
     $('g-jpg-d').textContent = 'differenza ' + dj.toFixed(1).replace('.', ',');
     $('g-jpg-d').className = dj > 2 ? 'bad' : '';
-    $('g-n').textContent = 'Salvataggi: ' + n + (n % 2 ? ' · ora un poco più chiara' : '');
+    $('g-n').textContent = n >= MASSIMO ? 'Salvataggi: ' + n + ' · basta così' : 'Salvataggi: ' + n;
   }
+  const MASSIMO = 50;
   async function esegui(volte) {
-    if (occupato) return; occupato = true;
+    if (occupato || n >= MASSIMO) return; occupato = true;
     ['g-1', 'g-10', 'g-0'].forEach(id => $(id).disabled = true);
-    for (let i = 0; i < volte; i++) await passo();
+    for (let i = 0; i < volte && n < MASSIMO; i++) await passo();
     aggiornaGen();
-    ['g-1', 'g-10', 'g-0'].forEach(id => $(id).disabled = false);
+    $('g-0').disabled = false;
+    $('g-1').disabled = $('g-10').disabled = n >= MASSIMO;
     occupato = false;
   }
   $('g-1').addEventListener('click', () => esegui(1));
   $('g-10').addEventListener('click', () => esegui(10));
-  $('g-0').addEventListener('click', () => { n = 0; jpgImg = null; aggiornaGen(); });
+  $('g-0').addEventListener('click', () => { n = 0; jpgImg = null; fattore = 1; $('g-1').disabled = $('g-10').disabled = false; aggiornaGen(); });
 
   /* ---------- 03 trasparenza ---------- */
   const sedia = document.createElement('canvas'); sedia.width = 480; sedia.height = 360;
@@ -401,7 +421,6 @@
   /* ---------- avvio ---------- */
   src.onload = async () => {
     base.getContext('2d').drawImage(src, 0, 0, S, S);
-    ritocco(chiaroCv, base, true);
     $('q-png').textContent = kb((await blob(base, 'image/png')).size);
     cornice(); comprimi(); aggiornaGen();
   };
