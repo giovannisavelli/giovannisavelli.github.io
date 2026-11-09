@@ -37,9 +37,11 @@
     if (barra && getComputedStyle(barra).position === 'sticky') h += barra.getBoundingClientRect().height;
     return h;
   }
+  // dove sta un elemento nella pagina, senza contare le animazioni (una scheda che entra scivolando non sposta il punto d'arrivo)
+  function cima(el) { let y = 0; for (let e = el; e; e = e.offsetParent) y += e.offsetTop; return y; }
   function scorriA(el, margine = 12) {
     requestAnimationFrame(() => {
-      const y = el.getBoundingClientRect().top + scrollY - sopra() - margine;
+      const y = cima(el) - sopra() - margine;
       scrollTo({ top: Math.max(0, y), behavior: fermo() ? 'auto' : 'smooth' });
     });
   }

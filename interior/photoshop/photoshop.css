@@ -375,7 +375,7 @@ body.gs-course--photoshop .poster-material-links a { white-space:normal; text-al
   body.gs-course--photoshop .ps-art { height:355px; margin-top:8px; }
   .ps-art-frame { top:0; transform:translateX(-50%) scale(.64); transform-origin:top center; }
   body.gs-course--photoshop .shell > .notice { margin-bottom:12px; }
-  body.gs-course--photoshop .panel { min-height:320px; padding:34px 0 45px; scroll-margin-top:80px; }
+  body.gs-course--photoshop .panel { padding:34px 0 45px; scroll-margin-top:80px; }
   body.gs-course--photoshop .panel h2 { font-size:clamp(36px,9vw,54px); }
 }
 @media (max-width:380px) {

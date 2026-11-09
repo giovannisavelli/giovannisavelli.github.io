@@ -17,7 +17,10 @@
   --sans: 'Geist', system-ui, sans-serif;
   --mono: 'Geist Mono', ui-monospace, monospace;
   --su-accento: #101016;          /* il testo sopra il colore del corso (scheda scelta, pulsanti accesi) */
-  --alto-testata: 76px;          /* la testata in alto: le barre che restano attaccate si mettono sotto */
+  --alto-testata: 76px;
+  /* il «vetro» di testata e barra delle schede quando restano in alto: per averle piene, --vetro: var(--bg) */
+  --vetro: color-mix(in srgb, var(--bg) 74%, transparent);
+  --vetro-sfoca: blur(18px) saturate(1.3);          /* la testata in alto: le barre che restano attaccate si mettono sotto */
   --ease: cubic-bezier(.16, 1, .3, 1);
   /* molla con un piccolo rimbalzo (come le "spring" di React Bits) */
   --molla: linear(0, .22 7%, .63 16%, 1.01 28%, 1.12 37%, 1.1 46%, 1.02 58%, .99 72%, 1);
@@ -50,7 +53,7 @@ body::after {
 
 /* ---------- Testata ---------- */
 .top { position: fixed; inset: 0 0 auto; z-index: 50; transition: background-color .4s ease, backdrop-filter .4s ease, border-color .4s ease; border-bottom: 1px solid transparent; }
-.top.solida { background: rgba(10, 10, 13, .96); backdrop-filter: blur(16px) saturate(1.4); -webkit-backdrop-filter: blur(16px) saturate(1.4); border-bottom-color: var(--line); }
+.top.solida { background: var(--vetro); backdrop-filter: var(--vetro-sfoca); -webkit-backdrop-filter: var(--vetro-sfoca); border-bottom-color: var(--line); }
 .top .wrap { display: flex; align-items: center; justify-content: space-between; gap: 12px; height: 76px; }
 .marchio { display: flex; align-items: center; gap: 12px; font-weight: 600; letter-spacing: -.01em; }
 .marchio i { display: grid; place-items: center; flex: none; width: 38px; height: 38px; border-radius: 11px; background: var(--ink); color: var(--bg); font: 700 14px/1 var(--sans); font-style: normal; letter-spacing: -.03em; }
@@ -132,12 +135,16 @@ footer { position: relative; z-index: 2; margin-top: 140px; padding: 0 0 40px; o
    Al suo posto la barra è trasparente; quando resta attaccata in alto diventa un blocco pieno
    a tutta larghezza, unito alla testata. Per cambiarla in tutto il sito si cambia solo qui. */
 .schede { position: sticky; top: var(--alto-testata); z-index: 40; display: flex; flex-wrap: wrap; gap: 8px; padding: 13px 0; border-bottom: 1px solid var(--line); }
-.schede.attaccata { background: var(--bg); box-shadow: 0 0 0 100vmax var(--bg), 0 1px 0 100vmax var(--line); clip-path: inset(calc(-1 * var(--alto-testata)) -100vmax -1px -100vmax); }
+/* attaccata in alto diventa una fascia di vetro a tutta larghezza, come la testata: dietro la pagina si intravede sfocata */
+.schede::before { content: ""; position: absolute; z-index: -1; top: 0; bottom: -1px; left: 50%; width: 100vw; transform: translateX(-50%); border-bottom: 1px solid var(--line); background: var(--vetro); backdrop-filter: var(--vetro-sfoca); -webkit-backdrop-filter: var(--vetro-sfoca); opacity: 0; transition: opacity .25s ease; pointer-events: none; }
+.schede.attaccata::before { opacity: 1; }
 .scheda { display: inline-flex; align-items: center; justify-content: center; gap: 8px; min-height: 46px; padding: 10px 20px; border: 1px solid var(--line-2); border-radius: 999px; background: transparent; color: var(--ink-2); font: 500 15.5px/1.3 var(--sans); cursor: pointer; transition: background-color .2s ease, border-color .2s ease, color .2s ease; }
 .scheda:hover { border-color: rgba(244, 241, 236, .34); background: rgba(244, 241, 236, .06); color: var(--ink); }
 .scheda[aria-selected="true"] { background: var(--accent); border-color: var(--accent); color: var(--su-accento); }
-/* ogni scheda è alta almeno quanto lo schermo sotto le barre: passando a una scheda corta la pagina non si accorcia e non risale */
-@media (min-width: 761px) { [role="tabpanel"][data-scheda] { min-height: max(320px, calc(100vh - var(--alto-testata) - 72px)); } }
+/* ogni scheda è alta almeno quanto lo schermo sotto le barre: cliccando una scheda la pagina resta ferma (o va sempre
+   allo stesso punto, l'inizio della scheda) e non salta in un posto diverso perché la scheda nuova è più corta.
+   Vale per tutti i corsi: nessun corso deve scrivere un'altra altezza minima per i suoi pannelli. */
+[role="tabpanel"][data-scheda] { min-height: max(320px, calc(100vh - var(--alto-testata) - 72px)); }
 
 /* scorciatoie fisse in basso, solo sul telefono: <nav class="azioni-tel"><a href="#programma" data-vai-scheda="programma">… */
 .azioni-tel { display: none; }
@@ -211,7 +218,7 @@ footer { position: relative; z-index: 2; margin-top: 140px; padding: 0 0 40px; o
   .course-facts { gap: 20px 28px; margin-bottom: 24px; }
   .course-empty { padding: 24px; }
   .schede { position: relative; top: auto; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); }
-  .schede.attaccata { background: none; box-shadow: none; clip-path: none; }
+  .schede::before { display: none; }
   .scheda { width: 100%; min-width: 0; padding: 10px 12px; font-size: 14px; }
   .azioni-tel { position: fixed; z-index: 510; inset: auto 0 0; display: flex; justify-content: center; gap: 6px; padding: 9px 12px max(9px, env(safe-area-inset-bottom)); border-top: 1px solid var(--line); background: rgba(10, 10, 13, .97); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); }
   .azioni-tel a { display: grid; place-items: center; flex: 1; max-width: 170px; min-height: 44px; padding: 8px; border: 1px solid var(--line-2); border-radius: 999px; color: var(--ink-2); font: 500 12px/1.2 var(--sans); text-align: center; }
