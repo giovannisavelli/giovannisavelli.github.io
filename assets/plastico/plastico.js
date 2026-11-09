@@ -155,7 +155,7 @@ function pezzo(cx, cz, lungo, spesso, alto, asseX) {
   // nascita: i muri salgono dal pavimento a onda, partendo dall'ingresso
   const nasce = .9 + Math.hypot(cx - 500, cz - 560) / 620 * 1.5 + Math.random() * .15;
   mesh.scale.y = ridotto ? 1 : .001;
-  pezzi.push({ perno, mesh, cx, cz, asseX, lungo, spesso, alto, ang: 0, vel: 0, verso: 1, limite: Math.PI / 2, nasce, cresciuto: ridotto });
+  pezzi.push({ perno, mesh, cx, cz, asseX, lungo, spesso, alto, ang: 0, vel: 0, verso: 1, limite: Math.PI / 2, appoggio: null, nasce, cresciuto: ridotto });
 }
 for (const m of MURI) {
   const asseX = m.z1 === m.z2, lungo = Math.hypot(m.x2 - m.x1, m.z2 - m.z1);
@@ -186,8 +186,9 @@ function ingombro(o) {
                  : { x0: o.cx + p0, x1: o.cx + p1, z0: o.cz - mezzo, z1: o.cz + mezzo, alto };
 }
 function angoloMassimo(p, lato) {
-  // l'angolo a cui il pannello tocca il primo ostacolo cadendo da quella parte (90° = arriva a terra)
-  let max = Math.PI / 2;
+  // l'angolo a cui il pannello tocca il primo ostacolo cadendo da quella parte (90° = arriva a terra),
+  // e qual è quell'ostacolo
+  let max = Math.PI / 2, chi = null;
   const mezzo = p.lungo / 2 - 1, sp = p.spesso / 2;
   for (const o of pezzi) {
     if (o === p) continue;
@@ -200,16 +201,16 @@ function angoloMassimo(p, lato) {
     const v0 = Math.min(a, b), v1 = Math.max(a, b);
     if (u1 <= -mezzo || u0 >= mezzo || v1 <= sp + .5 || v0 >= p.alto) continue;
     const d = Math.max(0, v0 - sp);                       // spazio libero fra la faccia del pannello e l'ostacolo
-    if (d < 2) return 0;
-    max = Math.min(max, Math.max(Math.asin(Math.min(1, d / p.alto)), Math.atan(d / Math.max(r.alto, .1))));
+    const tocca = d < 2 ? 0 : Math.max(Math.asin(Math.min(1, d / p.alto)), Math.atan(d / Math.max(r.alto, .1)));
+    if (tocca < max) { max = tocca; chi = o; }
   }
-  return max;
+  return [max, chi];
 }
 function scegliLato(p, voluto) {
   // si cade dalla parte voluta (lontano dal mouse); se lì è quasi tutto bloccato, dall'altra
-  const a = angoloMassimo(p, voluto);
+  const a = angoloMassimo(p, voluto)[0];
   if (a >= .25) return voluto;
-  return angoloMassimo(p, -voluto) > a ? -voluto : voluto;
+  return angoloMassimo(p, -voluto)[0] > a ? -voluto : voluto;
 }
 
 // ---------- i nomi dei corsi, sospesi sopra le aule (HTML, seguono la proiezione della telecamera) ----------
@@ -342,17 +343,35 @@ function frame(now) {
       p.verso = versoDi(p, scegliLato(p, voluto));
     }
     // fin dove può arrivare adesso: a terra, o appoggiato al primo ostacolo
-    if (giu || p.ang > .01) p.limite = Math.min(TERRA, angoloMassimo(p, latoDi(p)));
-    if (ridotto) p.ang = giu ? p.limite : 0;
+    if (giu || p.ang > .01) {
+      const [lim, chi] = angoloMassimo(p, latoDi(p));
+      p.limite = Math.min(TERRA, lim); p.appoggio = lim < TERRA ? chi : null;
+    } else p.appoggio = null;
+    // chi ha un altro pannello appoggiato sopra non si rialza finché quello non se ne va
+    const sotto = p.ang > .3 && pezzi.some(o => o !== p && o.appoggio === p && o.ang > .3);
+    if (ridotto) p.ang = giu ? p.limite : sotto ? p.ang : 0;
     else if (giu) {
-      // cade come un corpo pesante: lento all'inizio, sempre più veloce, poi batte (a terra o sull'ostacolo) e rimbalza appena
-      p.vel += (1.2 + 24 * Math.sin(p.ang + .04)) * dt;
-      p.ang += p.vel * dt;
-      if (p.ang >= p.limite) { p.ang = p.limite; p.vel = Math.abs(p.vel) > .8 ? -p.vel * .2 : 0; }
+      if (p.ang > p.limite + .02) {
+        // un ostacolo è arrivato nel suo spazio: si rialza piano fino a toccarlo, senza scatti
+        p.ang += (p.limite - p.ang) * (1 - Math.exp(-dt * 8)); p.vel = 0;
+      } else {
+        // cade come un corpo pesante: lento all'inizio, sempre più veloce, poi batte (a terra o sull'ostacolo) e rimbalza appena
+        p.vel += (1.2 + 24 * Math.sin(Math.max(0, p.ang) + .04)) * dt;
+        p.ang += p.vel * dt;
+        if (p.ang >= p.limite) { p.ang = p.limite; p.vel = Math.abs(p.vel) > .8 ? -p.vel * .2 : 0; }
+      }
+      if (p.ang < 0) { p.ang = 0; p.vel = Math.max(0, p.vel); }   // mai oltre la verticale: niente giri su se stesso
+    } else if (sotto) {
+      p.vel = 0;
     } else {
       // si rialza con calma, senza rimbalzi
       p.vel += ((0 - p.ang) * 14 - p.vel * 7.5) * dt; p.ang += p.vel * dt;
       if (p.ang < 0) { p.ang = 0; p.vel = 0; }
+    }
+    // mai oltre il pavimento o l'ostacolo, nemmeno se stava ancora cadendo quando il faro se n'è andato
+    if (p.ang > p.limite && !(giu && p.ang > p.limite + .02)) {
+      p.ang = p.ang - p.limite > .05 ? p.ang + (p.limite - p.ang) * (1 - Math.exp(-dt * 8)) : p.limite;   // senza scatti
+      p.vel = Math.min(0, p.vel);
     }
     if (p.asseX) p.perno.rotation.set(p.ang * p.verso, 0, 0); else p.perno.rotation.set(0, 0, p.ang * p.verso);
   }
