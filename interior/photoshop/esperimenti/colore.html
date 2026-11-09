@@ -1,0 +1,793 @@
+<!doctype html>
+<html lang="it">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#0a0a0d">
+  <title>Laboratorio del colore · AANT</title>
+  <meta name="description" content="Esperimenti su luce RGB, inchiostri CMYK, profili colore e consegna dei file. Corso Photoshop Interior, lezione 2.">
+  <style>
+    @font-face{font-family:Geist;src:url('../../../app/varianza/fonts/geist-sans-latin-400-normal.woff2') format('woff2');font-weight:400;font-display:swap}
+    @font-face{font-family:Geist;src:url('../../../app/varianza/fonts/geist-sans-latin-600-normal.woff2') format('woff2');font-weight:600;font-display:swap}
+    @font-face{font-family:Geist;src:url('../../../app/varianza/fonts/geist-sans-latin-700-normal.woff2') format('woff2');font-weight:700;font-display:swap}
+    @font-face{font-family:'Geist Mono';src:url('../../../app/varianza/fonts/geist-mono-latin-500-normal.woff2') format('woff2');font-weight:500;font-display:swap}
+    @font-face{font-family:'Geist Mono';src:url('../../../app/varianza/fonts/geist-mono-latin-600-normal.woff2') format('woff2');font-weight:600;font-display:swap}
+
+    :root{
+      color-scheme:dark;
+      --bg:#0a0a0d; --bg-2:#111116; --bg-3:#191920;
+      --line:rgba(244,241,236,.13); --line-2:rgba(244,241,236,.22);
+      --ink:#f4f1ec; --ink-2:#d7d2d0; --muted:#a9a4a7;
+      --accent:#38bdf8; --accent-2:#7dd4fc; --wash:rgba(56,189,248,.08); --wash-2:rgba(56,189,248,.16);
+      --ok:#7ee0a8; --no:#f39a8b;
+      --mono:'Geist Mono',ui-monospace,monospace; --sans:Geist,system-ui,Arial,sans-serif;
+    }
+    *,*::before,*::after{box-sizing:border-box}
+    html{background:var(--bg);scroll-behavior:smooth;scrollbar-color:#30303a var(--bg)}
+    body{margin:0;min-height:100vh;background:radial-gradient(ellipse at 85% 0%,rgba(56,189,248,.09),transparent 36%),var(--bg);color:var(--ink);font:400 16px/1.6 var(--sans);-webkit-font-smoothing:antialiased;overflow-x:hidden}
+    a{color:inherit} button,select,input{font:inherit;color:inherit} input{accent-color:var(--accent)}
+    :focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+    ::selection{color:#07151d;background:var(--accent)}
+    img,canvas{display:block;max-width:100%}
+
+    .shell{width:min(1320px,calc(100% - 64px));margin:0 auto}
+
+    /* Barra in alto: regola fissa delle app (DESIGN.md, sezione 5) */
+    .top{min-height:72px;display:flex;justify-content:space-between;align-items:center;gap:16px;border-bottom:1px solid var(--line)}
+    .top a{text-decoration:none}
+    .brand{display:inline-flex;align-items:center;gap:12px;font-size:14px;font-weight:600}
+    .brand-mark{width:37px;height:37px;display:grid;place-items:center;border:1px solid var(--accent);color:var(--accent);font:600 12px var(--mono)}
+    .return{color:var(--muted);font:500 11px var(--mono);letter-spacing:.06em;text-transform:uppercase;text-align:right}
+    .return:hover,.brand:hover{color:var(--accent)}
+    .return .short{display:none}
+
+    /* Apertura */
+    .hero{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,.95fr);gap:clamp(28px,5vw,72px);align-items:end;padding:clamp(40px,6vw,88px) 0 clamp(36px,5vw,64px)}
+    .eyebrow{margin:0 0 20px;color:var(--muted);font:500 12px/1.35 var(--mono);letter-spacing:.08em;text-transform:uppercase}
+    .eyebrow b{color:var(--accent);font-weight:500}
+    h1{margin:0 0 20px;font-size:clamp(44px,6.6vw,92px);font-weight:600;line-height:.98;letter-spacing:-.05em;text-wrap:balance}
+    h1 span,h2 span{color:var(--accent)}
+    .hero-copy{max-width:56ch;margin:0;color:var(--ink-2);font-size:clamp(16px,1.35vw,18px)}
+    .index{list-style:none;margin:0;padding:0;display:grid;gap:8px}
+    .index a{display:grid;grid-template-columns:44px minmax(0,1fr) auto;align-items:center;gap:14px;min-height:62px;padding:12px 18px;border:1px solid var(--line);border-radius:16px;background:var(--bg-2);text-decoration:none;transition:border-color .2s,background .2s,transform .2s}
+    .index a:hover{border-color:rgba(56,189,248,.55);background:var(--wash);transform:translateY(-2px)}
+    .index .n{color:var(--accent);font:500 12px var(--mono);letter-spacing:.06em}
+    .index strong{display:block;font-weight:600;line-height:1.3}
+    .index small{display:block;color:var(--muted);font-size:13px;line-height:1.35}
+    .index .tag{color:var(--muted);font:500 10px var(--mono);letter-spacing:.08em;text-transform:uppercase;border:1px solid var(--line-2);border-radius:999px;padding:4px 9px;white-space:nowrap}
+    .index .tag.classe{color:var(--accent);border-color:rgba(56,189,248,.5)}
+    .index .arrow{color:var(--accent)}
+
+    /* Sezioni */
+    .sec{padding:clamp(48px,6vw,88px) 0;border-top:1px solid var(--line);scroll-margin-top:12px}
+    .sec-head{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:clamp(20px,4vw,64px);align-items:end;margin-bottom:clamp(26px,3vw,40px)}
+    .label{display:inline-flex;align-items:center;gap:10px;margin:0 0 14px;color:var(--accent);font:500 12px var(--mono);letter-spacing:.08em;text-transform:uppercase}
+    .label::before{content:"";width:7px;height:7px;border-radius:50%;background:var(--accent);box-shadow:0 0 0 5px rgba(56,189,248,.12)}
+    h2{margin:0;font-size:clamp(34px,4.2vw,58px);font-weight:600;line-height:1.02;letter-spacing:-.045em;text-wrap:balance}
+    .sec-head p{margin:0;color:var(--ink-2);max-width:60ch}
+    h3{margin:0;font-size:20px;font-weight:600;line-height:1.3;letter-spacing:-.02em}
+    .muted{color:var(--muted)} .small{font-size:13px} .num{font-variant-numeric:tabular-nums}
+    .card{min-width:0;padding:clamp(16px,2.2vw,26px);border:1px solid var(--line);border-radius:16px;background:var(--bg-2)}
+    .card > p{margin:6px 0 0}
+    .grid2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+    .grid3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
+    .card-k{display:block;margin-bottom:10px;color:var(--accent);font:500 11px var(--mono);letter-spacing:.08em;text-transform:uppercase}
+    .note{margin:22px 0 0;max-width:78ch;color:var(--muted);font-size:14px}
+    .note a,.link{color:var(--accent);text-underline-offset:3px}
+    .thought{margin:22px 0 0;padding:16px 20px;border-left:1px solid var(--accent);border-radius:12px;background:rgba(56,189,248,.07);color:var(--ink-2)}
+    .thought strong{color:var(--ink)}
+    .classe-box{display:flex;gap:14px;align-items:flex-start;margin:0 0 22px;padding:14px 18px;border:1px dashed rgba(56,189,248,.5);border-radius:14px;color:var(--ink-2);font-size:15px}
+    .classe-box b{flex:none;color:var(--accent);font:500 11px/1.9 var(--mono);letter-spacing:.08em;text-transform:uppercase}
+
+    /* Controlli */
+    .slider{display:grid;grid-template-columns:72px minmax(0,1fr) 46px;align-items:center;gap:10px;min-height:40px}
+    .slider label{font-weight:600;font-size:14px}
+    .slider output{color:var(--ink-2);font:500 13px var(--mono);text-align:right;font-variant-numeric:tabular-nums}
+    input[type=range]{width:100%;min-height:36px;margin:0;cursor:pointer}
+    .btn{min-height:44px;padding:9px 16px;border:1px solid var(--line-2);border-radius:10px;background:var(--bg-3);font-weight:600;font-size:14px;cursor:pointer;transition:border-color .2s,background .2s}
+    .btn:hover{border-color:rgba(56,189,248,.62);background:#24252c}
+    .btn.primary{border-color:var(--accent);background:var(--accent);color:#07141b}
+    .btn.primary:hover{background:var(--accent-2)}
+    .seg{display:flex;flex-wrap:wrap;gap:6px}
+    .seg button{min-height:40px;padding:8px 14px;border:1px solid var(--line-2);border-radius:999px;background:none;font-size:14px;font-weight:600;cursor:pointer;transition:border-color .2s,background .2s,color .2s}
+    .seg button:hover{border-color:rgba(56,189,248,.6)}
+    .seg button[aria-pressed=true]{border-color:var(--accent);background:var(--wash-2);color:var(--accent)}
+    select{min-height:44px;width:100%;padding:8px 12px;border:1px solid var(--line-2);border-radius:10px;background:var(--bg-3)}
+    select:hover{border-color:rgba(56,189,248,.6)}
+
+    /* 01 Luce e inchiostro */
+    .scene{width:100%;height:230px;border-radius:12px;border:1px solid var(--line)}
+    .readout{display:flex;align-items:center;gap:10px;min-height:44px;margin:12px 0 6px;color:var(--ink-2);font-size:14px}
+    .chip{width:28px;height:28px;flex:none;border-radius:7px;box-shadow:inset 0 0 0 1px var(--line-2)}
+    .readout code{margin-left:auto;color:var(--muted);font:500 12px var(--mono)}
+
+    /* 02 Campione del cliente */
+    .match{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,.9fr);gap:16px}
+    .swatches{display:grid;grid-template-columns:1fr 1fr;border-radius:14px;overflow:hidden;border:1px solid var(--line);min-height:260px}
+    .swatch{position:relative;display:flex;align-items:flex-end;padding:14px;min-height:260px}
+    .swatch span{padding:5px 10px;border-radius:999px;background:rgba(10,10,13,.72);color:var(--ink);font:500 11px var(--mono);letter-spacing:.06em;text-transform:uppercase}
+    .score{display:flex;align-items:baseline;gap:14px;flex-wrap:wrap;margin:16px 0 4px}
+    .score .big{font:600 clamp(40px,5vw,64px)/1 var(--mono);letter-spacing:-.04em;color:var(--accent);font-variant-numeric:tabular-nums}
+    .score .verdict{font-weight:600;font-size:18px}
+    .controls{display:grid;gap:14px;align-content:start}
+    .controls .seg{margin-bottom:4px}
+    .match{position:relative}
+    .gara{display:flex;align-items:center;gap:10px;flex-wrap:wrap;padding-bottom:14px;border-bottom:1px solid var(--line)}
+    .gara .timer{margin-right:auto;font:600 34px/1 var(--mono);letter-spacing:-.03em;color:var(--ink)}
+    .gara .timer.corre{color:var(--accent)} .gara .timer.ultimi{color:var(--no)}
+    .gara .btn{min-width:96px}
+    .btn:disabled,.seg button:disabled{opacity:.4;cursor:not-allowed}
+    input[type=range]:disabled{opacity:.45;cursor:not-allowed}
+    .risultato{position:absolute;inset:0;z-index:5;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;padding:24px;border:1px solid var(--accent);border-radius:16px;background:var(--bg);text-align:center}
+    .risultato[hidden]{display:none}
+    .ris-k{color:var(--accent);font:600 13px var(--mono);letter-spacing:.12em;text-transform:uppercase}
+    .ris-campione{color:var(--ink-2);font-size:15px}
+    .ris-nums{display:flex;gap:clamp(24px,6vw,72px);justify-content:center;flex-wrap:wrap}
+    .ris-nums div{display:grid;gap:4px}
+    .ris-nums small{color:var(--muted);font:500 11px var(--mono);letter-spacing:.08em;text-transform:uppercase}
+    .ris-nums strong{font:600 clamp(48px,7vw,96px)/1 var(--mono);letter-spacing:-.04em;font-variant-numeric:tabular-nums}
+    .ris-sw{display:flex;width:min(320px,100%);height:44px;border-radius:10px;overflow:hidden;border:1px solid var(--line-2)}
+    .ris-sw span{flex:1}
+    .ris-verdetto{font-weight:600;font-size:clamp(18px,2vw,24px)}
+    .ris-verdetto.ok{color:var(--ok)}
+    .best{margin:10px 0 0;color:var(--ink-2);font-size:14px}
+    .best:empty{display:none}
+    .best strong{color:var(--ink)}
+
+    /* 03 Profili */
+    .profili-campione{height:110px;border-radius:10px;margin:12px 0 10px;box-shadow:inset 0 0 0 1px var(--line)}
+    .profili-top{display:flex;flex-wrap:wrap;gap:16px;align-items:end;margin-bottom:16px}
+    .profili-top label{display:grid;gap:6px;min-width:220px;font-weight:600;font-size:14px}
+    .profili-top .num{color:var(--ink-2);font:500 14px var(--mono);padding-bottom:10px}
+    .rule{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;margin-top:40px}
+    .rule .card.main{border-color:rgba(56,189,248,.5);background:linear-gradient(180deg,rgba(56,189,248,.09),var(--bg-2) 70%)}
+    .rule h3{font-size:24px}
+    .rule p{color:var(--ink-2)}
+    .steps{counter-reset:s;list-style:none;margin:0;padding:0;display:grid;gap:10px}
+    .steps li{counter-increment:s;display:grid;grid-template-columns:40px minmax(0,1fr);gap:12px;padding:14px 16px;border:1px solid var(--line);border-radius:14px;background:var(--bg-2);color:var(--ink-2)}
+    .steps li::before{content:"0" counter(s);color:var(--accent);font:500 12px/1.9 var(--mono)}
+    .steps strong{color:var(--ink)}
+    .dialog-wrap{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:16px;margin-top:22px}
+    .ps-dialog{border:1px solid #3a3a44;border-radius:10px;background:#2b2b31;box-shadow:0 18px 40px rgba(0,0,0,.35);overflow:hidden}
+    .ps-dialog .bar{padding:9px 14px;background:#3a3a42;font-size:13px;font-weight:600;color:#e9e6e2}
+    .ps-dialog .body{padding:16px;font-size:14px;color:#dad6d3}
+    .ps-dialog .body p{margin:0 0 12px}
+    .ps-dialog dl{display:grid;grid-template-columns:auto minmax(0,1fr);gap:4px 12px;margin:0 0 14px;font-size:13px}
+    .ps-dialog dt{color:#a7a3a6} .ps-dialog dd{margin:0;font-family:var(--mono);font-size:12px;overflow-wrap:anywhere}
+    .ps-dialog fieldset{border:0;margin:0;padding:0;display:grid;gap:4px}
+    .ps-dialog legend{padding:0;margin-bottom:6px;color:#a7a3a6;font-size:13px}
+    .ps-dialog label{display:flex;gap:10px;align-items:flex-start;min-height:40px;padding:8px 10px;border-radius:8px;cursor:pointer}
+    .ps-dialog label:hover{background:rgba(255,255,255,.05)}
+    .ps-dialog input{margin-top:4px;flex:none;width:17px;height:17px}
+    .ps-dialog .opt-note{display:block;color:#a7a3a6;font-size:12px}
+    .esito{display:grid;grid-template-columns:150px minmax(0,1fr);gap:16px;align-items:start}
+    .esito img{width:150px;aspect-ratio:1;object-fit:cover;border-radius:10px;border:1px solid var(--line)}
+    .esito h3{margin-bottom:6px}
+    .esito p{margin:0;color:var(--ink-2);font-size:15px}
+    .esito .badge{display:inline-block;margin-bottom:8px;padding:3px 9px;border-radius:999px;font:500 10px var(--mono);letter-spacing:.08em;text-transform:uppercase;border:1px solid var(--line-2);color:var(--muted)}
+    .esito .badge.ok{border-color:rgba(126,224,168,.5);color:var(--ok)}
+    .esito .badge.no{border-color:rgba(243,154,139,.5);color:var(--no)}
+
+    /* 04 Foto spenta */
+    .foto-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
+    .foto{margin:0;min-width:0}
+    .foto .ph{position:relative}
+    .foto img{width:100%;aspect-ratio:1;object-fit:cover;border-radius:12px;border:1px solid var(--line)}
+    .foto .letter{position:absolute;left:12px;top:12px;width:40px;height:40px;display:grid;place-items:center;border-radius:10px;background:rgba(10,10,13,.82);font:600 18px var(--mono);color:var(--ink)}
+    .foto figcaption{display:grid;gap:8px;margin-top:12px}
+    .foto .verdetto{min-height:0;font-size:14px;color:var(--ink-2)}
+    .foto .verdetto b.ok{color:var(--ok)} .foto .verdetto b.no{color:var(--no)}
+    .foto-tabs{display:none}
+    .pick{display:flex;flex-wrap:wrap;align-items:center;gap:10px 16px;margin:20px 0 0}
+    .pick > span{font-weight:600}
+    .pick label{display:inline-flex;align-items:center;gap:8px;min-height:44px;cursor:pointer}
+    .actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:18px}
+    .feedback{margin:16px 0 0;min-height:24px;color:var(--ink-2)}
+    .feedback strong{color:var(--ink)}
+    .download{display:inline-flex;align-items:center;gap:10px;min-height:44px;padding:9px 16px;border:1px solid rgba(56,189,248,.48);border-radius:999px;background:rgba(56,189,248,.1);font-weight:600;font-size:14px;text-decoration:none}
+    .download:hover{border-color:var(--accent);background:rgba(56,189,248,.19)}
+    .ps-steps{margin-top:40px}
+    .ps-steps h3{margin-bottom:16px;font-size:24px}
+
+    /* 05 Quiz */
+    .quiz{max-width:860px}
+    .quiz-progress{display:block;margin:0 0 10px;color:var(--accent);font:500 11px var(--mono);letter-spacing:.08em;text-transform:uppercase}
+    .quiz-question{margin:0 0 20px;font-size:clamp(22px,2.4vw,30px);font-weight:600;line-height:1.25;letter-spacing:-.025em}
+    .quiz-options{display:grid;gap:8px}
+    .quiz-options button{width:100%;min-height:56px;padding:12px 16px;border:1px solid var(--line);border-radius:12px;background:var(--bg-2);text-align:left;cursor:pointer;transition:border-color .2s,background .2s}
+    .quiz-options button:hover:not(:disabled){border-color:rgba(56,189,248,.6);background:var(--wash)}
+    .quiz-options button:disabled{cursor:default;opacity:.7}
+    .quiz-options button.is-correct{border-color:var(--accent);background:var(--wash-2);opacity:1}
+    .quiz-options button.is-wrong{border-color:var(--no);opacity:1}
+    .quiz-feedback{min-height:56px;margin:18px 0 12px;color:var(--ink-2)}
+    .quiz-feedback strong{color:var(--ink)}
+    .quiz-next[hidden]{display:none}
+
+    .back{margin:0;padding:0 0 32px}
+    .foot{display:flex;justify-content:space-between;align-items:flex-start;gap:20px;border-top:1px solid var(--line);padding:18px 0 42px;color:var(--muted);font-size:12px}
+    .foot p{max-width:72ch;margin:0}
+    .foot strong,.foot a{color:var(--accent)}
+    .foot a{flex:none;text-decoration:none}
+    .foot a:hover{text-decoration:underline;text-underline-offset:3px}
+
+    @media(max-width:980px){
+      .hero,.sec-head,.match,.dialog-wrap{grid-template-columns:1fr}
+      .hero{align-items:start}
+    }
+    @media(max-width:760px){
+      .shell{width:calc(100% - 32px)}
+      .grid2,.grid3,.rule{grid-template-columns:1fr}
+      .scene{height:190px}
+      .foto-grid{grid-template-columns:1fr}
+      .foto-grid .foto{display:none}
+      .foto-grid .foto.is-on{display:block}
+      .foto-tabs{display:flex;margin-bottom:12px}
+    }
+    @media(max-width:680px){
+      .brand{font-size:12px;gap:8px}.brand-mark{width:35px;height:35px}
+      .return{font-size:10px}.return .long{display:none}.return .short{display:inline}
+      .foot{display:block}.foot a{display:inline-block;margin-top:12px}
+      .index a{grid-template-columns:34px minmax(0,1fr);padding:12px 14px}
+      .index .tag,.index .arrow{display:none}
+      .swatches,.swatch{min-height:110px}
+      .match{gap:10px}
+      .match > .card:first-child .muted{display:none}
+      .match .seg button{min-height:36px;padding:6px 12px;font-size:13px}
+      .score{margin:10px 0 0}.score .big{font-size:36px}
+      .esito{grid-template-columns:96px minmax(0,1fr)}
+      .esito img{width:96px}
+      .slider{grid-template-columns:62px minmax(0,1fr) 42px;gap:8px}
+      .classe-box{flex-direction:column;gap:4px}
+      .gara .timer{flex:0 0 auto;font-size:28px}
+      .gara .btn{flex:1 1 0;min-width:0;padding:9px 10px}
+    }
+    @media(max-width:440px){
+      .esito{grid-template-columns:1fr}
+      .esito img{width:100%;max-width:240px}
+    }
+    @media(max-width:360px){
+      .brand span:last-child{max-width:110px;line-height:1.2}
+      .return{font-size:9px}
+    }
+    @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*::before,*::after{transition:none!important}}
+  </style>
+</head>
+<body>
+<div class="shell">
+  <header class="top">
+    <a class="brand" href="../../../"><span class="brand-mark">GS</span><span>Giovanni Savelli · AANT</span></a>
+    <a class="return" href="../#esperimenti">← <span class="long">Corso di Photoshop</span><span class="short">Corso Photoshop</span></a>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div>
+        <p class="eyebrow"><b>Photoshop Interior</b> · Lezione 02 · Esperimenti</p>
+        <h1>Laboratorio del colore<span>.</span></h1>
+        <p class="hero-copy">Prima di scontornare la sedia apriamo un file, e il file ha un colore che va letto bene. Qui proviamo con le mani che cosa sono luce, inchiostro e profilo, e perché prima di consegnare un'immagine quasi sempre la convertiamo.</p>
+      </div>
+      <ol class="index" aria-label="Le parti del laboratorio">
+        <li><a href="#luce"><span class="n">01</span><span><strong>Luce e inchiostro</strong><small>RGB somma, CMYK sottrae</small></span><span class="arrow" aria-hidden="true">→</span></a></li>
+        <li><a href="#campione"><span class="n">02</span><span><strong>Il campione del cliente</strong><small>Rifai un colore con luce e inchiostri</small></span><span class="tag classe">In aula</span></a></li>
+        <li><a href="#profili"><span class="n">03</span><span><strong>Converti, quasi sempre</strong><small>Profili e la domanda di Photoshop</small></span><span class="arrow" aria-hidden="true">→</span></a></li>
+        <li><a href="#foto-spenta"><span class="n">04</span><span><strong>La foto spenta</strong><small>Tre versioni dello stesso file</small></span><span class="tag classe">A coppie</span></a></li>
+        <li><a href="#prova"><span class="n">05</span><span><strong>Prepara la consegna</strong><small>Tre situazioni, scegli il file</small></span><span class="arrow" aria-hidden="true">→</span></a></li>
+      </ol>
+    </section>
+
+    <!-- 01 · LUCE E INCHIOSTRO -->
+    <section class="sec" id="luce" aria-labelledby="luce-t">
+      <div class="sec-head">
+        <div><p class="label">01 / Luce e inchiostro</p><h2 id="luce-t">Uno parte dal buio, l'altro dal bianco<span>.</span></h2></div>
+        <p>Lo schermo accende la luce: rosso, verde e blu si sommano e schiariscono. La stampa mette inchiostro sulla carta: ciano, magenta, giallo e nero si sovrappongono e tolgono luce.</p>
+      </div>
+      <div class="grid2">
+        <div class="card">
+          <span class="card-k">RGB · si somma la luce</span>
+          <h3>Tre faretti su una parete buia</h3>
+          <canvas class="scene" id="scena-rgb" style="margin-top:14px" role="img" aria-label="Tre faretti rosso, verde e blu si sovrappongono su una parete buia."></canvas>
+          <div class="readout" aria-live="polite"><span class="chip" id="rgb-chip"></span><span id="rgb-testo"></span><code id="rgb-num"></code></div>
+          <div class="slider"><label for="l-r">Rosso</label><input type="range" id="l-r" min="0" max="100" value="85"><output for="l-r" id="l-r-o"></output></div>
+          <div class="slider"><label for="l-g">Verde</label><input type="range" id="l-g" min="0" max="100" value="60"><output for="l-g" id="l-g-o"></output></div>
+          <div class="slider"><label for="l-b">Blu</label><input type="range" id="l-b" min="0" max="100" value="30"><output for="l-b" id="l-b-o"></output></div>
+        </div>
+        <div class="card">
+          <span class="card-k">CMYK · si toglie luce</span>
+          <h3>Inchiostri su un campione di carta</h3>
+          <canvas class="scene" id="scena-cmyk" style="margin-top:14px" role="img" aria-label="Inchiostri ciano, magenta, giallo e nero si sovrappongono su carta bianca."></canvas>
+          <div class="readout" aria-live="polite"><span class="chip" id="cmyk-chip"></span><span id="cmyk-testo"></span><code id="cmyk-num"></code></div>
+          <div class="slider"><label for="i-c">Ciano</label><input type="range" id="i-c" min="0" max="100" value="60"><output for="i-c" id="i-c-o"></output></div>
+          <div class="slider"><label for="i-m">Magenta</label><input type="range" id="i-m" min="0" max="100" value="20"><output for="i-m" id="i-m-o"></output></div>
+          <div class="slider"><label for="i-y">Giallo</label><input type="range" id="i-y" min="0" max="100" value="40"><output for="i-y" id="i-y-o"></output></div>
+          <div class="slider"><label for="i-k">Nero</label><input type="range" id="i-k" min="0" max="100" value="0"><output for="i-k" id="i-k-o"></output></div>
+        </div>
+      </div>
+      <p class="note">Porta tutto a 0 e poi tutto a 100: la luce va dal nero al bianco, gli inchiostri dalla carta bianca a un colore molto scuro. Gli inchiostri qui imitano quelli veri da tipografia, ma restano uno schema: in stampa contano anche carta e macchina.</p>
+    </section>
+
+    <!-- 02 · IL CAMPIONE DEL CLIENTE -->
+    <section class="sec" id="campione" aria-labelledby="campione-t">
+      <div class="sec-head">
+        <div><p class="label">02 / Il campione del cliente</p><h2 id="campione-t">Rifai il colore. Poi rifallo in stampa<span>.</span></h2></div>
+        <p>Il cliente ti manda il campione di un materiale. Riproducilo con i cursori, prima con la luce e poi con gli inchiostri. Il numero grande dice quanto sei lontano: sotto 2 i due colori sono uguali a occhio.</p>
+      </div>
+      <p class="classe-box"><b>Gara in aula</b><span>Tutti sullo stesso campione, ognuno dal suo telefono o PC. Premete «Via!» insieme: avete 2 minuti. Quando pensate di esserci premete «Fatto». Vince chi scende sotto 2 nel tempo più breve; se nessuno ci arriva, chi è più vicino. Poi alzate i telefoni. Con l'insegna LED in CMYK nessuno arriverà sotto 2: è il momento di chiedersi perché.</span></p>
+      <div class="match">
+        <div class="risultato" id="risultato" hidden aria-live="assertive">
+          <span class="ris-k" id="ris-k">Fatto</span>
+          <span class="ris-campione" id="ris-campione"></span>
+          <div class="ris-nums">
+            <div><small>Tempo</small><strong id="ris-tempo">0:00,0</strong></div>
+            <div><small>Distanza</small><strong id="ris-dist">0,0</strong></div>
+          </div>
+          <div class="ris-sw"><span id="ris-sw-t"></span><span id="ris-sw-m"></span></div>
+          <span class="ris-verdetto" id="ris-verdetto"></span>
+          <button type="button" class="btn primary" id="nuova-gara">Nuova gara</button>
+        </div>
+        <div class="card">
+          <div class="seg" role="group" aria-label="Campione" id="campioni"></div>
+          <div class="swatches" style="margin-top:16px">
+            <div class="swatch" id="sw-target"><span>Campione</span></div>
+            <div class="swatch" id="sw-tuo"><span>Il tuo</span></div>
+          </div>
+          <div class="score" aria-live="polite"><span class="big" id="distanza">0,0</span><span class="verdict" id="verdetto"></span></div>
+          <p class="muted small" style="margin:0">Distanza tra i due colori (ΔE). Più è bassa, più si somigliano.</p>
+        </div>
+        <div class="card controls">
+          <div class="gara">
+            <span class="timer num" id="timer" role="timer" aria-label="Tempo rimasto">2:00</span>
+            <button type="button" class="btn primary" id="via">Via!</button>
+            <button type="button" class="btn" id="fatto" disabled>Fatto</button>
+          </div>
+          <div class="seg" role="group" aria-label="Con che cosa costruisci il colore">
+            <button type="button" id="modo-rgb" aria-pressed="true">Con la luce · RGB</button>
+            <button type="button" id="modo-cmyk" aria-pressed="false">Con gli inchiostri · CMYK</button>
+          </div>
+          <div id="cursori-rgb">
+            <div class="slider"><label for="g-r">R</label><input type="range" id="g-r" min="0" max="255" value="128"><output id="g-r-o"></output></div>
+            <div class="slider"><label for="g-g">G</label><input type="range" id="g-g" min="0" max="255" value="128"><output id="g-g-o"></output></div>
+            <div class="slider"><label for="g-b">B</label><input type="range" id="g-b" min="0" max="255" value="128"><output id="g-b-o"></output></div>
+          </div>
+          <div id="cursori-cmyk" hidden>
+            <div class="slider"><label for="g-c">C</label><input type="range" id="g-c" min="0" max="100" value="30"><output id="g-c-o"></output></div>
+            <div class="slider"><label for="g-m">M</label><input type="range" id="g-m" min="0" max="100" value="30"><output id="g-m-o"></output></div>
+            <div class="slider"><label for="g-y">Y</label><input type="range" id="g-y" min="0" max="100" value="30"><output id="g-y-o"></output></div>
+            <div class="slider"><label for="g-k">K</label><input type="range" id="g-k" min="0" max="100" value="0"><output id="g-k-o"></output></div>
+            <button type="button" class="btn" id="migliore" style="margin-top:10px">Mostra il più vicino possibile</button>
+          </div>
+          <p class="best" id="best" aria-live="polite"></p>
+        </div>
+      </div>
+      <p class="thought"><strong>Cosa ci portiamo a casa.</strong> Lo schermo arriva a colori che gli inchiostri non raggiungono: si dice che sono <em>fuori gamma</em>. Per questo una stampa si prepara con chi stampa, e un colore acceso visto a schermo va controllato prima di prometterlo al cliente.</p>
+    </section>
+
+    <!-- 03 · PROFILI -->
+    <section class="sec" id="profili" aria-labelledby="profili-t">
+      <div class="sec-head">
+        <div><p class="label">03 / Profili colore</p><h2 id="profili-t">Converti, quasi sempre<span>.</span></h2></div>
+        <p>In un file i colori sono numeri. Il profilo dice come vanno letti: gli stessi numeri, letti in sRGB, Adobe RGB o ProPhoto RGB, diventano tre colori diversi.</p>
+      </div>
+      <div class="profili-top">
+        <label for="materiale">Stessi numeri, campione di
+          <select id="materiale">
+            <option value="verde">Tessuto verde</option>
+            <option value="blu">Ceramica blu</option>
+            <option value="rosso">Laccatura rossa</option>
+          </select>
+        </label>
+        <span class="num" id="numeri">R 50 · G 180 · B 110</span>
+      </div>
+      <div class="grid3">
+        <div class="card"><h3>sRGB</h3><div class="profili-campione" id="c-srgb" role="img" aria-label="Il colore letto come sRGB"></div><p class="muted small">Il profilo comune di schermi, siti e telefoni.</p></div>
+        <div class="card"><h3>Adobe RGB</h3><div class="profili-campione" id="c-adobe" role="img" aria-label="Il colore letto come Adobe RGB"></div><p class="muted small">Più colori, soprattutto verdi e azzurri. Usato in fotografia e stampa.</p></div>
+        <div class="card"><h3>ProPhoto RGB</h3><div class="profili-campione" id="c-prophoto" role="img" aria-label="Il colore letto come ProPhoto RGB"></div><p class="muted small">Ancora più ampio. Si usa per lavorare le foto RAW.</p></div>
+      </div>
+      <p class="note" id="profili-avviso" hidden>Questo browser non riesce a mostrare i tre profili: i campioni qui sopra sembrano uguali, ma non lo sono.</p>
+
+      <div class="rule">
+        <div class="card main">
+          <span class="card-k">Il caso normale</span>
+          <h3>Converti</h3>
+          <p>Quasi tutti i file arrivano già con un profilo: le foto, i render, le immagini dei produttori. Photoshop sa come leggerli. Quando li portiamo nel nostro spazio di lavoro (io lavoro sempre in Adobe RGB), o ne prepariamo una copia per il web, un cliente o una tipografia, <strong>convertiamo</strong>: Photoshop ricalcola i numeri perché il colore resti lo stesso.</p>
+        </div>
+        <div class="card">
+          <span class="card-k">Il caso raro</span>
+          <h3>Assegna</h3>
+          <p>Serve solo quando un file arriva <strong>senza profilo</strong>, o con quello sbagliato, e sappiamo da dove viene. Assegnare non ricalcola niente: dice a Photoshop come leggere i numeri, quindi l'aspetto cambia. Se lo usi al posto di Converti, rovini i colori.</p>
+        </div>
+      </div>
+
+      <h3 style="margin-top:48px;font-size:24px">Photoshop te lo chiede quando apri il file</h3>
+      <p class="muted" style="max-width:72ch;margin:8px 0 18px">In <strong style="color:var(--ink)">Modifica → Impostazioni colore</strong> si sceglie lo spazio di lavoro RGB (io uso Adobe RGB) e si chiede a Photoshop di avvisarci all'apertura quando un file ha un profilo diverso o non ne ha. Da quel momento, ogni volta, ti chiede cosa fare.</p>
+      <ol class="steps">
+        <li><span><strong>Spazio di lavoro RGB:</strong> Adobe RGB (1998), lo stesso per tutte le immagini di un progetto. Ogni file che arriva in un altro profilo si converte qui.</span></li>
+        <li><span><strong>Profili diversi o mancanti:</strong> spunta le caselle che fanno chiedere all'apertura.</span></li>
+        <li><span><strong>Apri il file:</strong> se il profilo è diverso compare la finestra qui sotto. Prova le tre scelte.</span></li>
+      </ol>
+      <div class="dialog-wrap">
+        <div class="ps-dialog" role="group" aria-labelledby="dlg-t">
+          <div class="bar" id="dlg-t">Profilo incorporato non corrispondente</div>
+          <div class="body">
+            <p>Il documento «manifesti-srgb.jpg» ha un profilo che non corrisponde allo spazio di lavoro RGB.</p>
+            <dl><dt>Incorporato</dt><dd>sRGB IEC61966-2.1</dd><dt>Spazio di lavoro</dt><dd>Adobe RGB (1998)</dd></dl>
+            <fieldset>
+              <legend>Che cosa fai?</legend>
+              <label><input type="radio" name="dlg" value="lascia"><span>Lascia il profilo del file<span class="opt-note">invece dello spazio di lavoro</span></span></label>
+              <label><input type="radio" name="dlg" value="converti" checked><span>Converti nello spazio di lavoro<span class="opt-note">ricalcola i numeri in Adobe RGB</span></span></label>
+              <label><input type="radio" name="dlg" value="ignora"><span>Ignora il profilo<span class="opt-note">non gestire il colore</span></span></label>
+            </fieldset>
+          </div>
+        </div>
+        <div class="card esito" aria-live="polite">
+          <img id="dlg-img" src="img/foto-giusta.jpg" alt="Anteprima del risultato" width="150" height="150">
+          <div><span class="badge" id="dlg-badge"></span><h3 id="dlg-h"></h3><p id="dlg-p"></p></div>
+        </div>
+      </div>
+      <p class="note">Il nome della finestra e delle tre voci può cambiare un poco tra una versione di Photoshop e l'altra; il senso è questo. Per approfondire: <a href="https://helpx.adobe.com/photoshop/desktop/adjust-color/color-profiles/change-a-documents-color-profile.html" target="_blank" rel="noopener noreferrer">assegnare e convertire un profilo (Adobe)</a>.</p>
+    </section>
+
+    <!-- 04 · LA FOTO SPENTA -->
+    <section class="sec" id="foto-spenta" aria-labelledby="spenta-t">
+      <div class="sec-head">
+        <div><p class="label">04 / La foto spenta</p><h2 id="spenta-t">Che cosa è successo a questa foto<span>?</span></h2></div>
+        <p>Hai consegnato un'immagine e il cliente scrive: «sul sito è venuta spenta». Ecco tre versioni dello stesso file. Per ognuna decidete che cosa è successo, poi scegliete quella da consegnare.</p>
+      </div>
+      <p class="classe-box"><b>A coppie</b><span>Cinque minuti per decidere insieme, senza aprire Photoshop. Poi «Controlla» e discussione con la classe: chi ha scelto quale, e perché.</span></p>
+      <div class="seg foto-tabs" role="group" aria-label="Scegli la versione da guardare">
+        <button type="button" data-foto="0" aria-pressed="true">A</button><button type="button" data-foto="1" aria-pressed="false">B</button><button type="button" data-foto="2" aria-pressed="false">C</button>
+      </div>
+      <div class="foto-grid" id="foto-grid">
+        <figure class="foto is-on" data-giusto="spenta">
+          <div class="ph"><img src="img/foto-spenta.jpg" alt="Versione A della foto dei manifesti" width="800" height="800" loading="lazy"><span class="letter">A</span></div>
+          <figcaption><label class="small muted" for="sel-a">Che cosa è successo alla versione A?</label><select id="sel-a"></select><span class="verdetto"></span></figcaption>
+        </figure>
+        <figure class="foto" data-giusto="giusta">
+          <div class="ph"><img src="img/foto-giusta.jpg" alt="Versione B della foto dei manifesti" width="800" height="800" loading="lazy"><span class="letter">B</span></div>
+          <figcaption><label class="small muted" for="sel-b">Che cosa è successo alla versione B?</label><select id="sel-b"></select><span class="verdetto"></span></figcaption>
+        </figure>
+        <figure class="foto" data-giusto="accesa">
+          <div class="ph"><img src="img/foto-accesa.jpg" alt="Versione C della foto dei manifesti" width="800" height="800" loading="lazy"><span class="letter">C</span></div>
+          <figcaption><label class="small muted" for="sel-c">Che cosa è successo alla versione C?</label><select id="sel-c"></select><span class="verdetto"></span></figcaption>
+        </figure>
+      </div>
+      <div class="pick" role="radiogroup" aria-label="Quale versione consegnate">
+        <span>Quale consegnate al cliente?</span>
+        <label><input type="radio" name="consegna" value="A"> A</label>
+        <label><input type="radio" name="consegna" value="B"> B</label>
+        <label><input type="radio" name="consegna" value="C"> C</label>
+      </div>
+      <div class="actions"><button type="button" class="btn primary" id="controlla">Controlla</button><button type="button" class="btn" id="ricomincia-foto">Ricomincia</button></div>
+      <p class="feedback" id="feedback-foto" aria-live="polite"></p>
+
+      <div class="ps-steps">
+        <h3>Ora rifatelo in Photoshop</h3>
+        <ol class="steps">
+          <li><span><strong>Impostazioni colore.</strong> Spazio di lavoro RGB Adobe RGB e avviso all'apertura per i profili diversi o mancanti, come nella parte 03.</span></li>
+          <li><span><strong>Aprite la foto qui sotto.</strong> È in sRGB: Photoshop vi chiede cosa fare e voi scegliete <em>Converti nello spazio di lavoro</em>. Ora è in Adobe RGB, come tutti i file di lavoro.</span></li>
+          <li><span><strong>Esportate due JPEG</strong> con File → Esporta → Esporta come. Il primo con «Converti in sRGB» attivo. Il secondo togliendo la spunta sia a «Converti in sRGB» sia a «Incorpora profilo colore»: è quello che succede quando un sito, un social o un'app di messaggi toglie il profilo.</span></li>
+          <li><span><strong>Aprite i due JPEG nel browser</strong>, uno accanto all'altro. Uno dei due è spento: quale, e perché? È la versione A qui sopra.</span></li>
+        </ol>
+        <p style="margin-top:18px"><a class="download" href="img/manifesti-srgb.jpg" download>↓ Scarica la foto in sRGB (390 KB)</a></p>
+        <p class="thought"><strong>La regola.</strong> Si lavora nel file con i livelli, nello spazio di lavoro (Adobe RGB). Se la copia finale va dove il profilo può perdersi, cioè siti, social e app di messaggi, la si consegna convertita in sRGB.</p>
+      </div>
+    </section>
+
+    <!-- 05 · QUIZ -->
+    <section class="sec" id="prova" aria-labelledby="quiz-t">
+      <div class="sec-head">
+        <div><p class="label">05 / Prova tu</p><h2 id="quiz-t">Prepara la consegna<span>.</span></h2></div>
+        <p>Tre situazioni brevi. Scegli come prepareresti il file, poi leggi il motivo. Non ci sono voti.</p>
+      </div>
+      <div class="quiz">
+        <span class="quiz-progress" id="quiz-progress"></span>
+        <h3 class="quiz-question" id="quiz-question"></h3>
+        <div class="quiz-options" id="quiz-options" role="group" aria-labelledby="quiz-question"></div>
+        <p class="quiz-feedback" id="quiz-feedback" aria-live="polite"></p>
+        <button class="btn primary quiz-next" id="quiz-next" type="button" hidden>Situazione successiva →</button>
+      </div>
+    </section>
+
+    <p class="back"><a class="link" href="../#lezione-2">Torna agli appunti della lezione 02 →</a></p>
+  </main>
+
+  <footer class="foot"><p><strong>Simulazione didattica.</strong> Le immagini e gli inchiostri imitano il comportamento reale; il risultato vero dipende da monitor, profilo, carta e macchina da stampa.</p><a href="../#esperimenti">← Torna al corso</a></footer>
+</div>
+
+<script>
+(() => {
+  /* ---------- colore: funzioni comuni ---------- */
+  const lin = c => { c /= 255; return c <= .04045 ? c / 12.92 : Math.pow((c + .055) / 1.055, 2.4); };
+  const enc = v => { v = Math.min(1, Math.max(0, v)); return Math.round(255 * (v <= .0031308 ? 12.92 * v : 1.055 * Math.pow(v, 1 / 2.4) - .055)); };
+  const css = a => 'rgb(' + a.join(',') + ')';
+  const fmt = n => n.toFixed(1).replace('.', ',');
+
+  // Inchiostri da tipografia (circa, su carta patinata), mescolati nella luce riflessa.
+  const PAPER = [250, 248, 243].map(lin);
+  const INK = { c: [0, 158, 224], m: [226, 0, 122], y: [255, 237, 0], k: [35, 31, 32] };
+  const T = {}; for (const k in INK) T[k] = INK[k].map((v, i) => Math.min(1, lin(v) / PAPER[i]));
+  function stampaLin(c, m, y, k) {
+    return [0, 1, 2].map(i => PAPER[i] * (1 - c + c * T.c[i]) * (1 - m + m * T.m[i]) * (1 - y + y * T.y[i]) * (1 - k + k * T.k[i]));
+  }
+  function lab(l) {
+    const X = (.4124 * l[0] + .3576 * l[1] + .1805 * l[2]) / .95047;
+    const Y = .2126 * l[0] + .7152 * l[1] + .0722 * l[2];
+    const Z = (.0193 * l[0] + .1192 * l[1] + .9505 * l[2]) / 1.08883;
+    const f = t => t > .008856 ? Math.cbrt(t) : 7.787 * t + 16 / 116;
+    return [116 * f(Y) - 16, 500 * (f(X) - f(Y)), 200 * (f(Y) - f(Z))];
+  }
+  const dE = (a, b) => Math.hypot(a[0] - b[0], a[1] - b[1], a[2] - b[2]);
+  const $ = id => document.getElementById(id);
+
+  /* ---------- 01 · scene ---------- */
+  function preparaCanvas(cv) {
+    const r = Math.min(2, window.devicePixelRatio || 1);
+    const w = Math.max(1, Math.round(cv.clientWidth * r)), h = Math.max(1, Math.round(cv.clientHeight * r));
+    if (cv.width !== w || cv.height !== h) { cv.width = w; cv.height = h; }
+    return [cv.getContext('2d'), w, h];
+  }
+  const CENTRI = [[.4, .42], [.6, .42], [.5, .64]];
+  function disegnaRGB() {
+    const v = ['l-r', 'l-g', 'l-b'].map(id => $(id).value / 100);
+    ['l-r', 'l-g', 'l-b'].forEach((id, i) => $(id + '-o').textContent = Math.round(v[i] * 100) + '%');
+    const [ctx, w, h] = preparaCanvas($('scena-rgb'));
+    const img = ctx.createImageData(w, h), d = img.data;
+    const R = Math.min(w * .25, h * .36), cx = CENTRI.map(c => [c[0] * w, c[1] * h]);
+    const wall = .0035;
+    for (let y = 0; y < h; y++) for (let x = 0; x < w; x++) {
+      const o = (y * w + x) * 4, acc = [wall, wall, wall];
+      for (let i = 0; i < 3; i++) {
+        // Cerchio netto (bordo antialias di 1 px) più un alone leggero fuori: si legge come luce.
+        const dd = Math.hypot(x - cx[i][0], y - cx[i][1]);
+        const disco = Math.min(1, Math.max(0, R - dd + .5));
+        const fuori = Math.max(0, dd - R) / (R * .16);
+        const alone = (1 - disco) * .14 * Math.exp(-fuori * fuori);
+        acc[i] += v[i] * (disco + alone);
+      }
+      d[o] = enc(acc[0]); d[o + 1] = enc(acc[1]); d[o + 2] = enc(acc[2]); d[o + 3] = 255;
+    }
+    ctx.putImageData(img, 0, 0);
+    const c = v.map(x => enc(x + wall));
+    $('rgb-chip').style.background = css(c);
+    $('rgb-num').textContent = 'R ' + c[0] + ' · G ' + c[1] + ' · B ' + c[2];
+    $('rgb-testo').textContent = v.every(x => x === 0) ? 'Nessuna luce: nero' : v.every(x => x === 1) ? 'Tutte le luci: bianco' : 'Al centro si sommano';
+  }
+  function disegnaCMYK() {
+    const ids = ['i-c', 'i-m', 'i-y', 'i-k'], v = ids.map(id => $(id).value / 100);
+    ids.forEach((id, i) => $(id + '-o').textContent = Math.round(v[i] * 100) + '%');
+    const [ctx, w, h] = preparaCanvas($('scena-cmyk'));
+    const img = ctx.createImageData(w, h), d = img.data;
+    const R = Math.min(w * .25, h * .36), cx = CENTRI.map(c => [c[0] * w, c[1] * h]);
+    const kx0 = w * .14, kx1 = w * .86, ky0 = h * .83, ky1 = h * .93;
+    for (let y = 0; y < h; y++) for (let x = 0; x < w; x++) {
+      const o = (y * w + x) * 4, a = [0, 0, 0];
+      for (let i = 0; i < 3; i++) a[i] = Math.min(1, Math.max(0, R - Math.hypot(x - cx[i][0], y - cx[i][1]) + .5)) * v[i];
+      const inK = x > kx0 && x < kx1 && y > ky0 && y < ky1 ? v[3] : 0;
+      const l = stampaLin(a[0], a[1], a[2], inK);
+      d[o] = enc(l[0]); d[o + 1] = enc(l[1]); d[o + 2] = enc(l[2]); d[o + 3] = 255;
+    }
+    ctx.putImageData(img, 0, 0);
+    const c = stampaLin(v[0], v[1], v[2], v[3]).map(enc);
+    $('cmyk-chip').style.background = css(c);
+    $('cmyk-num').textContent = 'C ' + Math.round(v[0] * 100) + ' · M ' + Math.round(v[1] * 100) + ' · Y ' + Math.round(v[2] * 100) + ' · K ' + Math.round(v[3] * 100);
+    $('cmyk-testo').textContent = v.every(x => x === 0) ? 'Nessun inchiostro: carta' : 'Al centro si sovrappongono';
+  }
+  ['l-r', 'l-g', 'l-b'].forEach(id => $(id).addEventListener('input', disegnaRGB));
+  ['i-c', 'i-m', 'i-y', 'i-k'].forEach(id => $(id).addEventListener('input', disegnaCMYK));
+
+  /* ---------- 02 · campione del cliente ---------- */
+  const CAMPIONI = [
+    { nome: 'Velluto terracotta', rgb: [176, 92, 66] },
+    { nome: 'Lino naturale', rgb: [212, 198, 172] },
+    { nome: 'Insegna LED blu', rgb: [20, 122, 255] }
+  ];
+  let scelto = 0, modo = 'rgb';
+  const gRGB = ['g-r', 'g-g', 'g-b'], gCMYK = ['g-c', 'g-m', 'g-y', 'g-k'];
+  CAMPIONI.forEach((c, i) => {
+    const b = document.createElement('button');
+    b.type = 'button'; b.textContent = c.nome; b.setAttribute('aria-pressed', i === 0);
+    b.addEventListener('click', () => { scelto = i; [...$('campioni').children].forEach((x, n) => x.setAttribute('aria-pressed', n === i)); $('best').textContent = ''; aggiornaGioco(); });
+    $('campioni').append(b);
+  });
+  function tuoColore() {
+    if (modo === 'rgb') return gRGB.map(id => +$(id).value);
+    return stampaLin(...gCMYK.map(id => $(id).value / 100)).map(enc);
+  }
+  function aggiornaGioco() {
+    gRGB.forEach(id => $(id + '-o').textContent = $(id).value);
+    gCMYK.forEach(id => $(id + '-o').textContent = $(id).value + '%');
+    const t = CAMPIONI[scelto].rgb, mio = tuoColore();
+    $('sw-target').style.background = css(t);
+    $('sw-tuo').style.background = css(mio);
+    const e = dE(lab(t.map(lin)), lab(mio.map(lin)));
+    $('distanza').textContent = fmt(e);
+    $('verdetto').textContent = e <= 2 ? 'Uguali a occhio' : e <= 5 ? 'Quasi' : e <= 10 ? 'Si vede la differenza' : 'Ancora lontano';
+  }
+  function impostaModo(m) {
+    modo = m;
+    $('modo-rgb').setAttribute('aria-pressed', m === 'rgb');
+    $('modo-cmyk').setAttribute('aria-pressed', m === 'cmyk');
+    $('cursori-rgb').hidden = m !== 'rgb';
+    $('cursori-cmyk').hidden = m !== 'cmyk';
+    $('best').textContent = '';
+    aggiornaGioco();
+  }
+  $('modo-rgb').addEventListener('click', () => impostaModo('rgb'));
+  $('modo-cmyk').addEventListener('click', () => impostaModo('cmyk'));
+  [...gRGB, ...gCMYK].forEach(id => $(id).addEventListener('input', aggiornaGioco));
+  $('migliore').addEventListener('click', () => {
+    const tl = lab(CAMPIONI[scelto].rgb.map(lin));
+    let best = [0, 0, 0, 0], be = 1e9;
+    const prova = (c, m, y, k) => { const e = dE(tl, lab(stampaLin(c, m, y, k))); if (e < be) { be = e; best = [c, m, y, k]; } };
+    for (let c = 0; c <= 1.0001; c += .05) for (let m = 0; m <= 1.0001; m += .05) for (let y = 0; y <= 1.0001; y += .05) for (let k = 0; k <= .6001; k += .05) prova(c, m, y, k);
+    const b0 = best.slice();
+    for (let c = -.05; c <= .0501; c += .01) for (let m = -.05; m <= .0501; m += .01) for (let y = -.05; y <= .0501; y += .01) for (let k = -.05; k <= .0501; k += .01) {
+      const p = [b0[0] + c, b0[1] + m, b0[2] + y, b0[3] + k];
+      if (p.every(x => x >= 0 && x <= 1)) prova(...p);
+    }
+    gCMYK.forEach((id, i) => $(id).value = Math.round(best[i] * 100));
+    aggiornaGioco();
+    $('best').innerHTML = be <= 2
+      ? '<strong>Si può fare.</strong> Il più vicino possibile arriva a ' + fmt(be) + ': questo colore sta dentro la gamma degli inchiostri.'
+      : '<strong>Fuori gamma.</strong> Anche il più vicino possibile resta a ' + fmt(be) + ': con questi inchiostri il colore non esiste. In stampa si sceglie un compromesso con la tipografia.';
+  });
+
+  /* ---------- 02 · la gara ---------- */
+  const DURATA = 120;
+  let gara = null;
+  const tempo = s => { const m = Math.floor(s / 60), r = s - m * 60; return m + ':' + (r < 10 ? '0' : '') + r.toFixed(1).replace('.', ','); };
+  function bloccaScelte(b) {
+    [...$('campioni').children, $('modo-rgb'), $('modo-cmyk'), $('migliore')].forEach(x => x.disabled = b);
+  }
+  function bloccaCursori(b) { [...gRGB, ...gCMYK].forEach(id => $(id).disabled = b); }
+  function tick() {
+    if (!gara) return;
+    const passati = (performance.now() - gara.t0) / 1000, resto = Math.max(0, DURATA - passati);
+    $('timer').textContent = (s => Math.floor(s / 60) + ':' + String(s % 60).padStart(2, '0'))(Math.ceil(resto));
+    $('timer').classList.toggle('ultimi', resto <= 15);
+    if (resto <= 0) return fine(true);
+    gara.raf = requestAnimationFrame(tick);
+  }
+  function fine(scaduto) {
+    if (!gara) return;
+    cancelAnimationFrame(gara.raf);
+    const passati = Math.min(DURATA, (performance.now() - gara.t0) / 1000);
+    gara = null;
+    bloccaCursori(true);
+    $('fatto').disabled = true;
+    $('timer').classList.remove('corre', 'ultimi');
+    const t = CAMPIONI[scelto].rgb, mio = tuoColore(), e = dE(lab(t.map(lin)), lab(mio.map(lin)));
+    $('ris-k').textContent = scaduto ? 'Tempo scaduto' : 'Fatto';
+    $('ris-campione').textContent = CAMPIONI[scelto].nome + ' · ' + (modo === 'rgb' ? 'con la luce (RGB)' : 'con gli inchiostri (CMYK)');
+    $('ris-tempo').textContent = tempo(passati);
+    $('ris-dist').textContent = fmt(e);
+    $('ris-sw-t').style.background = css(t);
+    $('ris-sw-m').style.background = css(mio);
+    $('ris-verdetto').textContent = e <= 2 ? 'Sotto 2: uguali a occhio' : e <= 5 ? 'Quasi! Sopra 2 di poco' : 'Ancora lontano';
+    $('ris-verdetto').className = 'ris-verdetto' + (e <= 2 ? ' ok' : '');
+    $('risultato').hidden = false;
+    $('risultato').scrollIntoView({ block: 'center' });
+    $('nuova-gara').focus({ preventScroll: true });
+  }
+  $('via').addEventListener('click', () => {
+    gRGB.forEach(id => $(id).value = 128);
+    gCMYK.forEach((id, i) => $(id).value = i < 3 ? 30 : 0);
+    $('best').textContent = '';
+    aggiornaGioco();
+    bloccaScelte(true); bloccaCursori(false);
+    $('via').disabled = true; $('fatto').disabled = false;
+    $('timer').classList.add('corre');
+    gara = { t0: performance.now() };
+    tick();
+  });
+  $('fatto').addEventListener('click', () => fine(false));
+  $('nuova-gara').addEventListener('click', () => {
+    $('risultato').hidden = true;
+    bloccaScelte(false); bloccaCursori(false);
+    $('via').disabled = false;
+    $('timer').textContent = '2:00';
+  });
+
+  /* ---------- 03 · profili ---------- */
+  const PRESET = { verde: [50, 180, 110], blu: [60, 105, 195], rosso: [205, 65, 60] };
+  const supporta = window.CSS && CSS.supports('color', 'color(a98-rgb .2 .6 .4)') && CSS.supports('color', 'color(prophoto-rgb .2 .6 .4)');
+  $('profili-avviso').hidden = !!supporta;
+  const col = (sp, n) => supporta ? 'color(' + sp + ' ' + n.map(x => (x / 255).toFixed(4)).join(' ') + ')' : css(n);
+  function aggiornaProfili() {
+    const n = PRESET[$('materiale').value];
+    $('numeri').textContent = 'R ' + n[0] + ' · G ' + n[1] + ' · B ' + n[2];
+    $('c-srgb').style.background = col('srgb', n);
+    $('c-adobe').style.background = col('a98-rgb', n);
+    $('c-prophoto').style.background = col('prophoto-rgb', n);
+  }
+  $('materiale').addEventListener('change', aggiornaProfili);
+
+  const DLG = {
+    lascia: { img: 'giusta', badge: ['ok', 'Colore giusto'], h: 'Il file resta in sRGB', p: 'La foto si vede bene, ma ha un profilo diverso dal resto del progetto. Quando la incollerai in un’altra immagine Photoshop dovrà convertirla comunque, e la domanda tornerà.' },
+    converti: { img: 'giusta', badge: ['ok', 'Quasi sempre la scelta giusta'], h: 'Stesso colore, ora in Adobe RGB', p: 'Photoshop ricalcola i numeri perché la foto appaia uguale, nello stesso spazio di tutte le altre immagini del progetto. Non si perde niente: tutti i colori di sRGB stanno dentro Adobe RGB.' },
+    ignora: { img: 'accesa', badge: ['no', 'Colore sbagliato'], h: 'La foto diventa troppo satura', p: 'Photoshop butta via il profilo e legge i numeri di sRGB come se fossero Adobe RGB. I colori si accendono troppo: è la versione C della parte 04.' }
+  };
+  function aggiornaDialogo() {
+    const s = DLG[document.querySelector('input[name=dlg]:checked').value];
+    $('dlg-img').src = 'img/foto-' + s.img + '.jpg';
+    $('dlg-badge').className = 'badge ' + s.badge[0]; $('dlg-badge').textContent = s.badge[1];
+    $('dlg-h').textContent = s.h; $('dlg-p').textContent = s.p;
+  }
+  document.querySelectorAll('input[name=dlg]').forEach(r => r.addEventListener('change', aggiornaDialogo));
+
+  /* ---------- 04 · la foto spenta ---------- */
+  const DIAGNOSI = [
+    ['', 'Scegli…'],
+    ['giusta', 'Convertita in sRGB'],
+    ['spenta', 'Profilo tolto: numeri Adobe RGB letti come sRGB'],
+    ['accesa', 'Profilo assegnato per sbaglio: numeri sRGB letti come Adobe RGB']
+  ];
+  const SPIEGA = {
+    giusta: 'I numeri sono stati ricalcolati per sRGB: il colore è quello voluto.',
+    spenta: 'Il file era in Adobe RGB e il profilo si è perso. Letti come sRGB, quei numeri danno colori più spenti.',
+    accesa: 'A numeri già sRGB è stato assegnato Adobe RGB: Photoshop li legge come colori più ampi e la foto diventa troppo satura.'
+  };
+  const figure = [...document.querySelectorAll('#foto-grid .foto')];
+  figure.forEach(f => { const s = f.querySelector('select'); DIAGNOSI.forEach(([v, t]) => s.add(new Option(t, v))); });
+  $('controlla').addEventListener('click', () => {
+    let giuste = 0, mancano = 0;
+    figure.forEach(f => {
+      const v = f.querySelector('select').value, ok = v === f.dataset.giusto, out = f.querySelector('.verdetto');
+      if (!v) mancano++; if (ok) giuste++;
+      out.innerHTML = (ok ? '<b class="ok">Giusto.</b> ' : '<b class="no">' + (v ? 'No.' : 'Da scegliere.') + '</b> ') + SPIEGA[f.dataset.giusto];
+    });
+    const c = document.querySelector('input[name=consegna]:checked');
+    $('feedback-foto').innerHTML = '<strong>' + giuste + ' su 3.</strong> ' + (c ? (c.value === 'B' ? 'E la B è proprio quella da consegnare.' : 'Da consegnare era la B, l’unica convertita in sRGB.') : 'Da consegnare è la B, l’unica convertita in sRGB.') + ' Nella vita vera l’errore più frequente è la A: un file Adobe RGB che perde il profilo.';
+  });
+  $('ricomincia-foto').addEventListener('click', () => {
+    figure.forEach(f => { f.querySelector('select').value = ''; f.querySelector('.verdetto').textContent = ''; });
+    document.querySelectorAll('input[name=consegna]').forEach(r => r.checked = false);
+    $('feedback-foto').textContent = '';
+  });
+  const tabs = [...document.querySelectorAll('.foto-tabs button')];
+  tabs.forEach(b => b.addEventListener('click', () => {
+    const n = +b.dataset.foto;
+    tabs.forEach((x, i) => x.setAttribute('aria-pressed', i === n));
+    figure.forEach((f, i) => f.classList.toggle('is-on', i === n));
+  }));
+
+  /* ---------- 05 · quiz ---------- */
+  const casi = [
+    { q: 'Il render di una cucina va nel tuo portfolio online. Quale copia prepari?',
+      o: ['JPEG convertito in sRGB', 'JPEG in ProPhoto RGB senza profilo incorporato', 'TIFF convertito in un CMYK qualsiasi'], a: 0,
+      why: 'Per il web si converte in sRGB: è il profilo che tutti gli schermi leggono. Il file di lavoro con i livelli lo tieni a parte.' },
+    { q: 'Apri la foto di un divano mandata dal produttore: è in sRGB e il tuo progetto è in Adobe RGB. Photoshop ti chiede cosa fare.',
+      o: ['Converto nello spazio di lavoro', 'Ignoro il profilo', 'Assegno Adobe RGB'], a: 0,
+      why: 'Convertire mantiene l’aspetto della foto e la porta nello stesso spazio del resto del progetto. Ignorare il profilo o assegnare Adobe RGB cambierebbe i colori: la foto verrebbe troppo satura.' },
+    { q: 'Una tipografia stamperà il pannello del tuo progetto, ma non ti ha detto niente sul colore. Che cosa fai?',
+      o: ['Converto subito in un CMYK qualsiasi', 'Chiedo alla tipografia formato e profilo', 'Assegno sRGB e consegno'], a: 1,
+      why: 'La stampa dipende da macchina, inchiostri e carta. Si chiede alla tipografia il profilo giusto e si converte solo la copia da mandare.' }
+  ];
+  let cur = 0;
+  function quiz() {
+    const it = casi[cur];
+    $('quiz-progress').textContent = 'Situazione ' + (cur + 1) + ' di ' + casi.length;
+    $('quiz-question').textContent = it.q;
+    $('quiz-feedback').textContent = '';
+    $('quiz-options').replaceChildren();
+    $('quiz-next').hidden = true;
+    it.o.forEach((t, i) => {
+      const b = document.createElement('button'); b.type = 'button'; b.textContent = t;
+      b.addEventListener('click', () => {
+        [...$('quiz-options').children].forEach((x, n) => { x.disabled = true; if (n === it.a) x.classList.add('is-correct'); else if (n === i) x.classList.add('is-wrong'); });
+        $('quiz-feedback').innerHTML = '<strong>' + (i === it.a ? 'Esatto. ' : 'Guarda la risposta evidenziata. ') + '</strong>' + it.why;
+        $('quiz-next').hidden = false;
+        $('quiz-next').textContent = cur === casi.length - 1 ? 'Ricomincia →' : 'Situazione successiva →';
+      });
+      $('quiz-options').append(b);
+    });
+  }
+  $('quiz-next').addEventListener('click', () => { cur = (cur + 1) % casi.length; quiz(); $('quiz-options').firstChild.focus(); });
+
+  /* ---------- avvio ---------- */
+  function scene() { disegnaRGB(); disegnaCMYK(); }
+  let rt; window.addEventListener('resize', () => { clearTimeout(rt); rt = setTimeout(scene, 120); });
+  scene(); aggiornaGioco(); aggiornaProfili(); aggiornaDialogo(); quiz();
+})();
+</script>
+</body>
+</html>
