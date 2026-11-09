@@ -79,6 +79,12 @@ body.gs-course--photoshop .shell > .notice { margin:0 0 22px; padding:18px 0; bo
 body.gs-course--photoshop .notice strong { color:var(--ink); font:600 16px/1.3 var(--sans); }
 body.gs-course--photoshop .notice p { color:var(--ink-2); font:400 13px/1.55 var(--sans); }
 body.gs-course--photoshop .tabs { position:sticky; top:var(--course-header-height,76px); z-index:40; display:flex; flex-wrap:wrap; gap:8px; width:100%; margin:0; padding:13px 0; border-bottom:1px solid var(--line); background:rgba(10,10,13,.95); backdrop-filter:blur(14px); scroll-margin-top:calc(var(--course-header-height,76px) + 4px); }
+/* Al suo posto la barra è trasparente, così non taglia la sfumatura dell'apertura. Quando si attacca in alto diventa
+   un blocco pieno a tutta larghezza, unito alla testata: sopra e ai lati non si vede la pagina che scorre. */
+body.gs-course--photoshop .tabs:not(.is-stuck) { background:transparent; backdrop-filter:none; -webkit-backdrop-filter:none; }
+body.gs-course--photoshop .tabs.is-stuck { background:var(--bg); backdrop-filter:none; -webkit-backdrop-filter:none;
+  box-shadow:0 0 0 100vmax var(--bg), 0 1px 0 100vmax rgba(244,241,236,.13);
+  clip-path:inset(calc(-1 * var(--course-header-height,76px)) -100vmax -1px -100vmax); }
 /* Ogni scheda è alta almeno quanto lo schermo sotto la barra: passando a una scheda corta la pagina non si accorcia e non risale. */
 body.gs-course--photoshop .panel { min-height:max(320px, calc(100vh - var(--course-header-height,76px) - 72px));padding:clamp(28px,4vw,54px) 0 60px; border:0; border-radius:0; background:transparent; scroll-margin-top:var(--course-scroll-offset); }
 body.gs-course--photoshop :is(.lesson-opening,.video-frame) { scroll-margin-top:var(--course-scroll-offset); }

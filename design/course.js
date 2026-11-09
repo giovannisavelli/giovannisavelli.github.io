@@ -81,6 +81,16 @@
     if (tabs) document.documentElement.style.setProperty("--course-tabs-height", `${Math.ceil(tabs.getBoundingClientRect().height)}px`);
   }
   measureNavigation();
+  // la barra delle schede sa quando è attaccata in alto (classe is-stuck): lo stile la rende piena solo in quel momento
+  if (tabs) {
+    const stick = () => {
+      const s = getComputedStyle(tabs), r = tabs.getBoundingClientRect(), alto = parseFloat(s.top);
+      tabs.classList.toggle("is-stuck", s.position === "sticky" && scrollY > 0 && r.bottom > 0 && Math.abs(r.top - alto) <= 1);
+    };
+    window.addEventListener("scroll", stick, { passive: true });
+    window.addEventListener("resize", stick, { passive: true });
+    stick();
+  }
   if (typeof ResizeObserver !== "undefined") {
     const navigationObserver = new ResizeObserver(measureNavigation);
     navigationObserver.observe(topbar);
