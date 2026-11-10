@@ -1,0 +1,131 @@
+/* =====================================================================
+   Lettura · PROVA (non pubblicata). Versione 2 del 10/11/2026, dopo la revisione dei 7 «pesci rossi».
+   Ogni scelta è un attributo su <html>, messo da lettura.js:
+     data-lt-spazio     1 | 2      spazio fra lettere, parole e righe, tutto insieme (1 = almeno i valori WCAG 1.4.12)
+     data-lt-grandezza  1 | 2 | 3  grandezza minima del testo da leggere (18, 20, 23 px)
+     data-lt-carattere  verdana | atkinson | lexend
+     data-lt-maiuscole  no         niente scritte tutte maiuscole, e il corsivo diventa dritto
+     data-lt-fermo      si         niente grana né movimenti decorativi
+   Restano FUORI (non cambiano mai): ciò che è aria-hidden, tele 3D, disegni SVG, la grande firma,
+   il tabellone, il marchio GS col nome, la scheda della password (accesso.js) e il pannello stesso.
+   NOTA: è ancora la strada «a forza» (!important con eccezioni). La scelta fra questa e le variabili
+   nel sistema comune è la decisione 1 del progetto.
+   ===================================================================== */
+
+/* ---------- valori ---------- */
+html[data-lt-spazio="1"] { --lt-l: .12em; --lt-p: .16em; --lt-r: 1.75; --lt-par: 1.4em; }
+html[data-lt-spazio="2"] { --lt-l: .2em;  --lt-p: .35em; --lt-r: 2.05; --lt-par: 2em; }
+html[data-lt-grandezza="1"] { --lt-min: 18px; }
+html[data-lt-grandezza="2"] { --lt-min: 20px; }
+html[data-lt-grandezza="3"] { --lt-min: 23px; }
+html[data-lt-carattere="verdana"]  { --lt-font: Verdana, 'DejaVu Sans', Tahoma, sans-serif; }
+html[data-lt-carattere="atkinson"] { --lt-font: 'Atkinson Hyperlegible Next', 'Atkinson Hyperlegible', sans-serif; }
+html[data-lt-carattere="lexend"]   { --lt-font: 'Lexend', sans-serif; }
+
+/* ---------- carattere ---------- */
+html[data-lt-carattere] body :not(svg, svg *, canvas, [aria-hidden="true"], [aria-hidden="true"] *, .grande-firma, .grande-firma *, .flap, .flap *, .marchio, .marchio *, .accesso, .accesso *, pre, code, kbd, .lt-pannello, .lt-pannello *) {
+  font-family: var(--lt-font) !important;
+}
+
+/* ---------- spazio fra lettere e parole ---------- */
+html[data-lt-spazio] body :not(svg, svg *, canvas, [aria-hidden="true"], [aria-hidden="true"] *, .grande-firma, .grande-firma *, .flap, .flap *, .marchio, .marchio *, .accesso, .accesso *, .lt-pannello, .lt-pannello *) {
+  letter-spacing: var(--lt-l) !important;
+  word-spacing: var(--lt-p) !important;
+}
+/* i titoli grandi: metà dello spazio fra le lettere (sono già grandi, e così ci stanno sul telefono) */
+html[data-lt-spazio] body :is(h1, h2):not([aria-hidden="true"] *, .accesso *, .lt-pannello *),
+html[data-lt-spazio] body :is(h1, h2) *:not(.accesso *) { letter-spacing: calc(var(--lt-l) / 2) !important; }
+
+/* ---------- spazio fra le righe e fra i paragrafi (solo il testo da leggere) ---------- */
+html[data-lt-spazio] body :is(p, li, dd, dt, td, th, blockquote, figcaption, summary, label, small):not([aria-hidden="true"] *, .accesso *, .lt-pannello *) {
+  line-height: var(--lt-r) !important;
+}
+html[data-lt-spazio] body :is(h1, h2, h3, h4):not([aria-hidden="true"] *, .accesso *, .lt-pannello *) { line-height: 1.3 !important; }
+html[data-lt-spazio] body :is(p, ul, ol, blockquote):not(.accesso *) + :is(p, ul, ol, blockquote) { margin-top: var(--lt-par) !important; }
+
+/* ---------- grandezza: lettura.js segna con data-lt-piccolo solo i testi più piccoli del minimo ---------- */
+html[data-lt-grandezza] [data-lt-piccolo] { font-size: var(--lt-min) !important; }
+
+/* ---------- niente maiuscole, niente corsivo ---------- */
+html[data-lt-maiuscole="no"] body :not(svg, svg *, canvas, [aria-hidden="true"], [aria-hidden="true"] *, .grande-firma, .grande-firma *, .flap, .flap *, .marchio, .marchio *, .accesso, .accesso *, pre, code, kbd, .lt-pannello, .lt-pannello *) {
+  text-transform: none !important;
+}
+/* le etichette in carattere «da macchina da scrivere» passano al carattere del testo */
+html[data-lt-maiuscole="no"]:not([data-lt-carattere]) body :not(svg, svg *, canvas, [aria-hidden="true"], [aria-hidden="true"] *, .grande-firma, .grande-firma *, .flap, .flap *, .marchio, .marchio *, .accesso, .accesso *, pre, code, kbd, .lt-pannello, .lt-pannello *) {
+  font-family: var(--sans) !important;
+}
+html[data-lt-maiuscole="no"] body :is(em, i, cite):not(.marchio i, .accesso *) { font-style: normal !important; }
+
+/* ---------- meno movimento (la parte in JavaScript va fatta negli effetti: vedi Studio.fermo nel progetto) ---------- */
+html[data-lt-fermo="si"] body::after { animation: none !important; opacity: 0 !important; }
+html[data-lt-fermo="si"] .alone { display: none !important; }
+html[data-lt-fermo="si"] *, html[data-lt-fermo="si"] *::before, html[data-lt-fermo="si"] *::after { scroll-behavior: auto !important; transition-duration: .01ms !important; animation-duration: .01ms !important; animation-iteration-count: 1 !important; }
+
+/* ---------- con più spazio, le parole lunghe vanno a capo invece di uscire dallo schermo ---------- */
+html[data-lt-attiva] body :is(div, section, article, header, main, aside, nav, li, a, p, h1, h2, h3, h4):not(.accesso, .accesso *) { min-width: 0; }
+html[data-lt-attiva] body :is(h1, h2, h3, h4, p, li, dd, summary, td, th, strong, span):not(.scheda *, .menu *, .accesso *, .lt-pannello *) { overflow-wrap: anywhere; }
+html[data-lt-attiva] body :is(h1, h2, h3, p, li, dd):not(.accesso *) { hyphens: auto; }
+
+/* =====================================================================
+   Il pulsante «Aa» nella testata e il pannello
+   ===================================================================== */
+.menu .lt-bottone, .lt-bottone { position: relative; display: inline-flex; align-items: center; gap: 8px; height: 40px; padding: 0 16px; border: 1px solid var(--line); border-radius: 999px; background: transparent; color: var(--ink); font: 600 13.5px/1 var(--sans); letter-spacing: 0; cursor: pointer; transition: background-color .2s ease, border-color .2s ease; }
+/* testo del pulsante più piccolo del 10% (Giovanni, 10/11): 15 → 13,5 px, «Aa» 17 → 15,3 px */
+.lt-bottone b { font: 700 15.3px/1 Georgia, 'Times New Roman', serif; letter-spacing: -.02em; }
+.menu .lt-bottone:hover { border-color: rgba(244, 241, 236, .34); background: rgba(244, 241, 236, .06); }
+/* pallino quando c'è almeno una scelta */
+.lt-bottone .lt-pallino { display: none; width: 8px; height: 8px; border-radius: 50%; background: var(--accent); }
+html[data-lt-attiva] .lt-bottone .lt-pallino { display: inline-block; }
+html[data-lt-attiva] .menu .lt-bottone { border-color: var(--accent); }
+/* sul telefono resta solo «Aa» (Photoshop non ha più Programma, Calendario e Video in testata: sono già nell'apertura e nella barra in basso) */
+@media (max-width: 560px) { .lt-bottone .lt-parola { display: none; } .menu .lt-bottone { padding: 0 13px; } }
+
+.lt-pannello { position: fixed; z-index: 1000; top: 84px; right: max(16px, calc((100vw - 1320px) / 2)); width: min(420px, calc(100vw - 32px)); max-height: calc(100dvh - 100px); overflow-y: auto; overscroll-behavior: contain;
+  padding: 0 22px 18px; border: 1px solid var(--line-2); border-radius: 20px; background: #19191f; color: var(--ink); box-shadow: 0 24px 60px rgba(0, 0, 0, .5);
+  font: 400 16px/1.45 'Geist', system-ui, sans-serif; letter-spacing: 0; word-spacing: 0; text-transform: none; text-align: left; }
+.lt-pannello * { font-family: 'Geist', system-ui, sans-serif; letter-spacing: 0; word-spacing: 0; text-transform: none; }
+/* la testa resta ferma in alto mentre il pannello scorre: × e «Togli tutte le scelte» sempre a portata */
+.lt-testa { position: sticky; top: 0; z-index: 1; display: flex; align-items: center; justify-content: space-between; gap: 10px; margin: 0 -22px; padding: 16px 22px 12px; background: #19191f; border-bottom: 1px solid var(--line); }
+.lt-testa strong { font-size: 20px; font-weight: 600; line-height: 1.25; }
+.lt-testa-azioni { display: flex; align-items: center; gap: 8px; }
+.lt-chiudi { display: grid; place-items: center; flex: none; width: 44px; height: 44px; padding: 0; border: 1px solid var(--line-2); border-radius: 50%; background: transparent; color: var(--ink); font: 400 24px/1 'Geist', sans-serif; cursor: pointer; }
+.lt-ripristina { flex: none; min-height: 44px; padding: 0 14px; border: 1px solid var(--line-2); border-radius: 999px; background: transparent; color: var(--ink); font-size: 14px; cursor: pointer; }
+.lt-ripristina:disabled { opacity: .4; cursor: default; }
+.lt-avviso { margin: 10px 0 0; color: var(--ink-2); font-size: 14px; }
+.lt-avviso:empty { display: none; }
+.lt-esempio { margin: 14px 0 4px; padding: 14px 16px; border: 1px solid var(--line-2); border-radius: 12px; background: #22222a; color: var(--ink); font-size: 17px; line-height: 1.55; }
+/* la frase di prova è l'unica parte del pannello che segue le scelte */
+html[data-lt-spazio] .lt-pannello .lt-esempio { letter-spacing: var(--lt-l) !important; word-spacing: var(--lt-p) !important; line-height: var(--lt-r) !important; }
+html[data-lt-grandezza] .lt-pannello .lt-esempio { font-size: max(17px, var(--lt-min)) !important; }
+html[data-lt-carattere] .lt-pannello .lt-esempio { font-family: var(--lt-font) !important; }
+.lt-gruppo { margin: 18px 0 0; padding: 0; border: 0; }
+.lt-gruppo legend { margin: 0 0 8px; padding: 0; color: var(--ink); font-size: 15px; font-weight: 600; }
+.lt-gruppo legend small { display: block; margin-top: 2px; color: var(--ink-3); font-size: 13px; font-weight: 400; }
+.lt-scelte { display: flex; flex-wrap: wrap; gap: 6px; }
+.lt-scelta { position: relative; }
+.lt-scelta input { position: absolute; opacity: 0; pointer-events: none; }
+.lt-scelta > span { display: inline-flex; align-items: center; justify-content: center; min-height: 44px; min-width: 48px; padding: 8px 14px; border: 1px solid var(--line-2); border-radius: 12px; color: var(--ink-2); font-size: 15px; line-height: 1.2; cursor: pointer; transition: border-color .15s ease, background-color .15s ease; }
+.lt-scelta > span:hover { border-color: rgba(244, 241, 236, .34); color: var(--ink); }
+.lt-scelta > input:checked + span { border-color: var(--ink); background: var(--ink); color: var(--bg); }
+.lt-scelta > input:focus-visible + span { outline: 2px solid var(--accent); outline-offset: 2px; }
+.lt-a { font-weight: 600; line-height: 1; }
+.lt-altro { margin-top: 18px; border-top: 1px solid var(--line); }
+.lt-altro > summary { display: flex; align-items: center; justify-content: space-between; min-height: 48px; cursor: pointer; font-size: 15px; font-weight: 600; list-style: none; }
+.lt-altro > summary::-webkit-details-marker { display: none; }
+.lt-altro > summary::after { content: "+"; font-size: 22px; font-weight: 400; }
+.lt-altro[open] > summary::after { content: "−"; }
+.lt-interruttore { display: flex; align-items: center; justify-content: space-between; gap: 14px; min-height: 48px; margin-top: 8px; padding: 8px 0; border-top: 1px solid var(--line); cursor: pointer; font-size: 15px; }
+.lt-interruttore small { display: block; color: var(--ink-3); font-size: 13px; }
+.lt-interruttore input { appearance: none; position: relative; flex: none; width: 46px; height: 28px; margin: 0; border-radius: 999px; background: #33333d; cursor: pointer; transition: background-color .2s ease; }
+.lt-interruttore input::after { content: ""; position: absolute; top: 3px; left: 3px; width: 22px; height: 22px; border-radius: 50%; background: var(--ink); transition: transform .2s ease; }
+.lt-interruttore input:checked { background: var(--accent); }
+.lt-interruttore input:checked::after { transform: translateX(18px); background: var(--bg); }
+.lt-interruttore input:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+.lt-nota { margin: 16px 0 0; color: var(--ink-3); font-size: 13px; line-height: 1.45; }
+
+/* sul telefono il pannello sale dal basso e lascia vedere la pagina sopra */
+@media (max-width: 560px) {
+  .lt-pannello { top: auto; right: 0; bottom: 0; left: 0; width: 100%; max-height: 74dvh; border-radius: 20px 20px 0 0; padding: 0 16px calc(16px + env(safe-area-inset-bottom)); }
+  .lt-testa { margin: 0 -16px; padding: 14px 16px 10px; }
+  .lt-testa strong { font-size: 18px; }
+}
