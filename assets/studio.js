@@ -6,9 +6,12 @@
   const leggi = k => { try { return localStorage.getItem(k); } catch (e) { return null; } };
   const salva = (k, v) => { try { localStorage.setItem(k, v); } catch (e) {} };
   const esc = s => String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
-  const fermo = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  /* «riduci movimento» del telefono OPPURE «Meno movimento» della Lettura facilitata (attributo su <html>), letto ogni volta */
+  const fermoOra = ((mq, h) => () => mq.matches || h.hasAttribute('data-lt-fermo'))(matchMedia('(prefers-reduced-motion: reduce)'), document.documentElement);
+  const fermo = fermoOra();
   const mouse = matchMedia('(pointer: fine)').matches;
-  window.Studio = { leggi, salva, esc, fermo, mouse };
+  window.Studio = { leggi, salva, esc, mouse };
+  Object.defineProperty(window.Studio, 'fermo', { get: fermoOra, enumerable: true });   // vero/falso, sempre aggiornato
 
   /* ---------- Testata e piede: scritti una volta qui, uguali in tutte le pagine ----------
    * Nella pagina basta:

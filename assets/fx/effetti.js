@@ -9,7 +9,8 @@
    Lo stile sta in assets/studio.css, sezione "Effetti presi da React Bits".
    ===================================================================== */
 (function () {
-  const fermo = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  /* «riduci movimento» del telefono OPPURE «Meno movimento» della Lettura facilitata (attributo su <html>), letto ogni volta */
+  const fermo = ((mq, h) => () => mq.matches || h.hasAttribute('data-lt-fermo'))(matchMedia('(prefers-reduced-motion: reduce)'), document.documentElement);
   const mouse = matchMedia('(pointer: fine)').matches;
   const CIFRE = '0123456789';
   const SEPARATORI = '.:/-';
@@ -39,7 +40,7 @@
       nuovo = String(nuovo);
       // un giro interrotto a metà: prima rimetti a posto le palette sull'ultimo testo
       if (raf) { cancelAnimationFrame(raf); raf = 0; disegna(attuale); }
-      if (fermo || nuovo.length !== attuale.length) { attuale = nuovo; disegna(nuovo); return; }
+      if (fermo() || nuovo.length !== attuale.length) { attuale = nuovo; disegna(nuovo); return; }
       const vecchio = attuale;
       attuale = nuovo;
       el.querySelector('.vh').textContent = nuovo;
@@ -78,7 +79,7 @@
      Le lettere vicine al mouse diventano più spesse (asse 'wght' del font variabile Geist)
      e si colorano dell'accento. Solo con il mouse e senza "riduci movimento". */
   function prossimita(el, { da = 400, a = 800, raggio = 220 } = {}) {
-    if (!mouse || fermo || el.classList.contains('vivo')) return;
+    if (!mouse || fermo() || el.classList.contains('vivo')) return;
     const testo = el.textContent;
     el.classList.add('vivo');
     el.innerHTML = [...testo].map(c => (c === ' ' ? ' ' : `<span>${c}</span>`)).join('');

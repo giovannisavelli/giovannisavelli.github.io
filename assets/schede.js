@@ -27,7 +27,7 @@
 (function () {
   const risolutori = [];
   let barra, bottoni = [], pannelli = new Map(), iniziale = '';
-  const fermo = () => matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const fermo = ((mq, h) => () => mq.matches || h.hasAttribute('data-lt-fermo'))(matchMedia('(prefers-reduced-motion: reduce)'), document.documentElement);
 
   // quanto spazio occupano in alto la testata e (se resta attaccata) la barra delle schede
   function sopra() {

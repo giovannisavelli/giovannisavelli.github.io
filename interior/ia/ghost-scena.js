@@ -7,7 +7,8 @@ const linksSvg = document.getElementById('ghost-links');
 const btn = document.getElementById('ghost-toggle');
 const stateEl = document.getElementById('ghost-state');
 const driftEl = document.getElementById('ghost-drift');
-const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+/* «riduci movimento» del telefono OPPURE «Meno movimento» della Lettura facilitata (attributo su <html>), letto ogni volta */
+const reduced = ((mq, h) => () => mq.matches || h.hasAttribute('data-lt-fermo'))(matchMedia('(prefers-reduced-motion: reduce)'), document.documentElement);
 const small = matchMedia('(max-width: 900px)').matches;
 
 // canvas opaco con lo stesso colore di fondo della pagina: un canvas trasparente con punti "di luce" sparisce in alcuni browser
@@ -451,6 +452,7 @@ const ACTIVE_ON = small ? 5 : 7, ACTIVE_OFF = SLOTS;
 const TRK = [];
 for (let j = 0; j < SLOTS; j++) {
   const el = document.createElement('div');
+  el.setAttribute('aria-hidden', 'true');   // mirino decorativo: la Lettura facilitata e i lettori di schermo lo lasciano stare
   el.className = 'gtrk';
   el.innerHTML = '<i class="gtrk-box"></i><i class="gtrk-plus"></i><span class="gtrk-label"><b></b><em></em></span>';
   stage.appendChild(el);
@@ -538,7 +540,7 @@ stage.addEventListener('pointercancel', endDrag);
 stage.addEventListener('pointerleave', () => { if (!pull.dragging) mouse.active = false; });
 
 // il pulsante toglie la Shell: sfera e cavi si disperdono e restano la rete e i mirini del Ghost
-let shellOn = true, loose = reduced ? 0 : 1;
+let shellOn = true, loose = reduced() ? 0 : 1;
 btn.addEventListener('click', () => {
   shellOn = !shellOn;
   btn.classList.toggle('off', !shellOn);
@@ -596,7 +598,7 @@ new IntersectionObserver(e => { visible = e[0].isIntersecting; }).observe(hero);
 function frame(now) {
   requestAnimationFrame(frame);
   if (!visible) { last = now; return; }
-  const dt = Math.min(.05, (now - last) / 1000); last = now; clock += reduced ? 0 : dt;
+  const dt = Math.min(.05, (now - last) / 1000); last = now; clock += reduced() ? 0 : dt;
   loose += ((shellOn ? 0 : 1) - loose) * Math.min(1, dt * (shellOn ? 1.1 : .7));
   mouse.on += ((mouse.active && !pull.dragging ? 1 : 0) - mouse.on) * Math.min(1, dt * 4);
 
@@ -606,14 +608,14 @@ function frame(now) {
   const stiff = pull.dragging ? 60 : 26, damp = pull.dragging ? 14 : 3.6;
   pull.vx += ((tx - pull.x) * stiff - pull.vx * damp) * dt; pull.vy += ((ty - pull.y) * stiff - pull.vy * damp) * dt;
   pull.x += pull.vx * dt; pull.y += pull.vy * dt;
-  const sway = reduced ? 0 : 1;
+  const sway = reduced() ? 0 : 1;
   ball.rotation.set(REST.x + pull.y * .9 + Math.sin(clock * .5) * .02 * sway, REST.y + pull.x * 1.1 + Math.sin(clock * .33) * .035 * sway, REST.z);
   ball.position.set(pull.x * .45, -pull.y * .45 + Math.sin(clock * .7) * .012 * sway, 0);
   ball.updateMatrix();
   U.uBall.value.copy(ball.matrix);
 
   U.uTime.value = clock; U.uLoose.value = loose; U.uBare.value = loose;
-  if (!reduced) { U.uPhase.value += dt * (1 + .8 * loose); net.rotation.y += dt * loose * .11; net.rotation.x += dt * loose * .035; }
+  if (!reduced()) { U.uPhase.value += dt * (1 + .8 * loose); net.rotation.y += dt * loose * .11; net.rotation.x += dt * loose * .035; }
   U.uAmp.value = .02 + .13 * loose;
   U.uMouse.value.copy(mouse.ndc); U.uHover.value = mouse.on;
   driftEl.textContent = 'Drift ' + String(Math.round(loose * 99)).padStart(2, '0');
@@ -630,7 +632,8 @@ function frame(now) {
 
   const active = Math.round(ACTIVE_ON + (ACTIVE_OFF - ACTIVE_ON) * loose);
   const k5 = 1 - Math.exp(-dt * (5 + 3.5 * loose)), k2 = 1 - Math.exp(-dt * (2.4 + 1.6 * loose));
-  TRK.forEach((t, j) => {
+  // con «riduci movimento» (telefono o Lettura facilitata) i mirini restano dove sono
+  if (!reduced()) TRK.forEach((t, j) => {
     const want = j < active;
     if (t.state === 'idle' && want && Math.random() < dt * 1.5) {
       t.node = pickNode(proj);

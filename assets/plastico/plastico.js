@@ -6,7 +6,8 @@ import { RoundedBoxGeometry } from 'three/addons/geometries/RoundedBoxGeometry.j
 
 const hero = document.getElementById('hero');
 const box = document.querySelector('.muri');
-const ridotto = matchMedia('(prefers-reduced-motion: reduce)').matches;
+/* «riduci movimento» del telefono OPPURE «Meno movimento» della Lettura facilitata (attributo su <html>), letto ogni volta */
+const ridotto = ((mq, h) => () => mq.matches || h.hasAttribute('data-lt-fermo'))(matchMedia('(prefers-reduced-motion: reduce)'), document.documentElement);
 const piccolo = () => innerWidth < 700;
 const BASE = window.BASE_CORSI ?? '';
 
@@ -127,7 +128,7 @@ function disegnaPianta() {
 }
 const tex = new THREE.CanvasTexture(tela);
 tex.colorSpace = THREE.SRGBColorSpace; tex.anisotropy = renderer.capabilities.getMaxAnisotropy();
-const pianta = new THREE.Mesh(new THREE.PlaneGeometry(1080, 700), new THREE.MeshStandardMaterial({ map: tex, roughness: .95, metalness: 0, transparent: true, opacity: ridotto ? 1 : 0 }));
+const pianta = new THREE.Mesh(new THREE.PlaneGeometry(1080, 700), new THREE.MeshStandardMaterial({ map: tex, roughness: .95, metalness: 0, transparent: true, opacity: ridotto() ? 1 : 0 }));
 pianta.rotation.x = -Math.PI / 2; pianta.position.set(500, 0, 310); pianta.receiveShadow = true;
 scene.add(pianta);
 const suolo = new THREE.Mesh(new THREE.PlaneGeometry(9000, 9000), new THREE.MeshStandardMaterial({ color: 0x0f0f13, roughness: 1 }));
@@ -154,8 +155,8 @@ function pezzo(cx, cz, lungo, spesso, alto, asseX) {
   mesh.add(new THREE.LineSegments(new THREE.EdgesGeometry(geo, 35), spigoli));
   // nascita: i muri salgono dal pavimento a onda, partendo dall'ingresso
   const nasce = .9 + Math.hypot(cx - 500, cz - 560) / 620 * 1.5 + Math.random() * .15;
-  mesh.scale.y = ridotto ? 1 : .001;
-  pezzi.push({ perno, mesh, cx, cz, asseX, lungo, spesso, alto, ang: 0, vel: 0, verso: 1, limite: Math.PI / 2, appoggio: null, dal: 0, nasce, cresciuto: ridotto });
+  mesh.scale.y = ridotto() ? 1 : .001;
+  pezzi.push({ perno, mesh, cx, cz, asseX, lungo, spesso, alto, ang: 0, vel: 0, verso: 1, limite: Math.PI / 2, appoggio: null, dal: 0, nasce, cresciuto: ridotto() });
 }
 for (const m of MURI) {
   const asseX = m.z1 === m.z2, lungo = Math.hypot(m.x2 - m.x1, m.z2 - m.z1);
@@ -321,7 +322,7 @@ function frame(now) {
   const attivo = now - ultimo < 3500 && mouse;
   const s = now / 1000;
   const bx = attivo ? mouse.x : 500 + 330 * Math.sin(s * .19), bz = attivo ? mouse.z : 300 + 190 * Math.sin(s * .13 + 1);
-  const k = ridotto ? 1 : 1 - Math.exp(-dt * 3.2);
+  const k = ridotto() ? 1 : 1 - Math.exp(-dt * 3.2);
   fuoco.x += (bx - fuoco.x) * k; fuoco.z += (bz - fuoco.z) * k;
   faro.position.set(fuoco.x + 60, 760, fuoco.z + 260); faro.target.position.copy(fuoco); faro.target.updateMatrixWorld();
 
@@ -334,9 +335,9 @@ function frame(now) {
 
   // apertura: prima compare la pianta, poi i muri salgono a onda dall'ingresso, infine i nomi
   const vita = (now - t0) / 1000;
-  if (!ridotto) pianta.material.opacity = Math.min(1, Math.max(0, (vita - .15) / .9));
+  if (!ridotto()) pianta.material.opacity = Math.min(1, Math.max(0, (vita - .15) / .9));
   if (vita > 2.9) tag.forEach(t => t.a.classList.add('su'));
-  const costruito = ridotto || vita > 3.4;
+  const costruito = ridotto() || vita > 3.4;
 
   // i muri: quelli vicini al faro si abbattono, cadendo dalla parte opposta al mouse; gli altri si rialzano
   const TERRA = Math.PI / 2 * .985;
@@ -366,7 +367,7 @@ function frame(now) {
     // finché quello non se ne va: così pilastro e muro non si spingono a vicenda e non si attraversano
     const sotto = regge && (p.ang < .05 || p.ang >= p.limite - .02 || pezzi.some(o => o !== p && o.appoggio === p && o.ang > .1 &&
       ((p.asseX ? o.cz - p.cz : o.cx - p.cx) * latoDi(p) > 0)));
-    if (ridotto) p.ang = sotto ? p.ang : giu ? p.limite : 0;
+    if (ridotto()) p.ang = sotto ? p.ang : giu ? p.limite : 0;
     else if (sotto) {
       p.vel = 0;
     } else if (giu) {

@@ -5,7 +5,8 @@
   const figura = document.getElementById('glo-anim');
   if (!figura) return;
   const NS = 'http://www.w3.org/2000/svg';
-  const ridotto = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  /* «riduci movimento» del telefono OPPURE «Meno movimento» della Lettura facilitata (attributo su <html>), letto ogni volta */
+  const ridotto = ((mq, h) => () => mq.matches || h.hasAttribute('data-lt-fermo'))(matchMedia('(prefers-reduced-motion: reduce)'), document.documentElement);
   const tela = figura.querySelector('.glo-tela');
   const svg = figura.querySelector('svg');
   const passoTesto = figura.querySelector('.glo-passo');
@@ -282,7 +283,7 @@
     fraseTesto.textContent = i < 0 ? scena.intro : passo.testo;
     aggiornaComandi();
     if (i < 0) return;
-    if (anima && !ridotto) await passo.anima(rif, annullato);
+    if (anima && !ridotto()) await passo.anima(rif, annullato);
     if (annullato()) return;
     passo.fine(rif);
     if (!inGioco) return;

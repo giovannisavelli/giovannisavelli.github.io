@@ -41,19 +41,30 @@
     document.head.appendChild(l);
   }
 
-  // grandezza: segna i testi da leggere più piccoli del minimo, misurati SENZA la Lettura
-  const TESTI = 'p, li, dd, dt, td, th, blockquote, figcaption, summary, label, small';
-  const ESCLUSI = '[aria-hidden="true"], .accesso, .lt-pannello, .flap, .grande-firma, .marchio';
+  // grandezza: segna OGNI elemento che contiene direttamente del testo (paragrafi, etichette, link, pulsanti,
+  // grassetti, date...) se è più piccolo del minimo. La regola CSS agisce solo sugli elementi segnati, quindi
+  // tolti i segni si misura la grandezza vera, senza spegnere la Lettura.
+  // Restano fuori: decorazioni, testata (marchio, Aa, Tutti i corsi), pannello, scheda della password.
+  const ESCLUSI = '[aria-hidden="true"], svg, canvas, script, style, .top, .accesso, .lt-pannello, .flap, .grande-firma, .marchio';
+  const haTesto = el => { for (const n of el.childNodes) if (n.nodeType === 3 && n.textContent.trim()) return true; return false; };
+  function segna(radice, min) {
+    const tutti = radice.querySelectorAll ? [radice, ...radice.querySelectorAll('*')] : [];
+    const da = tutti.filter(el => el.nodeType === 1 && haTesto(el) && !el.closest(ESCLUSI) && parseFloat(getComputedStyle(el).fontSize) < min - .1);
+    da.forEach(el => el.setAttribute('data-lt-piccolo', ''));
+  }
   function segnaPiccoli() {
     if (!document.body) return;
     document.querySelectorAll('[data-lt-piccolo]').forEach(el => el.removeAttribute('data-lt-piccolo'));
-    if (!stato.grandezza) return;
-    const min = MINIMI[stato.grandezza];
-    html.removeAttribute('data-lt-grandezza');
-    const da = [...document.querySelectorAll(TESTI)].filter(el => !el.closest(ESCLUSI) && parseFloat(getComputedStyle(el).fontSize) < min);
-    html.setAttribute('data-lt-grandezza', stato.grandezza);
-    da.forEach(el => el.setAttribute('data-lt-piccolo', ''));
+    if (stato.grandezza) segna(document.body, MINIMI[stato.grandezza]);
   }
+  // testi aggiunti dopo dalla pagina (elenchi delle lezioni, schede, animazioni a passi): si segnano anche loro
+  let nuovi = [], attesaNuovi;
+  new MutationObserver(lista => {
+    if (!stato.grandezza) return;
+    lista.forEach(m => m.addedNodes.forEach(n => { if (n.nodeType === 1 && !n.closest(ESCLUSI)) nuovi.push(n); else if (n.nodeType === 3 && n.parentElement && !n.parentElement.closest(ESCLUSI)) nuovi.push(n.parentElement); }));
+    clearTimeout(attesaNuovi);
+    attesaNuovi = setTimeout(() => { const min = MINIMI[stato.grandezza]; nuovi.splice(0).forEach(n => n.isConnected && segna(n, min)); }, 120);
+  }).observe(html, { childList: true, subtree: true });
 
   function applica() {
     ['spazio', 'grandezza', 'carattere', 'maiuscole'].forEach(k => { if (stato[k]) html.setAttribute('data-lt-' + k, stato[k]); else html.removeAttribute('data-lt-' + k); });

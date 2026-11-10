@@ -545,7 +545,7 @@
   }
 
   function disegna() {
-    const movimento = !matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const movimento = !(matchMedia('(prefers-reduced-motion: reduce)').matches || document.documentElement.hasAttribute('data-lt-fermo'));
     document.querySelectorAll('.wip-anim').forEach(d => {
       if (!d.firstChild) d.innerHTML = SVG;
       if (movimento && webglDisponibile()) diorama(d).catch(e => { console.warn('Lavori in corso: il 3D non parte, resta il disegno.', e); d.classList.remove('wip-3d'); d.innerHTML = SVG; });

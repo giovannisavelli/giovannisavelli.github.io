@@ -44,7 +44,9 @@ html[data-lt-spazio] body :is(h1, h2, h3, h4):not([aria-hidden="true"] *, .acces
 html[data-lt-spazio] body :is(p, ul, ol, blockquote):not(.accesso *) + :is(p, ul, ol, blockquote) { margin-top: var(--lt-par) !important; }
 
 /* ---------- grandezza: lettura.js segna con data-lt-piccolo solo i testi più piccoli del minimo ---------- */
-html[data-lt-grandezza] [data-lt-piccolo] { font-size: var(--lt-min) !important; }
+html[data-lt-grandezza] [data-lt-piccolo] { font-size: var(--lt-min) !important; line-height: var(--lt-r, 1.45) !important; }
+/* i pulsanti e le pillole con un'altezza fissa crescono col testo invece di tagliarlo */
+html[data-lt-grandezza] :is(button, a, .scheda)[data-lt-piccolo] { height: auto !important; min-height: 44px; padding-top: 6px; padding-bottom: 6px; }
 
 /* ---------- niente maiuscole, niente corsivo ---------- */
 html[data-lt-maiuscole="no"] body :not(svg, svg *, canvas, [aria-hidden="true"], [aria-hidden="true"] *, .grande-firma, .grande-firma *, .flap, .flap *, .marchio, .marchio *, .accesso, .accesso *, pre, code, kbd, .lt-pannello, .lt-pannello *) {
@@ -59,7 +61,9 @@ html[data-lt-maiuscole="no"] body :is(em, i, cite):not(.marchio i, .accesso *) {
 /* ---------- meno movimento (la parte in JavaScript va fatta negli effetti: vedi Studio.fermo nel progetto) ---------- */
 html[data-lt-fermo="si"] body::after { animation: none !important; opacity: 0 !important; }
 html[data-lt-fermo="si"] .alone { display: none !important; }
-html[data-lt-fermo="si"] *, html[data-lt-fermo="si"] *::before, html[data-lt-fermo="si"] *::after { scroll-behavior: auto !important; transition-duration: .01ms !important; animation-duration: .01ms !important; animation-iteration-count: 1 !important; }
+/* transizioni tolte del tutto (con una durata minima, in una scheda nascosta il cambio può restare a metà);
+   le animazioni invece si accorciano, così le parti che compaiono con un'animazione arrivano comunque visibili */
+html[data-lt-fermo="si"] *, html[data-lt-fermo="si"] *::before, html[data-lt-fermo="si"] *::after { scroll-behavior: auto !important; transition: none !important; animation-duration: .01ms !important; animation-iteration-count: 1 !important; }
 
 /* ---------- con più spazio, le parole lunghe vanno a capo invece di uscire dallo schermo ---------- */
 html[data-lt-attiva] body :is(div, section, article, header, main, aside, nav, li, a, p, h1, h2, h3, h4):not(.accesso, .accesso *) { min-width: 0; }
