@@ -57,6 +57,18 @@
     pannelloDocente(k);
   }, true);
 
+  // Statistiche (Umami): «umami.disabled» nel browser = questo dispositivo non viene contato.
+  function escluso() { try { return !!localStorage.getItem('umami.disabled'); } catch (e) { return false; } }
+  function cambiaConteggio() {
+    try { if (escluso()) localStorage.removeItem('umami.disabled'); else localStorage.setItem('umami.disabled', '1'); } catch (e) {}
+    return escluso();
+  }
+  if (location.hash === '#non-contarmi') {
+    const ora = cambiaConteggio();
+    history.replaceState(null, '', location.pathname + location.search);
+    setTimeout(() => alert(ora ? 'Fatto: le visite da questo dispositivo non vengono più contate.' : 'Fatto: le visite da questo dispositivo vengono di nuovo contate.'), 300);
+  }
+
   function svela(hex, k) {
     let out = '';
     for (let i = 0; i < hex.length; i += 2) out += String.fromCharCode(parseInt(hex.substr(i, 2), 16) ^ k.charCodeAt((i / 2) % k.length));
@@ -119,6 +131,7 @@
           <div class="dc-azioni">
             <button type="button" class="dc-primo" data-fai="apri">Apri tutti i corsi su questo dispositivo</button>
             <button type="button" data-fai="chiudi">Richiudi tutti i corsi su questo dispositivo</button>
+            <button type="button" data-fai="conta">${escluso() ? 'Statistiche: questo dispositivo NON è contato · ricontalo' : 'Statistiche: questo dispositivo è contato · escludilo'}</button>
             <button type="button" data-fai="esci">Chiudi il pannello</button>
           </div>
           <p class="dc-nota">Sul PC dell'aula, prima di andare via, usa «Richiudi»: altrimenti gli studenti trovano tutti i corsi aperti.</p>
@@ -140,6 +153,7 @@
         chiudiPannello();
         apriPagina();
       }
+      if (fai === 'conta') { cambiaConteggio(); disegna(); return; }
       if (fai === 'chiudi') {
         Object.keys(CORSI).forEach(id => {
           try { localStorage.removeItem(chiaveDi(id)); } catch (err) {}
