@@ -68,27 +68,33 @@
     if (!document.getElementById('docente-stile')) {
       const s = document.createElement('style');
       s.id = 'docente-stile';
+      // nomi con il prefisso dc- e regole esplicite: così lo stile della pagina (home, plastico) non lo cambia
       s.textContent = `
         .docente { position: fixed; inset: 0; z-index: 2147483600; display: grid; place-items: center; padding: 20px;
-          background: rgba(5,6,8,.78); backdrop-filter: blur(6px); color: #edf1ed; font-family: Geist, 'Segoe UI', Arial, sans-serif; }
+          background: rgba(5,6,8,.78); backdrop-filter: blur(6px); color: #edf1ed; font-family: Geist, 'Segoe UI', Arial, sans-serif; text-align: left; }
         .docente, .docente * { box-sizing: border-box; }
-        .docente .box { width: min(480px, 100%); padding: 26px 24px 22px; border: 1px solid rgba(220,230,224,.22);
-          border-radius: 18px; background: #0c0e10; box-shadow: 0 30px 80px rgba(0,0,0,.55); }
-        .docente .etichetta { color: #9fb0a7; font: 600 10px/1.4 'Geist Mono', ui-monospace, monospace; letter-spacing: .1em; text-transform: uppercase; }
-        .docente h2 { margin: 6px 0 16px; font-size: 24px; line-height: 1.2; font-weight: 650; letter-spacing: -.01em; }
-        .docente ul { list-style: none; margin: 0 0 18px; padding: 0; display: grid; gap: 8px; }
-        .docente li { display: grid; grid-template-columns: 1fr auto; gap: 2px 12px; align-items: center; padding: 10px 12px;
+        .docente .dc-box { position: relative; width: min(480px, 100%); max-height: calc(100vh - 40px); overflow: auto; padding: 26px 24px 22px;
+          border: 1px solid rgba(220,230,224,.22); border-radius: 18px; background: #0c0e10; box-shadow: 0 30px 80px rgba(0,0,0,.55); }
+        .docente .dc-etichetta { display: block; position: static; opacity: 1; transform: none; margin: 0; color: #9fb0a7;
+          font: 600 10px/1.4 'Geist Mono', ui-monospace, monospace; letter-spacing: .1em; text-transform: uppercase; }
+        .docente .dc-titolo { display: block; margin: 6px 0 16px; padding: 0; color: #edf1ed; font: 650 24px/1.2 Geist, 'Segoe UI', Arial, sans-serif; letter-spacing: -.01em; }
+        .docente .dc-lista { list-style: none; margin: 0 0 18px; padding: 0; display: grid; gap: 8px; }
+        .docente .dc-lista li { display: grid; grid-template-columns: 1fr auto; gap: 2px 12px; align-items: center; margin: 0; padding: 10px 12px;
           border: 1px solid rgba(220,230,224,.12); border-left: 3px solid var(--c); border-radius: 10px; }
-        .docente .nome { font-size: 14px; color: #d5ded8; }
-        .docente .pw { grid-column: 1; font: 600 17px 'Geist Mono', ui-monospace, monospace; color: var(--c); user-select: all; overflow-wrap: anywhere; }
-        .docente .stato { grid-row: 1 / 3; grid-column: 2; font-size: 12px; color: #9fb0a7; text-align: right; }
-        .docente .stato.si { color: #77e7b7; }
-        .docente .azioni { display: grid; gap: 8px; }
-        .docente button { width: 100%; min-height: 46px; border: 1px solid rgba(220,230,224,.28); border-radius: 999px;
-          background: transparent; color: #edf1ed; font: 600 15px Geist, Arial, sans-serif; cursor: pointer; }
-        .docente button.primo { background: #edf1ed; color: #0b1210; border-color: transparent; }
-        .docente button:hover { border-color: #edf1ed; }
-        .docente .nota { margin: 14px 0 0; font-size: 12.5px; line-height: 1.5; color: #9fb0a7; }
+        .docente .dc-nome { font-size: 14px; color: #d5ded8; }
+        .docente .dc-pw { grid-column: 1; justify-self: start; display: inline-flex; align-items: baseline; gap: 10px; min-height: 0; margin: 0; padding: 2px 0;
+          border: 0; border-radius: 0; background: none; color: var(--c); font: 600 17px 'Geist Mono', ui-monospace, monospace; letter-spacing: .04em;
+          cursor: pointer; overflow-wrap: anywhere; text-align: left; }
+        .docente .dc-pw small { color: #9fb0a7; font: 500 11px Geist, Arial, sans-serif; letter-spacing: 0; }
+        .docente .dc-pw:focus-visible { outline: 2px solid var(--c); outline-offset: 3px; }
+        .docente .dc-stato { grid-row: 1 / 3; grid-column: 2; font-size: 12px; color: #9fb0a7; text-align: right; }
+        .docente .dc-stato.si { color: #77e7b7; }
+        .docente .dc-azioni { display: grid; gap: 8px; position: static; opacity: 1; transform: none; filter: none; }
+        .docente .dc-azioni button { width: 100%; min-height: 46px; margin: 0; padding: 0 16px; border: 1px solid rgba(220,230,224,.28); border-radius: 999px;
+          background: transparent; color: #edf1ed; font: 600 15px Geist, Arial, sans-serif; cursor: pointer; transform: none; }
+        .docente .dc-azioni button.dc-primo { background: #edf1ed; color: #0b1210; border-color: transparent; }
+        .docente .dc-azioni button:hover { border-color: #edf1ed; }
+        .docente .dc-nota { margin: 14px 0 0; font-size: 12.5px; line-height: 1.5; color: #9fb0a7; }
       `;
       document.head.appendChild(s);
     }
@@ -96,27 +102,37 @@
     p.className = 'docente';
     p.setAttribute('role', 'dialog');
     p.setAttribute('aria-label', 'Pannello del docente');
+    const ids = Object.keys(CORSI);
+    const parole = ids.map(id => svela(CORSI[id].s, k));
+    const nascosta = '••••••••••';
     function disegna() {
       p.innerHTML = `
-        <div class="box">
-          <div class="etichetta">Solo per il docente</div>
-          <h2>Password dei corsi</h2>
-          <ul>${Object.keys(CORSI).map(id => {
+        <div class="dc-box">
+          <span class="dc-etichetta">Solo per il docente</span>
+          <strong class="dc-titolo">Password dei corsi</strong>
+          <ul class="dc-lista">${ids.map((id, i) => {
             const c = CORSI[id], si = aperto(id);
-            const pw = svela(c.s, k);
-            return `<li style="--c:${c.colore}"><span class="nome">${c.nome}</span><span class="pw">${pw}</span>
-              <span class="stato${si ? ' si' : ''}">${si ? 'aperto qui' : 'chiuso qui'}</span></li>`;
+            return `<li style="--c:${c.colore}"><span class="dc-nome">${c.nome}</span>
+              <button type="button" class="dc-pw" data-i="${i}" aria-pressed="false" aria-label="Mostra la password di ${c.nome}">${nascosta}<small>clic per vedere</small></button>
+              <span class="dc-stato${si ? ' si' : ''}">${si ? 'aperto qui' : 'chiuso qui'}</span></li>`;
           }).join('')}</ul>
-          <div class="azioni">
-            <button class="primo" data-fai="apri">Apri tutti i corsi su questo dispositivo</button>
-            <button data-fai="chiudi">Richiudi tutti i corsi su questo dispositivo</button>
-            <button data-fai="esci">Chiudi il pannello</button>
+          <div class="dc-azioni">
+            <button type="button" class="dc-primo" data-fai="apri">Apri tutti i corsi su questo dispositivo</button>
+            <button type="button" data-fai="chiudi">Richiudi tutti i corsi su questo dispositivo</button>
+            <button type="button" data-fai="esci">Chiudi il pannello</button>
           </div>
-          <p class="nota">Sul PC dell'aula, prima di andare via, usa «Richiudi»: altrimenti gli studenti trovano tutti i corsi aperti.</p>
+          <p class="dc-nota">Sul PC dell'aula, prima di andare via, usa «Richiudi»: altrimenti gli studenti trovano tutti i corsi aperti.</p>
         </div>`;
     }
     disegna();
     p.addEventListener('click', function (e) {
+      const pw = e.target.closest('.dc-pw');
+      if (pw) {
+        const vista = pw.getAttribute('aria-pressed') === 'true';
+        pw.setAttribute('aria-pressed', String(!vista));
+        pw.innerHTML = vista ? `${nascosta}<small>clic per vedere</small>` : `${parole[pw.dataset.i]}<small>clic per nascondere</small>`;
+        return;
+      }
       const fai = e.target.closest('button') && e.target.closest('button').dataset.fai;
       if (e.target === p || fai === 'esci') return chiudiPannello();
       if (fai === 'apri') {
