@@ -1,30 +1,14 @@
-/* Password «di cortesia» per le pagine dei corsi.
- *
- * Non è una protezione vera: il sito è pubblico su GitHub Pages e chi sa leggere il codice
- * arriva lo stesso ai contenuti. Serve solo a tenere ogni classe nel suo corso.
- *
- * Si usa così, nel <head> della pagina del corso, prima degli altri script:
- *   <script src="../../assets/accesso.js" data-corso="photoshop"></script>
- * Senza data-corso (per esempio nella home) non chiude niente: attiva solo il pannello del docente.
- *
- * PANNELLO DEL DOCENTE: tieni premuti insieme i tasti Q, W ed E e fai clic in un punto qualsiasi
- * della pagina. Mostra le password e permette di aprire (o richiudere) tutti i corsi su quel dispositivo.
- *
- * PER CAMBIARE UNA PASSWORD servono due righe, «impronta» e «parola»:
- *   python -c "import hashlib,base64; p='nuovapassword'; print(hashlib.sha256(p.encode()).hexdigest()); print(base64.b64encode(p[::-1].encode()).decode())"
- * La prima riga è l'impronta, la seconda la parola (la password al contrario, in base64: così non si
- * legge a colpo d'occhio nel codice). Password sempre minuscola. Chi aveva la vecchia la dovrà reinserire.
- */
+/* Password di cortesia dei corsi. Non è una protezione vera: il sito è pubblico. */
 (function () {
   const CORSI = {
     photoshop:    { nome: 'Photoshop', sotto: 'Interior Design', colore: '#38bdf8',
-                    impronta: 'fa45a391cf472b1bfc0c8acf23f6652445621a03f6ca7b6b970791d60abc11d7', parola: 'ZW5vbGNvcmJtaXQ=' },
+                    impronta: 'fa45a391cf472b1bfc0c8acf23f6652445621a03f6ca7b6b970791d60abc11d7', s: '3f0c14270e2406153e122e' },
     ia:           { nome: 'Intelligenza Artificiale', sotto: 'Interior e Product Design', colore: '#77e7b7',
-                    impronta: 'bf0c7a2bf147d4f4065173806734b0eb201f3462b84e6d29dab6f50f5b423ac1', parola: 'dHNvaGdsaWllc3V0' },
+                    impronta: 'bf0c7a2bf147d4f4065173806734b0eb201f3462b84e6d29dab6f50f5b423ac1', s: '3f100a201522091e39133811' },
     rendering:    { nome: 'Rendering 3D', sotto: 'Cinema 4D e Corona', colore: '#9d7bff',
-                    impronta: '05119de43df417a4f2d580dee4430109794b2b43cc199902df81049262f4919b', parola: 'YXNzZWxmaXJlY3Vs' },
+                    impronta: '05119de43df417a4f2d580dee4430109794b2b43cc199902df81049262f4919b', s: '27101a200e220315340f3804' },
     modellazione: { nome: 'Modellazione 3D', sotto: 'Product Design', colore: '#fb923c',
-                    impronta: 'fd7bbcab293170806c5570a6ba70562b9e9550291513a0df5f5f80058f9fee8f', parola: 'aXJldGFsaXJkYXVx' }
+                    impronta: 'fd7bbcab293170806c5570a6ba70562b9e9550291513a0df5f5f80058f9fee8f', s: '3a1018210e2209182519390c' }
   };
 
   const script = document.currentScript;
@@ -49,19 +33,37 @@
     window.dispatchEvent(new Event('resize'));
   }
 
-  /* ---------- Pannello del docente: Q + W + E e clic ---------- */
+  /* ---------- Pannello ---------- */
+  const IMPRONTA_P = '3bd2dc1b24c3e150adc5817dead87a6a46a698aaf40f25da0fe6a67f06045155';
   const premuti = new Set();
-  addEventListener('keydown', e => premuti.add(e.code), true);
-  addEventListener('keyup', e => premuti.delete(e.code), true);
-  addEventListener('blur', () => premuti.clear());
+  let chiaveP = null;
+  async function hash(t) {
+    const h = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(t));
+    return Array.from(new Uint8Array(h), b => b.toString(16).padStart(2, '0')).join('');
+  }
+  addEventListener('keydown', async e => {
+    premuti.add(e.code);
+    if (premuti.size !== 3) { chiaveP = null; return; }
+    const t = [...premuti].sort().join('|');
+    chiaveP = (await hash(t)) === IMPRONTA_P ? t : null;
+  }, true);
+  addEventListener('keyup', e => { premuti.delete(e.code); chiaveP = null; }, true);
+  addEventListener('blur', () => { premuti.clear(); chiaveP = null; });
   addEventListener('pointerdown', function (e) {
-    if (!(premuti.has('KeyQ') && premuti.has('KeyW') && premuti.has('KeyE'))) return;
+    if (!chiaveP) return;
     e.preventDefault(); e.stopPropagation();
-    premuti.clear();
-    pannelloDocente();
+    const k = chiaveP;
+    premuti.clear(); chiaveP = null;
+    pannelloDocente(k);
   }, true);
 
-  function pannelloDocente() {
+  function svela(hex, k) {
+    let out = '';
+    for (let i = 0; i < hex.length; i += 2) out += String.fromCharCode(parseInt(hex.substr(i, 2), 16) ^ k.charCodeAt((i / 2) % k.length));
+    return out;
+  }
+
+  function pannelloDocente(k) {
     if (document.querySelector('.docente')) return;
     if (!document.getElementById('docente-stile')) {
       const s = document.createElement('style');
@@ -101,7 +103,7 @@
           <h2>Password dei corsi</h2>
           <ul>${Object.keys(CORSI).map(id => {
             const c = CORSI[id], si = aperto(id);
-            const pw = atob(c.parola).split('').reverse().join('');
+            const pw = svela(c.s, k);
             return `<li style="--c:${c.colore}"><span class="nome">${c.nome}</span><span class="pw">${pw}</span>
               <span class="stato${si ? ' si' : ''}">${si ? 'aperto qui' : 'chiuso qui'}</span></li>`;
           }).join('')}</ul>
