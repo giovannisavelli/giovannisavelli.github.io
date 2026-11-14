@@ -70,3 +70,65 @@
 @media(max-width:600px){
   .tentativi,.tentativi--2,.diagnosi{grid-template-columns:1fr}
 }
+
+/* Le scale in cortile: vetrina con due immagini verticali in mezzo */
+.vetrina--alte figure:nth-child(2) img,.vetrina--alte figure:nth-child(3) img{aspect-ratio:4/5}
+.vetrina--alte figure:nth-child(4){grid-column:span 2}
+.vetrina--alte figure:nth-child(4) img{aspect-ratio:16/9}
+.tentativi--disegni img{object-fit:contain!important;background:#fff;aspect-ratio:auto!important}
+.disegno{margin:22px 0 0;max-width:980px}
+.disegno img{width:100%;height:auto;background:#fff;padding:10px}
+.disegno figcaption{margin-top:8px;color:var(--muted);font-size:14px}
+
+/* un pezzo di conversazione con l'IA */
+.dialogo{display:grid;gap:10px;margin:24px 0 0;max-width:820px}
+.dialogo p{margin:0;padding:14px 18px;border:1px solid var(--line);background:var(--fondo2);font-size:15px;line-height:1.55;color:#d6dfdb}
+.dialogo p b{display:block;margin-bottom:4px;font:500 10px var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+.dialogo p.ia{border-left:3px solid var(--green)}
+.dialogo p.ia b{color:var(--green)}
+.dialogo p.gruppo{margin-left:clamp(0px,6vw,60px);border-left:3px solid #f2d27a}
+.dialogo p.gruppo b{color:#f2d27a}
+
+/* catena di passaggi */
+.mosse--6{grid-template-columns:repeat(3,minmax(0,1fr))}
+.mosse--6 li{font-size:14px}
+.tentativi--slide img{aspect-ratio:16/9!important;background:#fff}
+
+/* ---- 14/11: guida per l'occhio ---- */
+/* capitoli di errore: una riga rossa a sinistra e un'etichetta sopra il titolo */
+.capitolo--errore{box-shadow:inset 3px 0 0 rgba(255,125,159,.55)}
+.capitolo--chiave{box-shadow:inset 3px 0 0 var(--green);background:linear-gradient(90deg,rgba(119,231,183,.05),transparent 40%)}
+.tipo{display:inline-flex;align-items:center;gap:10px;margin:0 0 14px;padding:6px 12px 6px 10px;border:1px solid rgba(255,125,159,.55);border-radius:999px;background:rgba(255,125,159,.08);color:var(--rosso-chiaro);font:600 12px var(--mono);letter-spacing:.12em;text-transform:uppercase}
+.tipo:before{content:"✕";display:grid;place-items:center;width:18px;height:18px;border-radius:50%;background:var(--rosso);color:#0a0b0d;font-size:11px;letter-spacing:0}
+.tipo--chiave{border-color:rgba(119,231,183,.6);background:rgba(119,231,183,.08);color:var(--green)}
+.tipo--chiave:before{content:"★";background:var(--green)}
+
+/* il «perché succede» è la parte che spiega: tutta la larghezza, testo più grande */
+.diagnosi .d-errore,.diagnosi .d-perche{grid-column:1/-1}
+.diagnosi .d-perche{border-left:3px solid #f2d27a;padding:22px 24px}
+.diagnosi .d-perche dt{font-size:12px}
+.diagnosi .d-perche dd{margin-top:10px;font-size:clamp(17px,1.5vw,20px);line-height:1.5;color:var(--ink)}
+.diagnosi .d-perche dd small{display:block;margin-top:10px;color:var(--muted);font-size:13px;line-height:1.5}
+.diagnosi .d-perche a{color:#f2d27a;text-decoration:underline;text-underline-offset:3px}
+
+/* avviso in apertura: «si ragiona così» */
+.avviso-anno{padding:clamp(34px,5vw,64px) clamp(20px,6vw,110px);border-bottom:1px solid var(--line);background:#0d1211}
+.avviso-anno div{max-width:900px;padding:24px 26px;border:1px solid rgba(242,210,122,.45);border-left:4px solid #f2d27a;border-radius:4px}
+.avviso-anno b{display:block;color:#f2d27a;font:600 11px var(--mono);letter-spacing:.14em;text-transform:uppercase}
+.avviso-anno strong{display:block;margin:10px 0 12px;font-size:clamp(24px,2.8vw,38px);font-weight:600;letter-spacing:-.035em;line-height:1.12;color:var(--ink)}
+.avviso-anno strong em{font-style:normal;color:#f2d27a}
+.avviso-anno p{margin:0 0 10px;color:#d6dfdb;font-size:16px;line-height:1.55}
+.avviso-anno p:last-child{margin:0}
+
+/* pelle, scheletro, clone */
+.pelle{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin:26px 0 0;max-width:980px}
+.pelle>div{padding:20px;border:1px solid var(--line);background:var(--fondo2)}
+.pelle>div:last-child{border-color:var(--green);background:rgba(119,231,183,.06)}
+.pelle b{display:block;font:500 11px var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.pelle strong{display:block;margin:6px 0 8px;font-size:21px;color:var(--ink);letter-spacing:-.02em}
+.pelle>div:last-child strong{color:var(--green)}
+.pelle p{margin:0;font-size:15px;line-height:1.5;color:#d6dfdb}
+.analogia{margin:24px 0 0;max-width:820px;padding:18px 22px;border:1px dashed rgba(119,231,183,.45);font-size:16px;line-height:1.55;color:#d6dfdb}
+.analogia b{color:var(--green)}
+@media(max-width:900px){.pelle{grid-template-columns:1fr}.mosse--6{grid-template-columns:1fr 1fr}}
+@media(max-width:600px){.mosse--6{grid-template-columns:1fr}}
