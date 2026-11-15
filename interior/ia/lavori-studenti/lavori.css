@@ -132,3 +132,19 @@
 .analogia b{color:var(--green)}
 @media(max-width:900px){.pelle{grid-template-columns:1fr}.mosse--6{grid-template-columns:1fr 1fr}}
 @media(max-width:600px){.mosse--6{grid-template-columns:1fr}}
+
+/* Garden of Peace: vetrina con due immagini larghe e due in mezzo */
+.vetrina--quattro figure:nth-child(4){grid-column:span 2}
+.vetrina--quattro figure:nth-child(4) img{aspect-ratio:16/9}
+/* campioni di colore */
+.campioni{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin:22px 0 0;max-width:980px}
+.campioni>div{padding:16px;border:1px solid var(--line);background:var(--fondo2)}
+.campioni b{display:block;margin-bottom:10px;font:500 11px var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.campioni ul{list-style:none;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px;margin:0;padding:0}
+.campioni li{display:flex;flex-direction:column;gap:6px;font:400 11px var(--mono);color:#d6dfdb}
+.campioni li span{display:block;height:56px;border-radius:3px;background:var(--c);border:1px solid rgba(255,255,255,.12)}
+.legenda{display:flex;flex-wrap:wrap;gap:8px 18px;margin:18px 0 0;padding:0;list-style:none;font-size:15px;color:#d6dfdb}
+.legenda li{display:flex;align-items:center;gap:8px}
+.legenda li:before{content:"";width:16px;height:16px;border-radius:3px;background:var(--c)}
+.disegno--stretto{max-width:420px}
+@media(max-width:600px){.campioni{grid-template-columns:1fr}}

@@ -264,3 +264,9 @@ body.zoom-aperto{position:fixed;left:0;right:0;overflow:hidden}
 .zoom-palco>img{grid-area:1/1}
 .zoom-vicina{visibility:hidden;max-width:100%;max-height:100%;object-fit:contain;border-radius:4px;box-shadow:0 30px 80px rgba(0,0,0,.55);will-change:transform;pointer-events:none}
 .zoom-freccia[hidden]{display:none}
+
+/* 15/11/2026: l'immagine ingrandita deve stare tutta nello schermo.
+   Il max-height:100% dentro la griglia non frenava niente (riga ad altezza automatica),
+   quindi sul computer le foto alte uscivano sopra e sotto e restavano tagliate. */
+.zoom-palco>img,.zoom-vicina{width:auto;height:auto;max-width:calc(100vw - 148px);max-height:calc(100dvh - 120px)}
+@media(max-width:600px){.zoom-palco>img,.zoom-vicina{max-width:calc(100vw - 20px);max-height:calc(100dvh - 184px)}}
