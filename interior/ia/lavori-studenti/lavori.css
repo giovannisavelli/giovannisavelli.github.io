@@ -148,3 +148,10 @@
 .legenda li:before{content:"";width:16px;height:16px;border-radius:3px;background:var(--c)}
 .disegno--stretto{max-width:420px}
 @media(max-width:600px){.campioni{grid-template-columns:1fr}}
+
+/* Corner Coffee (16/11/2026): due immagini finali a tutta larghezza, e il «limite» dichiarato dal gruppo */
+.vetrina--due figure{grid-column:span 2}
+.vetrina--due img,.vetrina--due figure:first-child img{aspect-ratio:auto!important;height:auto!important}
+.tipo--limite{border-color:rgba(242,210,122,.6);background:rgba(242,210,122,.08);color:#f2d27a}
+.tipo--limite:before{content:"!";background:#f2d27a}
+.capitolo--limite{box-shadow:inset 3px 0 0 rgba(242,210,122,.6)}
