@@ -453,3 +453,32 @@ body.gs-course--photoshop .course-schedule :is(time,strong) { font-weight:500; }
   body.gs-course--photoshop :is(.hero-actions,.notice,.lesson-materials) a,
   body.gs-course--photoshop :is(.resource-link,.video-start) { min-height:52px; padding:12px 22px; font-size:15px; }
 }
+
+/* Glossario: gruppi di voci apribili, come il glossario di IA, nel colore di Photoshop. */
+.glo-gruppo { margin: 36px 0 0; padding-top: 28px; border-top: 1px solid var(--border); }
+.glo-gruppo-testa { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 6px 32px; align-items: end; margin-bottom: 18px; }
+.glo-gruppo-testa span { grid-column: 1 / -1; color: var(--accent); font: 600 11px var(--mono); letter-spacing: .09em; }
+.glo-gruppo-testa h3 { margin: 0; font-size: clamp(24px, 3vw, 32px); letter-spacing: -.02em; }
+.glo-gruppo-testa p { margin: 0; color: var(--muted); font-size: 14px; line-height: 1.55; }
+.glo-griglia { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; align-items: start; }
+.glo-voce { border: 1px solid var(--border); border-radius: 14px; background: var(--surface); transition: border-color .2s, background .2s; }
+.glo-voce[open] { border-color: rgba(49,168,255,.45); background: var(--surface-strong); }
+.glo-voce summary { position: relative; display: grid; gap: 6px; min-height: 108px; padding: 18px 56px 18px 20px; cursor: pointer; list-style: none; }
+.glo-voce summary::-webkit-details-marker { display: none; }
+.glo-voce summary:hover { background: rgba(49,168,255,.05); border-radius: 14px; }
+.glo-meta { color: var(--accent); font: 600 10px/1.4 var(--mono); letter-spacing: .08em; }
+.glo-voce strong { font-size: 19px; line-height: 1.25; }
+.glo-teaser { color: var(--muted); font-size: 14px; line-height: 1.45; }
+.glo-toggle { position: absolute; top: 18px; right: 18px; width: 28px; height: 28px; border: 1px solid rgba(49,168,255,.45); border-radius: 50%; }
+.glo-toggle::before, .glo-toggle::after { content: ""; position: absolute; left: 50%; top: 50%; width: 11px; height: 1.5px; background: var(--accent); transform: translate(-50%, -50%); transition: transform .2s; }
+.glo-toggle::after { transform: translate(-50%, -50%) rotate(90deg); }
+.glo-voce[open] .glo-toggle::after { transform: translate(-50%, -50%) rotate(0deg); }
+.glo-corpo { padding: 0 20px 20px; }
+.glo-corpo p { margin: 0 0 12px; color: #d6e0ea; font-size: 15px; line-height: 1.65; }
+.glo-corpo p.glo-dove, .glo-corpo p.glo-es { margin: 0; padding: 11px 0; border-top: 1px solid var(--border); color: var(--muted); font-size: 14px; line-height: 1.55; }
+.glo-corpo p b { display: block; margin-bottom: 3px; color: var(--accent); font: 600 10px/1.4 var(--mono); letter-spacing: .08em; text-transform: uppercase; }
+@media (max-width: 760px) {
+  .glo-gruppo-testa { grid-template-columns: 1fr; }
+  .glo-griglia { grid-template-columns: 1fr; }
+  .glo-voce summary { min-height: 0; }
+}

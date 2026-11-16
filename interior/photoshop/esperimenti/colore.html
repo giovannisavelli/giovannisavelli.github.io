@@ -187,6 +187,17 @@
     .foto .verdetto{min-height:0;font-size:14px;color:var(--ink-2)}
     .foto .verdetto b.ok{color:var(--ok)} .foto .verdetto b.no{color:var(--no)}
     .foto-tabs{display:none}
+    .storia{display:grid;grid-template-columns:minmax(0,230px) minmax(0,1fr);gap:28px;align-items:start;margin:0 0 24px;padding:20px;border:1px solid var(--line);border-radius:16px;background:var(--bg-2)}
+    .storia-ref{margin:0;min-width:0}
+    .storia-ref img{width:100%;aspect-ratio:1;object-fit:cover;border-radius:12px;border:2px solid var(--accent)}
+    .storia-ref figcaption{margin-top:10px;font-size:14px;color:var(--ink-2)}
+    .storia-ref figcaption b{display:block;color:var(--accent);font:500 11px/1.9 var(--mono);letter-spacing:.08em;text-transform:uppercase}
+    .storia-passi{margin:0;padding-left:22px;display:grid;gap:8px;color:var(--ink-2)}
+    .storia-passi strong{color:var(--ink)}
+    .storia-casi-t{margin:20px 0 8px;font-weight:600}
+    .storia-casi{margin:0;padding:0;list-style:none;display:grid;gap:8px}
+    .storia-casi li{padding:10px 14px;border-left:2px solid var(--accent);border-radius:8px;background:rgba(56,189,248,.06);color:var(--ink-2);font-size:15px}
+    .storia-casi b{color:var(--ink)}
     .pick{display:flex;flex-wrap:wrap;align-items:center;gap:10px 16px;margin:20px 0 0}
     .pick > span{font-weight:600}
     .pick label{display:inline-flex;align-items:center;gap:8px;min-height:44px;cursor:pointer}
@@ -227,6 +238,8 @@
       .shell{width:calc(100% - 32px)}
       .grid2,.grid3,.rule{grid-template-columns:1fr}
       .scene{height:190px}
+      .storia{grid-template-columns:1fr;gap:18px;padding:16px}
+      .storia-ref{max-width:260px}
       .foto-grid{grid-template-columns:1fr}
       .foto-grid .foto{display:none}
       .foto-grid .foto.is-on{display:block}
@@ -279,7 +292,7 @@
         <li><a href="#luce"><span class="n">01</span><span><strong>Luce e inchiostro</strong><small>RGB somma, CMYK sottrae</small></span><span class="arrow" aria-hidden="true">→</span></a></li>
         <li><a href="#campione"><span class="n">02</span><span><strong>Il campione del cliente</strong><small>Rifai un colore con luce e inchiostri</small></span><span class="tag classe">In aula</span></a></li>
         <li><a href="#profili"><span class="n">03</span><span><strong>Converti, quasi sempre</strong><small>Profili e la domanda di Photoshop</small></span><span class="arrow" aria-hidden="true">→</span></a></li>
-        <li><a href="#foto-spenta"><span class="n">04</span><span><strong>La foto spenta</strong><small>Tre versioni dello stesso file</small></span><span class="tag classe">A coppie</span></a></li>
+        <li><a href="#foto-spenta"><span class="n">04</span><span><strong>La foto spenta</strong><small>Tre copie esportate: quale consegni?</small></span><span class="tag classe">A coppie</span></a></li>
         <li><a href="#prova"><span class="n">05</span><span><strong>Prepara la consegna</strong><small>Tre situazioni, scegli il file</small></span><span class="arrow" aria-hidden="true">→</span></a></li>
       </ol>
     </section>
@@ -447,10 +460,29 @@
     <!-- 04 · LA FOTO SPENTA -->
     <section class="sec" id="foto-spenta" aria-labelledby="spenta-t">
       <div class="sec-head">
-        <div><p class="label">04 / La foto spenta</p><h2 id="spenta-t">Che cosa è successo a questa foto<span>?</span></h2></div>
-        <p>Hai consegnato un'immagine e il cliente scrive: «sul sito è venuta spenta». Ecco tre versioni dello stesso file. Per ognuna decidete che cosa è successo, poi scegliete quella da consegnare.</p>
+        <div><p class="label">04 / La foto spenta</p><h2 id="spenta-t">Quale copia consegni<span>?</span></h2></div>
+        <p>Il cliente ti scrive: «sul sito la foto è venuta spenta». Prima di rispondere, ricostruisci che cosa è successo al file.</p>
       </div>
-      <p class="classe-box"><b>A coppie</b><span>Cinque minuti per decidere insieme, senza aprire Photoshop. Poi «Controlla» e discussione con la classe: chi ha scelto quale, e perché.</span></p>
+      <div class="storia">
+        <figure class="storia-ref">
+          <img src="img/foto-giusta.jpg" alt="La foto come appare in Photoshop, nel file di lavoro" width="800" height="800" loading="lazy">
+          <figcaption><b>L'originale</b>Così la vedevi in Photoshop, nel tuo file di lavoro in Adobe RGB.</figcaption>
+        </figure>
+        <div class="storia-testo">
+          <ol class="storia-passi">
+            <li>Hai lavorato la foto in <strong>Adobe RGB</strong>, lo spazio di lavoro.</li>
+            <li>Ne hai esportato <strong>tre copie JPEG</strong>, ognuna in un modo diverso. Sono le foto A, B e C qui sotto.</li>
+            <li>Una sola è uscita uguale all'originale. Le altre due hanno avuto un problema col profilo colore.</li>
+          </ol>
+          <p class="storia-casi-t">Le tre cose che possono essere successe (una per copia):</p>
+          <ul class="storia-casi">
+            <li><b>Convertita in sRGB.</b> I numeri sono stati ricalcolati: i colori restano quelli dell'originale.</li>
+            <li><b>Profilo tolto.</b> Il file era Adobe RGB, ma il profilo si è perso: i colori escono più spenti.</li>
+            <li><b>Profilo assegnato per sbaglio.</b> A un file sRGB è stato appiccicato Adobe RGB: i colori escono troppo saturi.</li>
+          </ul>
+        </div>
+      </div>
+      <p class="classe-box"><b>A coppie</b><span>Cinque minuti, senza aprire Photoshop. Confrontate ogni copia con l'originale (guardate soprattutto i manifesti colorati e il cielo), scegliete nel menu sotto ogni foto che cosa le è successo e poi quale consegnare. Infine «Controlla» e discussione con la classe: chi ha scelto quale, e perché.</span></p>
       <div class="seg foto-tabs" role="group" aria-label="Scegli la versione da guardare">
         <button type="button" data-foto="0" aria-pressed="true">A</button><button type="button" data-foto="1" aria-pressed="false">B</button><button type="button" data-foto="2" aria-pressed="false">C</button>
       </div>
@@ -736,8 +768,8 @@
   const DIAGNOSI = [
     ['', 'Scegli…'],
     ['giusta', 'Convertita in sRGB'],
-    ['spenta', 'Profilo tolto: numeri Adobe RGB letti come sRGB'],
-    ['accesa', 'Profilo assegnato per sbaglio: numeri sRGB letti come Adobe RGB']
+    ['spenta', 'Profilo tolto (esce spenta)'],
+    ['accesa', 'Profilo assegnato per sbaglio (esce troppo satura)']
   ];
   const SPIEGA = {
     giusta: 'I numeri sono stati ricalcolati per sRGB: il colore è quello voluto.',
