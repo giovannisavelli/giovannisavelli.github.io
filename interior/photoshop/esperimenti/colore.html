@@ -198,6 +198,9 @@
     .storia-casi{margin:0;padding:0;list-style:none;display:grid;gap:8px}
     .storia-casi li{padding:10px 14px;border-left:2px solid var(--accent);border-radius:8px;background:rgba(56,189,248,.06);color:var(--ink-2);font-size:15px}
     .storia-casi b{color:var(--ink)}
+    .storia-intro{margin:0;color:var(--ink-2);font-size:17px;line-height:1.6}
+    .storia-intro strong{color:var(--ink)}
+    .storia-regole li{border-left-color:var(--ok);background:rgba(126,224,168,.06)}
     .pick{display:flex;flex-wrap:wrap;align-items:center;gap:10px 16px;margin:20px 0 0}
     .pick > span{font-weight:600}
     .pick label{display:inline-flex;align-items:center;gap:8px;min-height:44px;cursor:pointer}
@@ -466,7 +469,7 @@
     <section class="sec" id="foto-spenta" aria-labelledby="spenta-t">
       <div class="sec-head">
         <div><p class="label">04 / La foto spenta</p><h2 id="spenta-t">Quale copia consegni<span>?</span></h2></div>
-        <p>Il cliente ti scrive: «sul sito la foto è venuta spenta». Prima di rispondere, ricostruisci che cosa è successo al file.</p>
+        <p>Il cliente ti scrive: «sul sito la foto è venuta spenta». Quale copia gli hai mandato? E quale dovevi mandare?</p>
       </div>
       <div class="storia">
         <figure class="storia-ref">
@@ -474,16 +477,17 @@
           <figcaption><b>L'originale</b>Così la vedevi in Photoshop, nel tuo file di lavoro in Adobe RGB.</figcaption>
         </figure>
         <div class="storia-testo">
-          <ol class="storia-passi">
-            <li>Hai lavorato la foto in <strong>Adobe RGB</strong>, lo spazio di lavoro.</li>
-            <li>Ne hai esportato <strong>tre copie JPEG</strong>, ognuna in un modo diverso. Sono le foto A, B e C qui sotto.</li>
-            <li>Una sola è uscita uguale all'originale. Le altre due hanno avuto un problema col profilo colore.</li>
-          </ol>
-          <p class="storia-casi-t">Le tre cose che possono essere successe (una per copia):</p>
+          <p class="storia-intro">Hai lavorato la foto in <strong>Adobe RGB</strong> e l'hai salvata <strong>tre volte</strong>, in tre modi diversi: sono le copie A, B e C qui sotto. Una sola è uguale all'originale.</p>
+          <p class="storia-casi-t">Prima, due cose da sapere</p>
+          <ul class="storia-casi storia-regole">
+            <li><b>Il profilo è come l'unità di misura.</b> Nel file i colori sono numeri, e il profilo dice come leggerli. Succede lo stesso col forno: «200» vuol dire una cosa in gradi °C e un'altra in °F.</li>
+            <li><b>Adobe RGB è più ampio di sRGB.</b> Con gli stessi numeri, letti in Adobe RGB i colori escono più vivi, letti in sRGB più smorti. Un file senza profilo viene letto come sRGB.</li>
+          </ul>
+          <p class="storia-casi-t">Che cosa è successo alle tre copie (una per copia)</p>
           <ul class="storia-casi">
-            <li><b>Convertita in sRGB.</b> Photoshop ha ricalcolato i numeri dei pixel per sRGB, e nel file c'è il profilo sRGB.</li>
-            <li><b>Profilo tolto.</b> I numeri sono rimasti quelli di Adobe RGB, ma il profilo non è stato salvato nel file.</li>
-            <li><b>Profilo assegnato per sbaglio.</b> I numeri erano già di sRGB, ma nel file è stato scritto che sono Adobe RGB.</li>
+            <li><b>Convertita in sRGB.</b> Photoshop ha cambiato i numeri per sRGB e ha scritto «sRGB» nel file.</li>
+            <li><b>Profilo perso.</b> I numeri sono di Adobe RGB, ma nel file non c'è scritto nessun profilo.</li>
+            <li><b>Profilo sbagliato.</b> I numeri sono di sRGB, ma nel file c'è scritto «Adobe RGB».</li>
           </ul>
         </div>
       </div>
@@ -774,13 +778,13 @@
   const DIAGNOSI = [
     ['', 'Scegli…'],
     ['giusta', 'Convertita in sRGB'],
-    ['spenta', 'Profilo tolto'],
-    ['accesa', 'Profilo assegnato per sbaglio']
+    ['spenta', 'Profilo perso'],
+    ['accesa', 'Profilo sbagliato']
   ];
   const SPIEGA = {
-    giusta: 'I numeri sono stati ricalcolati per sRGB: il colore è quello voluto.',
-    spenta: 'Il file era in Adobe RGB e il profilo si è perso. Letti come sRGB, quei numeri danno colori più spenti.',
-    accesa: 'A numeri già sRGB è stato assegnato Adobe RGB: Photoshop li legge come colori più ampi e la foto diventa troppo satura.'
+    giusta: 'È uguale all’originale: Photoshop ha cambiato i numeri per sRGB, quindi il colore resta lo stesso.',
+    spenta: 'Il profilo si è perso. Senza profilo i numeri vengono letti come sRGB, che è più stretto: i colori escono smorti. È la copia finita sul sito del cliente.',
+    accesa: 'I numeri sono di sRGB, ma il file dice Adobe RGB. Letti in Adobe RGB, che è più ampio, i colori escono troppo vivi.'
   };
   const figure = [...document.querySelectorAll('#foto-grid .foto')];
   figure.forEach(f => { const s = f.querySelector('select'); DIAGNOSI.forEach(([v, t]) => s.add(new Option(t, v))); });
