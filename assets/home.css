@@ -22,6 +22,8 @@
 .corso:hover .info, .corso:hover .info b, .corso:hover .stato { color: #0a0a0d; border-color: rgba(10, 10, 13, .3); }
 .corso:hover .freccia { transform: rotate(-45deg); background: #0a0a0d; color: var(--ink); border-color: #0a0a0d; }
 .corso.presto .nome { color: var(--ink-3); }
+/* riga con il solo nome (Chi sono): le colonne vuote tengono la freccia allineata alle altre */
+.corso.solo-nome .info, .corso.solo-nome .stato { visibility: hidden; }
 .corso.presto:hover .nome { color: #0a0a0d; }
 
 /* ---------- Prossime lezioni: le date sono un tabellone a palette ---------- */
@@ -66,3 +68,4 @@
 @media (prefers-reduced-motion: reduce) {
   .hero h1 .r > span, .hero p, .azioni { opacity: 1 !important; transform: none !important; filter: none !important; }
 }
+@media (max-width: 1000px) { .corso.solo-nome .info, .corso.solo-nome .stato { display: none; } }
