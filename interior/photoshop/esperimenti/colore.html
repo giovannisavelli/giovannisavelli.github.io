@@ -181,7 +181,7 @@
     .foto-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
     .foto{margin:0;min-width:0}
     .foto .ph{position:relative}
-    .foto img{width:100%;aspect-ratio:1;object-fit:cover;border-radius:12px;border:1px solid var(--line)}
+    .foto img{width:100%;height:auto;aspect-ratio:1;object-fit:contain;border-radius:12px;border:1px solid var(--line)}
     .foto .letter{position:absolute;left:12px;top:12px;width:40px;height:40px;display:grid;place-items:center;border-radius:10px;background:rgba(10,10,13,.82);font:600 18px var(--mono);color:var(--ink)}
     .foto figcaption{display:grid;gap:8px;margin-top:12px}
     .foto .verdetto{min-height:0;font-size:14px;color:var(--ink-2)}
@@ -189,7 +189,7 @@
     .foto-tabs{display:none}
     .storia{display:grid;grid-template-columns:minmax(0,230px) minmax(0,1fr);gap:28px;align-items:start;margin:0 0 24px;padding:20px;border:1px solid var(--line);border-radius:16px;background:var(--bg-2)}
     .storia-ref{margin:0;min-width:0}
-    .storia-ref img{width:100%;aspect-ratio:1;object-fit:cover;border-radius:12px;border:2px solid var(--accent)}
+    .storia-ref img{width:100%;height:auto;aspect-ratio:1;object-fit:contain;border-radius:12px;border:2px solid var(--accent)}
     .storia-ref figcaption{margin-top:10px;font-size:14px;color:var(--ink-2)}
     .storia-ref figcaption b{display:block;color:var(--accent);font:500 11px/1.9 var(--mono);letter-spacing:.08em;text-transform:uppercase}
     .storia-passi{margin:0;padding-left:22px;display:grid;gap:8px;color:var(--ink-2)}
@@ -476,9 +476,9 @@
           </ol>
           <p class="storia-casi-t">Le tre cose che possono essere successe (una per copia):</p>
           <ul class="storia-casi">
-            <li><b>Convertita in sRGB.</b> I numeri sono stati ricalcolati: i colori restano quelli dell'originale.</li>
-            <li><b>Profilo tolto.</b> Il file era Adobe RGB, ma il profilo si è perso: i colori escono più spenti.</li>
-            <li><b>Profilo assegnato per sbaglio.</b> A un file sRGB è stato appiccicato Adobe RGB: i colori escono troppo saturi.</li>
+            <li><b>Convertita in sRGB.</b> Photoshop ha ricalcolato i numeri dei pixel per sRGB, e nel file c'è il profilo sRGB.</li>
+            <li><b>Profilo tolto.</b> I numeri sono rimasti quelli di Adobe RGB, ma il profilo non è stato salvato nel file.</li>
+            <li><b>Profilo assegnato per sbaglio.</b> I numeri erano già di sRGB, ma nel file è stato scritto che sono Adobe RGB.</li>
           </ul>
         </div>
       </div>
@@ -514,8 +514,8 @@
         <ol class="steps">
           <li><span><strong>Impostazioni colore.</strong> Spazio di lavoro RGB Adobe RGB e avviso all'apertura per i profili diversi o mancanti, come nella parte 03.</span></li>
           <li><span><strong>Aprite la foto qui sotto.</strong> È in sRGB: Photoshop vi chiede cosa fare e voi scegliete <em>Converti nello spazio di lavoro</em>. Ora è in Adobe RGB, come tutti i file di lavoro.</span></li>
-          <li><span><strong>Esportate due JPEG</strong> con File → Esporta → Esporta come. Il primo con «Converti in sRGB» attivo. Il secondo togliendo la spunta sia a «Converti in sRGB» sia a «Incorpora profilo colore»: è quello che succede quando un sito, un social o un'app di messaggi toglie il profilo.</span></li>
-          <li><span><strong>Aprite i due JPEG nel browser</strong>, uno accanto all'altro. Uno dei due è spento: quale, e perché? È la versione A qui sopra.</span></li>
+          <li><span><strong>Salvate due copie JPEG</strong> con File → Salva una copia. Per la prima, su un duplicato (Immagine → Duplica), fate Modifica → Converti in profilo → sRGB e poi salvate la copia. La seconda salvatela dal file in Adobe RGB, togliendo la spunta al profilo colore (Profilo ICC) nella finestra di salvataggio: è quello che succede quando un sito, un social o un'app di messaggi toglie il profilo.</span></li>
+          <li><span><strong>Aprite le due copie</strong> con il visualizzatore di immagini, una accanto all'altra. Una delle due è spenta: quale, e perché?</span></li>
         </ol>
         <p style="margin-top:18px"><a class="download" href="img/manifesti-srgb.jpg" download>↓ Scarica la foto in sRGB (390 KB)</a></p>
         <p class="thought"><strong>La regola.</strong> Si lavora nel file con i livelli, nello spazio di lavoro (Adobe RGB). Se la copia finale va dove il profilo può perdersi, cioè siti, social e app di messaggi, la si consegna convertita in sRGB.</p>
@@ -754,7 +754,7 @@
   const DLG = {
     lascia: { img: 'giusta', badge: ['ok', 'Colore giusto'], h: 'Il file resta in sRGB', p: 'La foto si vede bene, ma ha un profilo diverso dal resto del progetto. Quando la incollerai in un’altra immagine Photoshop dovrà convertirla comunque, e la domanda tornerà.' },
     converti: { img: 'giusta', badge: ['ok', 'Quasi sempre la scelta giusta'], h: 'Stesso colore, ora in Adobe RGB', p: 'Photoshop ricalcola i numeri perché la foto appaia uguale, nello stesso spazio di tutte le altre immagini del progetto. Non si perde niente: tutti i colori di sRGB stanno dentro Adobe RGB.' },
-    ignora: { img: 'accesa', badge: ['no', 'Colore sbagliato'], h: 'La foto diventa troppo satura', p: 'Photoshop butta via il profilo e legge i numeri di sRGB come se fossero Adobe RGB. I colori si accendono troppo: è la versione C della parte 04.' }
+    ignora: { img: 'accesa', badge: ['no', 'Colore sbagliato'], h: 'La foto diventa troppo satura', p: 'Photoshop butta via il profilo e legge i numeri di sRGB come se fossero Adobe RGB. I colori si accendono troppo.' }
   };
   function aggiornaDialogo() {
     const s = DLG[document.querySelector('input[name=dlg]:checked').value];
@@ -768,8 +768,8 @@
   const DIAGNOSI = [
     ['', 'Scegli…'],
     ['giusta', 'Convertita in sRGB'],
-    ['spenta', 'Profilo tolto (esce spenta)'],
-    ['accesa', 'Profilo assegnato per sbaglio (esce troppo satura)']
+    ['spenta', 'Profilo tolto'],
+    ['accesa', 'Profilo assegnato per sbaglio']
   ];
   const SPIEGA = {
     giusta: 'I numeri sono stati ricalcolati per sRGB: il colore è quello voluto.',
