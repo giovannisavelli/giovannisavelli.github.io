@@ -4,9 +4,9 @@ const calendariIA = {
     date: [
       ['2026-12-03', 'Giovedì 3 dicembre 2026'],
       ['2026-12-10', 'Giovedì 10 dicembre 2026'],
-      ['2026-12-17', 'Giovedì 17 dicembre 2026'],
       ['2027-01-14', 'Giovedì 14 gennaio 2027'],
-      ['2027-01-21', 'Giovedì 21 gennaio 2027']
+      ['2027-01-21', 'Giovedì 21 gennaio 2027'],
+      ['2027-01-28', 'Giovedì 28 gennaio 2027']
     ]
   },
   '3B': {
@@ -14,9 +14,9 @@ const calendariIA = {
     date: [
       ['2026-12-03', 'Giovedì 3 dicembre 2026'],
       ['2026-12-10', 'Giovedì 10 dicembre 2026'],
-      ['2026-12-17', 'Giovedì 17 dicembre 2026'],
       ['2027-01-14', 'Giovedì 14 gennaio 2027'],
-      ['2027-01-21', 'Giovedì 21 gennaio 2027']
+      ['2027-01-21', 'Giovedì 21 gennaio 2027'],
+      ['2027-01-28', 'Giovedì 28 gennaio 2027']
     ]
   },
   '3C': {
