@@ -221,7 +221,12 @@
     .quiz-options button.is-wrong{border-color:var(--no);opacity:1}
     .quiz-feedback{min-height:56px;margin:18px 0 12px;color:var(--ink-2)}
     .quiz-feedback strong{color:var(--ink)}
-    .quiz-next[hidden]{display:none}
+    .quiz-next[hidden],.quiz-options[hidden],.quiz-question[hidden]{display:none}
+    .quiz-feedback strong.ok{color:var(--ok)} .quiz-feedback strong.no{color:var(--no)}
+    .quiz-punti{display:block;margin:0 0 14px;color:var(--ink);font-size:clamp(34px,4vw,48px);font-weight:600;letter-spacing:-.03em}
+    .quiz-riepilogo{margin:0;padding:0;list-style:none;display:grid;gap:8px}
+    .quiz-riepilogo li{padding:10px 14px;border:1px solid var(--line);border-radius:10px;background:var(--bg-2);font-size:15px}
+    .quiz-riepilogo li b{margin-right:6px} .quiz-riepilogo li.ok b{color:var(--ok)} .quiz-riepilogo li.no b{color:var(--no)}
 
     .back{margin:0;padding:0 0 32px;display:flex;flex-wrap:wrap;gap:14px 22px;align-items:center}
     .foot{display:flex;justify-content:space-between;align-items:flex-start;gap:20px;border-top:1px solid var(--line);padding:18px 0 42px;color:var(--muted);font-size:12px}
@@ -534,6 +539,7 @@
         <div class="quiz-options" id="quiz-options" role="group" aria-labelledby="quiz-question"></div>
         <p class="quiz-feedback" id="quiz-feedback" aria-live="polite"></p>
         <button class="btn primary quiz-next" id="quiz-next" type="button" hidden>Situazione successiva →</button>
+        <button class="btn primary quiz-next" id="quiz-restart" type="button" hidden>↺ Ricomincia</button>
       </div>
     </section>
 
@@ -812,8 +818,11 @@
       o: ['Converto subito in un CMYK qualsiasi', 'Chiedo alla tipografia formato e profilo', 'Assegno sRGB e consegno'], a: 1,
       why: 'La stampa dipende da macchina, inchiostri e carta. Si chiede alla tipografia il profilo giusto e si converte solo la copia da mandare.' }
   ];
-  let cur = 0;
+  let cur = 0, esiti = [];
   function quiz() {
+    if (cur === 0) esiti = [];
+    $('quiz-options').hidden = false;
+    $('quiz-question').hidden = false;
     const it = casi[cur];
     $('quiz-progress').textContent = 'Situazione ' + (cur + 1) + ' di ' + casi.length;
     $('quiz-question').textContent = it.q;
@@ -824,14 +833,30 @@
       const b = document.createElement('button'); b.type = 'button'; b.textContent = t;
       b.addEventListener('click', () => {
         [...$('quiz-options').children].forEach((x, n) => { x.disabled = true; if (n === it.a) x.classList.add('is-correct'); else if (n === i) x.classList.add('is-wrong'); });
-        $('quiz-feedback').innerHTML = '<strong>' + (i === it.a ? 'Esatto. ' : 'Guarda la risposta evidenziata. ') + '</strong>' + it.why;
+        esiti[cur] = i === it.a;
+        $('quiz-feedback').innerHTML = (i === it.a ? '<strong class="ok">✓ Giusto.</strong> ' : '<strong class="no">✕ Sbagliato.</strong> La risposta giusta è quella evidenziata. ') + it.why;
         $('quiz-next').hidden = false;
-        $('quiz-next').textContent = cur === casi.length - 1 ? 'Ricomincia →' : 'Situazione successiva →';
+        $('quiz-next').textContent = cur === casi.length - 1 ? 'Vedi il risultato →' : 'Situazione successiva →';
       });
       $('quiz-options').append(b);
     });
   }
-  $('quiz-next').addEventListener('click', () => { cur = (cur + 1) % casi.length; quiz(); $('quiz-options').firstChild.focus(); });
+  function risultato() {
+    const giuste = esiti.filter(Boolean).length;
+    $('quiz-progress').textContent = 'Risultato';
+    $('quiz-question').hidden = true;
+    $('quiz-options').hidden = true;
+    $('quiz-feedback').innerHTML = '<span class="quiz-punti">' + giuste + ' su ' + casi.length + '</span>' +
+      '<ul class="quiz-riepilogo">' + casi.map((c, n) => '<li class="' + (esiti[n] ? 'ok' : 'no') + '"><b>' + (esiti[n] ? '✓' : '✕') + '</b> ' + c.q + '</li>').join('') + '</ul>';
+    $('quiz-next').hidden = true;
+    $('quiz-restart').hidden = false;
+    $('quiz-restart').focus();
+  }
+  $('quiz-next').addEventListener('click', () => {
+    if (cur === casi.length - 1) { risultato(); return; }
+    cur++; quiz(); $('quiz-options').firstChild.focus();
+  });
+  $('quiz-restart').addEventListener('click', () => { cur = 0; $('quiz-restart').hidden = true; quiz(); $('quiz-options').firstChild.focus(); });
 
   /* ---------- avvio ---------- */
   function scene() { disegnaRGB(); disegnaCMYK(); }
