@@ -474,20 +474,20 @@
       <div class="storia">
         <figure class="storia-ref">
           <img src="img/foto-giusta.jpg" alt="La foto come appare in Photoshop, nel file di lavoro" width="800" height="800" loading="lazy">
-          <figcaption><b>L'originale</b>Così la vedevi in Photoshop, nel tuo file di lavoro in Adobe RGB.</figcaption>
+          <figcaption><b>L'originale</b>La foto com'è arrivata, con i suoi colori giusti.</figcaption>
         </figure>
         <div class="storia-testo">
-          <p class="storia-intro">Hai lavorato la foto in <strong>Adobe RGB</strong> e l'hai salvata <strong>tre volte</strong>, in tre modi diversi: sono le copie A, B e C qui sotto. Una sola è uguale all'originale.</p>
+          <p class="storia-intro">La foto ti arriva in <strong>sRGB</strong> e tu lavori in <strong>Adobe RGB</strong>, come nella parte 03. Ne hai preparato <strong>tre copie</strong> per il sito, e ogni volta hai fatto qualcosa di diverso: sono le copie A, B e C qui sotto. Una sola è uguale all'originale.</p>
           <p class="storia-casi-t">Prima, due cose da sapere</p>
           <ul class="storia-casi storia-regole">
             <li><b>Il profilo è come l'unità di misura.</b> Nel file i colori sono numeri, e il profilo dice come leggerli. Succede lo stesso col forno: «200» vuol dire una cosa in gradi °C e un'altra in °F.</li>
-            <li><b>Adobe RGB è più ampio di sRGB.</b> Con gli stessi numeri, letti in Adobe RGB i colori escono più vivi, letti in sRGB più smorti. Un file senza profilo viene letto come sRGB.</li>
+            <li><b>Adobe RGB è più ampio di sRGB.</b> Con gli stessi numeri, letti in Adobe RGB i colori accesi escono più vivi, letti in sRGB più smorti. Sul sito, nel browser e sul telefono, un file senza profilo viene letto come sRGB.</li>
           </ul>
           <p class="storia-casi-t">Che cosa è successo alle tre copie (una per copia)</p>
           <ul class="storia-casi">
-            <li><b>Convertita in sRGB.</b> Photoshop ha cambiato i numeri per sRGB e ha scritto «sRGB» nel file.</li>
-            <li><b>Profilo perso.</b> I numeri sono di Adobe RGB, ma nel file non c'è scritto nessun profilo.</li>
-            <li><b>Profilo sbagliato.</b> I numeri sono di sRGB, ma nel file c'è scritto «Adobe RGB».</li>
+            <li><b>Convertita in sRGB.</b> All'apertura hai convertito in Adobe RGB; prima di salvare hai convertito in sRGB, con il profilo nel file.</li>
+            <li><b>Profilo perso.</b> All'apertura hai convertito in Adobe RGB, ma hai salvato senza profilo: i numeri sono di Adobe RGB e nel file non c'è scritto niente.</li>
+            <li><b>Profilo sbagliato.</b> All'apertura hai scelto Assegna Adobe RGB invece di Converti: i numeri sono rimasti di sRGB, ma nel file c'è scritto «Adobe RGB».</li>
           </ul>
         </div>
       </div>
@@ -782,9 +782,9 @@
     ['accesa', 'Profilo sbagliato']
   ];
   const SPIEGA = {
-    giusta: 'È uguale all’originale: Photoshop ha cambiato i numeri per sRGB, quindi il colore resta lo stesso.',
-    spenta: 'Il profilo si è perso. Senza profilo i numeri vengono letti come sRGB, che è più stretto: i colori escono smorti. È la copia finita sul sito del cliente.',
-    accesa: 'I numeri sono di sRGB, ma il file dice Adobe RGB. Letti in Adobe RGB, che è più ampio, i colori escono troppo vivi.'
+    giusta: 'È come l’originale: ogni volta Photoshop ha convertito, cioè ha ricalcolato i numeri perché il colore restasse lo stesso.',
+    spenta: 'Il profilo si è perso. I numeri sono di Adobe RGB, ma il sito li legge come sRGB, che è più stretto: i colori escono smorti. È la copia finita sul sito del cliente.',
+    accesa: 'Assegnare non ricalcola i numeri: quelli di sRGB vengono letti come Adobe RGB, che è più ampio, e i colori escono troppo vivi. Si vede già in Photoshop.'
   };
   const figure = [...document.querySelectorAll('#foto-grid .foto')];
   figure.forEach(f => { const s = f.querySelector('select'); DIAGNOSI.forEach(([v, t]) => s.add(new Option(t, v))); });
