@@ -212,6 +212,7 @@
     .rg--intro{margin-top:12px}
     .righelli-03{margin:26px 0 0;padding:20px;border:1px solid var(--line);border-radius:16px;background:var(--bg-2)}
     .righelli-t{margin:0;color:var(--ink-2);line-height:1.6} .righelli-t b{color:var(--ink)}
+    .rule-domanda{margin:26px 0 12px;color:var(--ink-2);font-size:17px} .rule-domanda b{color:var(--ink)}
     .card-righello{margin:12px 0 0;padding:10px 12px;border-left:2px solid var(--ok);background:rgba(126,224,168,.06);color:var(--ink-2);font-size:14px}
     .rg-nome{font:600 13px var(--mono);letter-spacing:.04em;fill:rgba(244,241,236,.85)}
     .rg-nome.lungo{fill:var(--accent)}
@@ -456,18 +457,19 @@
         <p class="small muted">Le lunghezze sono indicative. Nella realtà i numeri sono tre (rosso, verde, blu), ma funziona allo stesso modo.</p>
       </div>
 
+      <p class="rule-domanda">Quando apri un file, Photoshop controlla il suo profilo. Se è diverso dal tuo spazio di lavoro, o se manca, te lo dice con una finestra (qui sotto vedi come attivarla). Le finestre sono due, e a ognuna corrisponde un comando.</p>
       <div class="rule">
         <div class="card main">
-          <span class="card-k">Il caso normale</span>
+          <span class="card-k">File con un profilo</span>
           <h3>Converti</h3>
-          <p>Quasi tutti i file arrivano già con un profilo: le foto, i render, le immagini dei produttori. Photoshop sa come leggerli. Quando li portiamo nel nostro spazio di lavoro (io lavoro sempre in Adobe RGB), o ne prepariamo una copia per il web, un cliente o una tipografia, <strong>convertiamo</strong>: Photoshop ricalcola i numeri perché il colore resti lo stesso.</p>
-          <p class="card-righello">Coi righelli: cambi righello e ricalcoli il numero delle tacche, così arrivi nello stesso punto.</p>
+          <p>Il file ha un profilo diverso dal tuo spazio di lavoro (io lavoro sempre in Adobe RGB) e Photoshop apre la finestra «Profilo incorporato non corrispondente». Si <strong>converte</strong>: Photoshop ricalcola i numeri perché il colore resti lo stesso. Si converte anche quando si prepara una copia per il web, per un cliente o per una tipografia. Se il profilo di arrivo è più piccolo, come sRGB o il CMYK della stampa, i colori che non ci stanno vengono portati al più vicino possibile.</p>
+          <p class="card-righello">Coi righelli: Photoshop passa da un righello all’altro e ricalcola il numero delle tacche, così il colore resta nello stesso punto. Se il righello nuovo è più corto e quel punto non lo raggiunge, il colore si ferma all’ultima tacca: è il più vicino che quel profilo riesce a fare. Un colore così si dice «fuori gamma».</p>
         </div>
         <div class="card">
-          <span class="card-k">Il caso raro</span>
+          <span class="card-k">File senza profilo</span>
           <h3>Assegna</h3>
-          <p>Serve solo quando un file arriva <strong>senza profilo</strong>, o con quello sbagliato, e sappiamo da dove viene. Assegnare non ricalcola niente: dice a Photoshop come leggere i numeri, quindi l'aspetto cambia. Se lo usi al posto di Converti, rovini i colori.</p>
-          <p class="card-righello">Coi righelli: cambi righello ma tieni lo stesso numero di tacche, quindi arrivi in un punto diverso.</p>
+          <p>Il file non ha un profilo, come molte immagini prese dal web e gli screenshot, e Photoshop apre la finestra «Profilo mancante». Si <strong>assegna</strong> il profilo con cui il file è stato fatto, quasi sempre sRGB, e poi lo si converte nel proprio spazio di lavoro. Assegnare non ricalcola i numeri: dice solo su quale profilo leggerli. Per questo non va usato al posto di Converti: su un file che ha già il suo profilo, cambierebbe i colori.</p>
+          <p class="card-righello">Coi righelli: Photoshop lascia il numero delle tacche com’è e cambia solo il righello su cui contarle.</p>
         </div>
       </div>
 
