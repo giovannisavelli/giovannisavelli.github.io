@@ -15,7 +15,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Geist:wght@300..800&family=Geist+Mono:wght@400;500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../../assets/studio.css?v=riordino-20261109">
     <link rel="stylesheet" href="../../assets/agenda.css?v=20261029d">
-    <link rel="stylesheet" href="photoshop.css?v=glossario-20261116">
+    <link rel="stylesheet" href="photoshop.css?v=programma-20261120d">
     <script src="../../assets/schede.js?v=lettura-20261110b"></script>
     <script src="../../assets/fx/effetti.js?v=lettura-20261110b" defer></script>
     <script>
@@ -93,7 +93,7 @@
     </script>
     <script src="../../assets/agenda.js?v=20261029d" defer></script>
     <script src="../../assets/studio.js?v=lettura-20261110b" defer></script>
-    <script src="photoshop.js?v=riordino-20261109" defer></script>
+    <script src="photoshop.js?v=programma-20261120" defer></script>
 <script defer src="https://cloud.umami.is/script.js" data-website-id="f2e9536a-0fe6-48be-82e0-97fccdf87046" data-domains="giovannisavelli.github.io"></script></head>
 <body class="corso gs-course--photoshop">
 <header class="top" id="top" data-testata></header>
@@ -144,18 +144,34 @@
         </section>
 
         <section class="panel" role="tabpanel" id="tab-elenco" data-scheda="programma" aria-labelledby="btn-elenco" hidden>
-            <p class="kicker">Il percorso in breve</p>
-            <h2>Programma lezioni</h2>
-            <p class="panel-intro">Tutte le lezioni del corso. Scegline una per leggere gli appunti; le date della tua classe sono nel calendario.</p>
-            <ol class="lesson-index" aria-label="Lezioni con programma pubblicato">
-                <li><a href="#lezione-1"><span class="lesson-index-number">01</span><strong>Conosciamoci</strong><small>2 ore</small><span class="lesson-index-arrow" aria-hidden="true">→</span></a></li>
-                <li><a href="#lezione-2"><span class="lesson-index-number">02</span><strong>Colore, scontorno e salvataggio</strong><small>2 ore</small><span class="lesson-index-arrow" aria-hidden="true">→</span></a></li>
-                <li><a href="#lezione-3"><span class="lesson-index-number">03</span><strong>Istogramma e regolazioni</strong><small>4 ore</small><span class="lesson-index-arrow" aria-hidden="true">→</span></a></li>
-                <li><a href="#lezione-4"><span class="lesson-index-number">04</span><strong>Fotoinserimento: le due sedie</strong><small>4 ore</small><span class="lesson-index-arrow" aria-hidden="true">→</span></a></li>
-                <li><a href="#lezione-5"><span class="lesson-index-number">05</span><strong>Manifesti e oggetti avanzati</strong><small>4 ore</small><span class="lesson-index-arrow" aria-hidden="true">→</span></a></li>
-                <li><a href="#lezione-6"><span class="lesson-index-number">06</span><strong>Esonero</strong><small>4 ore</small><span class="lesson-index-arrow" aria-hidden="true">→</span></a></li>
-            </ol>
-            <p class="lesson-index-note">Per l’esonero, modalità e consegna sono ancora da definire.</p>
+            <p class="kicker">Dove ti porta questo corso</p>
+            <h2 class="pg-titolo">A mano, <span>per capire.</span></h2>
+            <p class="pg-tesi">Un fotoinserimento domani lo farai in 3D o con l’IA. Farlo a mano ti insegna a vedere: l’ombra che manca, la luce che non torna, il bordo che tradisce.</p>
+            <ul class="pg-meta" aria-label="Gli obiettivi del corso">
+                <li><b>01</b>Consapevolezza del mezzo</li>
+                <li><b>02</b>Occhio per l’errore</li>
+                <li><b>03</b>Fotoinserimenti credibili</li>
+            </ul>
+
+            <div class="pg-domino" id="pg-domino">
+                <p class="pg-regola"><span>Il domino</span>Ogni tessera fa cadere la successiva. A un certo punto ti accorgi di saper fare cose che il primo giorno sembravano lontane.</p>
+                <ol class="pg-tessere" aria-label="Le tappe del corso">
+                    <li data-n="1"><a href="#lezione-1"><span class="pg-num">01</span><span class="pg-stato"></span><strong>Conosciamoci</strong><span class="pg-riga"><i>Capisci</i>chi siamo, come funziona il corso e dove trovi tutto</span><span class="pg-riga"><i>Inizi</i>a conoscere Photoshop</span><small>2 ore</small></a></li>
+                    <li data-n="2"><a href="#lezione-2"><span class="pg-num">02</span><span class="pg-stato"></span><strong>Colore e scontorno</strong><span class="pg-riga"><i>Capisci</i>come sono fatti i colori di una foto</span><span class="pg-riga"><i>Sai fare</i>ritagliare un oggetto e salvarlo nel formato giusto</span><small>2 ore</small></a></li>
+                    <li data-n="3"><a href="#lezione-3"><span class="pg-num">03</span><span class="pg-stato"></span><strong>Istogramma e regolazioni</strong><span class="pg-riga"><i>Capisci</i>come si leggono le luci e le ombre di una foto</span><span class="pg-riga"><i>Sai fare</i>dare volume a una sfera con luce e ombra</span><small>4 ore</small></a></li>
+                    <li data-n="4"><a href="#lezione-4"><span class="pg-num">04</span><span class="pg-stato"></span><strong>Le due sedie</strong><span class="pg-riga"><i>Capisci</i>perché un oggetto incollato sembra finto</span><span class="pg-riga"><i>Sai fare</i>mettere una sedia in una stanza, con la sua ombra</span><small>4 ore</small></a></li>
+                    <li data-n="5"><a href="#lezione-5"><span class="pg-num">05</span><span class="pg-stato"></span><strong>Manifesti</strong><span class="pg-riga"><i>Capisci</i>come cambiare un’immagine senza perdere l’originale</span><span class="pg-riga"><i>Sai fare</i>sostituire i manifesti di una foto vera, in prospettiva</span><small>4 ore</small></a></li>
+                    <li data-n="6" class="pg-ultima"><a href="#lezione-6"><span class="pg-num">06</span><span class="pg-stato"></span><strong>Esonero</strong><span class="pg-riga"><i>Dimostri</i>di saper fare un fotoinserimento</span><span class="pg-riga"><i>Modalità</i>da definire</span><small>4 ore</small></a></li>
+                </ol>
+                <button class="pg-rifai" type="button">↻ Fai cadere le tessere</button>
+            </div>
+
+            <ul class="pg-servono" aria-label="Cosa ti serve">
+                <li><span>Ti serve</span>Photoshop</li>
+                <li><a href="#video"><span>Prima della lezione</span>I due corsi video →</a></li>
+                <li><a href="#risorse"><span>Per gli esercizi</span>I file in Risorse →</a></li>
+                <li><a href="#calendario"><span>Quando</span>Le date della tua classe →</a></li>
+            </ul>
         </section>
 
         <section class="panel" role="tabpanel" id="tab-esperimenti" data-scheda="esperimenti" aria-labelledby="btn-esperimenti" hidden>

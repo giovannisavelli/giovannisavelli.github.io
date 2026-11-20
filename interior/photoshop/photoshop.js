@@ -95,3 +95,47 @@
     chooseClass(leggi("gs-site-photoshop-class"));
   }
 })();
+
+// Programma: il domino delle tappe. Gli stati vengono da LEZIONI_CORSO (giorno e archivio).
+// Le tessere già fatte cadono una dopo l'altra ogni volta che si apre la scheda, e restano appoggiate.
+(() => {
+  const lista = document.querySelector('.pg-tessere');
+  const corso = window.LEZIONI_CORSO;
+  if (!lista || !corso) return;
+  const fatte = (corso.archivio || []).map(Number);
+  const oggi = Number(corso.giorno) || 0;
+  const tessere = [...lista.querySelectorAll('li')];
+  const daCadere = tessere.filter(li => fatte.includes(Number(li.dataset.n)));
+  const tesseraOggi = tessere.find(li => Number(li.dataset.n) === oggi && !fatte.includes(oggi));
+  tessere.forEach(li => {
+    const n = Number(li.dataset.n), stato = li.querySelector('.pg-stato');
+    if (fatte.includes(n)) stato.textContent = 'Fatta ✓';
+    else if (li === tesseraOggi) { li.classList.add('oggi'); stato.textContent = 'Sei qui'; }
+    else stato.textContent = 'In arrivo';
+  });
+  const fine = () => lista.style.setProperty('--pg-fatte', daCadere.length + (tesseraOggi ? .5 : 0));
+  let timer = [];
+  const cadi = () => {
+    timer.forEach(clearTimeout); timer = [];
+    const fermo = window.Studio && Studio.fermo;
+    if (fermo) { daCadere.forEach(li => li.classList.add('giu')); fine(); return; }
+    daCadere.forEach(li => li.classList.remove('giu', 'cade'));
+    if (tesseraOggi) tesseraOggi.classList.remove('spinta');
+    lista.style.setProperty('--pg-fatte', 0);
+    void lista.offsetWidth;
+    const passo = 420, attesa = 350;
+    daCadere.forEach((li, i) => timer.push(setTimeout(() => {
+      li.classList.add('giu', 'cade');
+      lista.style.setProperty('--pg-fatte', i + 1);
+    }, attesa + i * passo)));
+    timer.push(setTimeout(() => {
+      fine();
+      if (tesseraOggi) tesseraOggi.classList.add('spinta');
+    }, attesa + daCadere.length * passo + 150));
+  };
+  const pannello = lista.closest('[data-scheda]');
+  if (pannello && !pannello.hidden) requestAnimationFrame(cadi);
+  document.addEventListener('scheda', e => { if (e.detail && e.detail.scheda === 'programma') requestAnimationFrame(() => requestAnimationFrame(cadi)); });
+  const rifai = document.querySelector('.pg-rifai');
+  if (rifai) { rifai.hidden = !daCadere.length; rifai.addEventListener('click', cadi); }
+})();
