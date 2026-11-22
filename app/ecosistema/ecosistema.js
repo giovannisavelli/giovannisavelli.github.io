@@ -1124,6 +1124,9 @@ function openCard(key) {
   if (key === 'brain' && window.apriCervello) { closeCard(); return window.apriCervello(); }
   const I = INFO[key]; if (!I) return;
   card.style.setProperty('--c', I[3]);
+  // sul computer la scheda va sotto «Stato del sistema», così non lo copre
+  const st = document.querySelector('.stats');
+  card.style.top = innerWidth > 900 && st ? `${st.offsetTop + st.offsetHeight + 12}px` : '';
   S('card-k').textContent = I[0]; S('card-t').textContent = I[1]; S('card-p').textContent = I[2];
   card.classList.add('on');
 }
