@@ -269,7 +269,7 @@ const glow = new THREE.PointLight(COL.green, 14, 9, 2); ball.add(glow);
 const hitBall = new THREE.Mesh(new THREE.SphereGeometry(BR, 16, 12), new THREE.MeshBasicMaterial({ transparent: true, opacity: 0, depthWrite: false }));
 ball.add(hitBall);
 clickable(brain, 'brain'); clickable(hitBall, 'brain');
-label(ball, BR + .55, 'brain', '<b>Cervello centrale</b>Google Drive · memoria e Diario', CSS.green);
+label(ball, BR + .55, 'brain', '<b>Cervello centrale</b>Google Drive · tocca per aprirlo', CSS.green);
 const BRAIN_TOP = out => out.copy(ball.position);
 const packets = [];
 const packetGeo = new THREE.SphereGeometry(.09, 8, 6);
@@ -1121,6 +1121,7 @@ const INFO = {
 };
 const card = document.getElementById('card');
 function openCard(key) {
+  if (key === 'brain' && window.apriCervello) { closeCard(); return window.apriCervello(); }
   const I = INFO[key]; if (!I) return;
   card.style.setProperty('--c', I[3]);
   S('card-k').textContent = I[0]; S('card-t').textContent = I[1]; S('card-p').textContent = I[2];
