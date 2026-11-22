@@ -57,6 +57,12 @@
     pannelloDocente(k);
   }, true);
 
+  // Link docente della frase a gruppi: mai nel codice del sito, solo nel browser di chi l'ha incollato.
+  const FRASE_K = 'aant-frase-docente';
+  const FRASE_RE = /^https:\/\/aant-frase-a-gruppi\.aant-la-prossima-parola\.workers\.dev\/teacher\?key=[\w%-]{24,}$/;
+  function frase() { try { const v = localStorage.getItem(FRASE_K); return v && FRASE_RE.test(v) ? v : ''; } catch (e) { return ''; } }
+  function dimenticaFrase() { try { localStorage.removeItem(FRASE_K); } catch (e) {} }
+
   // Statistiche (Umami): «umami.disabled» nel browser = questo dispositivo non viene contato.
   function escluso() { try { return !!localStorage.getItem('umami.disabled'); } catch (e) { return false; } }
   function cambiaConteggio() {
@@ -106,6 +112,12 @@
           background: transparent; color: #edf1ed; font: 600 15px Geist, Arial, sans-serif; cursor: pointer; transform: none; }
         .docente .dc-azioni button.dc-primo { background: #edf1ed; color: #0b1210; border-color: transparent; }
         .docente .dc-azioni button:hover { border-color: #edf1ed; }
+        .docente .dc-sotto { margin: 4px 0 12px; font-size: 18px; }
+        .docente .dc-frase { margin: 0 0 18px; }
+        .docente .dc-link { display: block; box-sizing: border-box; width: 100%; min-height: 44px; margin: 0 0 8px; padding: 0 14px; border: 1px solid rgba(220,230,224,.28);
+          border-radius: 12px; background: rgba(255,255,255,.04); color: #edf1ed; font: 400 13px Geist, Arial, sans-serif; }
+        .docente .dc-link:focus-visible { outline: 2px solid #77e7b7; outline-offset: 2px; }
+        .docente .dc-errore { margin-top: 8px; color: #ff9b8a; }
         .docente .dc-nota { margin: 14px 0 0; font-size: 12.5px; line-height: 1.5; color: #9fb0a7; }
       `;
       document.head.appendChild(s);
@@ -128,13 +140,22 @@
               <button type="button" class="dc-pw" data-i="${i}" aria-pressed="false" aria-label="Mostra la password di ${c.nome}">${nascosta}<small>clic per vedere</small></button>
               <span class="dc-stato${si ? ' si' : ''}">${si ? 'aperto qui' : 'chiuso qui'}</span></li>`;
           }).join('')}</ul>
+          <strong class="dc-titolo dc-sotto">Frase a gruppi</strong>
+          ${frase() ? `<div class="dc-azioni dc-frase">
+            <button type="button" class="dc-primo" data-fai="frase">Apri la frase a gruppi · docente ↗</button>
+            <button type="button" data-fai="dimentica">Dimentica il link su questo dispositivo</button>
+          </div>` : `<div class="dc-frase">
+            <input type="url" class="dc-link" placeholder="Incolla qui il link docente" aria-label="Link docente della frase a gruppi" autocomplete="off" spellcheck="false">
+            <div class="dc-azioni"><button type="button" data-fai="salva">Ricorda il link su questo dispositivo</button></div>
+            <p class="dc-nota dc-errore" hidden>Non è il link docente della frase a gruppi.</p>
+          </div>`}
           <div class="dc-azioni">
             <button type="button" class="dc-primo" data-fai="apri">Apri tutti i corsi su questo dispositivo</button>
             <button type="button" data-fai="chiudi">Richiudi tutti i corsi su questo dispositivo</button>
             <button type="button" data-fai="conta">${escluso() ? 'Statistiche: questo dispositivo NON è contato · ricontalo' : 'Statistiche: questo dispositivo è contato · escludilo'}</button>
             <button type="button" data-fai="esci">Chiudi il pannello</button>
           </div>
-          <p class="dc-nota">Sul PC dell'aula, prima di andare via, usa «Richiudi»: altrimenti gli studenti trovano tutti i corsi aperti.</p>
+          <p class="dc-nota">Sul PC dell'aula, prima di andare via, usa «Richiudi»: altrimenti gli studenti trovano tutti i corsi aperti. «Richiudi» dimentica anche il link della frase a gruppi.</p>
         </div>`;
     }
     disegna();
@@ -154,7 +175,17 @@
         apriPagina();
       }
       if (fai === 'conta') { cambiaConteggio(); disegna(); return; }
+      if (fai === 'frase') { window.open(frase(), '_blank', 'noopener'); return chiudiPannello(); }
+      if (fai === 'dimentica') { dimenticaFrase(); disegna(); return; }
+      if (fai === 'salva') {
+        const v = (p.querySelector('.dc-link').value || '').trim();
+        if (!FRASE_RE.test(v)) { p.querySelector('.dc-errore').hidden = false; return; }
+        try { localStorage.setItem(FRASE_K, v); } catch (err) {}
+        disegna();
+        return;
+      }
       if (fai === 'chiudi') {
+        dimenticaFrase();
         Object.keys(CORSI).forEach(id => {
           try { localStorage.removeItem(chiaveDi(id)); } catch (err) {}
           try { sessionStorage.removeItem(chiaveDi(id)); } catch (err) {}
