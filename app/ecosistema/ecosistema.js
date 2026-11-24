@@ -1120,8 +1120,23 @@ const INFO = {
   clienti: ['Progetto', 'Lavori per clienti', 'Codice e immagini. Gli assistenti scrivono pagine e prompt; io genero, rifinisco in Photoshop e consegno.', CSS.green],
 };
 const card = document.getElementById('card');
+// toccando il cervello la telecamera ci vola dentro, poi si apre la sua finestra
+function entraNelCervello() {
+  if (document.querySelector('.cv[open]')) return;
+  const piano = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  shot(BRAIN_TOP, 5.5, TH0 + .35, 1.25, 4.5);
+  setTimeout(() => {
+    const v = new THREE.Vector3(); ball.getWorldPosition(v); v.project(camera);
+    const b = canvas.getBoundingClientRect();
+    window.apriCervello([b.left + (v.x + 1) / 2 * b.width, b.top + (1 - v.y) / 2 * b.height]);
+  }, piano ? 0 : 650);
+}
+window.esciDalCervello = () => {
+  const h = HOME(); shot(h.target, h.zoom / ZS, TH0, PH0, 2.4);
+  const mio = focus; setTimeout(() => { if (focus === mio) focus = null; }, 2600);
+};
 function openCard(key) {
-  if (key === 'brain' && window.apriCervello) { closeCard(); return window.apriCervello(); }
+  if (key === 'brain' && window.apriCervello) { closeCard(); return entraNelCervello(); }
   const I = INFO[key]; if (!I) return;
   card.style.setProperty('--c', I[3]);
   // sul computer la scheda va sotto «Stato del sistema», così non lo copre
