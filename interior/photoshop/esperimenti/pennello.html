@@ -1,0 +1,556 @@
+<!doctype html>
+<html lang="it">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#0a0a0d">
+  <title>Il pennello · AANT</title>
+  <meta name="description" content="Dimensione e durezza del pennello di Photoshop: perché, a parità di durezza, un pennello grande sfuma su molti più pixel. Corso Photoshop Interior, lezione 2.">
+  <style>
+    @font-face{font-family:Geist;src:url('../../../app/varianza/fonts/geist-sans-latin-400-normal.woff2') format('woff2');font-weight:400;font-display:swap}
+    @font-face{font-family:Geist;src:url('../../../app/varianza/fonts/geist-sans-latin-600-normal.woff2') format('woff2');font-weight:600;font-display:swap}
+    @font-face{font-family:Geist;src:url('../../../app/varianza/fonts/geist-sans-latin-700-normal.woff2') format('woff2');font-weight:700;font-display:swap}
+    @font-face{font-family:'Geist Mono';src:url('../../../app/varianza/fonts/geist-mono-latin-500-normal.woff2') format('woff2');font-weight:500;font-display:swap}
+    @font-face{font-family:'Geist Mono';src:url('../../../app/varianza/fonts/geist-mono-latin-600-normal.woff2') format('woff2');font-weight:600;font-display:swap}
+    :root{
+      color-scheme:dark;
+      --bg:#0a0a0d; --bg-2:#111116; --bg-3:#191920;
+      --line:rgba(244,241,236,.13); --line-2:rgba(244,241,236,.22);
+      --ink:#f4f1ec; --ink-2:#d7d2d0; --muted:#a9a4a7;
+      --accent:#38bdf8; --accent-2:#7dd4fc; --wash:rgba(56,189,248,.08); --wash-2:rgba(56,189,248,.16);
+      --ok:#7ee0a8; --no:#f39a8b;
+      --mono:'Geist Mono',ui-monospace,monospace; --sans:Geist,system-ui,Arial,sans-serif;
+    }
+    *,*::before,*::after{box-sizing:border-box}
+    html{background:var(--bg);scroll-behavior:smooth}
+    body{margin:0;min-height:100vh;background:radial-gradient(ellipse at 85% 0%,rgba(56,189,248,.09),transparent 36%),var(--bg);color:var(--ink);font:400 16px/1.6 var(--sans);-webkit-font-smoothing:antialiased;overflow-x:hidden}
+    a{color:inherit} button,input{font:inherit;color:inherit} input{accent-color:var(--accent)}
+    :focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+    img,canvas{display:block;max-width:100%}
+    .shell{width:min(1320px,calc(100% - 64px));margin:0 auto}
+    .top{min-height:72px;display:flex;justify-content:space-between;align-items:center;gap:16px;border-bottom:1px solid var(--line)}
+    .top a{text-decoration:none}
+    .brand{display:inline-flex;align-items:center;gap:12px;font-size:14px;font-weight:600}
+    .brand-mark{width:37px;height:37px;display:grid;place-items:center;border:1px solid var(--accent);color:var(--accent);font:600 12px var(--mono)}
+    .return{color:var(--muted);font:500 11px var(--mono);letter-spacing:.06em;text-transform:uppercase;text-align:right}
+    .return:hover,.brand:hover{color:var(--accent)}
+    .return .short{display:none}
+
+    .hero{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,.95fr);gap:clamp(28px,5vw,72px);align-items:end;padding:clamp(40px,6vw,88px) 0 clamp(36px,5vw,64px)}
+    .eyebrow{margin:0 0 20px;color:var(--muted);font:500 12px/1.35 var(--mono);letter-spacing:.08em;text-transform:uppercase}
+    .eyebrow b{color:var(--accent);font-weight:500}
+    h1{margin:0 0 20px;font-size:clamp(44px,6.6vw,92px);font-weight:600;line-height:.98;letter-spacing:-.05em}
+    h1 span,h2 span{color:var(--accent)}
+    .hero-copy{max-width:56ch;margin:0;color:var(--ink-2);font-size:clamp(16px,1.35vw,18px)}
+    .index{list-style:none;margin:0;padding:0;display:grid;gap:8px}
+    .index a{display:grid;grid-template-columns:44px minmax(0,1fr) auto;align-items:center;gap:14px;min-height:62px;padding:12px 18px;border:1px solid var(--line);border-radius:16px;background:var(--bg-2);text-decoration:none;transition:border-color .2s,background .2s,transform .2s}
+    .index a:hover{border-color:rgba(56,189,248,.55);background:var(--wash);transform:translateY(-2px)}
+    .index .n{color:var(--accent);font:500 12px var(--mono);letter-spacing:.06em}
+    .index strong{display:block;font-weight:600;line-height:1.3}
+    .index small{display:block;color:var(--muted);font-size:13px;line-height:1.35}
+    .index .tag{color:var(--accent);font:500 10px var(--mono);letter-spacing:.08em;text-transform:uppercase;border:1px solid rgba(56,189,248,.5);border-radius:999px;padding:4px 9px;white-space:nowrap}
+    .index .arrow{color:var(--accent)}
+
+    .sec{padding:clamp(48px,6vw,88px) 0;border-top:1px solid var(--line);scroll-margin-top:12px}
+    .sec-head{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:clamp(20px,4vw,64px);align-items:end;margin-bottom:clamp(26px,3vw,40px)}
+    .label{display:inline-flex;align-items:center;gap:10px;margin:0 0 14px;color:var(--accent);font:500 12px var(--mono);letter-spacing:.08em;text-transform:uppercase}
+    .label::before{content:"";width:7px;height:7px;border-radius:50%;background:var(--accent);box-shadow:0 0 0 5px rgba(56,189,248,.12)}
+    h2{margin:0;font-size:clamp(34px,4.2vw,58px);font-weight:600;line-height:1.02;letter-spacing:-.045em}
+    .sec-head p{margin:0;color:var(--ink-2);max-width:60ch}
+    h3{margin:0 0 8px;font-size:18px;font-weight:600;line-height:1.3;letter-spacing:-.02em}
+    .card{min-width:0;padding:clamp(16px,2.2vw,26px);border:1px solid var(--line);border-radius:16px;background:var(--bg-2)}
+    .card-k{display:block;margin-bottom:10px;color:var(--accent);font:500 11px var(--mono);letter-spacing:.08em;text-transform:uppercase}
+    .muted{color:var(--muted)} .small{font-size:13px}
+    .thought{margin:22px 0 0;padding:16px 20px;border-left:1px solid var(--accent);border-radius:12px;background:rgba(56,189,248,.07);color:var(--ink-2);max-width:86ch}
+    .thought strong{color:var(--ink)}
+    .classe-box{display:flex;gap:14px;align-items:flex-start;margin:0 0 22px;padding:14px 18px;border:1px dashed rgba(56,189,248,.5);border-radius:14px;color:var(--ink-2);font-size:15px}
+    .classe-box b{flex:none;color:var(--accent);font:500 11px/1.9 var(--mono);letter-spacing:.08em;text-transform:uppercase}
+    .btn{min-height:44px;padding:9px 16px;border:1px solid var(--line-2);border-radius:999px;background:var(--bg-3);font-weight:600;font-size:14px;cursor:pointer;transition:border-color .2s,background .2s,transform .1s}
+    .btn:hover{border-color:rgba(56,189,248,.62);background:#24252c}
+    .btn:active{transform:translateY(1px)}
+    .btn.primary{border-color:var(--accent);background:var(--accent);color:#07141b}
+    .btn.primary:hover{background:var(--accent-2)}
+    .range-row{display:grid;grid-template-columns:92px minmax(0,1fr) 64px;gap:12px;align-items:center}
+    .range-row label{font-weight:600}
+    .range-row output{font:500 14px var(--mono);text-align:right;font-variant-numeric:tabular-nums}
+    input[type=range]{width:100%;min-height:36px;margin:0;cursor:pointer}
+    .stats{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+    .stat{padding:12px 14px;border:1px solid var(--line);border-radius:12px;background:var(--bg-3)}
+    .stat small{display:block;color:var(--muted);font:500 10px var(--mono);letter-spacing:.08em;text-transform:uppercase}
+    .stat strong{display:block;margin-top:4px;font:600 24px/1.1 var(--mono);font-variant-numeric:tabular-nums}
+    .stat strong.acc{color:var(--accent)}
+
+    /* 01 foglio */
+    .p-grid{display:grid;grid-template-columns:minmax(0,1.5fr) minmax(280px,.5fr);gap:16px}
+    .foglio{position:relative;border-radius:12px;overflow:hidden;border:1px solid var(--line);background:#fff}
+    .foglio canvas{width:100%;height:auto;touch-action:none;cursor:none}
+    .foglio canvas.cursore{position:absolute;inset:0;pointer-events:none}
+    .foglio-bar{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:10px;margin-top:12px}
+    .foglio-bar span{color:var(--muted);font:500 11px var(--mono);letter-spacing:.06em;text-transform:uppercase}
+    .p-ctrl{display:grid;gap:14px;align-content:start}
+    .profilo canvas{width:100%;height:auto;border-radius:10px;border:1px solid var(--line);background:var(--bg-3)}
+    .profilo figcaption{margin-top:6px;color:var(--muted);font-size:13px;line-height:1.45}
+    .preset{display:flex;flex-wrap:wrap;gap:6px}
+    .preset button{min-height:38px;padding:6px 12px;border:1px solid var(--line-2);border-radius:999px;background:none;font:500 12px var(--mono);cursor:pointer}
+    .preset button:hover{border-color:var(--accent);color:var(--accent)}
+
+    /* 02 tre pennelli */
+    .tre{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;margin-top:16px}
+    .tre figure{margin:0}
+    .tre canvas{width:100%;aspect-ratio:1;border-radius:12px;border:1px solid var(--line);image-rendering:pixelated;background:#fff}
+    .tre figcaption{margin-top:10px;display:grid;gap:2px}
+    .tre figcaption b{font:600 15px var(--mono)}
+    .tre figcaption span{color:var(--ink-2);font-size:14px}
+    .tre figcaption em{font-style:normal;color:var(--accent);font:600 22px var(--mono)}
+    .vista{border-radius:12px;border:1px solid var(--line);background:#fff;overflow:hidden}
+    .vista canvas{width:100%;height:auto}
+    .vista-cap{margin-top:8px;color:var(--muted);font-size:13px}
+
+    .viva-bar{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:12px}
+    .seg{display:flex;flex-wrap:wrap;align-items:center;gap:6px}
+    .seg button{min-height:40px;padding:8px 14px;border:1px solid var(--line-2);border-radius:999px;background:none;font:600 14px var(--mono);cursor:pointer}
+    .seg button[aria-pressed=true]{border-color:var(--accent);background:var(--wash-2);color:var(--accent)}
+    .lucchetto{margin-right:6px;color:var(--muted);font:500 11px var(--mono);letter-spacing:.06em;text-transform:uppercase}
+    .viva{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:14px}
+    .viva figure{margin:0}
+    .viva canvas{width:100%;aspect-ratio:1;border-radius:12px;border:1px solid var(--line);background:#fff}
+    #viva-lente{image-rendering:pixelated}
+    .viva figcaption{margin-top:8px;color:var(--muted);font-size:13px}
+    .metro{display:grid;grid-template-columns:auto auto minmax(0,1fr);gap:12px;margin-top:16px;align-items:stretch}
+    .metro>div{padding:12px 16px;border:1px solid var(--line);border-radius:12px;background:var(--bg-3)}
+    .metro span{display:block;color:var(--muted);font:500 10px var(--mono);letter-spacing:.08em;text-transform:uppercase}
+    .metro-num strong{display:block;margin-top:4px;font:600 26px/1.1 var(--mono);font-variant-numeric:tabular-nums}
+    .metro-num strong.acc{color:var(--accent)}
+    .metro-traccia{position:relative;height:14px;margin-top:12px;border-radius:999px;background:linear-gradient(90deg,#3a3a42,#f4f1ec)}
+    .metro-traccia i{position:absolute;top:-5px;width:4px;height:24px;margin-left:-2px;border-radius:2px;background:var(--accent);box-shadow:0 0 0 3px rgba(56,189,248,.25);transition:left .15s}
+    .metro-ai{display:flex;justify-content:space-between;margin-top:6px}
+    .metro-ai small{color:var(--muted);font-size:12px}
+    @media(max-width:760px){.metro{grid-template-columns:1fr 1fr}.metro-bar{grid-column:1/-1}}
+
+    /* 03 sfida */
+    .s-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+    .s-grid figure{margin:0}
+    .s-grid canvas{width:100%;aspect-ratio:2/1;border-radius:12px;border:1px solid var(--line);image-rendering:pixelated}
+    .s-grid figcaption{margin-top:8px;color:var(--ink-2);font-size:14px}
+    .s-grid figcaption b{color:var(--ink)}
+    .s-ctrl{display:grid;gap:12px;margin-top:16px}
+    .giro{display:flex;flex-wrap:wrap;justify-content:space-between;gap:10px;align-items:baseline;margin-bottom:14px}
+    .giro strong{font-size:20px}
+    .giro span{color:var(--muted);font:500 12px var(--mono);letter-spacing:.06em;text-transform:uppercase}
+    .esito{margin-top:14px;padding:14px 18px;border-radius:12px;border:1px solid var(--line);background:var(--bg-3);display:none}
+    .esito.si{display:block;border-color:rgba(126,224,168,.5)}
+    .esito.no{display:block;border-color:rgba(243,154,139,.5)}
+    .esito b{display:block;font-size:17px;margin-bottom:4px}
+    .esito.si b{color:var(--ok)} .esito.no b{color:var(--no)}
+    .actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:16px;align-items:center}
+    .risultato{margin-top:16px;padding:20px;border-radius:14px;border:1px solid rgba(56,189,248,.5);background:var(--wash);display:none}
+    .risultato strong{display:block;font:600 34px var(--mono);color:var(--accent)}
+
+    .scorciatoie{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+    .scorciatoie li{display:grid;gap:6px;padding:14px;border:1px solid var(--line);border-radius:12px;background:var(--bg-3)}
+    kbd{justify-self:start;padding:3px 8px;border:1px solid var(--line-2);border-radius:6px;background:var(--bg);font:500 12px var(--mono);color:var(--accent)}
+    .scorciatoie span{color:var(--ink-2);font-size:14px}
+
+    .next{display:inline-flex;align-items:center;gap:10px;margin-top:28px;min-height:44px;padding:9px 18px;border:1px solid rgba(56,189,248,.48);border-radius:999px;background:rgba(56,189,248,.1);font-weight:600;text-decoration:none}
+    .next:hover{border-color:var(--accent);background:rgba(56,189,248,.19)}
+    .foot{display:flex;justify-content:space-between;align-items:flex-start;gap:20px;border-top:1px solid var(--line);padding:18px 0 42px;color:var(--muted);font-size:12px}
+    .foot p{max-width:72ch;margin:0}
+    .foot strong,.foot a{color:var(--accent)}
+    .foot a{flex:none;text-decoration:none}
+
+    @media(max-width:980px){.hero,.sec-head,.p-grid{grid-template-columns:1fr}}
+    @media(max-width:760px){.shell{width:calc(100% - 32px)}.scorciatoie{grid-template-columns:1fr}.s-grid{gap:10px}.s-grid figcaption{font-size:13px}}
+    @media(max-width:680px){
+      .brand{font-size:12px;gap:8px}.brand-mark{width:35px;height:35px}
+      .return{font-size:10px}.return .long{display:none}.return .short{display:inline}
+      .foot{display:block}.foot a{display:inline-block;margin-top:12px}
+      .index a{grid-template-columns:34px minmax(0,1fr);padding:12px 14px}
+      .index .tag,.index .arrow{display:none}
+      .classe-box{flex-direction:column;gap:4px}
+      .range-row{grid-template-columns:98px minmax(0,1fr) 56px;gap:10px}
+    }
+    @media(max-width:360px){.brand span:last-child{max-width:110px;line-height:1.2}.return{font-size:9px}}
+    @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*::before,*::after{transition:none!important}}
+  </style>
+<script defer src="https://cloud.umami.is/script.js" data-website-id="f2e9536a-0fe6-48be-82e0-97fccdf87046" data-domains="giovannisavelli.github.io"></script></head>
+<body>
+<script>
+  if (!/^https?:$/.test(location.protocol)) document.write('<p style="margin:0;padding:12px 16px;background:#f5c76a;color:#111;font:600 15px/1.4 system-ui,sans-serif">Questa è una copia della pagina: i caratteri e alcune parti non si vedono. Apri la pagina dal sito (o dall’anteprima locale) per vederla intera.</p>');
+</script>
+<div class="shell">
+  <header class="top">
+    <a class="brand" href="../../../"><span class="brand-mark">GS</span><span>Giovanni Savelli · AANT</span></a>
+    <a class="return" href="../#esperimenti">← <span class="long">Corso di Photoshop</span><span class="short">Corso Photoshop</span></a>
+  </header>
+  <main>
+    <section class="hero">
+      <div>
+        <p class="eyebrow"><b>Photoshop Interior</b> · Lezione 02 · Esperimenti</p>
+        <h1>Il pennello<span>.</span></h1>
+        <p class="hero-copy">Due numeri decidono il bordo di ogni pennellata: la dimensione e la durezza. Sembrano indipendenti, ma non lo sono. Qui lo vediamo dipingendo.</p>
+      </div>
+      <ol class="index" aria-label="Le parti dell'esperimento">
+        <li><a href="#prova"><span class="n">01</span><span><strong>Prova il pennello</strong><small>Dipingi e guarda il bordo</small></span><span class="tag">In aula</span></a></li>
+        <li><a href="#grandezza"><span class="n">02</span><span><strong>Stessa durezza, altra grandezza</strong><small>La sfumatura cresce col pennello</small></span><span class="arrow" aria-hidden="true">→</span></a></li>
+        <li><a href="#bordo"><span class="n">03</span><span><strong>Il bordo giusto</strong><small>Tre bordi di una foto da imitare</small></span><span class="tag">Sfida</span></a></li>
+      </ol>
+    </section>
+
+    <!-- 01 -->
+    <section class="sec" id="prova" aria-labelledby="p-t">
+      <div class="sec-head">
+        <div><p class="label">01 / Prova il pennello</p><h2 id="p-t">Duro o morbido<span>?</span></h2></div>
+        <p>La <strong>dimensione</strong> è il diametro del pennello, in pixel. La <strong>durezza</strong> dice quanta parte del pennello è piena: a 100% è tutto pieno e il bordo è netto; a 0% sfuma dal centro fino al bordo.</p>
+      </div>
+      <p class="classe-box"><b>In aula</b><span>Fate due pennellate con la stessa durezza, 0%: una a 30 px e una a 300 px. Guardate il bordo di tutte e due. Poi ditemi: la durezza era la stessa, il bordo è lo stesso?</span></p>
+      <div class="p-grid">
+        <div class="card">
+          <div class="foglio">
+            <canvas id="foglio" width="1000" height="560" role="img" aria-label="Foglio bianco su cui dipingere con il pennello scelto"></canvas>
+            <canvas id="cursore" class="cursore" width="1000" height="560" aria-hidden="true"></canvas>
+          </div>
+          <div class="foglio-bar"><span>Documento 1000 × 560 px</span><button class="btn" type="button" id="pulisci">Pulisci il foglio</button></div>
+        </div>
+        <div class="card p-ctrl">
+          <div class="range-row"><label for="dim">Dimensione</label><input type="range" id="dim" min="2" max="400" value="60"><output id="dim-o">60 px</output></div>
+          <div class="range-row"><label for="dur">Durezza</label><input type="range" id="dur" min="0" max="100" value="0"><output id="dur-o">0%</output></div>
+          <div class="preset" role="group" aria-label="Pennelli pronti">
+            <button type="button" data-d="30" data-h="0">30 px · 0%</button>
+            <button type="button" data-d="300" data-h="0">300 px · 0%</button>
+            <button type="button" data-d="30" data-h="100">30 px · 100%</button>
+            <button type="button" data-d="300" data-h="100">300 px · 100%</button>
+          </div>
+          <div class="stats">
+            <div class="stat"><small>Parte piena</small><strong id="pieno">0 px</strong></div>
+            <div class="stat"><small>Sfumatura</small><strong class="acc" id="sfuma">30 px</strong></div>
+          </div>
+          <figure class="profilo" style="margin:0">
+            <canvas id="profilo" width="600" height="220" aria-hidden="true"></canvas>
+            <figcaption>Il pennello visto di taglio, dal centro al bordo: dove la linea sta in alto il colore è pieno, dove scende sfuma.</figcaption>
+          </figure>
+        </div>
+      </div>
+    </section>
+
+    <!-- 02 -->
+    <section class="sec" id="grandezza" aria-labelledby="g-t">
+      <div class="sec-head">
+        <div><p class="label">02 / Stessa durezza</p><h2 id="g-t">Il numero è fermo, il bordo no<span>.</span></h2></div>
+        <p>Blocca la durezza e muovi solo la dimensione. Il numero della durezza non cambia, ma il bordo sì: rimpicciolendo il pennello diventa sempre più netto, ingrandendolo sempre più morbido.</p>
+      </div>
+      <div class="card">
+        <div class="viva-bar">
+          <div class="seg" role="group" aria-label="Durezza bloccata">
+            <span class="lucchetto">Durezza bloccata</span>
+            <button type="button" data-hv="0" aria-pressed="true">0%</button>
+            <button type="button" data-hv="50" aria-pressed="false">50%</button>
+            <button type="button" data-hv="80" aria-pressed="false">80%</button>
+          </div>
+          <button class="btn primary" type="button" id="cresci">▶ Fai crescere il pennello</button>
+        </div>
+        <div class="range-row" style="margin-top:14px"><label for="dim3">Dimensione</label><input type="range" id="dim3" min="4" max="400" value="40"><output id="dim3-o">40 px</output></div>
+        <div class="viva">
+          <figure><canvas id="viva-tutto" width="440" height="440" aria-hidden="true"></canvas><figcaption>Il pennello intero, a grandezza vera. Il riquadro azzurro è il pezzo ingrandito accanto.</figcaption></figure>
+          <figure><canvas id="viva-lente" width="440" height="440" role="img" aria-label="Il bordo del pennello ingrandito dieci volte"></canvas><figcaption>Il bordo da vicino: un pezzo di 44 pixel, a metà della sfumatura, ingrandito 10 volte.</figcaption></figure>
+        </div>
+        <div class="metro">
+          <div class="metro-num"><span>Durezza nel pannello</span><strong id="v-num">0%</strong></div>
+          <div class="metro-num"><span>Sfumatura vera</span><strong class="acc" id="v-sfuma">20 px</strong></div>
+          <div class="metro-bar"><span>Come appare il bordo</span><div class="metro-traccia"><i id="v-ago"></i></div><div class="metro-ai"><small>morbido</small><small>netto</small></div></div>
+        </div>
+      </div>
+      <h3 style="margin:36px 0 12px">Perché succede</h3>
+      <p class="muted" style="margin:0 0 16px;max-width:70ch">La durezza è una <strong>percentuale</strong> del pennello, non una misura in pixel. Con la stessa durezza, un pennello dieci volte più grande sfuma su un bordo dieci volte più largo.</p>
+      <div class="card">
+        <div class="range-row"><label for="dur2">Durezza</label><input type="range" id="dur2" min="0" max="100" value="0"><output id="dur2-o">0%</output></div>
+        <div class="vista" style="margin-top:14px"><canvas id="tre-vista" width="1000" height="440" role="img" aria-label="Tre pennellate con la stessa durezza e dimensioni di 20, 100 e 400 pixel"></canvas></div>
+        <p class="vista-cap">Le tre pennellate alla loro grandezza vera, nello stesso documento.</p>
+        <div class="vista" style="margin-top:18px"><canvas id="strisce" width="1000" height="330" role="img" aria-label="Il bordo dei tre pennelli, dal centro verso l'esterno, alla stessa scala"></canvas></div>
+        <p class="vista-cap">Ogni pennello tagliato a metà, dal centro verso l'esterno, tutti alla stessa scala. La parte segnata in azzurro è la sfumatura.</p>
+      </div>
+      <p class="thought"><strong>Cosa vuol dire quando scontorni.</strong> Il bordo che conta è quello in pixel. Se per fare in fretta ingrandisci il pennello, il bordo diventa più morbido anche senza toccare la durezza. Per questo si guarda il bordo a ingrandimento 100%, non il numero della durezza.</p>
+    </section>
+
+    <!-- 03 -->
+    <section class="sec" id="bordo" aria-labelledby="b-t">
+      <div class="sec-head">
+        <div><p class="label">03 / Il bordo giusto</p><h2 id="b-t">Imita il bordo della foto<span>.</span></h2></div>
+        <p>Quando scontorni, il bordo della maschera deve somigliare al bordo vero dell'oggetto nella foto. Troppo netto e sembra ritagliato con le forbici; troppo morbido e intorno resta un alone. Scegli dimensione e durezza, poi controlla.</p>
+      </div>
+      <div class="card">
+        <div class="giro"><strong id="s-titolo">Il bordo della sedia, a fuoco</strong><span id="s-conta">Bordo 1 di 3</span></div>
+        <div class="s-grid">
+          <figure><canvas id="s-foto" width="128" height="64" aria-hidden="true"></canvas><figcaption><b>Il bordo nella foto</b>, ingrandito: 64 pixel di larghezza.</figcaption></figure>
+          <figure><canvas id="s-mio" width="128" height="64" aria-hidden="true"></canvas><figcaption><b>Il bordo del tuo pennello</b>, stesso ingrandimento.</figcaption></figure>
+        </div>
+        <div class="s-ctrl">
+          <div class="range-row"><label for="s-dim">Dimensione</label><input type="range" id="s-dim" min="2" max="400" value="200"><output id="s-dim-o">200 px</output></div>
+          <div class="range-row"><label for="s-dur">Durezza</label><input type="range" id="s-dur" min="0" max="100" value="0"><output id="s-dur-o">0%</output></div>
+        </div>
+        <div class="actions">
+          <button class="btn primary" type="button" id="s-controlla">Controlla</button>
+          <button class="btn" type="button" id="s-avanti" hidden>Prossimo bordo →</button>
+        </div>
+        <div class="esito" id="s-esito" role="status" aria-live="polite"></div>
+        <div class="risultato" id="s-risultato" role="status" aria-live="polite">
+          <strong id="s-punti">0 su 3</strong>
+          <p style="margin:6px 0 0" id="s-frase"></p>
+          <div class="actions"><button class="btn primary" type="button" id="s-ricomincia">↺ Ricomincia</button></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- scorciatoie -->
+    <section class="sec" id="scorciatoie" aria-labelledby="k-t">
+      <div class="sec-head">
+        <div><h2 id="k-t">In Photoshop, senza pannelli<span>.</span></h2></div>
+        <p>Dimensione e durezza si cambiano senza aprire niente, mentre dipingi. I simboli possono stare su tasti diversi secondo la tastiera.</p>
+      </div>
+      <ul class="scorciatoie">
+        <li><kbd>[ / ]</kbd><span>Rimpicciolisci o ingrandisci il pennello.</span></li>
+        <li><kbd>{ / }</kbd><span>Meno o più durezza. Di solito è Maiusc + [ / ].</span></li>
+        <li><kbd>Alt + clic destro + trascina</kbd><span>Su Windows: a destra e sinistra la dimensione, in alto e in basso la durezza.</span></li>
+        <li><kbd>Ctrl + Opzione + trascina</kbd><span>La stessa cosa su Mac.</span></li>
+      </ul>
+      <a class="next" href="../#lezione-2">Torna agli appunti della lezione 02 →</a>
+    </section>
+  </main>
+  <footer class="foot"><p><strong>Simulazione didattica.</strong> Il pennello qui è calcolato dal browser: la forma della sfumatura di Photoshop è un poco diversa, ma il rapporto fra dimensione, durezza e larghezza del bordo è lo stesso.</p><a href="../#esperimenti">← Torna al corso</a></footer>
+</div>
+
+<script>
+(() => {
+  const $ = id => document.getElementById(id);
+  const px = n => (n < 10 ? n.toFixed(1).replace(/\.0$/, '').replace('.', ',') : Math.round(n)) + ' px';
+
+  /* Il pennello: diametro D, durezza h (0-1). Pieno fino a h·R, poi sfuma fino a R. */
+  function alfa(r, R, h) {
+    const dentro = h * R, larga = Math.max(R - dentro, 0.6);
+    if (r <= dentro) return 1;
+    if (r >= dentro + larga) return 0;
+    const t = (r - dentro) / larga;
+    return 1 - t * t * (3 - 2 * t);
+  }
+  const sfumatura = (D, h) => Math.max(D / 2 * (1 - h), 1);
+
+  function punta(D, h) {
+    const R = D / 2, s = Math.ceil(D) + 2, c = document.createElement('canvas');
+    c.width = c.height = s;
+    const x = c.getContext('2d'), im = x.createImageData(s, s), m = s / 2;
+    for (let j = 0; j < s; j++) for (let i = 0; i < s; i++) {
+      const a = alfa(Math.hypot(i + .5 - m, j + .5 - m), R, h), k = (j * s + i) * 4;
+      im.data[k] = im.data[k + 1] = im.data[k + 2] = 17; im.data[k + 3] = Math.round(a * 255);
+    }
+    x.putImageData(im, 0, 0);
+    return c;
+  }
+
+  /* ---------- 01 foglio ---------- */
+  const fo = $('foglio'), fx = fo.getContext('2d'), cu = $('cursore'), cx = cu.getContext('2d');
+  const dim = $('dim'), dur = $('dur');
+  let tip = null, ultimo = null, dipingo = false;
+  function pulisci() { fx.fillStyle = '#fff'; fx.fillRect(0, 0, fo.width, fo.height); }
+  function profilo() {
+    const c = $('profilo'), x = c.getContext('2d'), W = c.width, H = c.height, D = +dim.value, h = dur.value / 100, R = D / 2;
+    x.clearRect(0, 0, W, H);
+    const l = 40, r = W - 20, t = 26, b = H - 40;
+    x.strokeStyle = 'rgba(244,241,236,.18)'; x.lineWidth = 1;
+    x.beginPath(); x.moveTo(l, b); x.lineTo(r, b); x.moveTo(l, t); x.lineTo(l, b); x.stroke();
+    const xh = l + (r - l) * h;
+    x.fillStyle = 'rgba(56,189,248,.14)'; x.fillRect(xh, t, r - xh, b - t);
+    x.beginPath();
+    for (let i = 0; i <= 200; i++) { const rr = R * i / 200, a = alfa(rr, R, h), X = l + (r - l) * i / 200, Y = b - (b - t) * a; i ? x.lineTo(X, Y) : x.moveTo(X, Y); }
+    x.strokeStyle = '#38bdf8'; x.lineWidth = 3; x.stroke();
+    x.fillStyle = '#a9a4a7'; x.font = '500 18px "Geist Mono", monospace';
+    x.textAlign = 'left'; x.fillText('centro', l, H - 12);
+    x.textAlign = 'right'; x.fillText('bordo · ' + Math.round(R) + ' px', r, H - 12);
+    x.textAlign = 'left'; x.fillText('pieno', l + 6, t - 8);
+  }
+  function aggiorna() {
+    const D = +dim.value, h = dur.value / 100;
+    $('dim-o').textContent = D + ' px'; $('dur-o').textContent = dur.value + '%';
+    $('pieno').textContent = px(D / 2 * h); $('sfuma').textContent = px(sfumatura(D, h));
+    tip = punta(D, h); profilo();
+  }
+  function pos(e) { const r = fo.getBoundingClientRect(); return { x: (e.clientX - r.left) * fo.width / r.width, y: (e.clientY - r.top) * fo.height / r.height }; }
+  /* Ogni pennellata ha una sua maschera: dove i timbri si sovrappongono vale il più scuro, non la somma,
+     così il bordo della pennellata ha lo stesso profilo del pennello. */
+  const ma = document.createElement('canvas'); ma.width = fo.width; ma.height = fo.height;
+  const mx = ma.getContext('2d', { willReadFrequently: true });
+  let base = null, grigia = null, sporco = false;
+  function puntaGrigia() {
+    const s = tip.width, c = document.createElement('canvas'); c.width = c.height = s;
+    const x = c.getContext('2d'); x.fillStyle = '#000'; x.fillRect(0, 0, s, s);
+    const src = tip.getContext('2d').getImageData(0, 0, s, s), im = x.createImageData(s, s);
+    for (let k = 0; k < src.data.length; k += 4) { const v = src.data[k + 3]; im.data[k] = im.data[k + 1] = im.data[k + 2] = v; im.data[k + 3] = 255; }
+    x.putImageData(im, 0, 0); return c;
+  }
+  function timbra(p) { mx.drawImage(grigia, p.x - grigia.width / 2, p.y - grigia.height / 2); sporco = true; }
+  function componi() {
+    if (!sporco || !base) return; sporco = false;
+    const m = mx.getImageData(0, 0, ma.width, ma.height).data, out = fx.createImageData(fo.width, fo.height), o = out.data, b = base.data;
+    for (let k = 0; k < o.length; k += 4) { const a = m[k] / 255; o[k] = b[k] + (17 - b[k]) * a; o[k + 1] = b[k + 1] + (17 - b[k + 1]) * a; o[k + 2] = b[k + 2] + (17 - b[k + 2]) * a; o[k + 3] = 255; }
+    fx.putImageData(out, 0, 0);
+  }
+  function inizia() {
+    base = fx.getImageData(0, 0, fo.width, fo.height); grigia = puntaGrigia();
+    mx.globalCompositeOperation = 'source-over'; mx.fillStyle = '#000'; mx.fillRect(0, 0, ma.width, ma.height);
+    mx.globalCompositeOperation = 'lighten';
+  }
+  function linea(a, b) {
+    const passo = Math.max(1, +dim.value * .02), d = Math.hypot(b.x - a.x, b.y - a.y), n = Math.floor(d / passo);
+    for (let i = 1; i <= n; i++) timbra({ x: a.x + (b.x - a.x) * i / n, y: a.y + (b.y - a.y) * i / n });
+    requestAnimationFrame(componi);
+    return n ? b : a;
+  }
+  function anello(p) {
+    cx.clearRect(0, 0, cu.width, cu.height); if (!p) return;
+    cx.beginPath(); cx.arc(p.x, p.y, Math.max(+dim.value / 2, 1.5), 0, Math.PI * 2);
+    cx.lineWidth = 3; cx.strokeStyle = 'rgba(255,255,255,.9)'; cx.stroke();
+    cx.lineWidth = 1.4; cx.strokeStyle = 'rgba(0,0,0,.85)'; cx.stroke();
+  }
+  fo.addEventListener('pointerdown', e => { fo.setPointerCapture(e.pointerId); dipingo = true; inizia(); ultimo = pos(e); timbra(ultimo); componi(); anello(ultimo); });
+  fo.addEventListener('pointermove', e => { const p = pos(e); anello(p); if (dipingo) ultimo = linea(ultimo, p); });
+  const fine = () => { if (dipingo) componi(); dipingo = false; };
+  fo.addEventListener('pointerup', fine); fo.addEventListener('pointercancel', fine);
+  fo.addEventListener('pointerleave', () => { if (!dipingo) anello(null); });
+  dim.addEventListener('input', aggiorna); dur.addEventListener('input', aggiorna);
+  $('pulisci').addEventListener('click', pulisci);
+  document.querySelectorAll('[data-d]').forEach(b => b.addEventListener('click', () => { dim.value = b.dataset.d; dur.value = b.dataset.h; aggiorna(); }));
+  pulisci(); aggiorna();
+
+  /* ---------- 02 tre pennelli ---------- */
+  const DIM = [20, 100, 400], tv = $('tre-vista'), tx = tv.getContext('2d'), dur2 = $('dur2');
+  const CX = [90, 270, 690], CY = 220;
+  function tre() {
+    const h = dur2.value / 100; $('dur2-o').textContent = dur2.value + '%';
+    tx.fillStyle = '#fff'; tx.fillRect(0, 0, tv.width, tv.height);
+    DIM.forEach((D, i) => {
+      const p = punta(D, h); tx.drawImage(p, CX[i] - p.width / 2, CY - p.height / 2);
+    });
+    tx.font = '500 16px "Geist Mono", monospace'; tx.fillStyle = '#555'; tx.textAlign = 'center';
+    DIM.forEach((D, i) => tx.fillText(D + ' px', CX[i], 434));
+    strisce(h);
+  }
+  function strisce(h) {
+    const c = $('strisce'), x = c.getContext('2d'), W = c.width, L = 120, Rt = W - 30, MAX = 220, k = (Rt - L) / MAX;
+    x.fillStyle = '#fff'; x.fillRect(0, 0, W, c.height);
+    x.font = '500 16px "Geist Mono", monospace';
+    DIM.forEach((D, i) => {
+      const R = D / 2, y = 22 + i * 100, hgt = 46;
+      for (let s = 0; s < Rt - L; s++) {
+        const a = alfa(s / k, R, h), v = Math.round(255 - (255 - 17) * a);
+        x.fillStyle = 'rgb(' + v + ',' + v + ',' + v + ')'; x.fillRect(L + s, y, 1, hgt);
+      }
+      x.fillStyle = '#333'; x.textAlign = 'left'; x.fillText(D + ' px', 14, y + hgt / 2 + 6);
+      const a0 = L + R * h * k, a1 = L + R * k, yb = y + hgt + 10;
+      x.strokeStyle = '#0284c7'; x.lineWidth = 2.5;
+      x.beginPath(); x.moveTo(a0, yb - 5); x.lineTo(a0, yb); x.lineTo(Math.max(a1, a0 + 2), yb); x.lineTo(Math.max(a1, a0 + 2), yb - 5); x.stroke();
+      const dx = a1 > W - 160; x.fillStyle = '#0284c7'; x.font = '600 17px "Geist Mono", monospace';
+      x.textAlign = dx ? 'right' : 'left';
+      x.fillText('sfuma ' + px(sfumatura(D, h)), dx ? a1 : Math.max(a1, a0 + 2) + 8, dx ? yb + 22 : yb + 6);
+      x.font = '500 16px "Geist Mono", monospace';
+    });
+    x.fillStyle = '#888'; x.textAlign = 'left'; x.font = '500 13px "Geist Mono", monospace';
+    x.fillText('centro', L, 14);
+  }
+  dur2.addEventListener('input', tre); tre();
+
+  /* ---------- 02 durezza bloccata ---------- */
+  const d3 = $('dim3'), LW = 44, ZOOM = 10;
+  let hv = 0, anim = null;
+  const fermo = matchMedia('(prefers-reduced-motion: reduce)');
+  function viva() {
+    const D = +d3.value, R = D / 2, h = hv / 100, f = sfumatura(D, h);
+    $('dim3-o').textContent = D + ' px'; $('v-num').textContent = hv + '%'; $('v-sfuma').textContent = px(f);
+    /* il pennello intero, 1 pixel = 1 pixel */
+    const a = $('viva-tutto'), ax = a.getContext('2d');
+    ax.fillStyle = '#fff'; ax.fillRect(0, 0, 440, 440);
+    const p = punta(D, h); ax.drawImage(p, 220 - p.width / 2, 220 - p.height / 2);
+    /* il riquadro sta dove il pennello è a metà sfumatura: lì si vede il bordo */
+    const meta = h * R + (R - h * R) / 2;
+    ax.strokeStyle = '#0284c7'; ax.lineWidth = 2; ax.strokeRect(220 + meta - LW / 2, 220 - LW / 2, LW, LW);
+    /* il bordo da vicino: 44 × 44 pixel, ingranditi 10 volte */
+    const l = $('viva-lente'), lx = l.getContext('2d'), im = lx.createImageData(LW, LW);
+    for (let j = 0; j < LW; j++) for (let i = 0; i < LW; i++) {
+      const x = meta - LW / 2 + i + .5, y = j - LW / 2 + .5, al = alfa(Math.hypot(x, y), R, h), v = Math.round(255 - 238 * al), k = (j * LW + i) * 4;
+      im.data[k] = im.data[k + 1] = im.data[k + 2] = v; im.data[k + 3] = 255;
+    }
+    const t = document.createElement('canvas'); t.width = t.height = LW; t.getContext('2d').putImageData(im, 0, 0);
+    lx.imageSmoothingEnabled = false; lx.drawImage(t, 0, 0, 440, 440);
+    /* quanto appare netto: da 1 px di sfumatura (netto) a 200 px (morbidissimo), in scala logaritmica come l'occhio */
+    $('v-ago').style.left = (100 * (1 - Math.log(Math.min(Math.max(f, 1), 200)) / Math.log(200))).toFixed(1) + '%';
+  }
+  d3.addEventListener('input', () => { ferma(); viva(); });
+  document.querySelectorAll('[data-hv]').forEach(b => b.addEventListener('click', () => {
+    hv = +b.dataset.hv; document.querySelectorAll('[data-hv]').forEach(x => x.setAttribute('aria-pressed', x === b)); viva();
+  }));
+  function ferma() { if (anim) cancelAnimationFrame(anim); anim = null; $('cresci').textContent = '▶ Fai crescere il pennello'; }
+  $('cresci').addEventListener('click', () => {
+    if (anim) { ferma(); return; }
+    if (fermo.matches) { d3.value = +d3.value >= 400 ? 4 : 400; viva(); return; }
+    const da = +d3.value >= 390 ? 4 : +d3.value, t0 = performance.now(), dur = 6000 * (400 - da) / 396;
+    $('cresci').textContent = '❚❚ Ferma';
+    const passo = now => {
+      const k = Math.min((now - t0) / dur, 1), e = k * k;
+      d3.value = Math.round(da + (400 - da) * e); viva();
+      anim = k < 1 ? requestAnimationFrame(passo) : (ferma(), null);
+    };
+    anim = requestAnimationFrame(passo);
+  });
+  viva();
+
+  /* ---------- 03 sfida ---------- */
+  const GIRI = [
+    { titolo: 'Il bordo della sedia, a fuoco', t: 1.5, nota: 'Un oggetto a fuoco, guardato al 100%, ha un bordo di uno o due pixel.' },
+    { titolo: 'Un cuscino un poco fuori fuoco', t: 6, nota: 'Appena fuori fuoco, il bordo si allarga di qualche pixel.' },
+    { titolo: 'Una pianta sfocata sullo sfondo', t: 24, nota: 'Molto sfocato: qui serve un bordo largo, morbido davvero.' }
+  ];
+  let giro = 0, punti = 0, fatto = false;
+  const sd = $('s-dim'), sh = $('s-dur');
+  function bordo(cv, larga) {
+    const x = cv.getContext('2d'), im = x.createImageData(128, 64);
+    for (let i = 0; i < 128; i++) {
+      const d = (i - 64) / 2, t = Math.min(Math.max((d + larga / 2) / larga, 0), 1), a = 1 - t * t * (3 - 2 * t);
+      const v = Math.round(52 * a + 236 * (1 - a));
+      for (let j = 0; j < 64; j++) { const k = (j * 128 + i) * 4; im.data[k] = v; im.data[k + 1] = Math.round(v * .97); im.data[k + 2] = Math.round(v * .93); im.data[k + 3] = 255; }
+    }
+    x.putImageData(im, 0, 0);
+  }
+  function mio() {
+    $('s-dim-o').textContent = sd.value + ' px'; $('s-dur-o').textContent = sh.value + '%';
+    bordo($('s-mio'), sfumatura(+sd.value, sh.value / 100));
+  }
+  function mostraGiro() {
+    const g = GIRI[giro]; fatto = false;
+    $('s-titolo').textContent = g.titolo; $('s-conta').textContent = 'Bordo ' + (giro + 1) + ' di ' + GIRI.length;
+    bordo($('s-foto'), g.t); $('s-esito').className = 'esito'; $('s-avanti').hidden = true; $('s-controlla').disabled = false;
+  }
+  $('s-controlla').addEventListener('click', () => {
+    if (fatto) return;
+    const g = GIRI[giro], mia = sfumatura(+sd.value, sh.value / 100), tol = Math.max(1.2, g.t * .35), e = $('s-esito');
+    const ok = Math.abs(mia - g.t) <= tol; fatto = true; if (ok) punti++;
+    e.className = 'esito ' + (ok ? 'si' : 'no');
+    e.innerHTML = '<b>' + (ok ? '✓ Giusto' : '✕ Sbagliato') + '</b>' +
+      'Il tuo bordo sfuma su ' + px(mia) + ', quello della foto su circa ' + px(g.t) + '. ' +
+      (ok ? g.nota : (mia < g.t ? 'Il tuo è troppo netto: sembra ritagliato con le forbici.' : 'Il tuo è troppo morbido: intorno all’oggetto resterebbe un alone.'));
+    $('s-controlla').disabled = true;
+    const ultimo = giro === GIRI.length - 1;
+    $('s-avanti').hidden = false; $('s-avanti').textContent = ultimo ? 'Vedi il risultato' : 'Prossimo bordo →';
+  });
+  $('s-avanti').addEventListener('click', () => {
+    if (giro < GIRI.length - 1) { giro++; mostraGiro(); return; }
+    $('s-avanti').hidden = true;
+    $('s-punti').textContent = punti + ' su ' + GIRI.length;
+    $('s-frase').textContent = punti === GIRI.length
+      ? 'Tutti giusti. Hai notato che lo stesso bordo si ottiene in più modi? Un pennello piccolo e morbido e uno grande e duro possono sfumare sugli stessi pixel.'
+      : 'Riprova: guarda i pixel della sfumatura, non la percentuale della durezza. Lo stesso bordo si ottiene anche con un pennello grande e duro.';
+    $('s-risultato').style.display = 'block';
+  });
+  $('s-ricomincia').addEventListener('click', () => { giro = 0; punti = 0; $('s-risultato').style.display = 'none'; mostraGiro(); });
+  sd.addEventListener('input', mio); sh.addEventListener('input', mio);
+  mio(); mostraGiro();
+})();
+</script>
+</body>
+</html>
