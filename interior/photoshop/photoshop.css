@@ -104,6 +104,13 @@
       .lesson-route h4, .exercise-card h4 { margin: 11px 0 8px; font: 700 21px/1.2 var(--sans); }
       .lesson-route p, .exercise-card p, .exercise-card li { margin: 0; color: var(--muted); font-size: 13px; line-height: 1.65; }
       .lesson-route strong, .exercise-card strong { color: var(--text); }
+      .lesson-route p + p { margin-top: 10px; }
+      /* esempio pratico sotto i riquadri: stessa famiglia dei riquadri, a tutta larghezza, con la riga del colore del corso a sinistra */
+      .lesson-example { margin: 12px 0 18px; padding: 21px 24px; border: 1px solid var(--border); border-left: 3px solid var(--accent); border-radius: 15px; background: var(--surface-strong); }
+      .lesson-example span { color: var(--accent); font: 600 11px var(--mono); letter-spacing: .06em; }
+      .lesson-example h4 { margin: 11px 0 8px; font: 700 21px/1.2 var(--sans); }
+      .lesson-example p { margin: 0; max-width: 78ch; color: var(--muted); font-size: 14px; line-height: 1.7; }
+      .lesson-example strong { color: var(--text); }
       .lesson-section-title { margin: 33px 0 10px; font: 700 clamp(22px, 3vw, 28px)/1.2 var(--sans); }
       .lesson-section-copy { max-width: 780px; margin: 0 0 17px; color: var(--muted); font-size: 14px; line-height: 1.65; }
       .exercise-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
