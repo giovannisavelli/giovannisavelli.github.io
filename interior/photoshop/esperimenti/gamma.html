@@ -400,7 +400,7 @@ const vellXY = xyDa(VELLUTO), vellPos = pos(VELLUTO);
 let step = 0, pitchBase = Math.PI / 2, pitch = Math.PI / 2, yaw = 0, giroT = 0, tempo = 0;
 // le scelte di chi guarda: rotazione, zoom e spostamento; tornano a zero quando cambia passo
 const U = { yaw: 0, pitch: 0, zoom: 1, panX: 0, panY: 0 };
-let ultimoTocco = -1e9, rientro = false, metaW = 1, metaH = 1;
+let ultimoTocco = -1e9, rientro = false, metaW = 1, metaH = 1, inclinaSubito = false;
 const toccato = () => { ultimoTocco = performance.now(); rientro = false; };
 const DEFAULT = [['occhio'], ['occhio', 'srgb'], ['occhio', 'srgb', 'adobe'], ['occhio', 'srgb', 'adobe', 'pro'], ['occhio', 'srgb', 'stampa'], ['occhio', 'stampa']];
 const chips = [...document.querySelectorAll('.chips button')];
@@ -413,7 +413,7 @@ const stepEls = [...document.querySelectorAll('.step')];
 function leggiScroll() {
   const vh = innerHeight; let s = 0;
   stepEls.forEach((el, i) => { const r = el.getBoundingClientRect(); if (r.top < vh * .55) s = i; });
-  if (s !== step) { if (step >= 0) rientro = true; step = s; impostaSet(DEFAULT[s]); }
+  if (s !== step) { if (step >= 0) rientro = true; step = s; impostaSet(DEFAULT[s]); inclinaSubito = false; }
   const r = stepEls[5].getBoundingClientRect();
   giroT = Math.min(1, Math.max(0, (vh * .8 - r.top) / (vh * .9)));
   stage.classList.toggle('giro', giroT > .6);
@@ -434,8 +434,9 @@ new ResizeObserver(misura).observe(stage);
 function aggiornaCamera() {
   const mob = W < 900;
   const e = t => t * t * (3 - 2 * t);
-  const tgt = Math.PI / 2 - e(giroT) * (Math.PI / 2 - .42);
-  pitchBase += (tgt - pitchBase) * Math.min(1, kDt * 1.5);
+  const gT = inclinaSubito ? 1 : giroT;
+  const tgt = Math.PI / 2 - e(gT) * (Math.PI / 2 - .42);
+  pitchBase += (tgt - pitchBase) * Math.min(1, kDt * (inclinaSubito ? 3 : 1.5));
   const giro = a => Math.atan2(Math.sin(a), Math.cos(a));
   if (rientro) { // cambiando passo, la vista torna quella del racconto
     const k = Math.min(1, kDt * 1.4);
@@ -443,7 +444,8 @@ function aggiornaCamera() {
     if (Math.abs(yaw) + Math.abs(U.yaw) + Math.abs(U.pitch) + Math.abs(U.panX) + Math.abs(U.panY) + Math.abs(U.zoom - 1) < .002) rientro = false;
   }
   if (giroT > .95 && !lento && performance.now() - ultimoTocco > 4000) yaw += kDt * .02;
-  pitch = Math.max(-1.5, Math.min(Math.PI / 2, pitchBase + U.pitch));
+  U.pitch = Math.max(-1.5 - pitchBase, Math.min(Math.PI / 2 - pitchBase, U.pitch)); // niente rotazione «nascosta» oltre il limite
+  pitch = pitchBase + U.pitch;
   const Y = yaw + U.yaw;
   // inquadratura: il diagramma a destra su computer, in alto su telefono
   const asp = W / Hh;
@@ -473,6 +475,7 @@ let drag = null;
 cv.addEventListener('contextmenu', e => e.preventDefault());
 cv.addEventListener('pointerdown', e => {
   if (e.pointerType !== 'mouse') return;
+  if (step === 5) inclinaSubito = true;
   drag = { x: e.clientX, y: e.clientY, yaw: U.yaw, pitch: U.pitch, panX: U.panX, panY: U.panY, sposta: e.shiftKey || e.button === 2 };
   stage.classList.add('trascino'); toccato();
 });
@@ -506,7 +509,7 @@ cv.addEventListener('touchstart', e => {
   if (tocco && tocco.timer) clearTimeout(tocco.timer);
   if (t.length === 2) { tocco = { due: true, d: distanza(t), c: centro(t), zoom: U.zoom, panX: U.panX, panY: U.panY }; return; }
   const qui = { x: t[0].clientX, y: t[0].clientY, yaw: U.yaw, pitch: U.pitch, preso: false, scorre: false };
-  qui.timer = setTimeout(() => { if (tocco === qui && !qui.scorre) { qui.preso = true; stage.classList.add('trascino'); } }, 230);
+  qui.timer = setTimeout(() => { if (tocco === qui && !qui.scorre) { qui.preso = true; if (step === 5) inclinaSubito = true; stage.classList.add('trascino'); } }, 230);
   tocco = qui;
 }, { passive: true });
 cv.addEventListener('touchmove', e => {
