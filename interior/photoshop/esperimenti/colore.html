@@ -76,6 +76,9 @@
     .note a,.link{color:var(--accent);text-underline-offset:3px}
     .thought{margin:22px 0 0;padding:16px 20px;border-left:1px solid var(--accent);border-radius:12px;background:rgba(56,189,248,.07);color:var(--ink-2)}
     .thought strong{color:var(--ink)}
+    .thought--link{display:flex;align-items:center;gap:18px;flex-wrap:wrap}
+    .thought--link p{flex:1 1 320px;margin:0}
+    .thought--link .download{flex:none}
     .classe-box{display:flex;gap:14px;align-items:flex-start;margin:0 0 22px;padding:14px 18px;border:1px dashed rgba(56,189,248,.5);border-radius:14px;color:var(--ink-2);font-size:15px}
     .classe-box b{flex:none;color:var(--accent);font:500 11px/1.9 var(--mono);letter-spacing:.08em;text-transform:uppercase}
 
@@ -148,12 +151,28 @@
     .perche summary:hover{background:rgba(56,189,248,.06)}
     .perche-i{color:var(--accent);font:500 20px var(--mono);transition:transform .2s}
     .perche[open] .perche-i{transform:rotate(45deg)}
-    .perche-body{padding:0 18px 16px;max-width:80ch;color:var(--ink-2)}
+    .perche-body{padding:18px 18px 20px;border-top:1px solid var(--line);color:var(--ink-2)}
+    .bit-intro{max-width:70ch}
+    .bit-griglia{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin:4px 0 14px}
+    .bit-griglia section{padding:18px;border:1px solid var(--line);border-radius:12px;background:rgba(255,255,255,.02)}
+    .bit-griglia span{color:var(--accent);font:600 11px var(--mono);letter-spacing:.08em}
+    .bit-griglia b{display:block;margin:10px 0 0;color:var(--ink);font:700 34px/1 var(--sans);letter-spacing:-.03em}
+    .bit-griglia em{display:block;margin:4px 0 12px;color:var(--muted);font-style:normal;font-size:13px}
+    .perche-body .bit-griglia p{margin:12px 0 0;font-size:14px;line-height:1.6}
+    .bit-fila{display:flex;align-items:center;gap:4px;margin-top:6px}
+    .bit-fila i{display:grid;place-items:center;width:22px;height:26px;border:1px solid var(--line-2);border-radius:5px;color:var(--ink);font:500 13px var(--mono);font-style:normal}
+    .bit-fila small{margin-left:6px;color:var(--muted);font:500 12px var(--mono)}
+    .perche-body .bit-nota{margin:0;padding-top:12px;border-top:1px solid var(--line);color:var(--muted);font-size:14px}
+    @media(max-width:760px){.bit-griglia{grid-template-columns:1fr}}
     .perche-body p{margin:0 0 10px}
     .perche-body strong{color:var(--ink)}
     .best strong{color:var(--ink)}
 
     /* 03 Profili */
+    .prof-k{margin:22px 0 10px}
+    .prof-delta{margin:0;color:var(--ink);font:600 15px/1.4 var(--sans)}
+    .prof-delta small{display:block;color:var(--muted);font:400 13px/1.4 var(--sans)}
+    .prof-nota{margin:10px 0 0;max-width:80ch}
     .profili-campione{height:110px;border-radius:10px;margin:12px 0 10px;box-shadow:inset 0 0 0 1px var(--line)}
     .profili-top{display:flex;flex-wrap:wrap;gap:16px;align-items:end;margin-bottom:16px}
     .profili-top label{display:grid;gap:6px;min-width:220px;font-weight:600;font-size:14px}
@@ -430,13 +449,22 @@
       <details class="perche">
         <summary><span class="card-k" style="margin:0">Perché i numeri RGB arrivano a 255?</span><span class="perche-i" aria-hidden="true">+</span></summary>
         <div class="perche-body">
-          <p>Nel file ogni pixel ha tre numeri, uno per canale: rosso, verde e blu. In un'immagine a <strong>8 bit</strong> ogni canale si scrive con 8 cifre che possono essere solo 0 o 1. Le combinazioni possibili sono 2 × 2 × 2 × 2 × 2 × 2 × 2 × 2 = <strong>256</strong>.</p>
-          <p>Si comincia a contare da 0, che vuol dire canale spento: l'ultimo numero è quindi <strong>255</strong>, il canale al massimo. Tre canali da 256 livelli fanno 256 × 256 × 256, cioè circa <strong>16,7 milioni</strong> di colori.</p>
-          <p>A <strong>16 bit</strong> ogni canale ha 65.536 livelli, e i passaggi da un colore all'altro diventano molto più fini. Per questo un profilo molto ampio come ProPhoto RGB si usa a 16 bit: 256 gradini distribuiti su tanti colori sono pochi, e nelle sfumature compaiono delle strisce.</p>
-          <p>Gli inchiostri invece si misurano in percentuale: quanta carta coprono, da 0 a 100%.</p>
+          <p class="bit-intro">Nel file ogni pixel ha tre numeri, uno per canale: rosso, verde e blu.</p>
+          <div class="bit-griglia">
+            <section><span>01 · 8 BIT</span><b>256</b><em>livelli per canale</em>
+              <div class="bit-fila" aria-hidden="true"><i>0</i><i>1</i><i>1</i><i>0</i><i>1</i><i>0</i><i>0</i><i>1</i><small>= 105</small></div>
+              <p>Ogni canale si scrive con 8 cifre che possono essere solo 0 o 1. Le combinazioni possibili sono 2 × 2 × 2 × 2 × 2 × 2 × 2 × 2 = <strong>256</strong>.</p></section>
+            <section><span>02 · DA 0 A 255</span><b>0 → 255</b><em>da spento al massimo</em>
+              <div class="bit-fila" aria-hidden="true"><i>0</i><i>0</i><i>0</i><i>0</i><i>0</i><i>0</i><i>0</i><i>0</i><small>= 0</small></div>
+              <div class="bit-fila" aria-hidden="true"><i>1</i><i>1</i><i>1</i><i>1</i><i>1</i><i>1</i><i>1</i><i>1</i><small>= 255</small></div>
+              <p>Si comincia a contare da 0, il canale spento: l'ultimo numero è <strong>255</strong>, il canale al massimo. Tre canali fanno 256 × 256 × 256, cioè circa <strong>16,7 milioni</strong> di colori.</p></section>
+            <section><span>03 · 16 BIT</span><b>65.536</b><em>livelli per canale</em>
+              <p>I passaggi da un colore all'altro diventano molto più fini. Per questo un profilo molto ampio come ProPhoto RGB si usa a 16 bit: 256 gradini distribuiti su tanti colori sono pochi, e nelle sfumature compaiono delle strisce.</p></section>
+          </div>
+          <p class="bit-nota">Gli inchiostri invece si misurano in percentuale: quanta carta coprono, da 0 a 100%.</p>
         </div>
       </details>
-      <p class="thought"><strong>Una domanda per dopo la gara.</strong> Con gli inchiostri, qualcuno è riuscito a rifare l'insegna LED blu? Segnatevi il numero più basso che avete ottenuto: ci torniamo con la gamma cromatica.</p>
+      <div class="thought thought--link"><p><strong>Una domanda per dopo la gara.</strong> Con gli inchiostri, qualcuno è riuscito a rifare l'insegna LED blu? Segnatevi il numero più basso che avete ottenuto: ci torniamo con la gamma cromatica.</p><a class="download" href="gamma.html">Apri la gamma cromatica →</a></div>
     </section>
 
     <!-- 03 · PROFILI -->
@@ -455,11 +483,20 @@
         </label>
         <span class="num" id="numeri">R 50 · G 180 · B 110</span>
       </div>
+      <p class="card-k prof-k">Simulazione · quanto cambierebbe davvero</p>
+      <div class="grid3">
+        <div class="card"><h3>sRGB</h3><div class="profili-campione" id="s-srgb" role="img" aria-label="Simulazione: il colore letto come sRGB"></div><p class="prof-delta" id="d-srgb"></p></div>
+        <div class="card"><h3>Adobe RGB</h3><div class="profili-campione" id="s-adobe" role="img" aria-label="Simulazione: il colore letto come Adobe RGB"></div><p class="prof-delta" id="d-adobe"></p></div>
+        <div class="card"><h3>ProPhoto RGB</h3><div class="profili-campione" id="s-prophoto" role="img" aria-label="Simulazione: il colore letto come ProPhoto RGB"></div><p class="prof-delta" id="d-prophoto"></p></div>
+      </div>
+      <p class="small muted prof-nota">I colori veri di Adobe RGB e ProPhoto non stanno in uno schermo normale. Qui li abbiamo spenti tutti e tre della stessa misura finché ci stanno: i colori non sono quelli veri, ma la differenza fra uno e l'altro è in proporzione. Le percentuali sono quelle vere.</p>
+      <p class="card-k prof-k">Quello che vede il tuo schermo</p>
       <div class="grid3">
         <div class="card"><h3>sRGB</h3><div class="profili-campione" id="c-srgb" role="img" aria-label="Il colore letto come sRGB"></div><p class="muted small">Il profilo comune di schermi, siti e telefoni.</p></div>
         <div class="card"><h3>Adobe RGB</h3><div class="profili-campione" id="c-adobe" role="img" aria-label="Il colore letto come Adobe RGB"></div><p class="muted small">Più colori, soprattutto verdi e azzurri. Usato in fotografia e stampa.</p></div>
         <div class="card"><h3>ProPhoto RGB</h3><div class="profili-campione" id="c-prophoto" role="img" aria-label="Il colore letto come ProPhoto RGB"></div><p class="muted small">Ancora più ampio. Si usa per lavorare le foto RAW.</p></div>
       </div>
+      <p class="thought"><strong>Perché qui il rosso cambia e il verde e il blu quasi no?</strong> Anche lo schermo ha il suo righello, di solito corto come sRGB: i colori che vanno oltre li ferma all'ultima tacca. Nei rossi il righello dello schermo arriva abbastanza lontano, quindi il rosso più acceso di ProPhoto si vede quasi tutto. Nei verdi e negli azzurri invece si ferma presto: il verde e il blu di Adobe RGB e ProPhoto finiscono oltre il bordo, vengono tagliati e sembrano quasi uguali a sRGB. Eppure, guarda la simulazione: il verde è quello che cambia di più. Su un monitor a gamma ampia lo vedresti.</p>
       <p class="note" id="profili-avviso" hidden>Questo browser non riesce a mostrare i tre profili: i campioni qui sopra sembrano uguali, ma non lo sono.</p>
       <div class="righelli-03">
         <p class="righelli-t"><b>Pensa ai profili come a dei righelli.</b> Nel file non c'è il colore: c'è solo un numero, come le tacche di un righello. Ogni profilo è un righello con 255 tacche, che parte dallo stesso grigio. sRGB è corto, Adobe RGB più lungo, ProPhoto RGB ancora di più: sui righelli lunghi le tacche sono più larghe, quindi lo stesso numero arriva più lontano, a un verde più acceso. Il profilo dice su quale righello contare.</p>
@@ -594,7 +631,7 @@
       </div>
     </section>
 
-    <p class="back"><a class="download" href="gamma.html">Prossimo esperimento: La gamma cromatica, perché l’insegna LED non ci arriva →</a> <a class="link" href="../#lezione-2">Torna agli appunti della lezione 02 →</a></p>
+    <p class="back"><a class="download" href="gamma.html">Prossimo esperimento: La gamma cromatica →</a> <a class="link" href="../#lezione-2">Torna agli appunti della lezione 02 →</a></p>
   </main>
 
   <footer class="foot"><p><strong>Simulazione didattica.</strong> Le immagini e gli inchiostri imitano il comportamento reale; il risultato vero dipende da monitor, profilo, carta e macchina da stampa.</p><a href="../#esperimenti">← Torna al corso</a></footer>
@@ -840,7 +877,48 @@
     $('c-adobe').style.background = col('a98-rgb', n);
     $('c-prophoto').style.background = col('prophoto-rgb', n);
   }
+  // Simulazione: i tre colori veri in Lab, poi spenti insieme (stesso fattore sulla saturazione) finché stanno in sRGB.
+  const M3 = (m, v) => m.map(r => r[0] * v[0] + r[1] * v[1] + r[2] * v[2]);
+  const PROF = {
+    srgb: { g: v => v <= .04045 ? v / 12.92 : Math.pow((v + .055) / 1.055, 2.4), m: [[.4124564, .3575761, .1804375], [.2126729, .7151522, .0721750], [.0193339, .1191920, .9503041]] },
+    adobe: { g: v => Math.pow(v, 563 / 256), m: [[.5767309, .1855540, .1881852], [.2973769, .6273491, .0752741], [.0270343, .0706872, .9911085]] },
+    prophoto: { g: v => v < 1 / 32 ? v / 16 : Math.pow(v, 1.8), m: [[.7976749, .1351917, .0313534], [.2880402, .7118741, .0000857], [0, 0, .8252100]], d50: true }
+  };
+  const BRADFORD = [[.9555766, -.0230393, .0631636], [-.0282895, 1.0099416, .0210077], [.0122982, -.0204830, 1.3299098]];
+  const XYZ_SRGB = [[3.2404542, -1.5371385, -.4985314], [-.9692660, 1.8760108, .0415560], [.0556434, -.2040259, 1.0572252]];
+  const W = [.95047, 1, 1.08883];
+  const fL = t => t > 216 / 24389 ? Math.cbrt(t) : (24389 / 27 * t + 16) / 116;
+  const fLi = t => t * t * t > 216 / 24389 ? t * t * t : (116 * t - 16) / (24389 / 27);
+  function labDi(nome, n) {
+    const P = PROF[nome];
+    let xyz = M3(P.m, n.map(x => P.g(x / 255)));
+    if (P.d50) xyz = M3(BRADFORD, xyz);
+    const [fx, fy, fz] = xyz.map((v, i) => fL(v / W[i]));
+    return [116 * fy - 16, 500 * (fx - fy), 200 * (fy - fz)];
+  }
+  function labInSRGB(L, a, b) { // da Lab a sRGB lineare, senza tagliare
+    const fy = (L + 16) / 116, fx = fy + a / 500, fz = fy - b / 200;
+    return M3(XYZ_SRGB, [fLi(fx) * W[0], fLi(fy) * W[1], fLi(fz) * W[2]]);
+  }
+  const dentro = l => l.every(v => v >= -.0005 && v <= 1.0005);
+  function simula(n) {
+    const labs = ['srgb', 'adobe', 'prophoto'].map(k => labDi(k, n));
+    let lo = 0, hi = 1; // il fattore più grande che fa stare tutti e tre nello schermo
+    for (let i = 0; i < 30; i++) { const k = (lo + hi) / 2; labs.every(([L, a, b]) => dentro(labInSRGB(L, a * k, b * k))) ? lo = k : hi = k; }
+    return labs.map(([L, a, b]) => ({ rgb: labInSRGB(L, a * lo, b * lo).map(enc), C: Math.hypot(a, b), h: Math.atan2(b, a) * 180 / Math.PI }));
+  }
+  function aggiornaSimulazione() {
+    const sim = simula(PRESET[$('materiale').value]);
+    ['srgb', 'adobe', 'prophoto'].forEach((k, i) => {
+      $('s-' + k).style.background = css(sim[i].rgb);
+      if (i === 0) { $('d-' + k).innerHTML = 'Punto di partenza<small>Il colore come lo legge sRGB</small>'; return; }
+      const pc = Math.round((sim[i].C / sim[0].C - 1) * 100);
+      let dh = Math.abs(sim[i].h - sim[0].h); if (dh > 180) dh = 360 - dh;
+      $('d-' + k).innerHTML = (pc >= 0 ? '+' : '') + pc + '% di saturazione<small>' + (dh >= 6 ? 'e la tinta si sposta di ' + Math.round(dh) + '°' : 'la tinta resta quasi la stessa') + '</small>';
+    });
+  }
   $('materiale').addEventListener('change', aggiornaProfili);
+  $('materiale').addEventListener('change', aggiornaSimulazione);
 
   const DLG = {
     lascia: { img: 'giusta', badge: ['ok', 'Colore giusto'], h: 'Il file resta in sRGB', p: 'La foto si vede bene, ma ha un profilo diverso dal resto del progetto. Quando la incollerai in un’altra immagine Photoshop dovrà convertirla comunque, e la domanda tornerà.' },
@@ -946,7 +1024,7 @@
   /* ---------- avvio ---------- */
   function scene() { disegnaRGB(); disegnaCMYK(); }
   let rt; window.addEventListener('resize', () => { clearTimeout(rt); rt = setTimeout(scene, 120); });
-  scene(); aggiornaGioco(); aggiornaProfili(); aggiornaDialogo(); quiz();
+  scene(); aggiornaGioco(); aggiornaProfili(); aggiornaSimulazione(); aggiornaDialogo(); quiz();
 })();
 </script>
 </body>
