@@ -15,7 +15,7 @@
   <link rel="stylesheet" href="course-ai.css?v=riordino-20261109">
   <link rel="stylesheet" href="guida-strumenti.css?v=20261104-ecosistemi01">
   <link rel="stylesheet" href="glossario.css?v=20261127c">
-  <link rel="stylesheet" href="appunti.css?v=20261127">
+  <link rel="stylesheet" href="appunti.css?v=20261127b">
   <script src="glossario.js?v=lettura-20261110b" defer></script>
   <script src="glossario-zoom.js?v=20261127" defer></script>
   <link rel="stylesheet" href="ghost-scena.css?v=riordino-20261109">
@@ -187,12 +187,19 @@
                 <p class="ap-nota">I nomi dei menu cambiano spesso: memoria e addestramento si trovano nelle impostazioni di ChatGPT.</p>
 
                 <h4 class="ap-titolo" id="lez2-chi"><span>02 / C</span>Chi scrive e chi disegna</h4>
-                <p class="ap-testo">Dentro ChatGPT lavorano modelli diversi. La chat è un <strong>LLM</strong>: scrive. Quando chiedi un’immagine, l’LLM scrive un prompt e lo passa a un <strong>modello di immagini</strong>, che la disegna. Sono due cervelli diversi, e sbagliano in modo diverso.</p>
+                <p class="ap-testo">Dentro ChatGPT lavorano modelli diversi. La chat è un <strong>LLM</strong>: scrive e risponde. Quando chiedi un’immagine, passa la richiesta a un <strong>modello di immagini</strong>, che la disegna. Sono due cervelli diversi: <strong>se quello che scrive sembra aver capito, non è detto che abbia capito anche quello che disegna.</strong> Lì bisogna ingegnarsi e trovare strategie per farsi capire.</p>
                 <div class="ap-schede">
                   <section><span>LLM</span><h5>Scrive</h5><p>Sceglie la parola più probabile dopo l’altra. Quando sbaglia, inventa con sicurezza: un dato, una citazione, un nome. Si chiama allucinazione.</p></section>
-                  <section><span>Modello di immagini</span><h5>Disegna</h5><p>Costruisce l’immagine dal prompt. Quando sbaglia, sbaglia con le mani, le scritte, il numero degli oggetti, e inventa tutto quello che non hai scritto.</p></section>
+                  <section><span>Modello di immagini</span><h5>Disegna</h5><p>Riceve il prompt e lo trasforma in un’immagine. La chat ti ha detto «ho capito», ma il disegno può ignorare un dettaglio, prendere una parola alla lettera o inventare tutto quello che non hai scritto.</p></section>
                   <section><span>Perché conta</span><h5>Lo strumento giusto</h5><p>Per le immagini ChatGPT non è l’unica strada: ci sono Gemini, Higgsfield e molti altri modelli. Si sceglie in base a cosa devi fare.</p></section>
                 </div>
+                <p class="ap-testo ap-sotto"><strong>Ogni modello di immagini legge il prompt a modo suo.</strong> Non esiste il prompt giusto per tutti: lo stesso testo può funzionare benissimo con uno e male con un altro.</p>
+                <div class="ap-schede">
+                  <section><span>Nano Banana Pro · Google</span><h5>Ragiona prima di disegnare</h5><p>È costruito su Gemini 3 Pro e ne usa il ragionamento e le conoscenze. Legge il prompt narrativo, lo interpreta e lo adatta a quello che sa, cosa che molti altri modelli non fanno. Per questo funziona bene anche con un brief scritto come lo spiegheresti a una persona.</p></section>
+                  <section><span>FLUX.2 · Ideogram · FIBO</span><h5>Preferiscono il JSON</h5><p><strong>FLUX.2</strong> di Black Forest Labs (c’è anche su Higgsfield) ha una guida ufficiale ai prompt in JSON, consigliati quando serve controllare ogni parte della scena. Anche <strong>Ideogram 4</strong> accetta il JSON. <strong>FIBO</strong> di Bria è stato addestrato solo su descrizioni in JSON: con un prompt libero funziona male.</p></section>
+                  <section><span>Immagini di riferimento</span><h5>Pregio e difetto</h5><p>Nano Banana Pro legge molto bene le immagini che gli alleghi (fino a 14). Nella mia esperienza, però, dà troppo peso alla prima: invece di usarla come riferimento, a volte la ricalca.</p></section>
+                </div>
+                <p class="ap-nota">Fonti: <a href="https://blog.google/technology/ai/nano-banana-pro/" target="_blank" rel="noopener">Google su Nano Banana Pro</a> · <a href="https://docs.bfl.ai/guides/usecases_t2i_json_prompting" target="_blank" rel="noopener">Black Forest Labs su FLUX.2 e il JSON</a> · <a href="https://ideogram.ai/blog/ideogram-4-json-prompting/" target="_blank" rel="noopener">Ideogram 4 e il JSON</a> · <a href="https://huggingface.co/briaai/FIBO" target="_blank" rel="noopener">Bria su FIBO</a>.</p>
 
                 <h4 class="ap-titolo" id="lez2-prompt"><span>02 / D</span>Due modi di scrivere un prompt</h4>
                 <p class="ap-testo">Lo stesso prompt si può scrivere a paragrafi, come un brief a un fotografo (<strong>narrativo</strong>), oppure mettendo ogni informazione in un cassetto con un nome (<strong>JSON</strong>). Nell’esperimento c’è il prompt vero di un mio ritratto, trasformato da una forma all’altra, e quattro ritratti dell’anno scorso generati nei due modi, da confrontare.</p>
