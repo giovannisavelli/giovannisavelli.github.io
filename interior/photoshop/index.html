@@ -39,11 +39,12 @@
        "titolo": "Colore, scontorno e salvataggio",
        "ore": "2 ore",
        "voci": [
-        "Colore: RGB, CMYK e profili",
-        "Impostazioni colore ed esperimenti interattivi",
-        "Scontorno: livelli, pennello e lazo",
-        "Sedia e mela: due contorni a confronto",
-        "Salvataggio, se resta tempo: PSD, PSB, TIFF, JPEG e PNG"
+        { "testo": "Sistemare Photoshop: memoria e stati storia", "k": "ps-int-2627-L2-prep" },
+        { "testo": "Colore: RGB, CMYK e profili", "k": "ps-int-2627-L2-0" },
+        { "testo": "Impostazioni colore ed esperimenti interattivi", "k": "ps-int-2627-L2-1" },
+        { "testo": "Scontorno: livelli, pennello e lazo", "k": "ps-int-2627-L2-2" },
+        { "testo": "Sedia e mela: due contorni a confronto", "k": "ps-int-2627-L2-3" },
+        { "testo": "Salvataggio, se resta tempo: PSD, PSB, TIFF, JPEG e PNG", "k": "ps-int-2627-L2-4" }
        ]
       },
       "3": {
@@ -239,6 +240,20 @@
                 <p class="lesson-deck">Partiamo da RGB, CMYK e profili colore; poi usiamo livelli, pennello e lazo sulle sagome di una sedia e una mela. Infine vediamo come salvare il lavoro e preparare una copia finale.</p>
                 <div class="lesson-thought"><p>Tre scelte dello stesso lavoro: <strong>come leggere il colore, come isolare l’oggetto e come conservare il risultato.</strong> Il salvataggio è previsto alla fine; se le due ore non bastano, lo riprendiamo all’inizio della terza lezione.</p></div>
             </article>
+
+            <h4 class="lesson-section-title" id="lez2-sistemare">Prima di tutto: sistemare Photoshop</h4>
+            <p class="lesson-section-copy">Impostazioni da fare una volta sola, appena installato Photoshop. Stanno tutte nella stessa pagina, <strong>Prestazioni</strong>, che è un po’ nascosta dentro le preferenze:</p>
+            <ol class="lesson-section-copy">
+                <li>apriamo le preferenze: su <strong>Windows</strong>: <strong>Modifica → Preferenze → Prestazioni</strong>; su <strong>Mac</strong>: <strong>Photoshop → Impostazioni → Prestazioni</strong>. Più veloce: <strong>Ctrl + K</strong> (Windows) o <strong>Cmd + K</strong> (Mac), che apre la pagina «Generali»;</li>
+                <li>nella colonna a sinistra della finestra c’è l’elenco delle pagine (Generali, Interfaccia, Gestione file…): clicchiamo <strong>Prestazioni</strong>;</li>
+                <li>a destra compaiono alcuni riquadri: <strong>Uso memoria</strong> (in alto a sinistra) e <strong>Storia e cache</strong> (a destra). Le tre impostazioni qui sotto sono lì;</li>
+                <li>alla fine premiamo <strong>OK</strong> e riavviamo Photoshop: alcune modifiche valgono solo dal prossimo avvio.</li>
+            </ol>
+            <div class="lesson-route" aria-label="Prestazioni e storia di Photoshop">
+                <section><span>01 / MEMORIA</span><h4>Uso memoria all’80-85%</h4><p>Nel riquadro <strong>Uso memoria</strong> diciamo quanta RAM del computer può prendere Photoshop. Un valore tra l’<strong>80 e l’85%</strong> va bene. Più memoria diamo a Photoshop, però, meno ne resta agli altri programmi aperti insieme (browser, Cinema 4D, un render in corso): se il computer ha poca RAM, o lavoriamo con tanti programmi aperti, scendiamo un po’. Il nuovo valore vale dal prossimo avvio di Photoshop.</p></section>
+                <section><span>02 / STORIA</span><h4>Stati storia: 100</h4><p>Nel riquadro <strong>Storia e cache</strong>, alla voce <strong>Stati storia</strong>, scriviamo <strong>100</strong>: sono i passi che possiamo annullare. Lavorando in modo reversibile (livelli, maschere, oggetti avanzati) non ci servono tantissimi passi indietro, ma un centinaio per le emergenze teniamoli.</p></section>
+                <section><span>03 / CACHE</span><h4>Cache: «Predefinito / Foto»</h4><p>Sempre in <strong>Storia e cache</strong> ci sono <strong>Livelli cache</strong> e <strong>Dimensione porzione cache</strong>. Sono copie rimpicciolite dell’immagine che Photoshop prepara per mostrarla più in fretta quando la ingrandiamo o la rimpiccioliamo. Invece di scrivere i numeri a mano, scegliamo uno dei tre pulsanti accanto:</p><p><strong>Predefinito / Foto</strong> (4 livelli) va bene per foto e render di interni: è la scelta giusta per quasi tutto il corso. <strong>Dimensioni pixel enormi</strong> serve per file molto grandi, come panoramiche e stampe giganti. <strong>Web / Progettazione UI</strong> è per file piccoli con tantissimi livelli, come le schermate di un’app.</p></section>
+            </div>
 
             <h4 class="lesson-section-title">Il colore del documento</h4>
             <p class="lesson-section-copy">Prima della prova distinguiamo il <strong>modo colore</strong> dal <strong>profilo</strong>: il primo descrive i canali dell’immagine, il secondo dà significato ai valori dei colori. Il formato del file sarà una scelta successiva, al momento del salvataggio.</p>
