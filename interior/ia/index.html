@@ -15,6 +15,7 @@
   <link rel="stylesheet" href="course-ai.css?v=riordino-20261109">
   <link rel="stylesheet" href="guida-strumenti.css?v=20261104-ecosistemi01">
   <link rel="stylesheet" href="glossario.css?v=20261127c">
+  <link rel="stylesheet" href="appunti.css?v=20261127">
   <script src="glossario.js?v=lettura-20261110b" defer></script>
   <script src="glossario-zoom.js?v=20261127" defer></script>
   <link rel="stylesheet" href="ghost-scena.css?v=riordino-20261109">
@@ -45,12 +46,19 @@
      ]
     },
     "2": {
-     "titolo": "Un caso vero, dall’inizio alla fine",
+     "titolo": "Dentro ChatGPT: prompt e strumenti",
      "ore": "4 ore · in preparazione",
      "voci": [
-      "Caso studio: «Una famiglia che non esiste» (Makkelijk)",
-      "Esperimento: il Laboratorio della Varianza",
-      "I diversi modi di scrivere un prompt"
+      "Ripasso: che cosa ci siamo detti la volta scorsa",
+      "Aprire ChatGPT: dal browser, dall’app del telefono, dall’app del computer",
+      "La postazione dell’Accademia: un account condiviso, che cosa non scriverci",
+      "Chi scrive e chi disegna: LLM e modelli di immagini",
+      "Esperimento: lo stesso prompt, narrativo e JSON",
+      "Il contesto della chat: perché a un certo punto dimentica",
+      "Dietro le quinte: API, MCP e skill",
+      "Higgsfield e gli altri modelli di immagini",
+      "Esercizio in aula",
+      "Per la prossima volta: ogni gruppo cerca un modello di immagini"
      ]
     }
    }
@@ -119,7 +127,7 @@
           </div>
           <ol class="lesson-index" aria-label="Incontri del corso">
             <li><a href="#lezione-1"><span class="lesson-index-number">01</span><strong>Gli LLM e gli strumenti</strong><small>4 ore · traccia iniziale</small><span class="lesson-index-arrow" aria-hidden="true">→</span></a></li>
-            <li><a href="#lezione-2"><span class="lesson-index-number">02</span><strong>Un caso vero, dall’inizio alla fine</strong><small>4 ore · in preparazione</small><span class="lesson-index-arrow" aria-hidden="true">→</span></a></li>
+            <li><a href="#lezione-2"><span class="lesson-index-number">02</span><strong>Dentro ChatGPT: prompt e strumenti</strong><small>4 ore · in preparazione</small><span class="lesson-index-arrow" aria-hidden="true">→</span></a></li>
             <li class="pending"><span class="lesson-card"><span class="lesson-index-number">03</span><strong>Lezione in preparazione</strong><small>4 ore</small><span class="lesson-index-status">In arrivo</span></span></li>
             <li class="pending"><span class="lesson-card"><span class="lesson-index-number">04</span><strong>Lezione in preparazione</strong><small>4 ore</small><span class="lesson-index-status">In arrivo</span></span></li>
             <li class="pending"><span class="lesson-card"><span class="lesson-index-number">05</span><strong>Lezione in preparazione</strong><small>4 ore</small><span class="lesson-index-status">In arrivo</span></span></li>
@@ -157,14 +165,61 @@
               </div>
             </details>
             <details class="lesson-note" id="lezione-2" name="appunti-lezioni">
-              <summary><span class="lesson-note-number">02</span><span class="lesson-note-main"><strong>Un caso vero, dall’inizio alla fine</strong><small>Seconda lezione · in preparazione</small></span><span class="lesson-note-toggle" aria-hidden="true"></span></summary>
+              <summary><span class="lesson-note-number">02</span><span class="lesson-note-main"><strong>Dentro ChatGPT: prompt e strumenti</strong><small>Seconda lezione · in preparazione</small></span><span class="lesson-note-toggle" aria-hidden="true"></span></summary>
               <div class="lesson-note-content">
-                <div class="lesson-opening"><span class="section-meta">SECONDA LEZIONE · 4 ORE</span><h3>Si comincia da un lavoro vero.</h3><p>Guardiamo come è andato un lavoro fatto con l’IA per un cliente: le foto finite, il brief, il metodo, gli errori e come li abbiamo corretti.</p></div>
-                <div class="lesson-track" aria-label="Percorso della seconda lezione">
-                  <article class="lesson-step"><span class="step-index">02 / A</span><div><h3>Caso studio: una famiglia che non esiste</h3><p>Cinque foto per Makkelijk, un’app olandese. Le schede dei personaggi, il cervello centrale su Drive, i cancelli, la ricerca della spontaneità e la review che ha cambiato tutto.</p><a href="casi-studio/makkelijk/">Apri il caso studio <span aria-hidden="true">↗</span></a></div></article>
-                  <article class="lesson-step"><span class="step-index">02 / B</span><div><h3>Il Laboratorio della Varianza</h3><p>Passiamo dalle frasi alle immagini: osserviamo come informazioni non specificate possano produrre risultati differenti anche quando il punto di partenza sembra lo stesso.</p><a href="#vibe-coding">Vai al laboratorio <span aria-hidden="true">↗</span></a></div></article>
+                <div class="lesson-opening"><span class="section-meta">SECONDA LEZIONE · 4 ORE</span><h3>Dentro ChatGPT.</h3><p>Nella prima lezione abbiamo visto che cos’è un LLM. Oggi lo apriamo e lo usiamo: dove si trova, che cosa non scriverci, chi scrive e chi disegna, come si scrive un prompt, perché a un certo punto dimentica e che cosa c’è dietro le quinte.</p></div>
+
+                <h4 class="ap-titolo" id="lez2-aprire"><span>02 / A</span>Aprire ChatGPT</h4>
+                <p class="ap-testo">ChatGPT si usa in tre modi. Le chat sono le stesse ovunque: se entri con lo stesso account, ritrovi tutto.</p>
+                <div class="ap-schede">
+                  <section><span>Browser</span><h5>chatgpt.com</h5><p>Funziona su qualunque computer, senza installare niente. <strong>In aula usiamo questo.</strong></p></section>
+                  <section><span>Telefono</span><h5>L’app</h5><p>Per iPhone e Android. Comoda per parlarci a voce o per fotografare quello che vuoi chiedere.</p></section>
+                  <section><span>Computer</span><h5>L’app del computer</h5><p>Per Windows e Mac. Una finestra sua, sempre a portata di mano mentre lavori con altri programmi.</p></section>
                 </div>
-                <p class="lesson-index-note">Gli altri argomenti della lezione sono ancora da definire.</p>
+
+                <h4 class="ap-titolo" id="lez2-postazione"><span>02 / B</span>La postazione dell’Accademia</h4>
+                <p class="ap-testo">In aula l’account è uno per postazione, e lo usate in tanti. Quindi sono <strong>in comune</strong> la cronologia delle chat, la memoria (quello che ChatGPT ricorda di chi lo usa) e i Progetti.</p>
+                <div class="ap-schede">
+                  <section><span>Da non scrivere</span><h5>Niente di vostro</h5><p>Password, numeri di telefono, indirizzi, dati personali vostri o di altri, materiali riservati di un cliente. Chi si siede dopo di voi li può leggere.</p></section>
+                  <section><span>La memoria</span><h5>Ricorda tutti</h5><p>ChatGPT può ricordare cose fra una chat e l’altra. Su un account condiviso ricorda quelle di tutti, e le regole di uno finiscono nelle risposte di un altro.</p></section>
+                  <section><span>Per le cose vostre</span><h5>La chat temporanea</h5><p>Non resta nella cronologia e non usa la memoria. Le conversazioni normali, invece, possono servire ad addestrare i modelli, se nessuno lo ha disattivato nelle impostazioni.</p></section>
+                </div>
+                <p class="ap-nota">I nomi dei menu cambiano spesso: memoria e addestramento si trovano nelle impostazioni di ChatGPT.</p>
+
+                <h4 class="ap-titolo" id="lez2-chi"><span>02 / C</span>Chi scrive e chi disegna</h4>
+                <p class="ap-testo">Dentro ChatGPT lavorano modelli diversi. La chat è un <strong>LLM</strong>: scrive. Quando chiedi un’immagine, l’LLM scrive un prompt e lo passa a un <strong>modello di immagini</strong>, che la disegna. Sono due cervelli diversi, e sbagliano in modo diverso.</p>
+                <div class="ap-schede">
+                  <section><span>LLM</span><h5>Scrive</h5><p>Sceglie la parola più probabile dopo l’altra. Quando sbaglia, inventa con sicurezza: un dato, una citazione, un nome. Si chiama allucinazione.</p></section>
+                  <section><span>Modello di immagini</span><h5>Disegna</h5><p>Costruisce l’immagine dal prompt. Quando sbaglia, sbaglia con le mani, le scritte, il numero degli oggetti, e inventa tutto quello che non hai scritto.</p></section>
+                  <section><span>Perché conta</span><h5>Lo strumento giusto</h5><p>Per le immagini ChatGPT non è l’unica strada: ci sono Gemini, Higgsfield e molti altri modelli. Si sceglie in base a cosa devi fare.</p></section>
+                </div>
+
+                <h4 class="ap-titolo" id="lez2-prompt"><span>02 / D</span>Due modi di scrivere un prompt</h4>
+                <p class="ap-testo">Lo stesso prompt si può scrivere a paragrafi, come un brief a un fotografo (<strong>narrativo</strong>), oppure mettendo ogni informazione in un cassetto con un nome (<strong>JSON</strong>). Nell’esperimento c’è il prompt vero di un mio ritratto, trasformato da una forma all’altra, e quattro ritratti dell’anno scorso generati nei due modi, da confrontare.</p>
+                <div class="ap-materiali"><div><span>Esperimento</span><strong>Narrativo o JSON</strong><p>Il prompt di Kimi Antonelli, poi Pedro Pascal e Florence Pugh a confronto.</p></div><a href="prompt/">Apri l’esperimento <span aria-hidden="true">↗</span></a></div>
+
+                <h4 class="ap-titolo" id="lez2-contesto"><span>02 / E</span>Il contesto della chat</h4>
+                <p class="ap-testo">Un LLM non ricorda la chat come la ricordiamo noi: a ogni risposta <strong>rilegge tutto</strong> quello che c’è sopra. Lo spazio che riesce a rileggere si chiama finestra di contesto, ed è limitato.</p>
+                <div class="ap-schede">
+                  <section><span>Perché dimentica</span><h5>La chat troppo lunga</h5><p>Quando la chat diventa lunghissima, le parti più vecchie vengono tagliate o riassunte. I dettagli dell’inizio si perdono, e il modello comincia a contraddirsi.</p></section>
+                  <section><span>Cosa fare</span><h5>Una chat nuova</h5><p>Quando cambi argomento o la chat si è allungata troppo, chiedi un riassunto, apri una chat nuova e incollalo all’inizio.</p></section>
+                  <section><span>Le regole fisse</span><h5>I Progetti</h5><p>Quello che vale sempre, come il brief o il tuo modo di lavorare, va nelle istruzioni di un Progetto: ogni chat del Progetto le rilegge.</p></section>
+                </div>
+
+                <h4 class="ap-titolo" id="lez2-dietro"><span>02 / F</span>Dietro le quinte: API, MCP e skill</h4>
+                <p class="ap-testo">Tre parole che sentirete sempre più spesso. Servono a collegare l’IA agli altri programmi e a darle istruzioni che non devi ripetere ogni volta.</p>
+                <div class="ap-schede">
+                  <section><span>API</span><h5>Lo sportello</h5><p>Un programma chiede qualcosa a un servizio e riceve la risposta. L’app del meteo non ha meteorologi: chiede le previsioni a un servizio attraverso la sua API. I passaggi li decide chi scrive il programma.</p></section>
+                  <section><span>MCP</span><h5>Il pannello di pulsanti</h5><p>Dà all’assistente i comandi di un programma, e i passaggi li sceglie lui. Per esempio Claude collegato a Cinema 4D: gli chiedi una luce e decide da solo quali comandi usare.</p></section>
+                  <section><span>Skill</span><h5>Il manuale</h5><p>Istruzioni scritte una volta, che l’assistente apre solo quando servono: per esempio «come scrivo i prompt per i ritratti». In Claude si chiamano skill; in ChatGPT qualcosa di simile sono le istruzioni dei Progetti e i GPT personalizzati.</p></section>
+                </div>
+                <div class="ap-materiali"><div><span>Glossario</span><strong>API e MCP, passo passo</strong><p>Le animazioni con lo sportello e il pannello di pulsanti.</p></div><a href="#glossario">Apri il glossario <span aria-hidden="true">↗</span></a></div>
+
+                <h4 class="ap-titolo" id="lez2-higgsfield"><span>02 / G</span>Higgsfield e gli altri modelli</h4>
+                <p class="ap-testo"><strong>Higgsfield non è un modello</strong>: è una piattaforma che raccoglie tanti modelli di immagini e video (Nano Banana Pro di Google, Seedream, Flux e altri) e li fa usare pagando a crediti. Ogni modello ha un suo carattere: alcuni sono più fotografici, altri più bravi con le scritte, altri più veloci ed economici.</p>
+                <div class="ap-schede ap-compito">
+                  <section><span>Per la prossima volta</span><h5>Un modello a gruppo</h5><p>Ogni gruppo sceglie un modello di immagini e porta una scheda: che cosa fa bene, quanto costa, se si può provare gratis, un’immagine di prova e un limite che avete trovato.</p></section>
+                </div>
               </div>
             </details>
           </div>
@@ -196,8 +251,9 @@
         <div class="exercise-list">
           <article><span class="exercise-number">01 / IN CLASSE</span><div><h3>La frase a gruppi</h3><p>Entra nella sessione della classe con il QR che vi mostro in aula. Ogni persona aggiunge un breve pezzo alla frase del proprio gruppo.</p></div><a href="https://aant-frase-a-gruppi.aant-la-prossima-parola.workers.dev/join" target="_blank" rel="noopener noreferrer">Apri l’esercizio <span aria-hidden="true">↗</span></a></article>
           <article><span class="exercise-number">02 / IMMAGINI</span><div><h3>Laboratorio della Varianza</h3><p>Completa progressivamente la descrizione e confronta le immagini ottenute.</p></div><a href="../../app/varianza/">Apri il laboratorio <span aria-hidden="true">↗</span></a></article>
-          <article><span class="exercise-number">03 / PROMPT</span><div><h3>Micro-espressioni</h3><p>Controlla singoli attributi di un ritratto e osserva come cambia la struttura del prompt.</p></div><a href="../../app/micro-espressioni/">Apri lo strumento <span aria-hidden="true">↗</span></a></article>
-          <article><span class="exercise-number">04 / ECOSISTEMA</span><div><h3>Il mio ecosistema</h3><p>Come lavoro con l’IA: un cervello centrale, due computer, più assistenti e i loro sub-agent. Premi play e segui un flusso di lavoro dall’idea alla consegna.</p></div><a href="../../app/ecosistema/">Apri la simulazione <span aria-hidden="true">↗</span></a></article>
+          <article><span class="exercise-number">03 / PROMPT</span><div><h3>Narrativo o JSON</h3><p>Lo stesso prompt scritto in due modi, con un ritratto vero e quattro confronti da trascinare.</p></div><a href="prompt/">Apri l’esperimento <span aria-hidden="true">↗</span></a></article>
+          <article><span class="exercise-number">04 / PROMPT</span><div><h3>Micro-espressioni</h3><p>Controlla singoli attributi di un ritratto e osserva come cambia la struttura del prompt.</p></div><a href="../../app/micro-espressioni/">Apri lo strumento <span aria-hidden="true">↗</span></a></article>
+          <article><span class="exercise-number">05 / ECOSISTEMA</span><div><h3>Il mio ecosistema</h3><p>Come lavoro con l’IA: un cervello centrale, due computer, più assistenti e i loro sub-agent. Premi play e segui un flusso di lavoro dall’idea alla consegna.</p></div><a href="../../app/ecosistema/">Apri la simulazione <span aria-hidden="true">↗</span></a></article>
         </div>
       </section>
       </section>
