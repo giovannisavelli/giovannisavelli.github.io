@@ -88,3 +88,14 @@ body.ai-page .glo-foto img { display: block; width: 100%; height: 300px; object-
 body.ai-page .glo-foto figcaption { margin-top: 8px; color: #9fb1a5; font-size: 13px; line-height: 1.5; }
 body.ai-page .glo-foto figcaption a { color: #7d9086; text-decoration: underline; text-underline-offset: 3px; }
 @media(max-width:600px){ body.ai-page .glo-foto img { height: 220px; } }
+
+/* Galleria delle sottoculture: persona alta a sinistra, paesaggio e città a destra (27/11/2026) */
+body.ai-page .glo-galleria { display: grid; grid-template-columns: 2fr 3fr; grid-template-rows: auto auto; gap: 8px; margin: 0 0 16px; }
+body.ai-page .glo-galleria a { display: block; overflow: hidden; border-radius: 10px; border: 1px solid rgba(188,230,216,.14); background: #0e1513; }
+body.ai-page .glo-galleria img { display: block; width: 100%; height: 100%; object-fit: cover; transition: transform .4s; }
+body.ai-page .glo-galleria a:hover img { transform: scale(1.03); }
+body.ai-page .glo-galleria .glo-g-persona { grid-row: 1 / span 2; }
+body.ai-page .glo-galleria .glo-g-panorama, body.ai-page .glo-galleria .glo-g-citta { aspect-ratio: 16 / 9; }
+body.ai-page .glo-galleria figcaption { grid-column: 1 / -1; margin-top: 2px; color: #9fb1a5; font-size: 13px; line-height: 1.5; }
+@media(max-width:600px){ body.ai-page .glo-galleria { grid-template-columns: 1fr; } body.ai-page .glo-galleria .glo-g-persona { grid-row: auto; aspect-ratio: 4 / 5; } }
+@media(prefers-reduced-motion:reduce){ body.ai-page .glo-galleria img { transition: none; } }
