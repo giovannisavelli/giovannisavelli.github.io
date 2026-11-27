@@ -14,8 +14,9 @@
   <link rel="stylesheet" href="../../assets/agenda.css?v=20261029d">
   <link rel="stylesheet" href="course-ai.css?v=riordino-20261109">
   <link rel="stylesheet" href="guida-strumenti.css?v=20261104-ecosistemi01">
-  <link rel="stylesheet" href="glossario.css?v=20261127b">
+  <link rel="stylesheet" href="glossario.css?v=20261127c">
   <script src="glossario.js?v=lettura-20261110b" defer></script>
+  <script src="glossario-zoom.js?v=20261127" defer></script>
   <link rel="stylesheet" href="ghost-scena.css?v=riordino-20261109">
   <script src="../../assets/studio.js?v=lettura-20261110b" defer></script>
   <script src="../../assets/fx/effetti.js?v=lettura-20261110b" defer></script>
@@ -477,7 +478,7 @@
           <div class="guide-ai-tool-grid">
             <details class="guide-ai-tool">
               <summary><span class="guide-ai-tool-meta">PUNK · ANNI SETTANTA</span><strong>Punk</strong><span class="guide-ai-tool-teaser">Da dove viene la parola</span><span class="guide-ai-tool-toggle" aria-hidden="true"></span></summary>
-              <div class="guide-ai-tool-body"><figure class="glo-foto"><img src="glossario-img/punk.jpg" alt="Johnny Ramone dei Ramones dal vivo, 1977." loading="lazy" style="object-position:50% 35%"><figcaption>Johnny Ramone dei Ramones dal vivo, 1977. <a href="https://commons.wikimedia.org/wiki/File:Johnny-Ramone_1977.jpg" target="_blank" rel="noopener">Foto: Michael Markos, CC BY-SA 2.0</a></figcaption></figure><p>È nato a metà degli anni Settanta, tra New York e Londra: musica veloce e arrabbiata, contro le regole e contro il buon gusto. Più che uno stile è un atteggiamento: fai da te, anche se non sei capace. Da lì «punk» è diventato un pezzo di parola: nella fantascienza indica un mondo dominato da una tecnologia, e qualcuno che la usa contro il sistema.</p><p class="glo-esempi-titolo">DA RECUPERARE, PER CULTURA PERSONALE</p><ul class="glo-esempi"><li>Ramones, <i>Ramones</i> (album, 1976)</li><li>Sex Pistols, <i>Never Mind the Bollocks</i> (album, 1977)</li><li><i>Sid &amp; Nancy</i> (film, 1986)</li></ul></div>
+              <div class="guide-ai-tool-body"><figure class="glo-foto"><img src="glossario-img/punk.jpg" alt="Johnny Ramone dei Ramones dal vivo, 1977." loading="lazy" class="glo-foto-alta" style="object-position:50% 8%"><figcaption>Johnny Ramone dei Ramones dal vivo, 1977. <a href="https://commons.wikimedia.org/wiki/File:Johnny-Ramone_1977.jpg" target="_blank" rel="noopener">Foto: Michael Markos, CC BY-SA 2.0</a></figcaption></figure><p>È nato a metà degli anni Settanta, tra New York e Londra: musica veloce e arrabbiata, contro le regole e contro il buon gusto. Più che uno stile è un atteggiamento: fai da te, anche se non sei capace. Da lì «punk» è diventato un pezzo di parola: nella fantascienza indica un mondo dominato da una tecnologia, e qualcuno che la usa contro il sistema.</p><p class="glo-esempi-titolo">DA RECUPERARE, PER CULTURA PERSONALE</p><ul class="glo-esempi"><li>Ramones, <i>Ramones</i> (album, 1976)</li><li>Sex Pistols, <i>Never Mind the Bollocks</i> (album, 1977)</li><li><i>Sid &amp; Nancy</i> (film, 1986)</li></ul></div>
             </details>
             <details class="guide-ai-tool">
               <summary><span class="guide-ai-tool-meta">CYBERPUNK · ANNI OTTANTA</span><strong>Cyberpunk</strong><span class="guide-ai-tool-teaser">High tech, low life</span><span class="guide-ai-tool-toggle" aria-hidden="true"></span></summary>
@@ -521,5 +522,13 @@
   </div>
   <nav class="azioni-tel" aria-label="Accesso rapido alle sezioni"><a href="#programma" data-vai-scheda="programma">Programma</a><a href="#calendario" data-vai-scheda="calendario">Calendario</a><a href="#esperimenti" data-vai-scheda="esperimenti">Esperimenti</a></nav>
   <script type="module" src="ghost-scena.js?v=lettura-20261110b"></script>
+  <dialog class="zoom" id="zoom" aria-label="Immagine ingrandita">
+    <div class="zoom-palco"><img alt=""></div>
+    <p class="zoom-aiuto">Scorri di lato per cambiare immagine · in su o in giù per chiudere</p>
+    <button type="button" class="zoom-chiudi" aria-label="Chiudi">×</button>
+    <button type="button" class="zoom-freccia zoom-prima" aria-label="Immagine precedente">←</button>
+    <button type="button" class="zoom-freccia zoom-dopo" aria-label="Immagine successiva">→</button>
+    <span class="zoom-conta"></span>
+  </dialog>
 </body>
 </html>
