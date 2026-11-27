@@ -1,0 +1,520 @@
+<!doctype html>
+<html lang="it">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#0a0a0d">
+  <title>Il lazo · AANT</title>
+  <meta name="description" content="Lazo a mano libera e lazo poligonale di Photoshop, e i quattro modi di selezione: nuova, aggiungi, sottrai, interseca. Corso Photoshop Interior, lezione 2.">
+  <style>
+    @font-face{font-family:Geist;src:url('../../../app/varianza/fonts/geist-sans-latin-400-normal.woff2') format('woff2');font-weight:400;font-display:swap}
+    @font-face{font-family:Geist;src:url('../../../app/varianza/fonts/geist-sans-latin-600-normal.woff2') format('woff2');font-weight:600;font-display:swap}
+    @font-face{font-family:Geist;src:url('../../../app/varianza/fonts/geist-sans-latin-700-normal.woff2') format('woff2');font-weight:700;font-display:swap}
+    @font-face{font-family:'Geist Mono';src:url('../../../app/varianza/fonts/geist-mono-latin-500-normal.woff2') format('woff2');font-weight:500;font-display:swap}
+    @font-face{font-family:'Geist Mono';src:url('../../../app/varianza/fonts/geist-mono-latin-600-normal.woff2') format('woff2');font-weight:600;font-display:swap}
+    :root{
+      color-scheme:dark;
+      --bg:#0a0a0d; --bg-2:#111116; --bg-3:#191920;
+      --line:rgba(244,241,236,.13); --line-2:rgba(244,241,236,.22);
+      --ink:#f4f1ec; --ink-2:#d7d2d0; --muted:#a9a4a7;
+      --accent:#38bdf8; --accent-2:#7dd4fc; --wash:rgba(56,189,248,.08); --wash-2:rgba(56,189,248,.16);
+      --ok:#7ee0a8; --no:#f39a8b;
+      --mono:'Geist Mono',ui-monospace,monospace; --sans:Geist,system-ui,Arial,sans-serif;
+    }
+    *,*::before,*::after{box-sizing:border-box}
+    html{background:var(--bg);scroll-behavior:smooth}
+    body{margin:0;min-height:100vh;background:radial-gradient(ellipse at 85% 0%,rgba(56,189,248,.09),transparent 36%),var(--bg);color:var(--ink);font:400 16px/1.6 var(--sans);-webkit-font-smoothing:antialiased;overflow-x:hidden}
+    a{color:inherit} button,input{font:inherit;color:inherit} input{accent-color:var(--accent)}
+    :focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+    img,canvas{display:block;max-width:100%}
+    .shell{width:min(1320px,calc(100% - 64px));margin:0 auto}
+    .top{min-height:72px;display:flex;justify-content:space-between;align-items:center;gap:16px;border-bottom:1px solid var(--line)}
+    .top a{text-decoration:none}
+    .brand{display:inline-flex;align-items:center;gap:12px;font-size:14px;font-weight:600}
+    .brand-mark{width:37px;height:37px;display:grid;place-items:center;border:1px solid var(--accent);color:var(--accent);font:600 12px var(--mono)}
+    .return{color:var(--muted);font:500 11px var(--mono);letter-spacing:.06em;text-transform:uppercase;text-align:right}
+    .return:hover,.brand:hover{color:var(--accent)}
+    .return .short{display:none}
+
+    .hero{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,.95fr);gap:clamp(28px,5vw,72px);align-items:end;padding:clamp(40px,6vw,88px) 0 clamp(36px,5vw,64px)}
+    .eyebrow{margin:0 0 20px;color:var(--muted);font:500 12px/1.35 var(--mono);letter-spacing:.08em;text-transform:uppercase}
+    .eyebrow b{color:var(--accent);font-weight:500}
+    h1{margin:0 0 20px;font-size:clamp(44px,6.6vw,92px);font-weight:600;line-height:.98;letter-spacing:-.05em}
+    h1 span,h2 span{color:var(--accent)}
+    .hero-copy{max-width:56ch;margin:0;color:var(--ink-2);font-size:clamp(16px,1.35vw,18px)}
+    .index{list-style:none;margin:0;padding:0;display:grid;gap:8px}
+    .index a{display:grid;grid-template-columns:44px minmax(0,1fr) auto;align-items:center;gap:14px;min-height:62px;padding:12px 18px;border:1px solid var(--line);border-radius:16px;background:var(--bg-2);text-decoration:none;transition:border-color .2s,background .2s,transform .2s}
+    .index a:hover{border-color:rgba(56,189,248,.55);background:var(--wash);transform:translateY(-2px)}
+    .index .n{color:var(--accent);font:500 12px var(--mono);letter-spacing:.06em}
+    .index strong{display:block;font-weight:600;line-height:1.3}
+    .index small{display:block;color:var(--muted);font-size:13px;line-height:1.35}
+    .index .tag{color:var(--accent);font:500 10px var(--mono);letter-spacing:.08em;text-transform:uppercase;border:1px solid rgba(56,189,248,.5);border-radius:999px;padding:4px 9px;white-space:nowrap}
+    .index .arrow{color:var(--accent)}
+
+    .sec{padding:clamp(48px,6vw,88px) 0;border-top:1px solid var(--line);scroll-margin-top:12px}
+    .sec-head{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:clamp(20px,4vw,64px);align-items:end;margin-bottom:clamp(26px,3vw,40px)}
+    .label{display:inline-flex;align-items:center;gap:10px;margin:0 0 14px;color:var(--accent);font:500 12px var(--mono);letter-spacing:.08em;text-transform:uppercase}
+    .label::before{content:"";width:7px;height:7px;border-radius:50%;background:var(--accent);box-shadow:0 0 0 5px rgba(56,189,248,.12)}
+    h2{margin:0;font-size:clamp(34px,4.2vw,58px);font-weight:600;line-height:1.02;letter-spacing:-.045em}
+    .sec-head p{margin:0;color:var(--ink-2);max-width:60ch}
+    h3{margin:0 0 8px;font-size:18px;font-weight:600;line-height:1.3;letter-spacing:-.02em}
+    .card{min-width:0;padding:clamp(16px,2.2vw,26px);border:1px solid var(--line);border-radius:16px;background:var(--bg-2)}
+    .card-k{display:block;margin-bottom:10px;color:var(--accent);font:500 11px var(--mono);letter-spacing:.08em;text-transform:uppercase}
+    .muted{color:var(--muted)} .small{font-size:13px}
+    .thought{margin:22px 0 0;padding:16px 20px;border-left:1px solid var(--accent);border-radius:12px;background:rgba(56,189,248,.07);color:var(--ink-2);max-width:86ch}
+    .thought strong{color:var(--ink)}
+    .classe-box{display:flex;gap:14px;align-items:flex-start;margin:0 0 22px;padding:14px 18px;border:1px dashed rgba(56,189,248,.5);border-radius:14px;color:var(--ink-2);font-size:15px}
+    .classe-box b{flex:none;color:var(--accent);font:500 11px/1.9 var(--mono);letter-spacing:.08em;text-transform:uppercase}
+    .btn{min-height:44px;padding:9px 16px;border:1px solid var(--line-2);border-radius:999px;background:var(--bg-3);font-weight:600;font-size:14px;cursor:pointer;transition:border-color .2s,background .2s,transform .1s}
+    .btn:hover{border-color:rgba(56,189,248,.62);background:#24252c}
+    .btn:active{transform:translateY(1px)}
+    .btn.primary{border-color:var(--accent);background:var(--accent);color:#07141b}
+    .btn.primary:hover{background:var(--accent-2)}
+    .range-row{display:grid;grid-template-columns:92px minmax(0,1fr) 64px;gap:12px;align-items:center}
+    .range-row label{font-weight:600}
+    .range-row output{font:500 14px var(--mono);text-align:right;font-variant-numeric:tabular-nums}
+    input[type=range]{width:100%;min-height:36px;margin:0;cursor:pointer}
+    .stats{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+    .stat{padding:12px 14px;border:1px solid var(--line);border-radius:12px;background:var(--bg-3)}
+    .stat small{display:block;color:var(--muted);font:500 10px var(--mono);letter-spacing:.08em;text-transform:uppercase}
+    .stat strong{display:block;margin-top:4px;font:600 24px/1.1 var(--mono);font-variant-numeric:tabular-nums}
+    .stat strong.acc{color:var(--accent)}
+
+    .viva-bar{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:12px}
+    .seg{display:flex;flex-wrap:wrap;align-items:center;gap:6px}
+    .seg button{min-height:40px;padding:8px 14px;border:1px solid var(--line-2);border-radius:999px;background:none;font:600 14px var(--mono);cursor:pointer}
+    .seg button[aria-pressed=true]{border-color:var(--accent);background:var(--wash-2);color:var(--accent)}
+    .lucchetto{margin-right:6px;color:var(--muted);font:500 11px var(--mono);letter-spacing:.06em;text-transform:uppercase}
+    /* 03 sfida */
+    .s-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+    .s-grid figure{margin:0}
+    .s-grid canvas{width:100%;aspect-ratio:2/1;border-radius:12px;border:1px solid var(--line);image-rendering:pixelated}
+    .s-grid figcaption{margin-top:8px;color:var(--ink-2);font-size:14px}
+    .s-grid figcaption b{color:var(--ink)}
+    .s-ctrl{display:grid;gap:12px;margin-top:16px}
+    .giro{display:flex;flex-wrap:wrap;justify-content:space-between;gap:10px;align-items:baseline;margin-bottom:14px}
+    .giro strong{font-size:20px}
+    .giro span{color:var(--muted);font:500 12px var(--mono);letter-spacing:.06em;text-transform:uppercase}
+    .esito{margin-top:14px;padding:14px 18px;border-radius:12px;border:1px solid var(--line);background:var(--bg-3);display:none}
+    .esito.si{display:block;border-color:rgba(126,224,168,.5)}
+    .esito.no{display:block;border-color:rgba(243,154,139,.5)}
+    .esito b{display:block;font-size:17px;margin-bottom:4px}
+    .esito.si b{color:var(--ok)} .esito.no b{color:var(--no)}
+    .actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:16px;align-items:center}
+    .risultato{margin-top:16px;padding:20px;border-radius:14px;border:1px solid rgba(56,189,248,.5);background:var(--wash);display:none}
+    .risultato strong{display:block;font:600 34px var(--mono);color:var(--accent)}
+
+    .scorciatoie{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+    .scorciatoie li{display:grid;gap:6px;padding:14px;border:1px solid var(--line);border-radius:12px;background:var(--bg-3)}
+    kbd{justify-self:start;padding:3px 8px;border:1px solid var(--line-2);border-radius:6px;background:var(--bg);font:500 12px var(--mono);color:var(--accent)}
+    .scorciatoie span{color:var(--ink-2);font-size:14px}
+
+    .next{display:inline-flex;align-items:center;gap:10px;margin-top:28px;min-height:44px;padding:9px 18px;border:1px solid rgba(56,189,248,.48);border-radius:999px;background:rgba(56,189,248,.1);font-weight:600;text-decoration:none}
+    .next:hover{border-color:var(--accent);background:rgba(56,189,248,.19)}
+    .foot{display:flex;justify-content:space-between;align-items:flex-start;gap:20px;border-top:1px solid var(--line);padding:18px 0 42px;color:var(--muted);font-size:12px}
+    .foot p{max-width:72ch;margin:0}
+    .foot strong,.foot a{color:var(--accent)}
+    .foot a{flex:none;text-decoration:none}
+
+    /* lazo */
+    .tavola{position:relative;border-radius:12px;overflow:hidden;border:1px solid var(--line);background:#d9d2c7}
+    .tavola canvas{width:100%;height:auto;touch-action:none}
+    .tavola canvas.sopra{position:absolute;inset:0;cursor:crosshair}
+    .attrezzi{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:12px;margin-bottom:14px}
+    .seg .tit{margin-right:6px;color:var(--muted);font:500 11px var(--mono);letter-spacing:.06em;text-transform:uppercase}
+    .seg button{font-size:13px}
+    .tavola-bar{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:10px;margin-top:12px}
+    .tavola-bar .aiuto{color:var(--muted);font-size:13px;max-width:70ch}
+    .tavola-bar .aiuto b{color:var(--ink)}
+    .due{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;margin-bottom:22px}
+    .due p{margin:0 0 8px;color:var(--ink-2);font-size:15px}
+    .due p:last-child{margin-bottom:0}
+    .quattro{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px}
+    .quattro svg{width:100%;height:auto;display:block;margin-bottom:14px;border-radius:10px;background:var(--bg-3)}
+    .quattro p{margin:0 0 10px;color:var(--ink-2);font-size:14px}
+    .quattro kbd{display:inline-block}
+    .legenda{display:flex;flex-wrap:wrap;gap:18px;margin:16px 0 0;color:var(--muted);font-size:13px}
+    .legenda i{display:inline-block;width:14px;height:14px;margin-right:6px;vertical-align:-2px;border-radius:3px}
+    @media(max-width:980px){.quattro{grid-template-columns:repeat(2,minmax(0,1fr))}}
+    @media(max-width:760px){.due{grid-template-columns:1fr}}
+    @media(max-width:420px){.quattro{grid-template-columns:1fr}}
+    @media(max-width:980px){.hero,.sec-head{grid-template-columns:1fr}}
+    @media(max-width:760px){.shell{width:calc(100% - 32px)}.scorciatoie{grid-template-columns:1fr}}
+    @media(max-width:680px){
+      .brand{font-size:12px;gap:8px}.brand-mark{width:35px;height:35px}
+      .return{font-size:10px}.return .long{display:none}.return .short{display:inline}
+      .foot{display:block}.foot a{display:inline-block;margin-top:12px}
+      .index a{grid-template-columns:34px minmax(0,1fr);padding:12px 14px}
+      .index .tag,.index .arrow{display:none}
+      .classe-box{flex-direction:column;gap:4px}
+    }
+    @media(max-width:360px){.brand span:last-child{max-width:110px;line-height:1.2}.return{font-size:9px}}
+    @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*::before,*::after{transition:none!important}}
+  </style>
+<script defer src="https://cloud.umami.is/script.js" data-website-id="f2e9536a-0fe6-48be-82e0-97fccdf87046" data-domains="giovannisavelli.github.io"></script></head>
+<body>
+<script>
+  if (!/^https?:$/.test(location.protocol)) document.write('<p style="margin:0;padding:12px 16px;background:#f5c76a;color:#111;font:600 15px/1.4 system-ui,sans-serif">Questa è una copia della pagina: i caratteri e alcune parti non si vedono. Apri la pagina dal sito (o dall’anteprima locale) per vederla intera.</p>');
+</script>
+<div class="shell">
+  <header class="top">
+    <a class="brand" href="../../../"><span class="brand-mark">GS</span><span>Giovanni Savelli · AANT</span></a>
+    <a class="return" href="../#esperimenti">← <span class="long">Corso di Photoshop</span><span class="short">Corso Photoshop</span></a>
+  </header>
+  <main>
+    <section class="hero">
+      <div>
+        <p class="eyebrow"><b>Photoshop Interior</b> · Lezione 02 · Esperimenti</p>
+        <h1>Il lazo<span>.</span></h1>
+        <p class="hero-copy">Due lazi per disegnare a mano il bordo di una selezione, e quattro modi per unire una selezione nuova a quella che c’è già. Qui li proviamo su una piccola stanza.</p>
+      </div>
+      <ol class="index" aria-label="Le parti dell'esperimento">
+        <li><a href="#lazi"><span class="n">01</span><span><strong>I due lazi</strong><small>A mano libera e poligonale</small></span><span class="tag">In aula</span></a></li>
+        <li><a href="#modi"><span class="n">02</span><span><strong>Nuova, aggiungi, sottrai, interseca</strong><small>Come si uniscono le selezioni</small></span><span class="arrow" aria-hidden="true">→</span></a></li>
+        <li><a href="#sfida"><span class="n">03</span><span><strong>Tre selezioni da fare</strong><small>Paralume, cornice, tutte e due</small></span><span class="tag">Sfida</span></a></li>
+      </ol>
+    </section>
+
+    <!-- 01 -->
+    <section class="sec" id="lazi" aria-labelledby="l-t">
+      <div class="sec-head">
+        <div><p class="label">01 / I due lazi</p><h2 id="l-t">Curve o linee dritte<span>?</span></h2></div>
+        <p>Il lazo disegna il bordo della selezione: quello che sta dentro il bordo è selezionato. In Photoshop sono nello stesso gruppo di strumenti (tasto <strong>L</strong>, e <strong>Maiusc + L</strong> per passare dall’uno all’altro). Il lazo magnetico lo lasciamo stare.</p>
+      </div>
+      <div class="due">
+        <div class="card"><span class="card-k">Lazo · a mano libera</span><h3>Per le curve</h3><p><strong>Tieni premuto</strong> e disegna il bordo, come con una matita. Quando lasci il tasto, Photoshop chiude la selezione con una linea dritta fino al punto di partenza.</p><p class="muted small">Va bene per forme morbide e tonde. Con il mouse è difficile essere precisi: si corregge dopo, aggiungendo e togliendo pezzi.</p></div>
+        <div class="card"><span class="card-k">Lazo poligonale</span><h3>Linee dritte, ma anche curve</h3><p><strong>Clicca un punto alla volta</strong>: fra un punto e l’altro Photoshop traccia una linea dritta. Per chiudere clicca di nuovo sul primo punto (accanto al cursore compare un cerchietto) oppure fai doppio clic.</p><p>Non serve solo per le cose squadrate. Ingrandendo l’immagine e mettendo <strong>tanti punti vicini</strong>, i segmenti corti seguono anche una curva: si può costruire un cerchio. Non sarà un cerchio geometrico perfetto, ma sul bordo di un oggetto vero funziona bene, spesso meglio della mano libera.</p><p class="muted small"><kbd>Backspace</kbd> toglie l’ultimo punto, <kbd>Esc</kbd> annulla tutto.</p></div>
+      </div>
+      <p class="thought"><strong>Per selezionare bene si ingrandisce.</strong> In Photoshop, mentre usi il lazo, ingrandisci l’immagine (<kbd>Ctrl + +</kbd>, <kbd>Cmd + +</kbd> su Mac) e ti sposti tenendo premuta la <kbd>barra spaziatrice</kbd>: con il lazo poligonale il giro resta aperto e puoi continuare a mettere punti. Più sei vicino al bordo, più la selezione è precisa. Questa pagina è una dispensa interattiva: qui non si può ingrandire, serve solo a capire come funzionano lazi e modi. Tutto quello che provate qui si fa allo stesso modo in Photoshop.</p>
+      <p class="classe-box" style="margin-top:22px"><b>In aula</b><span>Selezionate il paralume della lampada con tutti e due i lazi. Con quale fate prima? Poi provate lo specchio tondo con il poligonale, a tanti punti piccoli.</span></p>
+      <div class="card" id="prova-lazo"></div>
+    </section>
+
+    <!-- 02 -->
+    <section class="sec" id="modi" aria-labelledby="m-t">
+      <div class="sec-head">
+        <div><p class="label">02 / Quattro modi</p><h2 id="m-t">Una selezione non basta quasi mai<span>.</span></h2></div>
+        <p>Raramente un oggetto si prende con un solo giro di lazo. Si parte da una selezione e la si corregge: si aggiunge un pezzo, se ne toglie un altro. I quattro modi sono i quattro quadratini nella barra in alto in Photoshop, ma conviene usarli con i tasti, tenendoli premuti <strong>prima</strong> di cominciare a disegnare.</p>
+      </div>
+      <div class="quattro">
+        <div class="card"><svg viewBox="0 0 200 130" aria-hidden="true"><rect x="30" y="28" width="90" height="74" rx="4" fill="none" stroke="#a9a4a7" stroke-dasharray="4 3"/><circle cx="128" cy="65" r="40" fill="rgba(56,189,248,.45)" stroke="#38bdf8" stroke-width="2"/></svg><span class="card-k">Nuova selezione</span><h3>Ricomincia da capo</h3><p>Il nuovo giro di lazo <strong>prende il posto</strong> della selezione di prima, che sparisce.</p><p class="muted small">Nessun tasto.</p></div>
+        <div class="card"><svg viewBox="0 0 200 130" aria-hidden="true"><g opacity=".5"><rect x="34" y="28" width="86" height="74" fill="#38bdf8"/><circle cx="128" cy="65" r="40" fill="#38bdf8"/></g></svg><span class="card-k">Aggiungi alla selezione</span><h3>Somma</h3><p>Il nuovo giro <strong>si unisce</strong> a quello di prima: per prendere un pezzo che mancava.</p><p><kbd>Maiusc</kbd></p></div>
+        <div class="card"><svg viewBox="0 0 200 130" aria-hidden="true"><defs><mask id="ms"><rect width="200" height="130" fill="#fff"/><circle cx="128" cy="65" r="40" fill="#000"/></mask></defs><rect x="34" y="28" width="86" height="74" fill="rgba(56,189,248,.45)" mask="url(#ms)"/><circle cx="128" cy="65" r="40" fill="none" stroke="#a9a4a7" stroke-dasharray="4 3"/><path fill="none" stroke="#38bdf8" stroke-width="2" d="M120 28H34v74h86"/></svg><span class="card-k">Sottrai dalla selezione</span><h3>Togli</h3><p>Il nuovo giro <strong>viene tolto</strong> da quello di prima: per un buco o un pezzo preso per sbaglio.</p><p><kbd>Alt</kbd> su Windows · <kbd>Opzione</kbd> su Mac</p></div>
+        <div class="card"><svg viewBox="0 0 200 130" aria-hidden="true"><defs><clipPath id="ci"><circle cx="128" cy="65" r="40"/></clipPath></defs><rect x="34" y="28" width="86" height="74" fill="none" stroke="#a9a4a7" stroke-dasharray="4 3"/><circle cx="128" cy="65" r="40" fill="none" stroke="#a9a4a7" stroke-dasharray="4 3"/><rect x="34" y="28" width="86" height="74" fill="rgba(56,189,248,.45)" stroke="#38bdf8" stroke-width="2" clip-path="url(#ci)"/></svg><span class="card-k">Interseca con la selezione</span><h3>Tieni solo l’incrocio</h3><p>Resta <strong>solo la parte in comune</strong> fra i due giri. Si usa meno: per esempio per tenere, di una parete già selezionata, solo il pezzo dentro un rettangolo.</p><p><kbd>Maiusc + Alt</kbd> · <kbd>Maiusc + Opzione</kbd></p></div>
+      </div>
+      <p class="legenda"><span><i style="border:1px dashed #a9a4a7"></i>selezione di prima o nuovo giro</span><span><i style="background:rgba(56,189,248,.45);border:1px solid #38bdf8"></i>quello che resta selezionato</span></p>
+      <p class="thought"><strong>Il segno accanto al cursore.</strong> Quando tieni premuto il tasto, vicino al cursore del lazo compare un piccolo <strong>+</strong> (aggiungi), <strong>−</strong> (sottrai) o <strong>×</strong> (interseca). Se non lo vedi, il tasto non è stato preso: il giro diventa una nuova selezione e quella di prima sparisce. In quel caso <kbd>Ctrl + Z</kbd> (<kbd>Cmd + Z</kbd>) la riporta indietro.</p>
+    </section>
+
+    <!-- 03 -->
+    <section class="sec" id="sfida" aria-labelledby="s-t">
+      <div class="sec-head">
+        <div><p class="label">03 / Sfida</p><h2 id="s-t">Tre selezioni da fare<span>.</span></h2></div>
+        <p>Scegli tu il lazo e il modo. Quando pensi di aver finito, premi <strong>Controlla</strong>: la pagina confronta la tua selezione con quella giusta. Qualche pixel di scarto sul bordo non conta.</p>
+      </div>
+      <div class="card">
+        <div class="giro"><strong id="s-titolo">Il paralume</strong><span id="s-conta">Selezione 1 di 3</span></div>
+        <p class="muted" id="s-consiglio" style="margin:-6px 0 16px"></p>
+        <div id="sfida-lazo"></div>
+        <div class="actions">
+          <button class="btn primary" type="button" id="s-controlla">Controlla</button>
+          <button class="btn" type="button" id="s-avanti" hidden>Prossima selezione →</button>
+        </div>
+        <div class="esito" id="s-esito" role="status" aria-live="polite"></div>
+        <div class="risultato" id="s-risultato" role="status" aria-live="polite">
+          <strong id="s-punti">0 su 3</strong>
+          <p style="margin:6px 0 0" id="s-frase"></p>
+          <div class="actions"><button class="btn primary" type="button" id="s-ricomincia">↺ Ricomincia</button></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- scorciatoie -->
+    <section class="sec" id="scorciatoie" aria-labelledby="k-t">
+      <div class="sec-head">
+        <div><h2 id="k-t">In Photoshop, con i tasti<span>.</span></h2></div>
+        <p>Su Mac, al posto di Ctrl si usa Cmd e al posto di Alt si usa Opzione.</p>
+      </div>
+      <ul class="scorciatoie">
+        <li><kbd>L</kbd><span>Prende il lazo. <strong>Maiusc + L</strong> passa da un lazo all’altro.</span></li>
+        <li><kbd>Alt mentre usi il lazo a mano libera</kbd><span>Finché lo tieni premuto, ogni clic traccia una linea dritta: curve e linee dritte nello stesso giro.</span></li>
+        <li><kbd>Ctrl + D</kbd><span>Deseleziona tutto.</span></li>
+        <li><kbd>Maiusc + Ctrl + I</kbd><span>Inverti la selezione: selezionato ciò che non lo era.</span></li>
+      </ul>
+      <a class="next" href="salvataggio.html">Prossimo esperimento: Il JPEG si consuma →</a>
+    </section>
+  </main>
+  <footer class="foot"><p><strong>Simulazione didattica.</strong> I lazi qui sono disegnati dal browser e funzionano come quelli di Photoshop nelle cose che contano: chiusura, punti, modi e tasti. Il bordo non è sfumato e non c’è la sfumatura della selezione.</p><a href="../#esperimenti">← Torna al corso</a></footer>
+</div>
+
+<script>
+(() => {
+  const W = 960, H = 600;
+  const ACC = '56,189,248';
+
+  // ---------- la stanza ----------
+  const MIRROR = { x: 270, y: 245, R: 128, r: 98 };
+  const SHADE = [[590, 112], [730, 112], [772, 252], [548, 252]];
+  function disegnaStanza(c) {
+    const g = c.createLinearGradient(0, 0, W, 0);
+    g.addColorStop(0, '#cfc6b8'); g.addColorStop(.75, '#e2dbcf'); g.addColorStop(1, '#d6cdbf');
+    c.fillStyle = g; c.fillRect(0, 0, W, 470);
+    const lume = c.createRadialGradient(660, 200, 20, 660, 200, 330);
+    lume.addColorStop(0, 'rgba(255,240,205,.55)'); lume.addColorStop(1, 'rgba(255,240,205,0)');
+    c.fillStyle = lume; c.fillRect(0, 0, W, 470);
+    c.fillStyle = '#efe9df'; c.fillRect(0, 458, W, 14);
+    const p = c.createLinearGradient(0, 472, 0, H);
+    p.addColorStop(0, '#a88c6c'); p.addColorStop(1, '#8d7154');
+    c.fillStyle = p; c.fillRect(0, 472, W, H - 472);
+    c.strokeStyle = 'rgba(60,40,20,.25)'; c.lineWidth = 1;
+    for (let y = 490; y < H; y += 26) { c.beginPath(); c.moveTo(0, y); c.lineTo(W, y); c.stroke(); }
+    // specchio
+    c.save(); c.beginPath(); c.arc(MIRROR.x + 8, MIRROR.y + 10, MIRROR.R, 0, 7); c.fillStyle = 'rgba(40,30,20,.18)'; c.filter = 'blur(8px)'; c.fill(); c.restore();
+    const cor = c.createLinearGradient(MIRROR.x - MIRROR.R, MIRROR.y - MIRROR.R, MIRROR.x + MIRROR.R, MIRROR.y + MIRROR.R);
+    cor.addColorStop(0, '#9b6a40'); cor.addColorStop(1, '#5e3b22');
+    c.beginPath(); c.arc(MIRROR.x, MIRROR.y, MIRROR.R, 0, Math.PI * 2); c.fillStyle = cor; c.fill();
+    const sp = c.createLinearGradient(MIRROR.x - MIRROR.r, MIRROR.y - MIRROR.r, MIRROR.x + MIRROR.r, MIRROR.y + MIRROR.r);
+    sp.addColorStop(0, '#e9f0f1'); sp.addColorStop(.5, '#a9c0c8'); sp.addColorStop(1, '#7f98a2');
+    c.beginPath(); c.arc(MIRROR.x, MIRROR.y, MIRROR.r, 0, Math.PI * 2); c.fillStyle = sp; c.fill();
+    c.save(); c.clip(); c.fillStyle = 'rgba(255,255,255,.35)';
+    c.beginPath(); c.moveTo(MIRROR.x - 90, MIRROR.y + 20); c.lineTo(MIRROR.x + 10, MIRROR.y - 100); c.lineTo(MIRROR.x + 40, MIRROR.y - 100); c.lineTo(MIRROR.x - 60, MIRROR.y + 20); c.fill(); c.restore();
+    // lampada
+    c.fillStyle = '#2b2a2a';
+    c.beginPath(); c.ellipse(660, 506, 62, 14, 0, 0, Math.PI * 2); c.fill();
+    c.fillRect(655, 250, 10, 256);
+    const pl = c.createLinearGradient(548, 0, 772, 0);
+    pl.addColorStop(0, '#e6d6b3'); pl.addColorStop(.45, '#fbf2dc'); pl.addColorStop(1, '#d9c69e');
+    c.beginPath(); SHADE.forEach(([x, y], i) => i ? c.lineTo(x, y) : c.moveTo(x, y)); c.closePath(); c.fillStyle = pl; c.fill();
+  }
+
+  // ---------- un piano di lavoro con il lazo ----------
+  function creaLazo(root) {
+    root.innerHTML = `
+      <div class="attrezzi">
+        <div class="seg" role="group" aria-label="Strumento"><span class="tit">Strumento</span>
+          <button type="button" data-t="libero" aria-pressed="true">Lazo</button>
+          <button type="button" data-t="poli" aria-pressed="false">Lazo poligonale</button></div>
+        <div class="seg" role="group" aria-label="Modo"><span class="tit">Modo</span>
+          <button type="button" data-m="nuova" aria-pressed="true" title="Nuova selezione">Nuova</button>
+          <button type="button" data-m="aggiungi" aria-pressed="false" title="Aggiungi alla selezione">+ Aggiungi</button>
+          <button type="button" data-m="sottrai" aria-pressed="false" title="Sottrai dalla selezione">− Sottrai</button>
+          <button type="button" data-m="interseca" aria-pressed="false" title="Interseca con la selezione">× Interseca</button></div>
+      </div>
+      <div class="tavola">
+        <canvas width="${W}" height="${H}" role="img" aria-label="Una stanza con uno specchio tondo e una lampada da terra, su cui fare selezioni con il lazo"></canvas>
+        <canvas class="sopra" width="${W}" height="${H}" aria-hidden="true"></canvas>
+      </div>
+      <div class="tavola-bar"><span class="aiuto"></span><button class="btn" type="button" data-deseleziona>Deseleziona</button></div>`;
+    const [base, sopra] = root.querySelectorAll('canvas');
+    const bc = base.getContext('2d'), oc = sopra.getContext('2d');
+    disegnaStanza(bc);
+    const mk = () => { const cv = document.createElement('canvas'); cv.width = W; cv.height = H; return cv; };
+    const mask = mk(), mc = mask.getContext('2d', { willReadFrequently: true });
+    const tint = mk(), tc = tint.getContext('2d');
+    const ants = mk(), ac = ants.getContext('2d');
+    const antsImg = ac.createImageData(W, H);
+    let dentro = new Uint8Array(W * H), bordo = [];
+    let strumento = 'libero', modoScelto = 'nuova';
+    let punti = [], inCorso = false, premuto = false, modoGiro = 'nuova';
+    let cursore = null, tasti = { shift: false, alt: false }, ultimoClic = 0;
+    const aiuto = root.querySelector('.aiuto');
+    const testiAiuto = {
+      libero: '<b>Lazo:</b> tieni premuto e disegna. Lasciando il tasto la selezione si chiude da sola.',
+      poli: '<b>Lazo poligonale:</b> clicca un punto alla volta. Chiudi sul primo punto o con doppio clic. Backspace toglie l’ultimo punto, Esc annulla.'
+    };
+    aiuto.innerHTML = testiAiuto[strumento];
+
+    const premi = (sel, attr, val) => root.querySelectorAll(sel).forEach(b => b.setAttribute('aria-pressed', String(b.dataset[attr] === val)));
+    root.querySelectorAll('[data-t]').forEach(b => b.onclick = () => { annullaGiro(); strumento = b.dataset.t; premi('[data-t]', 't', strumento); aiuto.innerHTML = testiAiuto[strumento]; });
+    root.querySelectorAll('[data-m]').forEach(b => b.onclick = () => { modoScelto = b.dataset.m; premi('[data-m]', 'm', modoScelto); disegna(); });
+    root.querySelector('[data-deseleziona]').onclick = () => { annullaGiro(); mc.clearRect(0, 0, W, H); aggiorna(); };
+
+    const modoDaTasti = (s, a) => s && a ? 'interseca' : s ? 'aggiungi' : a ? 'sottrai' : modoScelto;
+    const pos = e => { const r = sopra.getBoundingClientRect(); return [(e.clientX - r.left) * W / r.width, (e.clientY - r.top) * H / r.height, W / r.width]; };
+
+    function annullaGiro() { punti = []; inCorso = false; premuto = false; disegna(); }
+    function applica() {
+      if (punti.length < 3) { annullaGiro(); return; }
+      const ops = { nuova: 'source-over', aggiungi: 'source-over', sottrai: 'destination-out', interseca: 'destination-in' };
+      if (modoGiro === 'nuova') mc.clearRect(0, 0, W, H);
+      mc.save(); mc.globalCompositeOperation = ops[modoGiro]; mc.fillStyle = '#000';
+      mc.beginPath(); punti.forEach(([x, y], i) => i ? mc.lineTo(x, y) : mc.moveTo(x, y)); mc.closePath(); mc.fill(); mc.restore();
+      punti = []; inCorso = false; premuto = false;
+      aggiorna();
+      root.dispatchEvent(new CustomEvent('selezione'));
+    }
+    function aggiorna() {
+      const d = mc.getImageData(0, 0, W, H).data;
+      dentro = new Uint8Array(W * H);
+      for (let i = 0; i < W * H; i++) dentro[i] = d[i * 4 + 3] > 127 ? 1 : 0;
+      bordo = [];
+      antsImg.data.fill(0);
+      for (let y = 0; y < H; y++) for (let x = 0; x < W; x++) {
+        const i = y * W + x;
+        if (dentro[i] && (x === 0 || y === 0 || x === W - 1 || y === H - 1 || !dentro[i - 1] || !dentro[i + 1] || !dentro[i - W] || !dentro[i + W])) bordo.push(i);
+      }
+      tc.clearRect(0, 0, W, H); tc.globalCompositeOperation = 'source-over'; tc.drawImage(mask, 0, 0);
+      tc.globalCompositeOperation = 'source-in'; tc.fillStyle = `rgba(${ACC},.30)`; tc.fillRect(0, 0, W, H);
+      passo = 0; formiche();
+    }
+    let passo = 0;
+    function formiche() {
+      const a = antsImg.data;
+      for (const i of bordo) {
+        const x = i % W, y = (i / W) | 0, v = ((x + y + passo) >> 2) & 1 ? 255 : 0;
+        a[i * 4] = a[i * 4 + 1] = a[i * 4 + 2] = v; a[i * 4 + 3] = 255;
+      }
+      ac.putImageData(antsImg, 0, 0);
+      disegna();
+    }
+    function disegna() {
+      oc.clearRect(0, 0, W, H);
+      oc.drawImage(tint, 0, 0); oc.drawImage(ants, 0, 0);
+      const k = W / sopra.getBoundingClientRect().width || 1;
+      if (punti.length) {
+        oc.beginPath(); punti.forEach(([x, y], i) => i ? oc.lineTo(x, y) : oc.moveTo(x, y));
+        if (strumento === 'poli' && cursore) oc.lineTo(cursore[0], cursore[1]);
+        oc.lineWidth = 2.2 * k; oc.strokeStyle = '#111'; oc.stroke(); oc.setLineDash([6 * k, 5 * k]); oc.strokeStyle = '#fff'; oc.stroke(); oc.setLineDash([]);
+        if (strumento === 'poli') {
+          punti.forEach(([x, y]) => { oc.fillStyle = '#fff'; oc.fillRect(x - 3 * k, y - 3 * k, 6 * k, 6 * k); oc.strokeStyle = '#111'; oc.lineWidth = k; oc.strokeRect(x - 3 * k, y - 3 * k, 6 * k, 6 * k); });
+          if (cursore && punti.length > 2 && Math.hypot(cursore[0] - punti[0][0], cursore[1] - punti[0][1]) < 16 * k) {
+            oc.beginPath(); oc.arc(punti[0][0], punti[0][1], 9 * k, 0, 7); oc.strokeStyle = `rgb(${ACC})`; oc.lineWidth = 2.5 * k; oc.stroke();
+          }
+        }
+      }
+      if (cursore) {
+        const m = inCorso ? modoGiro : modoDaTasti(tasti.shift, tasti.alt);
+        const segno = { aggiungi: '+', sottrai: '−', interseca: '×' }[m];
+        if (segno) {
+          oc.font = `600 ${22 * k}px Geist, system-ui, sans-serif`; oc.lineWidth = 4 * k; oc.strokeStyle = '#111'; oc.fillStyle = '#fff';
+          oc.strokeText(segno, cursore[0] + 10 * k, cursore[1] + 24 * k); oc.fillText(segno, cursore[0] + 10 * k, cursore[1] + 24 * k);
+        }
+      }
+    }
+
+    sopra.addEventListener('pointerdown', e => {
+      e.preventDefault(); attivo = api;
+      const [x, y, k] = pos(e); cursore = [x, y];
+      tasti = { shift: e.shiftKey, alt: e.altKey };
+      if (strumento === 'libero') {
+        sopra.setPointerCapture(e.pointerId);
+        modoGiro = modoDaTasti(e.shiftKey, e.altKey);
+        punti = [[x, y]]; inCorso = true; premuto = true; disegna(); return;
+      }
+      // poligonale
+      const ora = performance.now();
+      if (!inCorso) { modoGiro = modoDaTasti(e.shiftKey, e.altKey); punti = [[x, y]]; inCorso = true; ultimoClic = ora; disegna(); return; }
+      const ultimo = punti[punti.length - 1];
+      if (punti.length > 2 && Math.hypot(x - punti[0][0], y - punti[0][1]) < 16 * k) { applica(); return; }
+      if (ora - ultimoClic < 320 && Math.hypot(x - ultimo[0], y - ultimo[1]) < 10 * k) { applica(); return; }
+      punti.push([x, y]); ultimoClic = ora; disegna();
+    });
+    sopra.addEventListener('pointermove', e => {
+      const [x, y, k] = pos(e); cursore = [x, y]; tasti = { shift: e.shiftKey, alt: e.altKey };
+      if (strumento === 'libero' && premuto) {
+        const u = punti[punti.length - 1];
+        if (Math.hypot(x - u[0], y - u[1]) > 1.5 * k) punti.push([x, y]);
+      }
+      disegna();
+    });
+    sopra.addEventListener('pointerup', () => { if (strumento === 'libero' && premuto) applica(); });
+    sopra.addEventListener('pointercancel', () => { if (strumento === 'libero') annullaGiro(); });
+    sopra.addEventListener('pointerleave', e => { if (!premuto && e.pointerType === 'mouse') { cursore = null; disegna(); } });
+
+    const api = {
+      root, dentro: () => dentro,
+      tasto(e) {
+        if (e.type === 'keydown' && strumento === 'poli' && inCorso) {
+          if (e.key === 'Escape') { e.preventDefault(); annullaGiro(); return; }
+          if (e.key === 'Backspace' || e.key === 'Delete') { e.preventDefault(); punti.pop(); if (!punti.length) inCorso = false; disegna(); return; }
+        }
+        if (e.key === 'Shift' || e.key === 'Alt') { if (e.key === 'Alt') e.preventDefault(); tasti = { shift: e.shiftKey, alt: e.altKey }; disegna(); }
+      },
+      pulisci() { annullaGiro(); mc.clearRect(0, 0, W, H); aggiorna(); },
+      passa() { passo = (passo + 1) % 8; formiche(); }
+    };
+    aggiorna();
+    tutti.push(api);
+    return api;
+  }
+
+  const tutti = []; let attivo = null;
+  addEventListener('keydown', e => attivo && attivo.tasto(e));
+  addEventListener('keyup', e => attivo && attivo.tasto(e));
+  // le formiche camminano solo se la tavola si vede
+  const visibili = new Set();
+  const oss = new IntersectionObserver(es => es.forEach(x => x.isIntersecting ? visibili.add(x.target) : visibili.delete(x.target)));
+  const fermo = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  const prova = creaLazo(document.getElementById('prova-lazo'));
+  const sfida = creaLazo(document.getElementById('sfida-lazo'));
+  tutti.forEach(t => oss.observe(t.root));
+  // passo delle formiche, condiviso
+  setInterval(() => { if (fermo) return; tutti.forEach(t => { if (visibili.has(t.root)) t.passa(); }); }, 130);
+
+  // ---------- sfida ----------
+  function bersaglio(disegno) {
+    const t = document.createElement('canvas'); t.width = W; t.height = H;
+    const c = t.getContext('2d'); c.fillStyle = '#000'; disegno(c, 'fill');
+    const fascia = document.createElement('canvas'); fascia.width = W; fascia.height = H;
+    const f = fascia.getContext('2d'); f.strokeStyle = '#000'; f.lineWidth = 10; disegno(f, 'stroke');
+    const dt = c.getImageData(0, 0, W, H).data, df = f.getImageData(0, 0, W, H).data;
+    const dentro = new Uint8Array(W * H), conta = new Uint8Array(W * H);
+    for (let i = 0; i < W * H; i++) { dentro[i] = dt[i * 4 + 3] > 127 ? 1 : 0; conta[i] = df[i * 4 + 3] > 0 ? 0 : 1; }
+    return { dentro, conta };
+  }
+  const paralume = (c, m) => { c.beginPath(); SHADE.forEach(([x, y], i) => i ? c.lineTo(x, y) : c.moveTo(x, y)); c.closePath(); c[m](); };
+  const cornice = (c, m) => {
+    c.beginPath(); c.arc(MIRROR.x, MIRROR.y, MIRROR.R, 0, Math.PI * 2);
+    if (m === 'fill') { c.arc(MIRROR.x, MIRROR.y, MIRROR.r, 0, Math.PI * 2, true); c.fill('evenodd'); }
+    else { c.stroke(); c.beginPath(); c.arc(MIRROR.x, MIRROR.y, MIRROR.r, 0, Math.PI * 2); c.stroke(); }
+  };
+  const PROVE = [
+    { titolo: 'Il paralume', consiglio: 'Solo il paralume della lampada, senza asta. Ha i lati dritti: quale lazo conviene?', b: bersaglio(paralume) },
+    { titolo: 'La cornice dello specchio', consiglio: 'Solo la cornice di legno, senza il vetro dello specchio. Serve un buco nel mezzo.', b: bersaglio(cornice) },
+    { titolo: 'Paralume e cornice insieme', consiglio: 'Tutte e due nella stessa selezione: una non deve cancellare l’altra.', b: bersaglio((c, m) => { paralume(c, m); cornice(c, m); }) }
+  ];
+  const $ = id => document.getElementById(id);
+  let n = 0, giuste = new Array(PROVE.length).fill(false);
+  function mostra() {
+    const p = PROVE[n];
+    $('s-titolo').textContent = p.titolo; $('s-consiglio').textContent = p.consiglio;
+    $('s-conta').textContent = `Selezione ${n + 1} di ${PROVE.length}`;
+    $('s-esito').className = 'esito'; $('s-avanti').hidden = true;
+    $('s-avanti').textContent = n === PROVE.length - 1 ? 'Vedi il risultato →' : 'Prossima selezione →';
+    sfida.pulisci();
+  }
+  $('s-controlla').onclick = () => {
+    const { dentro: t, conta } = PROVE[n].b, s = sfida.dentro();
+    let tp = 0, fp = 0, fn = 0, buco = 0;
+    const m = MIRROR;
+    for (let i = 0; i < W * H; i++) {
+      if (!conta[i]) continue;
+      if (s[i] && t[i]) tp++; else if (s[i]) { fp++; const x = i % W, y = (i / W) | 0; if (Math.hypot(x - m.x, y - m.y) < m.r) buco++; } else if (t[i]) fn++;
+    }
+    const tot = tp + fp + fn, q = tot ? tp / tot : 0, pct = Math.round(q * 100), ok = q >= .88;
+    giuste[n] = ok;
+    let perche;
+    if (!tp) perche = 'Non c’è ancora una selezione sopra la cosa giusta.';
+    else if (ok) perche = 'Il bordo segue bene la forma.';
+    else if (buco > fn && buco > tp * .15) perche = 'Hai preso anche il vetro dello specchio: toglilo con Sottrai (tieni premuto Alt, o Opzione su Mac, prima di disegnare il cerchio interno).';
+    else if (fn > fp) perche = 'Manca un pezzo: aggiungilo con Aggiungi (tieni premuto Maiusc prima di disegnare).';
+    else perche = 'Hai preso anche un po’ di sfondo: toglilo con Sottrai (Alt, o Opzione su Mac).';
+    const es = $('s-esito');
+    es.className = 'esito ' + (ok ? 'si' : 'no');
+    es.innerHTML = `<b>${ok ? '✓ Giusto' : '✕ Non ancora'} · ${pct}% uguale</b>${perche}${ok ? '' : ' Puoi correggere e ricontrollare.'}`;
+    $('s-avanti').hidden = false;
+  };
+  $('s-avanti').onclick = () => {
+    if (n < PROVE.length - 1) { n++; mostra(); return; }
+    const k = giuste.filter(Boolean).length;
+    $('s-punti').textContent = `${k} su ${PROVE.length}`;
+    $('s-frase').textContent = k === PROVE.length ? 'Tutte giuste: lazi e modi sono a posto.' : 'Riprova quelle sbagliate: di solito manca un Aggiungi o un Sottrai.';
+    $('s-risultato').style.display = 'block'; $('s-avanti').hidden = true; $('s-controlla').hidden = true;
+  };
+  $('s-ricomincia').onclick = () => { n = 0; giuste.fill(false); $('s-risultato').style.display = 'none'; $('s-controlla').hidden = false; mostra(); };
+  mostra();
+})();
+</script>
+</body>
+</html>
